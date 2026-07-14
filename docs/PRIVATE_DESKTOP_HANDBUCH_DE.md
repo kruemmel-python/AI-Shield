@@ -1,6 +1,6 @@
 # AI Shield Private Desktop Handbuch
 
-Stand: 13. Juli 2026, Release Candidate `2.0.0-rc.8`
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.9`
 
 ## Zweck und Voraussetzungen
 
@@ -45,16 +45,29 @@ und geprüft werden.
 
 ![Dateityp-Schutz](../editions/private_desktop/schutzfunktionen_2.png)
 
-Dokumente, Archive, Bilder, Audio, Video und Webdateien können separat geprüft oder freigegeben
-werden. Die Einstellung wird atomar und DPAPI-Machine-geschützt gespeichert und vom Broker ohne
-Neustart neu geladen.
+Dokumente, Archive, Bilder, Audio, Video, Webdateien, Programme/Installer, Windows-Skripte,
+Entwickler-/Shell-Skripte sowie Verknüpfungen/Systemaktionen können separat geprüft oder
+freigegeben werden. Die Ausführungsgruppen erfassen insbesondere `EXE`, `MSI`, `MSIX`, `APPX`,
+`BAT`, `CMD`, `PS1`, `PSM1`, `VBS`, `JS`, `WSF`, `HTA`, `SH`, `PY`, `JAR`, `LNK`, `URL`, `REG`,
+`INF` und `CHM`. Die Einstellung wird atomar und DPAPI-Machine-geschützt gespeichert und vom
+Broker ohne Neustart neu geladen. Alte Policy-v1-/v2-Daten werden automatisch nach v3 migriert und
+aktivieren beim Upgrade die neuen Ausführungsgruppen sowie die Freigabeschranke.
 
 Neu angelegte Downloads mit Mark-of-the-Web werden an eine festgehaltene Dateiidentität gebunden
 und in einem zeitlich begrenzten isolierten Scanner geprüft. Microsoft Defender/AMSI sowie lokale
 PDF- und ZIP-Strukturprüfungen liefern die Entscheidung. Malware, aktive oder fehlerhafte PDFs,
 gefährliche beziehungsweise verschlüsselte Archive und nicht prüfbare risikoreiche Formate werden
-abhängig von der Policy quarantänisiert. Ein deaktivierter Dateitypschalter bedeutet ausdrücklich:
-keine AI-Shield-Inhaltsprüfung für diese Gruppe.
+abhängig von der Policy quarantänisiert. **Freigabe vor dem Öffnen erzwingen** verschiebt auch
+sauber geprüfte Dateien aktiver Gruppen in die Quarantäne. Die laufende UI meldet neue Downloads
+innerhalb weniger Sekunden; auf der Seite **Quarantäne** kann der Benutzer sie mit Zielpfad und
+Begründung freigeben. Ein deaktivierter Dateitypschalter bedeutet ausdrücklich: keine AI-Shield-
+Inhaltsprüfung und keine Freigabeschranke für diese Gruppe.
+
+Der eigenständige Schalter **Downloads härten** aktiviert zusätzlich die Kernel-Sperre. Sie
+blockiert direkte Prozessstarts aus `Downloads` und Aufrufe heruntergeladener Dateien über
+PowerShell, CMD, WSH, MSHTA, Shell-/Sprachinterpreter, Java/.NET sowie relevante Windows-
+Systemlauncher. Die Dateitypschalter ersetzen diese Sperre nicht, sondern steuern die vorgelagerte
+Prüfung und Quarantäne.
 
 ## Browser-Sensor
 

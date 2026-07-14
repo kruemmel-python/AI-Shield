@@ -1,6 +1,6 @@
 # AI Shield: Produktqualifikation und Microsoft-Treibersignierung
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Ausgefuehrte Hardening- und Recovery-Nachweise
 

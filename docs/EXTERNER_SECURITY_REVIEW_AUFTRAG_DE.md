@@ -1,10 +1,10 @@
 # Prüfauftrag für unabhängiges Security Review
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Prüfgegenstand
 
-AI Shield Private Desktop `2.0.0-rc.8`, insbesondere:
+AI Shield Private Desktop `2.0.0-rc.9`, insbesondere:
 
 - WFP-, Minifilter- und ProcessGuard-Kernelcode;
 - IOCTL-Verträge, Puffer-, Größen-, Sequenz- und Zugriffsprüfung;

@@ -30,7 +30,7 @@ $extract = Join-Path $work "extract"
 $obj = Join-Path $work "obj"
 $payload = Join-Path $extract "AI_Shield_Private_Desktop"
 $harvest = Join-Path $work "Payload.wxs"
-$msiName = "AI_Shield_Private_Desktop_2.0.0-rc.8_x64.msi"
+$msiName = "AI_Shield_Private_Desktop_2.0.0-rc.9_x64.msi"
 $msiPath = Join-Path $outputRoot $msiName
 
 try {

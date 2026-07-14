@@ -47,13 +47,28 @@ constexpr std::uint32_t kContentImages = 1U << 2U;
 constexpr std::uint32_t kContentAudio = 1U << 3U;
 constexpr std::uint32_t kContentVideo = 1U << 4U;
 constexpr std::uint32_t kContentWeb = 1U << 5U;
-constexpr std::uint32_t kContentAll = (1U << 6U) - 1U;
+constexpr std::uint32_t kContentPrograms = 1U << 6U;
+constexpr std::uint32_t kContentWindowsScripts = 1U << 7U;
+constexpr std::uint32_t kContentDeveloperScripts = 1U << 8U;
+constexpr std::uint32_t kContentLaunchers = 1U << 9U;
+constexpr std::uint32_t kContentLegacyAll = (1U << 6U) - 1U;
+constexpr std::uint32_t kContentExecutionAll = kContentPrograms | kContentWindowsScripts |
+                                               kContentDeveloperScripts | kContentLaunchers;
+constexpr std::uint32_t kContentAll = kContentLegacyAll | kContentExecutionAll;
 
 struct ContentPolicy final {
     std::uint32_t magic = 0x50435341U;
-    std::uint32_t version = 1U;
+    std::uint32_t version = 3U;
     std::uint32_t enabled_categories = kContentAll;
     std::uint32_t fail_closed = 1U;
+    std::uint32_t release_required = 1U;
+};
+
+struct LegacyContentPolicy final {
+    std::uint32_t magic;
+    std::uint32_t version;
+    std::uint32_t enabled_categories;
+    std::uint32_t fail_closed;
 };
 
 struct Sensor final {
@@ -207,16 +222,6 @@ std::string json_escape(std::wstring_view value) {
     return result;
 }
 
-bool executable_extension(std::filesystem::path path) {
-    auto extension = path.extension().wstring();
-    for (auto& character : extension) character = static_cast<wchar_t>(towlower(character));
-    constexpr std::array<std::wstring_view, 15> extensions{
-        L".exe", L".dll", L".scr", L".com", L".msi", L".bat", L".cmd", L".ps1",
-        L".vbs", L".vbe", L".js", L".jse", L".wsf", L".hta", L".lnk"};
-    for (const auto candidate : extensions) if (extension == candidate) return true;
-    return false;
-}
-
 std::wstring lower_extension(const std::filesystem::path& path) {
     auto extension = path.extension().wstring();
     for (auto& character : extension) character = static_cast<wchar_t>(towlower(character));
@@ -234,6 +239,20 @@ std::uint32_t content_category(const std::filesystem::path& path) {
     constexpr auto audio = std::to_array<std::wstring_view>({L".mp3", L".wav", L".flac", L".aac", L".ogg", L".m4a"});
     constexpr auto video = std::to_array<std::wstring_view>({L".mp4", L".m4v", L".mov", L".avi", L".mkv", L".webm", L".wmv"});
     constexpr auto web = std::to_array<std::wstring_view>({L".html", L".htm"});
+    constexpr auto programs = std::to_array<std::wstring_view>({
+        L".exe", L".com", L".scr", L".pif", L".dll", L".ocx", L".cpl", L".sys", L".drv",
+        L".msi", L".msp", L".mst", L".msix", L".msixbundle", L".appx", L".appxbundle", L".appinstaller"});
+    constexpr auto windows_scripts = std::to_array<std::wstring_view>({
+        L".bat", L".cmd", L".ps1", L".psm1", L".psd1", L".vbs", L".vbe", L".js", L".jse",
+        L".wsf", L".wsh", L".hta", L".sct"});
+    constexpr auto developer_scripts = std::to_array<std::wstring_view>({
+        L".sh", L".bash", L".zsh", L".fish", L".py", L".pyw", L".pyz", L".mjs", L".cjs",
+        L".pl", L".pm", L".rb", L".rake", L".php", L".phar", L".lua", L".tcl", L".jar",
+        L".groovy", L".kts", L".wasm"});
+    constexpr auto launchers = std::to_array<std::wstring_view>({
+        L".lnk", L".url", L".scf", L".application", L".appref-ms", L".gadget", L".diagcab",
+        L".diagpkg", L".reg", L".inf", L".chm", L".xll", L".iqy", L".oqy", L".rqy", L".slk",
+        L".settingcontent-ms", L".library-ms", L".search-ms"});
     const auto contains = [&extension](const auto& values) {
         return std::find(values.begin(), values.end(), extension) != values.end();
     };
@@ -243,7 +262,15 @@ std::uint32_t content_category(const std::filesystem::path& path) {
     if (contains(audio)) return kContentAudio;
     if (contains(video)) return kContentVideo;
     if (contains(web)) return kContentWeb;
+    if (contains(programs)) return kContentPrograms;
+    if (contains(windows_scripts)) return kContentWindowsScripts;
+    if (contains(developer_scripts)) return kContentDeveloperScripts;
+    if (contains(launchers)) return kContentLaunchers;
     return 0U;
+}
+
+bool executable_extension(const std::filesystem::path& path, std::uint32_t enabled = kContentAll) {
+    return (content_category(path) & enabled & kContentExecutionAll) != 0U;
 }
 
 bool parser_risk_extension(const std::filesystem::path& path, std::uint32_t enabled = kContentAll) {
@@ -266,11 +293,27 @@ ContentPolicy load_content_policy() {
     DATA_BLOB clear{};
     if (!CryptUnprotectData(&source, nullptr, nullptr, nullptr, nullptr, CRYPTPROTECT_UI_FORBIDDEN, &clear)) return fallback;
     ContentPolicy policy{};
-    const bool valid = clear.cbData == sizeof(policy);
-    if (valid) std::memcpy(&policy, clear.pbData, sizeof(policy));
+    bool valid = false;
+    if (clear.cbData == sizeof(policy)) {
+        std::memcpy(&policy, clear.pbData, sizeof(policy));
+        valid = policy.version == 3U;
+    } else if (clear.cbData == sizeof(LegacyContentPolicy)) {
+        LegacyContentPolicy legacy{};
+        std::memcpy(&legacy, clear.pbData, sizeof(legacy));
+        if (legacy.version == 1U || legacy.version == 2U) {
+            policy.magic = legacy.magic;
+            policy.version = 3U;
+            policy.enabled_categories = legacy.enabled_categories;
+            policy.fail_closed = legacy.fail_closed;
+            policy.release_required = 1U;
+            if (legacy.version == 1U) policy.enabled_categories |= kContentExecutionAll;
+            valid = true;
+        }
+    }
     LocalFree(clear.pbData);
-    if (!valid || policy.magic != fallback.magic || policy.version != 1U ||
-        (policy.enabled_categories & ~kContentAll) != 0U || policy.fail_closed > 1U) return fallback;
+    if (!valid || policy.magic != fallback.magic ||
+        (policy.enabled_categories & ~kContentAll) != 0U || policy.fail_closed > 1U ||
+        policy.release_required > 1U) return fallback;
     return policy;
 }
 
@@ -528,7 +571,7 @@ public:
             for (const auto& entry : std::filesystem::recursive_directory_iterator(
                      root, std::filesystem::directory_options::skip_permission_denied, error)) {
                 if (!entry.is_regular_file(error)) continue;
-                const bool executable = executable_extension(entry.path());
+                const bool executable = executable_extension(entry.path(), policy_.enabled_categories);
                 if ((!downloads_root && !executable) ||
                     (downloads_root && !executable && !parser_risk_extension(entry.path(), policy_.enabled_categories))) continue;
                 processed_.insert(entry.path().wstring());
@@ -558,7 +601,7 @@ public:
                      root, std::filesystem::directory_options::skip_permission_denied, error)) {
                 if (++visited > 20'000U) return;
                 if (error || !entry.is_regular_file(error)) continue;
-                const bool executable = executable_extension(entry.path());
+                const bool executable = executable_extension(entry.path(), policy_.enabled_categories);
                 if ((!downloads_root && !executable) ||
                     (downloads_root && !executable && !parser_risk_extension(entry.path(), policy_.enabled_categories))) continue;
                 const auto modified = entry.last_write_time(error);
@@ -665,19 +708,22 @@ private:
                 source_info.ftLastWriteTime.dwLowDateTime};
         const auto digest = ai_shield::crypto::sha256(std::as_bytes(std::span(identity)));
         const std::string identifier = digest_hex(digest);
-        const bool executable = executable_extension(source);
+        const bool executable = executable_extension(source, policy_.enabled_categories);
         const bool parser_risk = parser_risk_extension(source, policy_.enabled_categories);
         const bool trusted = executable && trusted_signature(source);
         const auto defender = scan_with_defender(source, size);
         append_record(health_, "{\"event\":\"defender_complete\",\"verdict\":" +
                                std::to_string(static_cast<unsigned int>(defender)) + "}\r\n");
         const bool structure_suspicious = defender == DefenderVerdict::suspicious;
-        const bool quarantine = (executable && !trusted) || structure_suspicious || defender == DefenderVerdict::threat ||
+        const bool release_pending = parser_risk && policy_.release_required != 0U;
+        const bool quarantine = release_pending || (executable && !trusted) || structure_suspicious ||
+                                defender == DefenderVerdict::threat ||
                                 (parser_risk && policy_.fail_closed != 0U && defender == DefenderVerdict::unavailable);
         const std::string classification = defender == DefenderVerdict::threat ? "malware_detected" :
             structure_suspicious ? "suspicious_file_structure" :
             (parser_risk && policy_.fail_closed != 0U && defender == DefenderVerdict::unavailable) ? "parser_risk_scan_unavailable" :
             (executable && !trusted) ? "external_untrusted_executable" :
+            release_pending ? "pending_user_release" :
             trusted ? "external_trusted_scanned" : "external_content_scanned_safe";
         const std::string record = "{\"id\":\"" + identifier + "\",\"source\":\"" +
                                     json_escape(source.wstring()) + "\",\"size\":" + std::to_string(size) +
@@ -778,7 +824,7 @@ int run_broker(const std::filesystem::path& log_directory, bool once) {
         quarantine_worker = std::jthread([&quarantine](std::stop_token stop) {
             while (!stop.stop_requested()) {
                 quarantine.scan();
-                for (unsigned int i = 0U; i < 20U && !stop.stop_requested(); ++i) Sleep(100U);
+                for (unsigned int i = 0U; i < 10U && !stop.stop_requested(); ++i) Sleep(100U);
             }
         });
     }
@@ -921,7 +967,12 @@ int self_test() {
         !suspicious_structure(L"active.pdf", bytes(active_pdf)) ||
         !parser_risk_extension(L"photo.webp") || !parser_risk_extension(L"movie.mp4") ||
         parser_risk_extension(L"notes.txt") || parser_risk_extension(L"photo.webp", kContentDocuments) ||
-        content_category(L"report.pdf") != kContentDocuments || content_category(L"track.mp3") != kContentAudio) return 4;
+        content_category(L"report.pdf") != kContentDocuments || content_category(L"track.mp3") != kContentAudio ||
+        content_category(L"setup.msi") != kContentPrograms || content_category(L"deploy.ps1") != kContentWindowsScripts ||
+        content_category(L"bootstrap.sh") != kContentDeveloperScripts || content_category(L"target.lnk") != kContentLaunchers ||
+        !executable_extension(L"deploy.ps1") || !executable_extension(L"module.psm1") ||
+        !executable_extension(L"tool.py") || !executable_extension(L"package.jar") ||
+        executable_extension(L"deploy.ps1", kContentPrograms)) return 4;
     std::wcout << L"ai_shield_broker self-test passed\n";
     return 0;
 }
@@ -929,22 +980,27 @@ int self_test() {
 int runtime_command(int argc, wchar_t** argv) {
     if (argc == 2 && std::wstring_view(argv[1]) == L"content-policy-status") {
         const auto policy = load_content_policy();
-        std::wcout << L"{\"schema\":\"AIShieldContentPolicy/1\",\"enabled_categories\":"
+        std::wcout << L"{\"schema\":\"AIShieldContentPolicy/3\",\"enabled_categories\":"
                    << policy.enabled_categories << L",\"fail_closed\":"
-                   << (policy.fail_closed != 0U ? L"true" : L"false") << L"}\n";
+                   << (policy.fail_closed != 0U ? L"true" : L"false") << L",\"release_required\":"
+                   << (policy.release_required != 0U ? L"true" : L"false") << L"}\n";
         return 0;
     }
-    if (argc == 4 && std::wstring_view(argv[1]) == L"content-policy-set") {
+    if ((argc == 4 || argc == 5) && std::wstring_view(argv[1]) == L"content-policy-set") {
         if (!elevated_administrator()) return 5;
         wchar_t* mask_end = nullptr;
         wchar_t* fail_end = nullptr;
+        wchar_t* release_end = nullptr;
         const auto mask = wcstoul(argv[2], &mask_end, 10);
         const auto fail_closed = wcstoul(argv[3], &fail_end, 10);
+        const auto release_required = argc == 5 ? wcstoul(argv[4], &release_end, 10) : 1UL;
         if (mask_end == argv[2] || *mask_end != L'\0' || fail_end == argv[3] || *fail_end != L'\0' ||
-            (mask & ~kContentAll) != 0U || fail_closed > 1U) return 2;
+            (argc == 5 && (release_end == argv[4] || *release_end != L'\0')) ||
+            (mask & ~kContentAll) != 0U || fail_closed > 1U || release_required > 1U) return 2;
         ContentPolicy policy{};
         policy.enabled_categories = mask;
         policy.fail_closed = fail_closed;
+        policy.release_required = release_required;
         return save_content_policy(policy) ? 0 : 2;
     }
     ai_shield::platform::windows::security::SecureRuntimeStore store(L"C:\\ProgramData\\AIShield");

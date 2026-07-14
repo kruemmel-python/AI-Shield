@@ -1,6 +1,6 @@
 # AI Shield: ABI Freeze und HLK-Übergabe
 
-Stand: 13. Juli 2026, Kernel-Transport ABI `1.2`, Freeze-Revision `2`
+Stand: 14. Juli 2026, Kernel-Transport ABI `1.2`, Freeze-Revision `2`
 
 ## Eingefrorenes ABI
 

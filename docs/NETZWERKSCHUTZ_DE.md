@@ -1,6 +1,6 @@
 # AI Shield: Systemweiter Netzwerkschutz
 
-Stand: 13. Juli 2026, Kernel-Transport ABI 1.2
+Stand: 14. Juli 2026, Kernel-Transport ABI 1.2
 
 ## Schutzumfang
 

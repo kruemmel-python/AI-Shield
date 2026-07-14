@@ -1,6 +1,6 @@
 # AI Shield: Aktueller Build- und Installationsstand
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Build
 
@@ -27,8 +27,8 @@ Alle drei Paketdateien besitzen eine gültige Signatur des lokalen Testzertifika
 
 | Datei | SHA-256 der vollständigen signierten Datei |
 |---|---|
-| `AIShieldMiniFilter.sys` | `A2D57DF519C6BB46AC4CC130CB0255D97115D52CC85BF4DC1D6EFA06C46D01E7` |
-| `AIShieldProcessGuard.sys` | `0E8C643B1CAF96CA3ECD5D344A2057961E28E264AEBE0F8B5E994125A3A93B58` |
+| `AIShieldMiniFilter.sys` | `6BC8B6BC6936E430F27CC155007B4E285D82AAE411D0CE0C1478B863C706F2E4` |
+| `AIShieldProcessGuard.sys` | `6C964917579995C7BADBF51FF49457941B49FD02497FC0EAE27A7009ADF79023` |
 | `AIShieldWfp.sys` | `96BB3CBD64E1ACEFF9A402D7C5D06FAC74465C1B1F8F03FE4F6E58141BC27A9E` |
 
 Lokales Testsigning ersetzt keine Microsoft-Produktionssignatur.
@@ -48,6 +48,21 @@ AIShieldMiniFilter   Running System
 AIShieldProcessGuard Running System
 AIShieldWfp          Running System
 ```
+
+## RC9-Downloadnachweis
+
+Der installierte Broker verwendet `AIShieldContentPolicy/3` mit allen zehn Gruppen,
+`fail_closed=true` und `release_required=true`. Der reale Test auf dem Referenzrechner meldete:
+
+```text
+safe_image_requires_release=true
+active_pdf_quarantined=true
+provenance_recorded=true
+```
+
+Die installierte Desktop-UI zeigt neue Quarantäneobjekte innerhalb weniger Sekunden und
+unterscheidet Freigabewarteschlange, Malware, Strukturbefund, Scanfehler und nicht vertrauenswürdige
+Ausführung. Details stehen in [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md).
 
 Ein früherer Installationslauf meldete folgenden geschützten Runtime-State; Policy- und
 Generationsnummern können sich bei jeder Aktivierung erhöhen:
@@ -101,8 +116,15 @@ Zertifikatpins korrekt unkonfiguriert. Die Firewalltransaktion ist implementiert
 konkreten VPN- und Entwicklungsallowlists des Zielsystems abgestimmt werden.
 
 Die Private-Desktop-UI besitzt jetzt einen DPAPI-geschützten Dateityp-Schutz für Dokumente,
-Archive, Bilder, Audio, Video und Webdateien. Neue Mark-of-the-Web-Downloads werden abhängig von
-dieser Policy durch einen isolierten, zeitbegrenzten Defender-/AMSI- und Struktur-Scanner geprüft.
+Archive, Bilder, Audio, Video, Webdateien sowie vier zusätzliche Ausführungsgruppen: Programme und
+Installer, Windows-Skripte, Entwickler-/Shell-Skripte sowie Verknüpfungen/Systemaktionen. Neue
+Mark-of-the-Web-Downloads werden abhängig von dieser Policy durch einen isolierten,
+zeitbegrenzten Defender-/AMSI- und Struktur-Scanner geprüft. ProcessGuard blockiert direkte Starts
+aus `Downloads` und erweitert die indirekte Sperre auf Sprachinterpreter, MSIExec, Java/.NET und
+relevante Windows-Systemlauncher. Die Content-Policy v3 aktiviert standardmäßig eine zusätzliche
+Freigabeschranke: Auch sauber geprüfte Downloads aktiver Gruppen werden quarantänisiert, in der UI
+gemeldet und erst nach begründeter Freigabe wieder bereitgestellt. Bestehende Policy-v1-/v2-Daten
+werden sicher migriert.
 Der integrierte Audit Viewer validiert und dekodiert lokale oder exportierte AISHAD02-Dateien.
 
 Credential Guard ohne UEFI-Lock ist fuer den naechsten kontrollierten Neustart vorbereitet. Defender

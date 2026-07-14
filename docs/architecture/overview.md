@@ -1,6 +1,6 @@
 # AI Shield Architecture Foundation
 
-Stand: 13. Juli 2026. Diese Datei beschreibt die Shared-Core-Grenze. Editions-, Betriebs- und
+Stand: 14. Juli 2026. Diese Datei beschreibt die Shared-Core-Grenze. Editions-, Betriebs- und
 UI-Dokumentation beginnt eine Ebene höher in [`../README.md`](../README.md).
 
 Der aktuelle Windows-Stand ergänzt den Shared Core um Private-Desktop-UI, Browser-Sensor,

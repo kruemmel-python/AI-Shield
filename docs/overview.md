@@ -1,6 +1,6 @@
 # AI Shield Architecture Foundation
 
-Stand: 13. Juli 2026. Der zentrale Dokumentationseinstieg und die Abgrenzung von Private Desktop,
+Stand: 14. Juli 2026. Der zentrale Dokumentationseinstieg und die Abgrenzung von Private Desktop,
 Enterprise-Betriebsprofil, Developer Full und Gateway-Prototyp stehen in
 [`README.md`](README.md) und [`EDITIONEN_UND_VERSIONEN_DE.md`](EDITIONEN_UND_VERSIONEN_DE.md).
 

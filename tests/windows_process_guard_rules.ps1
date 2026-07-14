@@ -15,7 +15,13 @@ $downloadInterpreterBlocked=$false
 try { & powershell.exe -NoProfile -File $downloadScript | Out-Null; $downloadInterpreterBlocked=-not $? } catch { $downloadInterpreterBlocked=$true }
 Remove-Item $downloadScript -Force -ErrorAction SilentlyContinue
 
-$result="temp_execution_blocked=$tempBlocked`r`nrisky_script_blocked=$scriptBlocked`r`ndownload_interpreter_blocked=$downloadInterpreterBlocked"
+$downloadBatch=Join-Path $env:USERPROFILE "Downloads\ai-shield-interpreter-test.bat"
+Set-Content -LiteralPath $downloadBatch -Value "@echo ai-shield-download-batch-test"
+$downloadBatchBlocked=$false
+try { & cmd.exe /d /c $downloadBatch | Out-Null; $downloadBatchBlocked=-not $? } catch { $downloadBatchBlocked=$true }
+Remove-Item $downloadBatch -Force -ErrorAction SilentlyContinue
+
+$result="temp_execution_blocked=$tempBlocked`r`nrisky_script_blocked=$scriptBlocked`r`ndownload_interpreter_blocked=$downloadInterpreterBlocked`r`ndownload_batch_blocked=$downloadBatchBlocked"
 $result|Set-Content "D:\AI_Shield\runtime\process_guard_rules.log"
 Write-Output $result
-if(-not $tempBlocked -or -not $scriptBlocked -or -not $downloadInterpreterBlocked){exit 2}
+if(-not $tempBlocked -or -not $scriptBlocked -or -not $downloadInterpreterBlocked -or -not $downloadBatchBlocked){exit 2}

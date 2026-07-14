@@ -1,6 +1,6 @@
 # AI Shield: Entwickler- und Betriebshandbuch des Windows-Prototyps
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## 1. Ziel und Status
 

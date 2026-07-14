@@ -1,12 +1,17 @@
 # Softwarebewertung: AI Shield 2.0
 
-Stand: 13. Juli 2026, bewertet wird Release Candidate `2.0.0-rc.8`
+Stand: 14. Juli 2026, bewertet wird Release Candidate `2.0.0-rc.9`
 
 Nachtrag zum verifizierten RC8-Stand: Die Recovery-Erstbaseline wurde auf dem Referenzrechner mit
 13.353 Dateien und null Übersprüngen abgeschlossen. Nicht auflösbare Junctions und Reparse Points
 werden nicht verfolgt und sind durch einen negativen Integrationstest abgedeckt. Alle zwölf
 CTest-Ziele bestanden. Diese Evidenz verbessert die lokale Funktionsreife, ersetzt jedoch keine
 Langzeit-, Vollplatten-, Stromausfall- oder unabhängige Sicherheitsqualifikation.
+
+RC9 ergänzt die praktisch relevante Download-Freigabeschranke: Saubere Dateien aktiver Gruppen
+werden nicht mehr automatisch als vertrauenswürdig behandelt, sondern bis zur begründeten
+Freigabe quarantänisiert und in der UI gemeldet. Der reale Integrationstest für ein sauberes Bild
+und eine aktive PDF ist Bestandteil des Release-Nachweises.
 
 ## Gegenstand und Bewertungsrahmen
 
@@ -17,7 +22,7 @@ Administrationskanal und mehreren Windows-Härtungsintegrationen.
 
 Diese Bewertung berichtigt die zuvor vorgelegte, stark werbliche Softwarebewertung. Sie stützt sich
 auf den Quellcode, die Projektdokumentation und die im Projekt festgehaltenen lokalen Build-, Test-
-und Installationsnachweise mit Stand 13. Juli 2026. Sie ist weder ein unabhängiger Penetrationstest
+und Installationsnachweise mit Stand 14. Juli 2026. Sie ist weder ein unabhängiger Penetrationstest
 noch eine Microsoft-Zertifizierung oder eine Freigabe für den Produktivbetrieb.
 
 | Merkmal | Bewerteter Stand |

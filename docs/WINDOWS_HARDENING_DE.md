@@ -1,6 +1,6 @@
 # AI Shield: Sicheres Windows-Hardening
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Automatische Pruefung
 

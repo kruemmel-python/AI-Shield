@@ -1,6 +1,6 @@
 # AI Shield Audit Viewer
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Warum die Exportdateien binär sind
 

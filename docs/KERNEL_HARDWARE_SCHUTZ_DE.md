@@ -1,6 +1,6 @@
 # Kernel- und Hardware-Schutz
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 AI Shield behandelt Kernel- und Hardwareangriffe als mehrschichtiges Risiko. Ein eigener Treiber
 kann keinen unbekannten Fehler im Windows-Kernel reparieren und keine bereits manipulierte CPU oder

@@ -1,6 +1,6 @@
 # AI Shield ABI 2.0
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Geltungsbereich
 
