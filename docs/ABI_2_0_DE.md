@@ -48,7 +48,7 @@ Fehlern. Netzwerk- und Kindprozessfreigaben werden in Tier 1 abgelehnt. Erst
 ## Verifikation
 
 Der saubere Release-Build `build_vs_abi2` kompiliert Core, Windows-Adapter, Broker und
-Werkzeuge. Die 15 CTest-Ziele prüfen unter anderem ABI-HMAC-Manipulation, ABI-1.2-zu-2.0-
+Werkzeuge. Die 16 CTest-Ziele prüfen unter anderem ABI-HMAC-Manipulation, ABI-1.2-zu-2.0-
 Übersetzung, Plattformadapter und die ausführbaren Self-Tests.
 
 Nicht Teil dieses Meilensteins sind Hyper-V-Tier-2, Sovereign Mode, Microsoft-HLK-Ausführung,

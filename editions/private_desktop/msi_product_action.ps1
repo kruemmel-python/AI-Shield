@@ -15,6 +15,19 @@ function Write-AIShieldMsiLog([string]$Message) {
     Write-Output $line
 }
 
+function Invoke-AIShieldChild([string]$Script, [string[]]$Arguments, [string]$LogPrefix) {
+    $previousPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    try {
+        $output = & powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File $Script @Arguments 2>&1
+        $exitCode = $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $previousPreference
+    }
+    $output | ForEach-Object { Write-AIShieldMsiLog "$LogPrefix $_" }
+    if ($exitCode -ne 0) { throw "$LogPrefix failed with exit code $exitCode." }
+}
+
 try {
     $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
     $principal = [Security.Principal.WindowsPrincipal]$identity
@@ -29,26 +42,25 @@ try {
         if ($script:hadExistingInstallation) {
             Write-AIShieldMsiLog "existing installation detected; refreshing components in place"
         }
-        & powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File `
-            (Join-Path $PSScriptRoot "install_private_desktop.ps1") -SuppressUiLaunch -RefreshInstalledComponents 2>&1 |
-            ForEach-Object { Write-AIShieldMsiLog "install $_" }
-        if ($LASTEXITCODE -ne 0) { throw "Product installation failed with exit code $LASTEXITCODE." }
+        Invoke-AIShieldChild -Script (Join-Path $PSScriptRoot "install_private_desktop.ps1") `
+            -Arguments @("-SuppressUiLaunch", "-RefreshInstalledComponents") -LogPrefix "install"
         Write-AIShieldMsiLog "completed"
         exit 0
     }
 
-    & powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File `
-        (Join-Path $PSScriptRoot "uninstall_private_desktop.ps1") 2>&1 |
-        ForEach-Object { Write-AIShieldMsiLog "uninstall $_" }
-    if ($LASTEXITCODE -ne 0) { throw "Product removal failed with exit code $LASTEXITCODE." }
+    Invoke-AIShieldChild -Script (Join-Path $PSScriptRoot "uninstall_private_desktop.ps1") `
+        -Arguments @() -LogPrefix "uninstall"
     Write-AIShieldMsiLog "completed; audit and quarantine data preserved"
 } catch {
     Write-AIShieldMsiLog "failed error=$($_.Exception.Message)"
     if ($Action -eq "install" -and $script:hadExistingInstallation -ne $true) {
         Write-AIShieldMsiLog "rolling back resources from failed fresh installation"
-        & powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File `
-            (Join-Path $PSScriptRoot "uninstall_private_desktop.ps1") 2>&1 |
-            ForEach-Object { Write-AIShieldMsiLog "rollback $_" }
+        try {
+            Invoke-AIShieldChild -Script (Join-Path $PSScriptRoot "uninstall_private_desktop.ps1") `
+                -Arguments @() -LogPrefix "rollback"
+        } catch {
+            Write-AIShieldMsiLog "rollback failed error=$($_.Exception.Message)"
+        }
     }
     Write-Error $_
     exit 1

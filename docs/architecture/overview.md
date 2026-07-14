@@ -6,7 +6,7 @@ UI-Dokumentation beginnt eine Ebene höher in [`../README.md`](../README.md).
 Der aktuelle Windows-Stand ergänzt den Shared Core um Private-Desktop-UI, Browser-Sensor,
 DPAPI-geschützten Dateityp-Schutz, isolierte Downloadprüfung und einen AISHAD02-Audit-Viewer.
 
-The current codebase implements the shared, platform-neutral core required before Windows driver
+The current codebase implements the shared, platform-neutral core and its active Windows driver
 integration:
 
 - `shared/abi`: represented by `include/ai_shield/abi.hpp`.
@@ -93,8 +93,31 @@ Windows milestone artifacts now live under `platform/windows`:
 - `common/abi_translation`: translates platform observations into validated Shared Core ABI records.
 - `service/driver_channel`: validates monotone driver-channel events and one-shot pending completions.
 - `wfp/adapter`: maps telemetry-only WFP observations and fast enforcement decisions.
-- `wfp/driver`: contains the telemetry-only WFP driver entry and permit-only classify callback source.
+- `wfp/driver`: contains dual-stack ALE telemetry, blocking, scanner network isolation and
+  transparent connect redirection.
 - `minifilter/provenance_adapter`: maps file events into Shared Core provenance.
-- `minifilter/driver`: contains the minifilter registration source.
+- `minifilter/driver`: contains volume/file-ID telemetry, quarantine enforcement and a fail-closed
+  pending-file gate that blocks preview/read/mapping before the broker verdict. On cleanup it sends
+  the normalized path plus volume/file identity through an authenticated Filter Manager port. The
+  broker acknowledges queue admission within a 250 ms kernel deadline; a separate worker performs
+  the scan and submits the final verdict through a broker-only IOCTL. Missing ports, timeouts,
+  queue exhaustion, malformed replies and identity changes keep the object pending.
 - `process_guard/driver`: contains the process creation sensor registration source.
-- `sandbox/appcontainer_launcher`: validates and launches the shadow parser in an AppContainer profile.
+- `sandbox/appcontainer_launcher`: launches the parser with an explicit handle allowlist in an
+  AppContainer; its fallback uses a restricted low-integrity token, private desktop, minimal DACL,
+  job limits and process mitigations.
+
+The ZIP preflight validates local headers, the central directory, Data Descriptors, CRC-32,
+UTF-8 names and ZIP64 metadata. Stored and raw-DEFLATE entries are decompressed in-process and
+nested archives are inspected recursively under shared limits for depth, entry count, individual
+expanded size, total expanded size and compression ratio. Path traversal, alternate-data-stream
+names, duplicate canonical names, header disagreement, truncated streams, malformed Huffman tables,
+CRC mismatch and budget exhaustion are fail-closed findings. Encrypted entries and compression
+methods other than Stored/DEFLATE are never classified as clean automatically.
+
+Authenticode validation checks whole-chain revocation and separates `signed_valid` from
+`trusted_publisher`. Trusted publisher certificate SHA-256 fingerprints are read one per line from
+`C:\ProgramData\AIShield\policy\trusted-publishers.txt`; an absent or empty file trusts no publisher.
+The broker resolves profile roots and redirected Downloads Known Folders from the Windows profile
+registry. Cross-volume quarantine copies from the locked source handle, verifies the copied SHA-256
+and only then deletes the original through that same handle.

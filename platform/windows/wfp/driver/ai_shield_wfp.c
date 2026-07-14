@@ -1,5 +1,5 @@
 #define NDIS_SUPPORT_NDIS6 1
-#include <ntddk.h>
+#include <ntifs.h>
 #include <netioddk.h>
 #include <fwpmk.h>
 #include <fwpsk.h>
@@ -35,8 +35,22 @@ static AI_SHIELD_DRIVER_POLICY g_Policy = {
 static AI_SHIELD_DRIVER_STATUS g_Status = {
     AI_SHIELD_PROTOCOL_VERSION, sizeof(AI_SHIELD_DRIVER_STATUS), AI_SHIELD_POLICY_AUDIT, 0, 0, 0, 0, 0, 0};
 static AI_SHIELD_EVENT_QUEUE g_EventQueue;
+static PEPROCESS volatile g_BrokerProcess = NULL;
+static PEPROCESS volatile g_IsolatedProcess = NULL;
 
 #define AI_SHIELD_STAGE_STATUS(stage) ((NTSTATUS)(0xC0E10000U | (stage)))
+
+static BOOLEAN AiShieldCurrentProcessIs(PEPROCESS volatile* expected) {
+    return (PEPROCESS)InterlockedCompareExchangePointer((PVOID volatile*)expected, NULL, NULL) ==
+           PsGetCurrentProcess();
+}
+
+static VOID AiShieldReplaceProcess(PEPROCESS volatile* destination, PEPROCESS process) {
+    PEPROCESS previous;
+    ObReferenceObject(process);
+    previous = (PEPROCESS)InterlockedExchangePointer((PVOID volatile*)destination, process);
+    if (previous != NULL) ObDereferenceObject(previous);
+}
 
 static AI_SHIELD_DRIVER_POLICY AiShieldReadPolicy(void) {
     AI_SHIELD_DRIVER_POLICY policy;
@@ -70,6 +84,24 @@ static BOOLEAN AiShieldProcessPathContains(const FWPS_INCOMING_METADATA_VALUES0*
     return FALSE;
 }
 
+static BOOLEAN AiShieldProcessPathEndsWith(const FWPS_INCOMING_METADATA_VALUES0* metadata, PCWSTR suffixBuffer) {
+    UNICODE_STRING path;
+    UNICODE_STRING suffix;
+    UNICODE_STRING candidate;
+    if ((metadata->currentMetadataValues & FWPS_METADATA_FIELD_PROCESS_PATH) == 0U ||
+        metadata->processPath == NULL || metadata->processPath->data == NULL ||
+        metadata->processPath->size > MAXUSHORT) return FALSE;
+    path.Buffer = (PWSTR)metadata->processPath->data;
+    path.Length = (USHORT)metadata->processPath->size;
+    path.MaximumLength = path.Length;
+    RtlInitUnicodeString(&suffix, suffixBuffer);
+    if (path.Length < suffix.Length) return FALSE;
+    candidate.Buffer = path.Buffer + (path.Length - suffix.Length) / sizeof(WCHAR);
+    candidate.Length = suffix.Length;
+    candidate.MaximumLength = suffix.Length;
+    return RtlEqualUnicodeString(&candidate, &suffix, TRUE);
+}
+
 static BOOLEAN AiShieldIsBrowser(const FWPS_INCOMING_METADATA_VALUES0* metadata) {
     return AiShieldProcessPathContains(metadata, L"\\chrome.exe") ||
            AiShieldProcessPathContains(metadata, L"\\msedge.exe") ||
@@ -79,7 +111,8 @@ static BOOLEAN AiShieldIsBrowser(const FWPS_INCOMING_METADATA_VALUES0* metadata)
 }
 
 static BOOLEAN AiShieldIsFileScanner(const FWPS_INCOMING_METADATA_VALUES0* metadata) {
-    return AiShieldProcessPathContains(metadata, L"\\ai_shield_file_scanner.exe");
+    return AiShieldProcessPathEndsWith(metadata,
+        L"\\program files\\aishield\\bin\\ai_shield_file_scanner.exe");
 }
 
 static BOOLEAN AiShieldIsWebPort(UINT16 port) {
@@ -154,7 +187,7 @@ static void NTAPI AiShieldAuthorizeClassify(const FWPS_INCOMING_VALUES0* values,
             16U);
         outbound = TRUE;
     }
-    if (AiShieldIsFileScanner(metadata)) {
+    if (AiShieldCurrentProcessIs(&g_IsolatedProcess) || AiShieldIsFileScanner(metadata)) {
         classifyOut->actionType = FWP_ACTION_BLOCK;
         classifyOut->rights &= ~FWPS_RIGHT_ACTION_WRITE;
         InterlockedIncrement64(&g_Status.Blocked);
@@ -317,6 +350,27 @@ static NTSTATUS AiShieldDeviceControl(PDEVICE_OBJECT device, PIRP irp) {
             bytes = sizeof(event);
             status = STATUS_SUCCESS;
         } else status = STATUS_NO_MORE_ENTRIES;
+    } else if (stack->Parameters.DeviceIoControl.IoControlCode == AI_SHIELD_IOCTL_REGISTER_BROKER &&
+               stack->Parameters.DeviceIoControl.InputBufferLength == sizeof(AI_SHIELD_BROKER_REGISTRATION)) {
+        AI_SHIELD_BROKER_REGISTRATION* registration =
+            (AI_SHIELD_BROKER_REGISTRATION*)irp->AssociatedIrp.SystemBuffer;
+        if (registration->Version == AI_SHIELD_PROTOCOL_VERSION && registration->Size == sizeof(*registration) &&
+            registration->ProcessId == (ULONGLONG)(ULONG_PTR)PsGetCurrentProcessId()) {
+            AiShieldReplaceProcess(&g_BrokerProcess, PsGetCurrentProcess());
+            status = STATUS_SUCCESS;
+        } else status = STATUS_ACCESS_DENIED;
+    } else if (stack->Parameters.DeviceIoControl.IoControlCode == AI_SHIELD_IOCTL_REGISTER_ISOLATED_PROCESS &&
+               stack->Parameters.DeviceIoControl.InputBufferLength == sizeof(AI_SHIELD_BROKER_REGISTRATION)) {
+        AI_SHIELD_BROKER_REGISTRATION* registration =
+            (AI_SHIELD_BROKER_REGISTRATION*)irp->AssociatedIrp.SystemBuffer;
+        PEPROCESS process = NULL;
+        if (AiShieldCurrentProcessIs(&g_BrokerProcess) &&
+            registration->Version == AI_SHIELD_PROTOCOL_VERSION && registration->Size == sizeof(*registration) &&
+            NT_SUCCESS(PsLookupProcessByProcessId((HANDLE)(ULONG_PTR)registration->ProcessId, &process))) {
+            AiShieldReplaceProcess(&g_IsolatedProcess, process);
+            ObDereferenceObject(process);
+            status = STATUS_SUCCESS;
+        } else status = STATUS_ACCESS_DENIED;
     }
     irp->IoStatus.Status = status;
     irp->IoStatus.Information = bytes;
@@ -356,6 +410,8 @@ static NTSTATUS AiShieldAddFilter(const GUID* layer, const GUID* key, UINT64 con
 
 static void AiShieldUnload(PDRIVER_OBJECT driver) {
     UNICODE_STRING link = RTL_CONSTANT_STRING(L"\\DosDevices\\AIShieldWfp");
+    PEPROCESS broker;
+    PEPROCESS isolated;
     UNREFERENCED_PARAMETER(driver);
     if (g_Engine != NULL) { FwpmEngineClose0(g_Engine); g_Engine = NULL; }
     if (g_RedirectHandle != NULL) {
@@ -368,6 +424,10 @@ static void AiShieldUnload(PDRIVER_OBJECT driver) {
     if (g_RedirectId != 0U) FwpsCalloutUnregisterById0(g_RedirectId);
     if (g_AcceptId != 0U) FwpsCalloutUnregisterById0(g_AcceptId);
     if (g_ConnectId != 0U) FwpsCalloutUnregisterById0(g_ConnectId);
+    broker = (PEPROCESS)InterlockedExchangePointer((PVOID volatile*)&g_BrokerProcess, NULL);
+    isolated = (PEPROCESS)InterlockedExchangePointer((PVOID volatile*)&g_IsolatedProcess, NULL);
+    if (broker != NULL) ObDereferenceObject(broker);
+    if (isolated != NULL) ObDereferenceObject(isolated);
     IoDeleteSymbolicLink(&link);
     if (g_Device != NULL) { IoDeleteDevice(g_Device); g_Device = NULL; }
 }

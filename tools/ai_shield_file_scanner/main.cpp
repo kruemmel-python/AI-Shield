@@ -18,6 +18,51 @@
 
 namespace {
 
+struct ProcessHandleEntry final {
+    HANDLE handle_value;
+    ULONG_PTR handle_count;
+    ULONG_PTR pointer_count;
+    ULONG granted_access;
+    ULONG object_type_index;
+    ULONG handle_attributes;
+    ULONG reserved;
+};
+
+struct ProcessHandleTable final {
+    ULONG_PTR count;
+    ULONG_PTR reserved;
+    ProcessHandleEntry entries[1];
+};
+
+bool process_has_handle(std::uintptr_t value, bool& query_ok) {
+    using QueryProcessInformation = LONG (NTAPI*)(HANDLE, ULONG, void*, ULONG, ULONG*);
+    const HMODULE ntdll = GetModuleHandleW(L"ntdll.dll");
+    const auto query = ntdll == nullptr ? nullptr : reinterpret_cast<QueryProcessInformation>(
+        GetProcAddress(ntdll, "NtQueryInformationProcess"));
+    if (query == nullptr) { query_ok = false; return false; }
+    std::vector<std::byte> storage(64U * 1024U);
+    ULONG required = 0U;
+    LONG status = 0;
+    for (unsigned int attempt = 0U; attempt < 8U; ++attempt) {
+        status = query(GetCurrentProcess(), 51U, storage.data(), static_cast<ULONG>(storage.size()), &required);
+        if (status != static_cast<LONG>(0xC0000004U)) break;
+        storage.resize((std::max)(storage.size() * 2U, static_cast<std::size_t>(required) + 4096U));
+    }
+    if (status < 0) { query_ok = false; return false; }
+    query_ok = true;
+    const auto* table = reinterpret_cast<const ProcessHandleTable*>(storage.data());
+    for (ULONG_PTR index = 0U; index < table->count; ++index) {
+        if (reinterpret_cast<std::uintptr_t>(table->entries[index].handle_value) == value) return true;
+    }
+    return false;
+}
+
+int classify_amsi_result(AMSI_RESULT result) noexcept {
+    if (AmsiResultIsMalware(result)) return 10;
+    if (result >= AMSI_RESULT_BLOCKED_BY_ADMIN_START && result <= AMSI_RESULT_BLOCKED_BY_ADMIN_END) return 11;
+    return 0;
+}
+
 bool structural_risk(std::span<const std::byte> content, const std::filesystem::path& path) {
     const auto universal = ai_shield::file_preflight::inspect(content, path.filename().wstring());
     if (universal.high_risk()) return true;
@@ -62,13 +107,32 @@ int amsi_verdict(std::span<const std::byte> content) {
     uninitialize(context);
     FreeLibrary(module);
     if (FAILED(scanned)) return 3;
-    return AmsiResultIsMalware(result) ? 10 : 0;
+    return classify_amsi_result(result);
 }
 
 }  // namespace
 
 int wmain(int argc, wchar_t** argv) {
-    if (argc == 2 && std::wstring_view(argv[1]) == L"self-test") return 0;
+    if (argc == 2 && std::wstring_view(argv[1]) == L"self-test") {
+        return classify_amsi_result(AMSI_RESULT_NOT_DETECTED) == 0 &&
+                       classify_amsi_result(AMSI_RESULT_BLOCKED_BY_ADMIN_START) == 11 &&
+                       classify_amsi_result(AMSI_RESULT_DETECTED) == 10 ? 0 : 1;
+    }
+    if (argc == 4 && std::wstring_view(argv[1]) == L"probe-handles") {
+        wchar_t* allowed_end = nullptr;
+        wchar_t* forbidden_end = nullptr;
+        const auto allowed_value = _wcstoui64(argv[2], &allowed_end, 10);
+        const auto forbidden_value = _wcstoui64(argv[3], &forbidden_end, 10);
+        if (*allowed_end != L'\0' || *forbidden_end != L'\0') return 2;
+        bool allowed_query = false;
+        bool forbidden_query = false;
+        const bool allowed = process_has_handle(static_cast<std::uintptr_t>(allowed_value), allowed_query);
+        const bool leaked = process_has_handle(static_cast<std::uintptr_t>(forbidden_value), forbidden_query);
+        if (!allowed_query || !forbidden_query) return 4;
+        if (!allowed) return 5;
+        if (leaked) return 6;
+        return 0;
+    }
     if (argc != 5 || std::wstring_view(argv[1]) != L"scan-handle") return 2;
     wchar_t* handle_end = nullptr;
     wchar_t* size_end = nullptr;

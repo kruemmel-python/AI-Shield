@@ -137,7 +137,7 @@ if(WIN32)
 
     add_executable(ai_shield_broker tools/ai_shield_broker/main.cpp)
     target_include_directories(ai_shield_broker PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-    target_link_libraries(ai_shield_broker PRIVATE ai_shield_core advapi32 wintrust crypt32 bcrypt)
+    target_link_libraries(ai_shield_broker PRIVATE ai_shield_core advapi32 wintrust crypt32 bcrypt FltLib)
     target_compile_definitions(ai_shield_broker PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX)
     if(MSVC)
         target_compile_options(ai_shield_broker PRIVATE /W4 /permissive- /sdl /GS)
@@ -182,7 +182,7 @@ if(WIN32 AND AI_SHIELD_ENABLE_WINDOWS_PLATFORM)
         platform/windows/siem/syslog_connector.cpp
     )
     target_include_directories(ai_shield_windows_platform PUBLIC include ${CMAKE_CURRENT_SOURCE_DIR})
-    target_link_libraries(ai_shield_windows_platform PUBLIC ai_shield_core userenv crypt32 bcrypt ncrypt amsi ole32 advapi32 ws2_32)
+    target_link_libraries(ai_shield_windows_platform PUBLIC ai_shield_core userenv crypt32 bcrypt ncrypt amsi ole32 advapi32 user32 ws2_32)
     target_link_libraries(ai_shield_broker PRIVATE ai_shield_windows_platform)
     target_compile_definitions(ai_shield_windows_platform PUBLIC WIN32_LEAN_AND_MEAN NOMINMAX)
     if(MSVC)
@@ -239,4 +239,8 @@ if(WIN32)
     add_test(NAME ai_shield_private_ui_contract
         COMMAND powershell.exe -NoProfile -ExecutionPolicy Bypass -STA -File
         ${CMAKE_CURRENT_SOURCE_DIR}/editions/private_desktop/ui/verify_ui_contract.ps1)
+    add_test(NAME ai_shield_minifilter_latency_contract
+        COMMAND powershell.exe -NoProfile -ExecutionPolicy Bypass -File
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/windows_minifilter_latency_contract.ps1
+        -RepositoryRoot ${CMAKE_CURRENT_SOURCE_DIR})
 endif()

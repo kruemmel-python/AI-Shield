@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <array>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -146,6 +147,46 @@ void test_appcontainer_launch_spec_validation() {
     AI_SHIELD_WIN_CHECK(invalid.status() == ai_shield::Status::invalid_state_transition);
 }
 
+void test_restricted_parser_inherits_only_allowlisted_handle() {
+#ifndef NDEBUG
+    return;
+#else
+    std::array<wchar_t, 32768> module{};
+    AI_SHIELD_WIN_CHECK(GetModuleFileNameW(nullptr, module.data(), static_cast<DWORD>(module.size())) != 0U);
+    const auto scanner = std::filesystem::path(module.data()).parent_path() / L"ai_shield_file_scanner.exe";
+    AI_SHIELD_WIN_CHECK(std::filesystem::exists(scanner));
+    SECURITY_ATTRIBUTES inheritable{sizeof(inheritable), nullptr, TRUE};
+    HANDLE allowed = CreateEventW(&inheritable, TRUE, FALSE, nullptr);
+    HANDLE forbidden = CreateEventW(&inheritable, TRUE, FALSE, nullptr);
+    AI_SHIELD_WIN_CHECK(allowed != nullptr && forbidden != nullptr);
+    const std::wstring command = L"\"" + scanner.wstring() + L"\" probe-handles " +
+        std::to_wstring(reinterpret_cast<std::uintptr_t>(allowed)) + L" " +
+        std::to_wstring(reinterpret_cast<std::uintptr_t>(forbidden));
+    const auto launched = ai_shield::platform::windows::sandbox::launch_restricted_parser({
+        .analysis_id = 9001U,
+        .parser_id = 1U,
+        .budget = {.wall_time_ns = 5'000'000'000ULL, .memory_bytes = 64U * 1024U * 1024U, .max_processes = 1U},
+        .allow_network = false,
+        .allow_child_processes = false,
+        .executable_path = scanner.wstring(),
+        .command_line = command,
+        .work_directory = scanner.parent_path().wstring(),
+        .inherited_handle = allowed});
+    if (!launched.ok()) std::cerr << "restricted launch error=" << GetLastError() << "\n";
+    AI_SHIELD_WIN_CHECK(launched.ok());
+    auto child = launched.value();
+    AI_SHIELD_WIN_CHECK(ai_shield::platform::windows::sandbox::resume_launched_process(child).ok());
+    AI_SHIELD_WIN_CHECK(WaitForSingleObject(child.process, 10'000U) == WAIT_OBJECT_0);
+    DWORD exit_code = ERROR_GEN_FAILURE;
+    AI_SHIELD_WIN_CHECK(GetExitCodeProcess(child.process, &exit_code) != FALSE);
+    if (exit_code != 0U) std::cerr << "restricted child exit=" << std::hex << exit_code << std::dec << "\n";
+    AI_SHIELD_WIN_CHECK(exit_code == 0U);
+    ai_shield::platform::windows::sandbox::close_launched_process(child);
+    CloseHandle(allowed);
+    CloseHandle(forbidden);
+#endif
+}
+
 void test_minifilter_provenance_adapter() {
     ai_shield::provenance::Store store;
     const ai_shield::provenance::FileIdentity source{.volume_id = 1,
@@ -240,6 +281,7 @@ int main() {
     test_driver_event_to_abi2_translation();
     test_wfp_enforcement_fast_policy();
     test_appcontainer_launch_spec_validation();
+    test_restricted_parser_inherits_only_allowlisted_handle();
     test_minifilter_provenance_adapter();
     test_secure_runtime_state_rotation_and_recovery();
     test_etw_amsi_translation_and_parser_pool_limits();

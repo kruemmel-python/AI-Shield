@@ -1,6 +1,6 @@
 # AI Shield: Noch auszuführende Produktnachweise
 
-Stand: 14. Juli 2026, nach Abschluss des RC11-Datei-, Desktop-, Download-, Recovery- und Ransomware-Schutzpfads
+Stand: 15. Juli 2026, nach Abschluss des RC12-ZIP- und latenzbegrenzten Minifilter-Schutzpfads
 
 ## Noch auszuführende Produktnachweise
 
@@ -23,7 +23,11 @@ Auch die lokalen Consumer-Betriebsfunktionen sind implementiert: MSI-Installatio
 Treiber-/Dienst-Rückbau, versteckter UI-Host nach UAC, Neustartfortsetzung, Edge-/Chrome-Sensor,
 DPAPI-geschützter Dateityp-Schutz, isolierter Defender-/AMSI-/PDF-/ZIP-Downloadscanner,
 Quarantäneworkflow sowie ein integrierter Viewer für lokale und exportierte AISHAD02-Dateien.
-Damit enthält diese Liste keine bekannte, nur durch weiteren lokalen Produktcode schließbare
+RC12 ergänzt eine budgetierte ZIP-/ZIP64-Tiefenanalyse und eine auf 250 ms begrenzte
+Filter-Manager-Übergabe zwischen Minifilter und Broker. Die Inhaltsanalyse läuft getrennt;
+Dateiöffnungen bleiben bis zum identitätsgebundenen Ergebnis gesperrt. Timeout, Portausfall,
+Warteschlangenüberlauf und ungültige Antworten bleiben `pending`. Damit enthält diese Liste
+keine bekannte, nur durch weiteren lokalen Produktcode schließbare
 Schutzlücke; offen sind Nachweise, externe Vertrauensanker und deployment-spezifische Parameter.
 
 RC8 ergänzte einen ACL-geschützten, inhaltsadressierten Recovery-Vault, Installationsbaseline,
@@ -34,12 +38,13 @@ Snapshot, Erkennung, Plan, Restore und externe Backupprüfung ab. Eine echte Win
 Systemdateiwiederherstellung und ein unveränderliches externes Ziel bleiben Produktnachweise und
 deployment-spezifische Infrastruktur, keine gefahrlos automatisch aktivierbare lokale Funktion.
 
-RC9 ergänzt Content-Policy v3, zehn einzeln steuerbare Dateigruppen, die standardmäßig aktive
+RC9 ergänzte Content-Policy v3, zehn einzeln steuerbare Dateigruppen, die standardmäßig aktive
 Freigabeschranke, sichtbare UI-Benachrichtigungen und lokalisierte Quarantänegründe. Der reale
 Integrationstest weist nach, dass auch eine sauber geprüfte Bilddatei vor dem Öffnen freigegeben
 werden muss. Damit ist die zuvor beobachtete automatische Freigabe von Medien im lokalen
-Produktcode geschlossen; synchrones Kernel-Pending für jeden Dateizugriff bleibt ein gesondertes
-Kompatibilitäts- und Qualifikationsthema, keine ungeprüft aktivierbare RC9-Funktion.
+Produktcode geschlossen. Das damals noch offene Kernel-Pending wurde mit RC12 implementiert und
+nach einem Desktop-Latenzbefund in eine 250-ms-Übergabe mit asynchronem Analyse-Worker gehärtet;
+Kompatibilitäts- und Dauertests bleiben Produktnachweise.
 
 RC10 ergänzt den automatisch gestarteten Tray-Agenten, die UI-Einzelinstanz und Close-to-Tray.
 Minimieren und `X` beenden weder UI-Prozess noch Schutzkern; der Tray-Doppelklick stellt dieselbe

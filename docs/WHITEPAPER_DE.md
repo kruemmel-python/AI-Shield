@@ -4,6 +4,23 @@
 
 Whitepaper, Stand 14. Juli 2026
 
+## RC12: Entscheidung vor dem ersten Zugriff
+
+RC12 schließt die zeitliche Lücke zwischen abgeschlossenem Dateischreiben und periodischer
+Verzeichnisprüfung. Der Minifilter markiert externe Schreibvorgänge anhand von Volume- und File-ID
+als `pending`. Beim Cleanup übermittelt er Request-ID, normalisierten NT-Pfad und Dateiidentität über
+einen nur für den registrierten Broker zugänglichen Filter-Manager-Port. Der Empfangsthread
+bestätigt die Warteschlangenaufnahme innerhalb einer 250-ms-Kerneldeadline. Ein separater Worker
+öffnet das Objekt ohne Reparse-Auflösung, verifiziert dieselbe Identität und setzt das endgültige
+Urteil per Broker-IOCTL. Fehlender Broker, Timeout, Identitätswechsel, Warteschlangenüberlauf oder
+eine ungültige Antwort lassen die betroffene Datei gesperrt, ohne den Desktop-I/O-Pfad für die
+Dauer der Inhaltsanalyse anzuhalten.
+
+Die ZIP-Prüfung wertet Central Directory, lokale Header, Data Descriptor, ZIP64-Felder, UTF-8-Namen
+und CRC-32 konsistent aus. Stored- und DEFLATE-Inhalte werden rekursiv analysiert. Gemeinsame Budgets
+begrenzen Tiefe, Eintragszahl, Einzel- und Gesamtgröße sowie Kompressionsverhältnis. Verschlüsselung,
+nicht unterstützte Methoden und Budgetüberschreitungen führen nicht zu einer Positivfreigabe.
+
 ## RC11: Dateiinhalt statt Dateiendung
 
 RC11 führt eine universelle Preflight-Stufe vor der formatspezifischen Analyse ein. Sie vergleicht

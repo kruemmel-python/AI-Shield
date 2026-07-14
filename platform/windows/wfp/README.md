@@ -22,3 +22,7 @@ ai_shield_kernelctl.exe enforce --redirect-port 18081 --proxy-port 18080 --exemp
 
 Connect redirection is intentionally restricted to one configured destination port and loopback
 proxy port. Global redirection is not supported by this prototype.
+
+The isolated content scanner is network-denied independently of the normal policy mode. The broker
+registers each suspended scanner process; the callout compares the referenced `EPROCESS` and also
+keeps an exact canonical installed-path check as a fail-closed fallback.

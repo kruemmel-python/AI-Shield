@@ -324,30 +324,192 @@ void test_package_manifest_trust_gate() {
 }
 
 void test_zip_preflight_path_escape_and_bomb() {
-    std::vector<std::byte> zip(30U + 13U);
-    const auto put16 = [&](std::size_t offset, std::uint16_t value) {
-        zip[offset] = static_cast<std::byte>(value & 0xffU);
-        zip[offset + 1U] = static_cast<std::byte>((value >> 8U) & 0xffU);
-    };
-    const auto put32 = [&](std::size_t offset, std::uint32_t value) {
-        for (std::size_t i = 0; i < 4U; ++i) {
-            zip[offset + i] = static_cast<std::byte>((value >> (i * 8U)) & 0xffU);
+    const auto make_zip = [](std::string_view name, std::uint16_t method,
+                             std::span<const std::byte> compressed, std::uint32_t uncompressed,
+                             std::uint32_t crc, bool data_descriptor = false) {
+        const std::size_t descriptor_size = data_descriptor ? 16U : 0U;
+        const std::size_t central_offset = 30U + name.size() + compressed.size() + descriptor_size;
+        const std::size_t central_size = 46U + name.size();
+        std::vector<std::byte> zip(central_offset + central_size + 22U);
+        const auto put16 = [&zip](std::size_t offset, std::uint16_t value) {
+            zip[offset] = static_cast<std::byte>(value & 0xffU);
+            zip[offset + 1U] = static_cast<std::byte>((value >> 8U) & 0xffU);
+        };
+        const auto put32 = [&zip](std::size_t offset, std::uint32_t value) {
+            for (std::size_t i = 0; i < 4U; ++i)
+                zip[offset + i] = static_cast<std::byte>((value >> (i * 8U)) & 0xffU);
+        };
+        put32(0U, 0x04034b50U); put16(4U, 20U); put16(6U, data_descriptor ? 8U : 0U);
+        put16(8U, method); put32(14U, data_descriptor ? 0U : crc);
+        put32(18U, data_descriptor ? 0U : static_cast<std::uint32_t>(compressed.size()));
+        put32(22U, data_descriptor ? 0U : uncompressed);
+        put16(26U, static_cast<std::uint16_t>(name.size()));
+        for (std::size_t index = 0U; index < name.size(); ++index)
+            zip[30U + index] = static_cast<std::byte>(static_cast<unsigned char>(name[index]));
+        std::copy(compressed.begin(), compressed.end(), zip.begin() + static_cast<std::ptrdiff_t>(30U + name.size()));
+        if (data_descriptor) {
+            const auto descriptor = 30U + name.size() + compressed.size();
+            put32(descriptor, 0x08074b50U); put32(descriptor + 4U, crc);
+            put32(descriptor + 8U, static_cast<std::uint32_t>(compressed.size()));
+            put32(descriptor + 12U, uncompressed);
         }
+        const auto central = central_offset;
+        put32(central, 0x02014b50U); put16(central + 4U, 20U); put16(central + 6U, 20U);
+        put16(central + 8U, data_descriptor ? 8U : 0U); put16(central + 10U, method); put32(central + 16U, crc);
+        put32(central + 20U, static_cast<std::uint32_t>(compressed.size()));
+        put32(central + 24U, uncompressed); put16(central + 28U, static_cast<std::uint16_t>(name.size()));
+        for (std::size_t index = 0U; index < name.size(); ++index)
+            zip[central + 46U + index] = static_cast<std::byte>(static_cast<unsigned char>(name[index]));
+        const auto eocd = central + central_size;
+        put32(eocd, 0x06054b50U); put16(eocd + 8U, 1U); put16(eocd + 10U, 1U);
+        put32(eocd + 12U, static_cast<std::uint32_t>(central_size));
+        put32(eocd + 16U, static_cast<std::uint32_t>(central_offset));
+        return zip;
     };
-    put32(0, 0x04034b50U);
-    put32(18, 1U);
-    put32(22, 1000U);
-    put16(26, 13U);
-    const std::string name = "../evil.exe";
-    for (std::size_t i = 0; i < name.size(); ++i) {
-        zip[30U + i] = static_cast<std::byte>(static_cast<unsigned char>(name[i]));
-    }
-    zip.push_back(std::byte{0});
+    const std::array<std::byte, 1> zero{std::byte{0}};
+    const auto zip = make_zip("../evil.exe", 0U, zero, 1000U, 0xd202ef8dU);
     const auto parsed = ai_shield::protocols::zip::preflight(zip);
     AI_SHIELD_CHECK(parsed.ok());
     const auto evidence = ai_shield::protocols::zip::evidence_from(parsed.value());
     AI_SHIELD_CHECK((evidence.reason_mask & ai_shield::abi::ReasonCode::archive_path_escape) != 0U);
     AI_SHIELD_CHECK((evidence.reason_mask & ai_shield::abi::ReasonCode::archive_bomb_risk) != 0U);
+
+    const std::array<std::byte, 7> deflated{
+        std::byte{0xcb}, std::byte{0x48}, std::byte{0xcd}, std::byte{0xc9},
+        std::byte{0xc9}, std::byte{0x07}, std::byte{0x00}};
+    const auto normal = make_zip("hello.txt", 8U, deflated, 5U, 0x3610a686U);
+    const auto deep = ai_shield::protocols::zip::inspect_deep(normal, {});
+    AI_SHIELD_CHECK(deep.ok());
+    AI_SHIELD_CHECK(!deep.value().malformed);
+    AI_SHIELD_CHECK(!deep.value().unsupported_compression);
+    AI_SHIELD_CHECK(!deep.value().crc_mismatch);
+    AI_SHIELD_CHECK(deep.value().inspected_entry_count == 1U);
+
+    const auto descriptor_zip = make_zip("descriptor.txt", 8U, deflated, 5U, 0x3610a686U, true);
+    const auto descriptor_result = ai_shield::protocols::zip::preflight(descriptor_zip);
+    AI_SHIELD_CHECK(descriptor_result.ok());
+    AI_SHIELD_CHECK(!descriptor_result.value().malformed);
+    AI_SHIELD_CHECK(!descriptor_result.value().header_mismatch);
+
+    const auto bytes_from_hex = [](std::string_view hex) {
+        const auto digit = [](char value) -> std::uint8_t {
+            if (value >= '0' && value <= '9') return static_cast<std::uint8_t>(value - '0');
+            return static_cast<std::uint8_t>(value - 'a' + 10);
+        };
+        std::vector<std::byte> bytes(hex.size() / 2U);
+        for (std::size_t index = 0U; index < bytes.size(); ++index)
+            bytes[index] = static_cast<std::byte>((digit(hex[index * 2U]) << 4U) | digit(hex[index * 2U + 1U]));
+        return bytes;
+    };
+    const auto dynamic_deflate = bytes_from_hex(
+        "edcbc909c3301000c056b63511892030eb636d8cbb770a4809f399dfd4f85cc73c9fb867f6f5aef891cbda7ab46ccb53b3621bd9677e63bfdad1f29c39a22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb22ccbb2acffeb05");
+    const auto dynamic_zip = make_zip("dynamic.txt", 8U, dynamic_deflate, 53'999U, 0xf8b0b780U);
+    const auto dynamic_result = ai_shield::protocols::zip::preflight(dynamic_zip);
+    AI_SHIELD_CHECK(dynamic_result.ok());
+    AI_SHIELD_CHECK(!dynamic_result.value().malformed);
+    AI_SHIELD_CHECK(!dynamic_result.value().crc_mismatch);
+
+    const auto checksum = [](std::span<const std::byte> content) {
+        std::uint32_t crc = 0xffffffffU;
+        for (const auto byte : content) {
+            crc ^= std::to_integer<std::uint8_t>(byte);
+            for (unsigned int bit = 0U; bit < 8U; ++bit)
+                crc = (crc >> 1U) ^ (0xedb88320U & (0U - (crc & 1U)));
+        }
+        return ~crc;
+    };
+    const auto nested = make_zip("nested.zip", 0U, normal, static_cast<std::uint32_t>(normal.size()),
+                                 checksum(normal));
+    const auto nested_result = ai_shield::protocols::zip::preflight(nested);
+    AI_SHIELD_CHECK(nested_result.ok());
+    AI_SHIELD_CHECK(!nested_result.value().malformed);
+    AI_SHIELD_CHECK(nested_result.value().nested_container);
+    AI_SHIELD_CHECK(nested_result.value().entry_count == 2U);
+    AI_SHIELD_CHECK(nested_result.value().inspected_entry_count == 2U);
+    AI_SHIELD_CHECK(nested_result.value().maximum_depth == 1U);
+
+    const auto nested_twice = make_zip("nested-again.zip", 0U, nested,
+                                       static_cast<std::uint32_t>(nested.size()), checksum(nested));
+    ai_shield::protocols::zip::InspectionBudget shallow_budget{};
+    shallow_budget.maximum_depth = 1U;
+    const auto shallow = ai_shield::protocols::zip::inspect_deep(nested_twice, shallow_budget);
+    AI_SHIELD_CHECK(shallow.ok());
+    AI_SHIELD_CHECK(shallow.value().budget_exhausted);
+
+    const auto make_zip64 = [](std::string_view name, std::span<const std::byte> payload, std::uint32_t crc) {
+        const std::size_t local_size = 30U + name.size() + 20U + payload.size();
+        const std::size_t central_size = 46U + name.size() + 28U;
+        const std::size_t zip64_eocd = local_size + central_size;
+        std::vector<std::byte> result(zip64_eocd + 56U + 20U + 22U);
+        const auto put16 = [&result](std::size_t offset, std::uint16_t value) {
+            result[offset] = static_cast<std::byte>(value & 0xffU);
+            result[offset + 1U] = static_cast<std::byte>((value >> 8U) & 0xffU);
+        };
+        const auto put32 = [&result](std::size_t offset, std::uint32_t value) {
+            for (std::size_t i = 0U; i < 4U; ++i)
+                result[offset + i] = static_cast<std::byte>((value >> (i * 8U)) & 0xffU);
+        };
+        const auto put64 = [&result](std::size_t offset, std::uint64_t value) {
+            for (std::size_t i = 0U; i < 8U; ++i)
+                result[offset + i] = static_cast<std::byte>((value >> (i * 8U)) & 0xffU);
+        };
+        put32(0U, 0x04034b50U); put16(4U, 45U); put32(14U, crc);
+        put32(18U, 0xffffffffU); put32(22U, 0xffffffffU);
+        put16(26U, static_cast<std::uint16_t>(name.size())); put16(28U, 20U);
+        std::copy(name.begin(), name.end(), reinterpret_cast<char*>(result.data() + 30U));
+        const auto local_extra = 30U + name.size();
+        put16(local_extra, 1U); put16(local_extra + 2U, 16U);
+        put64(local_extra + 4U, payload.size()); put64(local_extra + 12U, payload.size());
+        std::copy(payload.begin(), payload.end(), result.begin() + static_cast<std::ptrdiff_t>(local_extra + 20U));
+        const auto central = local_size;
+        put32(central, 0x02014b50U); put16(central + 4U, 45U); put16(central + 6U, 45U);
+        put32(central + 16U, crc); put32(central + 20U, 0xffffffffU); put32(central + 24U, 0xffffffffU);
+        put16(central + 28U, static_cast<std::uint16_t>(name.size())); put16(central + 30U, 28U);
+        put32(central + 42U, 0xffffffffU);
+        std::copy(name.begin(), name.end(), reinterpret_cast<char*>(result.data() + central + 46U));
+        const auto central_extra = central + 46U + name.size();
+        put16(central_extra, 1U); put16(central_extra + 2U, 24U);
+        put64(central_extra + 4U, payload.size()); put64(central_extra + 12U, payload.size());
+        put64(central_extra + 20U, 0U);
+        put32(zip64_eocd, 0x06064b50U); put64(zip64_eocd + 4U, 44U);
+        put16(zip64_eocd + 12U, 45U); put16(zip64_eocd + 14U, 45U);
+        put64(zip64_eocd + 24U, 1U); put64(zip64_eocd + 32U, 1U);
+        put64(zip64_eocd + 40U, central_size); put64(zip64_eocd + 48U, local_size);
+        const auto locator = zip64_eocd + 56U;
+        put32(locator, 0x07064b50U); put64(locator + 8U, zip64_eocd); put32(locator + 16U, 1U);
+        const auto eocd = locator + 20U;
+        put32(eocd, 0x06054b50U); put16(eocd + 8U, 0xffffU); put16(eocd + 10U, 0xffffU);
+        put32(eocd + 12U, 0xffffffffU); put32(eocd + 16U, 0xffffffffU);
+        return result;
+    };
+    const auto zip64 = make_zip64("zip64.txt", std::span<const std::byte>(zero), 0xd202ef8dU);
+    const auto zip64_result = ai_shield::protocols::zip::preflight(zip64);
+    AI_SHIELD_CHECK(zip64_result.ok());
+    AI_SHIELD_CHECK(!zip64_result.value().malformed);
+    AI_SHIELD_CHECK(zip64_result.value().inspected_entry_count == 1U);
+
+    auto corrupted = normal;
+    corrupted[14U] ^= std::byte{1U};
+    const auto mismatched = ai_shield::protocols::zip::preflight(corrupted);
+    AI_SHIELD_CHECK(mismatched.ok());
+    AI_SHIELD_CHECK(mismatched.value().header_mismatch);
+
+    auto overlapping = normal;
+    const std::size_t eocd = overlapping.size() - 22U;
+    const std::uint32_t central_offset = static_cast<std::uint32_t>(
+        std::to_integer<std::uint8_t>(overlapping[eocd + 16U]) |
+        (std::to_integer<std::uint8_t>(overlapping[eocd + 17U]) << 8U) |
+        (std::to_integer<std::uint8_t>(overlapping[eocd + 18U]) << 16U) |
+        (std::to_integer<std::uint8_t>(overlapping[eocd + 19U]) << 24U));
+    for (std::size_t index = 0U; index < 4U; ++index) {
+        const auto byte = static_cast<std::byte>((central_offset >> (index * 8U)) & 0xffU);
+        overlapping[18U + index] = byte;
+        overlapping[central_offset + 20U + index] = byte;
+    }
+    const auto overlap_result = ai_shield::protocols::zip::preflight(overlapping);
+    AI_SHIELD_CHECK(overlap_result.ok());
+    AI_SHIELD_CHECK(overlap_result.value().malformed);
+    AI_SHIELD_CHECK(overlap_result.value().header_mismatch);
 }
 
 void test_pe_preflight_marks_executable_pending() {

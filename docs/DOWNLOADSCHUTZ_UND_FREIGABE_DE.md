@@ -52,10 +52,15 @@ Browserdownload
                                               └─► UI-Freigabe mit Ziel und Begründung
 ```
 
-Der Broker wiederholt die Downloadsuche im Ein-Sekunden-Takt und verlangt zwei identische
-Größenbeobachtungen, damit eine noch geschriebene Datei nicht vorzeitig verarbeitet wird. Die UI
-prüft alle zwei Sekunden auf neue Quarantäneobjekte und zeigt ein Warnfenster. Dieser asynchrone
-Ablauf reduziert das Zeitfenster erheblich, ist aber kein synchroner Kernel-Dialog beim Öffnen.
+Der primäre Entscheidungspfad ist seit RC12 identitätsgebunden. Der Minifilter markiert die
+Volume-/File-ID bei externen Schreibvorgängen als `pending` und sendet nach Cleanup eine
+authentisierte Filter-Manager-Anfrage an den registrierten Broker. Dessen Empfangsthread bestätigt
+die Aufnahme in die begrenzte Analysewarteschlange innerhalb von 250 ms. Bis der getrennte Worker
+das endgültige Urteil per Broker-IOCTL setzt, sind Lesen, Vorschau, Mapping und Ausführung gesperrt.
+Portausfall, Timeout, Warteschlangenüberlauf, Identitätswechsel oder Scannerfehler lassen nur das
+betroffene Dateiobjekt gesperrt. Der sekündliche Verzeichnisscan bleibt als serialisierter
+Recovery-Pfad bestehen. Die UI prüft alle zwei Sekunden auf neue Quarantäneobjekte und zeigt ein
+Warnfenster.
 
 Der Edge-/Chrome-Sensor liefert Navigations- und Downloadmetadaten. Er ist nicht der lokale
 Byte-Scanner und erzeugt deshalb nicht zwingend die integrierte Browsermeldung „gefährlicher
@@ -67,6 +72,12 @@ Der WAV-Preflight validiert RIFF-Größe, Chunk-Grenzen, `fmt `- und `data`-Chun
 Launcher-Tokens in Metadaten-Chunks werden als Strukturrisiko behandelt. Text in Metadaten wird
 nicht ausgeführt; dieses Signal schützt gegen missbräuchliche Container und dient zusammen mit
 Containerfehlern und AMSI/Defender der Klassifizierung.
+
+Der ZIP-Preflight validiert lokale Header gegen das Central Directory, Data Descriptor, ZIP64,
+UTF-8-Namen und CRC-32. Stored und raw DEFLATE werden rekursiv analysiert. Tiefe, Eintragszahl,
+Einzel- und Gesamtgröße sowie Kompressionsverhältnis besitzen gemeinsame Budgets. Pfadflucht,
+ADS-Namen, doppelte kanonische Pfade, überlappende Strukturen, ungültige Huffman-Tabellen,
+Verschlüsselung und nicht unterstützte Methoden werden nicht automatisch freigegeben.
 
 ## Quarantäne und Freigabe
 

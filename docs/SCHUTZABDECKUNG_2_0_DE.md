@@ -15,6 +15,10 @@ aktiver Gruppen werden bis zur begründeten Benutzerfreigabe quarantänisiert un
 RC11 erweitert diese Schranke mit Content-Policy v4 auf unbekannte und spezialisierte Formate,
 Magic-/Extension-Abgleich, Polyglot-/Trailing-Data-Erkennung, einen Handle-gebundenen Minimalworker
 und eine WFP-erzwungene Netzwerksperre des Scanners.
+RC12 ergänzt eine rekursive ZIP-/ZIP64-Prüfung für Stored und DEFLATE samt CRC-, Header-,
+Data-Descriptor-, Pfad- und Ressourcenvalidierung. Der Minifilter hält neue externe Dateien
+identitätsgebunden `pending`; der Broker bestätigt die Übergabe innerhalb von 250 ms und setzt das
+endgültige Analyseurteil asynchron für dieselbe Volume-/File-ID.
 Details enthält [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md).
 
 ## Audit Viewer

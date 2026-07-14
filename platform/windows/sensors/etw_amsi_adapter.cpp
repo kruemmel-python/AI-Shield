@@ -47,7 +47,9 @@ Result<abi2::SensorEvent> translate_amsi(const AmsiObservation& source,
     event.process_id = source.process_id;
     event.subject_id = source.scan_result;
     event.decision = source.scan_result;
-    if (AmsiResultIsMalware(source.scan_result)) event.event_flags |= 0x00000002U;
+    if (AmsiResultIsMalware(source.scan_result) ||
+        (source.scan_result >= AMSI_RESULT_BLOCKED_BY_ADMIN_START &&
+         source.scan_result <= AMSI_RESULT_BLOCKED_BY_ADMIN_END)) event.event_flags |= 0x00000002U;
     event.evidence_hash = source.content_hash;
     abi2::seal(event, channel_key);
     return event;

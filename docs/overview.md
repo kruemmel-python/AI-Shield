@@ -1,11 +1,14 @@
 # AI Shield Architecture Foundation
 
-Der RC11-Dateipfad führt jedes neue oder veränderte Downloadobjekt zunächst über einen universellen
+Der RC12-Dateipfad führt jedes neue oder veränderte Downloadobjekt zunächst über einen universellen
 Magic-/Extension-/Namens-Preflight. Anschließend erhält der isolierte Minimalworker ausschließlich
 das bereits gesperrte Datei-Handle. SHA-256 und Dateiidentität binden Analyse, Provenienz und
 Quarantäneentscheidung; der WFP-Treiber sperrt den Worker vollständig vom IPv4-/IPv6-Netz.
+Der Minifilter hält das Objekt zusätzlich anhand von Volume-/File-ID `pending`. Der registrierte
+Broker bestätigt die Warteschlangenaufnahme innerhalb von 250 ms; ein separater Analyse-Worker
+setzt anschließend über den geschützten IOCTL die passende endgültige Entscheidung.
 
-Stand: 14. Juli 2026. Der zentrale Dokumentationseinstieg und die Abgrenzung von Private Desktop,
+Stand: 15. Juli 2026. Der zentrale Dokumentationseinstieg und die Abgrenzung von Private Desktop,
 Enterprise-Betriebsprofil, Developer Full und Gateway-Prototyp stehen in
 [`README.md`](README.md) und [`EDITIONEN_UND_VERSIONEN_DE.md`](EDITIONEN_UND_VERSIONEN_DE.md).
 

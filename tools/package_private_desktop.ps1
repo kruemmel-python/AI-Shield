@@ -95,7 +95,9 @@ try {
         Copy-RequiredFile (Join-Path $repo $name) (Join-Path $root $name)
     }
     $docsRoot = Join-Path $repo "docs"
-    foreach ($file in (Get-ChildItem -LiteralPath $docsRoot -Recurse -File)) {
+    $generatedSnapshots = @("AI_Shield.md", "AI-Shield-CodeDump.md", "AI_Shield_Developer_Full.md")
+    foreach ($file in (Get-ChildItem -LiteralPath $docsRoot -Recurse -File |
+            Where-Object { $generatedSnapshots -notcontains $_.Name })) {
         $relative = $file.FullName.Substring($docsRoot.Length + 1)
         Copy-RequiredFile $file.FullName (Join-Path $root "docs\$relative")
     }

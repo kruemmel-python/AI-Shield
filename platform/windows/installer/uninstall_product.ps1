@@ -16,7 +16,11 @@ if ($AuditExportDirectory) {
     if ($LASTEXITCODE -ne 0) { throw "Mandatory audit export failed; uninstall stopped." }
 }
 $kernelctl = Join-Path $repo "build_vs\Release\ai_shield_kernelctl.exe"
-if (Test-Path $kernelctl) { & $kernelctl audit }
+$driverServices = @("AIShieldWfp", "AIShieldMiniFilter", "AIShieldProcessGuard")
+$allDriversInstalled = @($driverServices | Where-Object {
+    $null -ne (Get-Service -Name $_ -ErrorAction SilentlyContinue)
+}).Count -eq $driverServices.Count
+if ((Test-Path $kernelctl) -and $allDriversInstalled) { & $kernelctl audit }
 Stop-Service AIShieldCore,AIShieldBroker -Force -ErrorAction SilentlyContinue
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repo "platform\windows\installer\install_core_service.ps1") -Action uninstall
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repo "platform\windows\installer\install_broker.ps1") -Action uninstall

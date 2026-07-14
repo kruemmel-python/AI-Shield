@@ -6,7 +6,7 @@ ABI-2.0-Vertrag und bewertet sie anhand lokaler Richtlinien. Der aktuelle Stand 
 Windows-Kerneltreiber, LocalSystem-Dienste, isolierte Parser, Downloadquarantäne, Audit-Ketten,
 Recovery-Funktionen und eine grafische Private-Desktop-Oberfläche.
 
-> **Projektstatus:** `2.0.0-rc.11` ist ein funktionsfähiger Entwicklungs- und Pilotprototyp. Die
+> **Projektstatus:** `2.0.0-rc.12` ist ein funktionsfähiger Entwicklungs- und Pilotprototyp. Die
 > Private-Desktop-Ausgabe kann auf einem einzelnen Windows-PC installiert und getestet werden. Die
 > enthaltenen Treiber sind lokal testsigniert. Eine öffentliche Produktionsverteilung unter
 > aktiviertem Secure Boot erfordert weiterhin Microsoft-Treibersignierung, HLK/WHCP-Qualifikation,
@@ -15,13 +15,16 @@ Recovery-Funktionen und eine grafische Private-Desktop-Oberfläche.
 ## Kernfunktionen
 
 - Dual-Stack-WFP-Sensorik für IPv4/IPv6, TCP/UDP und konfigurierbare Enforcement-Regeln.
-- Minifilter-Telemetrie mit Datei-/Volume-Identität und TOCTOU-resistenter Quarantäne.
+- Minifilter-Telemetrie mit Datei-/Volume-Identität, synchronem fail-closed Brokerdialog und
+  TOCTOU-resistenter Quarantäne.
 - ProcessGuard-Regeln für Downloads, Skriptinterpreter, LOLBins, Office-Kindprozesse,
   Credential Access und Persistenzmuster.
 - Signierte, monotone Policies sowie authentisierte ABI-2.0-Korrelation über Broker, Audit,
   Kausalgraph, Incident-Paket und Replay.
 - Universeller Magic-/Extension-/Namens-Preflight plus gehärtete WAV-, ZIP-, PDF-, PE-, Bild-,
   Web-, Defender- und AMSI-Prüfung mit Zeit- und Ressourcenlimits.
+- Rekursive ZIP-/ZIP64-Tiefenanalyse für Stored und DEFLATE mit CRC-, Header-, Pfad-,
+  Verschachtelungs-, Größen-, Verhältnis- und Eintragsbudgets.
 - Download-Freigabeschranke für Programme, Skripte, Dokumente, Archive, Bilder, Audio, Video,
   Webdateien und Windows-Systemaktionen.
 - Manipulationssichtbare `AISHAD02`-Audit-Kette mit integriertem Viewer und JSON-Export.
@@ -55,7 +58,7 @@ lokale MITM-Zertifizierungsstelle.
 |---|---|
 | Shared Core und internes ABI 2.0 | Implementiert und automatisiert getestet |
 | Broker, Core-Dienst, Audit und Replay | Implementiert und lokal betreibbar |
-| Private-Desktop-UI, Tray und Quarantäne | Implementiert; RC11-Pilotstand |
+| Private-Desktop-UI, Tray und Quarantäne | Implementiert; RC12-Pilotstand |
 | WFP-, Minifilter- und ProcessGuard-Treiber | WDK-Prototyp, lokal testsignierbar |
 | Edge-/Chrome-Sensor | Lokal ladbar; Store-/HTTPS-Verteilung ausstehend |
 | Microsoft-Produktionstreibersignierung | Ausstehender externer Meilenstein |
@@ -96,7 +99,7 @@ Die aktuelle Desktop-Ausgabe steht zusätzlich als MSI- und ZIP-Artefakt im
 
 ### Wichtiger Secure-Boot-Hinweis
 
-Die veröffentlichten RC11-Treiber sind **nicht Microsoft-produktionssigniert**. Für lokale
+Die veröffentlichten RC12-Treiber sind **nicht Microsoft-produktionssigniert**. Für lokale
 Testsignierung muss Secure Boot in der UEFI-Firmware deaktiviert und Windows `TESTSIGNING`
 aktiviert werden. Das schwächt die Windows-Startvertrauenskette und ist nur für kontrollierte
 Entwicklungs- oder Pilotgeräte vorgesehen. Vor UEFI-Änderungen muss ein BitLocker-
@@ -182,6 +185,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 - [Schutzabdeckung](docs/SCHUTZABDECKUNG_2_0_DE.md)
 - [Netzwerkschutz](docs/NETZWERKSCHUTZ_DE.md)
 - [ABI 2.0](docs/ABI_2_0_DE.md)
+- [ZIP-Tiefenanalyse und latenzbegrenztes Minifilter-Pending](docs/ZIP_TIEFENANALYSE_UND_MINIFILTER_PENDING_DE.md)
 
 ### Installation und Betrieb
 
@@ -193,7 +197,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ### Qualifikation und externe Prüfungen
 
-- [RC11-Release-Nachweis](docs/RC11_RELEASE_NACHWEIS_DE.md)
+- [RC12-Release-Nachweis](docs/RC12_RELEASE_NACHWEIS_DE.md)
 - [Dateibasierte Angriffe und Scananforderungen](AI_Shield_Dateibasierte_Angriffe_und_Scananforderungen_DE.md)
 - [Historischer RC9-Nachweis](docs/RC9_RELEASE_NACHWEIS_DE.md)
 - [Produktqualifikation](docs/PRODUKTQUALIFIKATION_DE.md)

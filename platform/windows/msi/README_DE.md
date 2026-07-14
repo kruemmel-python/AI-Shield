@@ -21,7 +21,7 @@ powershell -ExecutionPolicy Bypass -File platform\windows\msi\build_msi.ps1
 ```
 
 Nur für einen internen, nicht verteilbaren Build kann `-SkipSigning` verwendet werden. Ausgabe:
-`dist\msi\AI_Shield_Private_Desktop_2.0.0-rc.11_x64.msi` plus SHA-256-Datei.
+`dist\msi\AI_Shield_Private_Desktop_2.0.0-rc.12_x64.msi` plus SHA-256-Datei.
 
 ## Installieren und deinstallieren
 
@@ -30,6 +30,15 @@ Die grafische Installation erfolgt per Doppelklick und UAC-Bestätigung. Für re
 ```powershell
 msiexec.exe /i .\dist\msi\AI_Shield_Private_Desktop.msi /l*v .\runtime\msi-install.log
 msiexec.exe /x .\dist\msi\AI_Shield_Private_Desktop.msi /l*v .\runtime\msi-uninstall.log
+```
+
+Der qualifizierte Upgradepfad stoppt Broker/Core, entfernt die alten Treiberdienste und startet
+danach das MSI mit ausführlichem Log:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass `
+  -File tools\install_private_desktop_release.ps1 `
+  -MsiPath dist\msi\AI_Shield_Private_Desktop_2.0.0-rc.12_x64.msi
 ```
 
 Eine stille Installation nutzt `/qn`. Die Deinstallation stoppt und entfernt beide Dienste und alle

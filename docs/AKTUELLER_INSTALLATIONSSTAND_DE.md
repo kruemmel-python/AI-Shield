@@ -1,11 +1,11 @@
 # AI Shield: Aktueller Build- und Installationsstand
 
-Stand: 14. Juli 2026
+Stand: 15. Juli 2026
 
 ## Build
 
 Der aktuelle Quellstand wurde mit Visual Studio 2022, Windows SDK/WDK 10.0.26100.0 und CMake als
-x64-Release gebaut. Alle 15 CTest-Ziele bestanden in Release und Debug. Anschließend wurden WFP-, Minifilter- und
+x64-Release gebaut. Alle 16 CTest-Ziele bestanden in Release und Debug. Anschließend wurden WFP-, Minifilter- und
 ProcessGuard-Treiber mit `/W4 /WX` neu gebaut, lokal test-signiert und installiert.
 
 Reproduzierbarer administrativer Ablauf:
@@ -27,9 +27,9 @@ Alle drei Paketdateien besitzen eine gültige Signatur des lokalen Testzertifika
 
 | Datei | SHA-256 der vollständigen signierten Datei |
 |---|---|
-| `AIShieldMiniFilter.sys` | `2FA9CACE0241FC12C4FBABBD4848A1A8885687EB6B811324CF3718B85D33077D` |
-| `AIShieldProcessGuard.sys` | `29E2C8E017410BB54B47C19119997EA446BC29AF9FC31C8AE5C06A5D9716B3C8` |
-| `AIShieldWfp.sys` | `424A0EE534231FC583EDC53CE693D7C8B7FAF90438FE0F09B7A631D281AD7F5E` |
+| `AIShieldMiniFilter.sys` | `1465EC64DA3C386EC437F916632EBD5B66E8136258B045F659A62445A8B45D97` |
+| `AIShieldProcessGuard.sys` | `A9D99C95EE77775DD7947CC73E53BF28D6768AD65195EEF65D06CEB7AB07C6F7` |
+| `AIShieldWfp.sys` | `60DF032CA04F9BF0F90D696EB4478E0B8850D714CCA1D24004B688E61389B351` |
 
 Lokales Testsigning ersetzt keine Microsoft-Produktionssignatur.
 
@@ -48,6 +48,25 @@ AIShieldMiniFilter   Running System
 AIShieldProcessGuard Running System
 AIShieldWfp          Running System
 ```
+
+## RC12-Latenz- und Neuinstallationsnachweis
+
+Die installierte RC12-Kombination aus Minifilter und Broker bestätigt nur die sichere
+Warteschlangenaufnahme im Kernelpfad; die Inhaltsanalyse läuft auf einem getrennten Worker. Der
+reale Test auf dem Referenzrechner ergab:
+
+```text
+200 Temp-Dateien schreiben und entfernen: 933,9 ms
+Downloaddatei schreiben/Cleanup:            15,1 ms
+fünf Dienste abfragen:                      25,5 ms
+UI-Prozess nach Start erkannt:             665,8 ms
+Download-Testdatei nach Scan vorhanden:     false
+```
+
+Alle fünf Komponenten blieben während und nach dem Test laufend. Das MSI wurde als Gleichversion
+zuerst vollständig deinstalliert und anschließend neu installiert; beide Windows-Installer-Läufe
+meldeten Exitcode `0`. Das Installationshilfsskript liest dazu den ProductCode direkt aus der
+signierten MSI-Datenbank und behandelt bereits entfernte Treiber idempotent.
 
 ## RC11-Datei- und Downloadnachweis
 

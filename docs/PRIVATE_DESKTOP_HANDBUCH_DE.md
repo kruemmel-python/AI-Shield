@@ -1,6 +1,6 @@
 # AI Shield Private Desktop Handbuch
 
-Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.11`
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.12`
 
 ## Zweck und Voraussetzungen
 
@@ -19,6 +19,14 @@ Bevorzugt wird `AI_Shield_Private_Desktop.msi` mit UAC-Bestätigung installiert.
 richtet drei Treiber, `AIShieldBroker`, `AIShieldCore`, lokale Policy, Browser-Host, Startmenüeintrag,
 UI und den Tray-Autostart ein. Der Eintrag unter **Installierte Apps** führt den vollständigen
 Rückbau aus.
+
+Für ein reproduzierbares Upgrade, das alte Treiber vor dem MSI-Lauf vollständig entfernt:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass `
+  -File tools\install_private_desktop_release.ps1 `
+  -MsiPath dist\msi\AI_Shield_Private_Desktop_2.0.0-rc.12_x64.msi
+```
 
 Nach der Installation startet **AI Shield Private Desktop** über das Startmenü. Die notwendige
 Administratorbestätigung bleibt sichtbar; die PowerShell-Konsole läuft anschließend verborgen im
@@ -74,6 +82,15 @@ sauber geprüfte Dateien aktiver Gruppen in die Quarantäne. Die laufende UI mel
 innerhalb weniger Sekunden; auf der Seite **Quarantäne** kann der Benutzer sie mit Zielpfad und
 Begründung freigeben. Ein deaktivierter Dateitypschalter bedeutet ausdrücklich: keine AI-Shield-
 Inhaltsprüfung und keine Freigabeschranke für diese Gruppe.
+
+Seit RC12 ist der Minifilter-Pending-Pfad identitätsgebunden und latenzbegrenzt: Nach dem Schreiben
+bleiben Vorschau, Lesen, Mapping und Ausführung gesperrt. Der Broker bestätigt die sichere
+Warteschlangenaufnahme innerhalb von 250 ms; ein separater Worker setzt danach das endgültige
+Urteil für dieselbe Volume-/File-ID. Dadurch blockiert eine Inhaltsanalyse weder UI noch normale
+PowerShell- und Installer-Tempdateien.
+ZIP-/ZIP64-Container werden für Stored und DEFLATE rekursiv unter festen Tiefen-, Größen-,
+Eintrags- und Kompressionsbudgets geprüft. Timeout, Brokerfehler, Identitätswechsel,
+verschlüsselte Einträge oder nicht unterstützte Kompressionsmethoden bleiben fail-closed.
 
 Der eigenständige Schalter **Downloads härten** aktiviert zusätzlich die Kernel-Sperre. Sie
 blockiert direkte Prozessstarts aus `Downloads` und Aufrufe heruntergeladener Dateien über

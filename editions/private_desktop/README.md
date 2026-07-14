@@ -1,6 +1,6 @@
 # AI Shield Private Desktop
 
-Release Candidate: `2.0.0-rc.11`. ABI-, Policy- und Funktionsumfang sind durch
+Release Candidate: `2.0.0-rc.12`. ABI-, Policy- und Funktionsumfang sind durch
 [`RELEASE_CONTRACT.json`](RELEASE_CONTRACT.json) eingefroren. Änderungen an sicherheitsrelevanten
 Verträgen werden von `validate_release_freeze.ps1` abgelehnt, bis ein bewusst neuer Vertrag erstellt
 wird.
@@ -19,7 +19,7 @@ freier Listener-Port ist für den normalen Schutzbetrieb nicht erforderlich.
 Der Standardstart aktiviert:
 
 - IPv4-/IPv6-WFP-Telemetrie und den lokalen Wurm-Egress-Schutz;
-- Minifilter-Provenance und Quarantäneschutz;
+- Minifilter-Provenance, synchrones Pending-Protokoll und Quarantäneschutz;
 - ProcessGuard gegen ausgewählte riskante Prozessketten;
 - Broker, Core-Überwachung und signierte lokale Policy;
 - Blockierung von Ausführung aus Quarantäne und Benutzer-Temp;

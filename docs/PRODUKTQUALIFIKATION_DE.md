@@ -12,7 +12,8 @@ Stand: 14. Juli 2026
   validierten Program-Files-Pfade zurueck.
 - Service-DACL und geschuetzter Installationspfad sind aktiv; normale Benutzer koennen Status lesen,
   Dienste aber nicht steuern oder rekonfigurieren.
-- 15 von 15 CTest-Zielen bestanden, einschließlich Datei-Scanner-, Recovery-, Tray- und UI-Vertragstests.
+- 16 von 16 CTest-Zielen bestanden, einschließlich Datei-Scanner-, Recovery-, Tray-, UI- und
+  Minifilter-Latenzvertragstests.
 - Der Recovery-Test deckt Snapshot, Vorfallerkennung, Wiederherstellungsplan, bestätigten Restore,
   externe Backupprüfung und eine absichtlich defekte Junction ab.
 - Eine reale Erstbaseline auf dem Referenzrechner erfasste 13.353 Dateien ohne übersprungene

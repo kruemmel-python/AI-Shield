@@ -28,6 +28,8 @@ struct LaunchedProcess final {
     HANDLE process = nullptr;
     HANDLE thread = nullptr;
     HANDLE job = nullptr;
+    HWINSTA window_station = nullptr;
+    HDESK desktop = nullptr;
     std::uint32_t process_id = 0;
 };
 

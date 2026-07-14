@@ -23,6 +23,8 @@ $excludedSegments = @(".git", ".vs", "x64", "Debug", "Release", "build", "build_
 $excludedExtensions = @(".sys", ".cat", ".cer", ".pfx", ".pvk", ".zip", ".obj", ".pdb", ".ilk", ".tlog")
 
 function Test-IncludedPath([string]$RelativePath) {
+    if ($RelativePath.Replace('\','/') -in @("docs/AI_Shield.md", "docs/AI-Shield-CodeDump.md",
+            "docs/AI_Shield_Developer_Full.md")) { return $false }
     foreach ($segment in ($RelativePath -split '[\\/]')) {
         if ($excludedSegments -contains $segment) { return $false }
     }

@@ -1,6 +1,6 @@
 # Ransomware-Schutz und Wiederherstellung
 
-Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.11`
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.12`
 
 ## Ziel und Sicherheitsmodell
 

@@ -2182,10 +2182,10 @@ Die Freigabe muss aus **Identität, Struktur, enthaltenen Fähigkeiten, Provenie
 
 # Implementiert
 
-Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.11`
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.12`
 
 Dieser Abschnitt ordnet die in diesem Dokument geforderten Kontrollen dem tatsächlich
-implementierten RC11-Stand zu. **Implementiert** bedeutet entweder eine positive technische
+implementierten RC12-Stand zu. **Implementiert** bedeutet entweder eine positive technische
 Analyse oder eine konservative Fail-closed-Behandlung. Es bedeutet nicht, dass AI Shield jeden
 zukünftigen Parserfehler oder jede semantische Manipulation zweifelsfrei erkennen kann.
 
@@ -2208,8 +2208,11 @@ zukünftigen Parserfehler oder jede semantische Manipulation zweifelsfrei erkenn
 - `src/wav_preflight.cpp` validiert RIFF-/WAVE-Grenzen, Chunkgrößen, `fmt`-/`data`-Konsistenz und
   verdächtige Befehle in Metadaten. Die im Projekt dokumentierte synthetische Trigger-WAV wird
   strukturell blockiert; eine harmlose PCM-WAV bleibt zulässig.
-- `src/zip_preflight.cpp` prüft Pfadtraversal, Bombenbudget, Verschlüsselung, nicht unterstützte
-  Kompression, ausführbare oder aktive Kinder, verschachtelte Container und doppelte Namen.
+- `src/zip_preflight.cpp` prüft lokale Header, Central Directory, Data Descriptor, ZIP64, CRC-32,
+  UTF-8-Namen, Pfadtraversal, Bombenbudgets, Verschlüsselung, nicht unterstützte Kompression,
+  ausführbare oder aktive Kinder, verschachtelte Container und doppelte Namen. Stored sowie
+  Fixed-/Dynamic-DEFLATE werden rekursiv unter gemeinsamen Tiefen-, Größen- und Eintragslimits
+  analysiert.
 - PDF-, Bild-, Web-, Dokument-, Archiv-, Audio-, Video-, Programm-, Skript-, Launcher-, Paket- und
   Modellfamilien werden über Content-Policy v4 klassifiziert. Wo kein tiefer Spezialparser besteht,
   greift die Freigabeschranke statt einer stillen Positivfreigabe.
@@ -2223,6 +2226,12 @@ zukünftigen Parserfehler oder jede semantische Manipulation zweifelsfrei erkenn
 - Bereits bekannte Pfade werden bei Inhaltsänderung erneut geprüft. Vorhandene Dateien werden beim
   Brokerstart als Baseline erfasst; neue oder veränderte Dateien im Downloadordner werden auch ohne
   erhaltenes Mark-of-the-Web verarbeitet.
+- Der Minifilter sendet nach Cleanup eine Request-ID-gebundene Filter-Manager-Anfrage mit NT-Pfad,
+  Volume- und File-ID. Der Broker bestätigt die Aufnahme in eine begrenzte Warteschlange innerhalb
+  von 250 ms; die Inhaltsanalyse läuft auf einem separaten Worker und setzt ihr endgültiges Urteil
+  über den geschützten Broker-IOCTL. Bis dahin bleiben Lese-, Vorschau-, Mapping- und
+  Ausführungszugriffe auf das betroffene Objekt gesperrt; Timeout, Überlast und
+  Kommunikationsfehler bleiben `pending`.
 
 ## 4. Isolierter Scanner und Laufzeitgrenzen
 
@@ -2265,5 +2274,5 @@ Noch nicht als semantischer Vollparser implementiert sind unter anderem formatsp
 CDR-Rekonstruktion für jede Familie, Detonation in jeder realen Zielanwendung, Entschlüsselung
 passwortgeschützter Container, Cloud-/Publisher-Reputation, Steganografiebeweis,
 ML-Modell-Backdoorbewertung sowie gerätespezifische Firmware-, CAD-, GIS- und CNC-Validierung.
-Diese Inhalte werden im RC11 nicht automatisch als sicher behauptet, sondern über die Kategorie
+Diese Inhalte werden im RC12 nicht automatisch als sicher behauptet, sondern über die Kategorie
 für unbekannte oder spezialisierte Formate blockiert beziehungsweise freigabepflichtig behandelt.
