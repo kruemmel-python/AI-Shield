@@ -1,0 +1,825 @@
+## Bewertung des aktuellen Stands
+
+Dein Projekt ist nicht mehr nur eine „Architecture Foundation“. Der Shared Core deckt bereits fast alle fachlichen Domänen des geplanten AI Shield ab:
+
+* Protokollprüfung und Kanonisierung
+* Risiko- und Policy-Entscheidungen
+* Provenance und kausale Beziehungen
+* Kampagnen-, Mutations- und Anomalieerkennung
+* Auditierung und Incident-Pakete
+* Sandboxsteuerung
+* Update-, Release- und Modellgovernance
+* Backpressure, Fail-Policy und Recovery
+* Service Discovery und explizite Autorisierung
+
+Die zentrale Architekturentscheidung ist korrekt:
+
+> **Kein Windows-Typ darf die Grenze zum Shared Core überschreiten.**
+
+`HANDLE`, `NTSTATUS`, `UNICODE_STRING`, `IRP`, `NET_BUFFER_LIST`, `FWPS_*` und Filter-Manager-Strukturen müssen vollständig in `platform/windows` verbleiben. Dadurch wird der Kern nicht nur Linux-portierbar, sondern auch gegen Änderungen, Fehler und Manipulationen der Windows-Schnittstellen abgeschirmt.
+
+Der nächste Schritt darf jedoch **nicht aus weiteren isolierten Modulen bestehen**.
+
+Die größte Gefahr ist jetzt eine Architektur, die auf dem Papier vollständig aussieht, deren Komponenten aber noch keine belastbare End-to-End-Sicherheitskette bilden.
+
+---
+
+# 1. Ab sofort gilt ein Feature-Freeze für neue Shared-Core-Module
+
+Bis ein realer Windows-Netzwerkfluss vollständig verarbeitet wird, sollten keine weiteren fachlichen Subsysteme entstehen.
+
+Der nächste Entwicklungsstand muss diese Kette real ausführen:
+
+```text
+Windows-Netzwerkereignis
+→ Windows-Adapter
+→ validiertes Shared-ABI-Ereignis
+→ Service-Identität
+→ Service-Policy
+→ Protokollanalyse
+→ Feature Extraction
+→ Detektoren
+→ Risikobewertung
+→ Policy-Autorisierung
+→ Fail-Policy
+→ finale Entscheidung
+→ Windows-Durchsetzung
+→ Auditkette
+→ kausaler Graph
+```
+
+Erst wenn diese Kette deterministisch funktioniert, ist der Shared Core praktisch validiert.
+
+---
+
+# 2. Eine wichtige Namens- und Grenzkorrektur
+
+Du hast aktuell:
+
+```text
+core/process_guard
+```
+
+und gleichzeitig die richtige Festlegung:
+
+> Windows-spezifische Process-Guard-Integration bleibt außerhalb des Shared Core.
+
+Das ist begrifflich gefährlich. Ein Entwickler könnte später Windows-Prozessüberwachung direkt in dieses Modul einbauen.
+
+Ich würde das Shared-Core-Modul umbenennen:
+
+```text
+core/process_guard
+→ core/consequence_policy
+```
+
+oder:
+
+```text
+core/process_consequence
+```
+
+Seine Aufgabe wäre ausschließlich:
+
+```text
+- Prozessereignisse fachlich bewerten
+- Herkunftsbeziehungen prüfen
+- erlaubte und unerlaubte Kindprozesse klassifizieren
+- Dispositionen berechnen
+- keine Prozesse selbst beobachten
+- keine Prozesse selbst beenden
+```
+
+Die echte Windows-Durchsetzung kommt später nach:
+
+```text
+platform/windows/process_guard/
+```
+
+Damit ist die Grenze eindeutig:
+
+```text
+Windows Process Sensor
+→ ProcessEvidence ABI
+→ core/consequence_policy
+→ ProcessDisposition
+→ Windows Process Enforcer
+```
+
+Dasselbe Prinzip gilt für `service_discovery`, `system_preflight` und `platform_uri`: Sie dürfen Plattformdaten modellieren, aber niemals Betriebssystemobjekte besitzen.
+
+---
+
+# 3. Kritische Prüfung der vorhandenen Module
+
+## `shared/abi`
+
+Dieses Modul ist jetzt der wichtigste Sicherheitsbereich des gesamten Repositories.
+
+Jede ABI-Struktur muss mindestens besitzen:
+
+```cpp
+std::uint32_t abi_version;
+std::uint32_t structure_size;
+```
+
+Zusätzlich verbindlich:
+
+* `std::is_standard_layout_v<T>`
+* `std::is_trivially_copyable_v<T>`
+* feste Integerbreiten
+* keine Pointer in persistenten oder IPC-Strukturen
+* keine `std::string`
+* keine `std::vector`
+* keine virtuellen Funktionen
+* keine plattformabhängigen Enums ohne expliziten Basistyp
+* reservierte Felder für kompatible Erweiterungen
+* definierte maximale Strukturgröße
+* vollständige Validierung vor jedem Feldzugriff
+
+Für jede ABI-Struktur braucht es einen negativen Testkatalog:
+
+```text
+falsche ABI-Version
+zu kleine Struktur
+zu große Struktur
+unbekannte Flags
+ungültiger Enum-Wert
+reservierte Bits gesetzt
+überlaufende Längen
+wiederholte Sequenznummer
+abgelaufener Zeitstempel
+unbekannte Flow-ID
+```
+
+## `core/audit`
+
+Die Offline-Verifikation über `audit-verify` ist sehr gut.
+
+Eine reine Hashkette beweist jedoch nur dann zuverlässig Manipulationen, wenn mindestens ein Kettenanker außerhalb der veränderbaren Auditdatei liegt.
+
+Benötigt werden:
+
+```text
+Audit Record Hash
+→ Segment Root
+→ signierter Checkpoint
+→ geschützter externer Anker
+```
+
+Für den Integrated Mode kann der Anker zunächst sein:
+
+* signierter Checkpoint in einem getrennten Store
+* TPM-gebundener Schlüssel
+* Windows-geschützter Schlüssel als Übergangslösung
+* optional exportierter Offline-Checkpoint
+
+Ohne externen Anker könnte ein Angreifer die gesamte Auditdatei ersetzen und eine neue gültige Hashkette erzeugen.
+
+## `core/provenance`
+
+Dieses Modul gehört zu den wertvollsten Teilen des Systems.
+
+Es muss Kopier-, Extraktions- und Umbenennungsketten darstellen können:
+
+```text
+Netzwerk-Flow
+→ HTTP-Response
+→ ZIP-Datei
+→ extrahierte EXE
+→ kopierte EXE
+→ gestarteter Prozess
+```
+
+Dabei darf die Herkunft nicht an Dateipfaden hängen. Pfade sind veränderbar.
+
+Primäre Identität sollte aus einer Kombination bestehen:
+
+```text
+Volume Identity
+File Identity
+Content Hash
+Creation Sequence
+Parent Provenance
+```
+
+Die Windows-Erfassung dieser Informationen kommt später aus dem Minifilter. Minifilter können Datei-I/O im Dateisystemstack beobachten, filtern oder verändern; der Windows-spezifische Teil gehört daher vollständig in den Plattformadapter. ([Microsoft Learn][1])
+
+## `core/learning`
+
+Das Modul darf im Enforcement-Modus niemals Produktionsmodelle live verändern.
+
+Verbindliche Zustände:
+
+```cpp
+enum class LearningMode : std::uint8_t {
+    disabled,
+    observation_only,
+    shadow_candidate_generation,
+    offline_validation
+};
+```
+
+Nicht zulässig:
+
+```text
+eingehender Verkehr
+→ Modell wird automatisch geändert
+→ geändertes Modell blockiert unmittelbar
+```
+
+Jede neue Modellversion muss über:
+
+```text
+dataset_governance
+→ offline evaluation
+→ regression suite
+→ build_attestation
+→ release_gate
+→ model_registry
+```
+
+gehen.
+
+## `core/cloud`
+
+`cloud_optin` sollte nicht Teil der Trusted Computing Base sein.
+
+Empfehlung:
+
+```text
+core/cloud
+→ optional/cloud_connector
+```
+
+Der Default-Build muss vollständig ohne Cloudkomponente funktionieren:
+
+```cmake
+AI_SHIELD_ENABLE_CLOUD=OFF
+```
+
+Selbst bei aktivierter Cloud darf der Connector ausschließlich exportierte, bereits redigierte Daten erhalten. Keine Cloudantwort darf unmittelbar eine Kernel- oder Blockierentscheidung erzwingen.
+
+## `core/pending_decision`
+
+Dieses Modul ist für WFP besonders kritisch.
+
+Es benötigt harte Grenzen:
+
+```text
+maximale offene Entscheidungen
+maximale Wartezeit pro Entscheidung
+maximale Wartezeit pro Dienst
+maximale Speicherbelegung
+Deadline pro Flow
+eindeutige Timeout-Disposition
+Schutz vor doppelter Vervollständigung
+Schutz vor verspäteter Entscheidung
+```
+
+WFP ermöglicht asynchrone Klassifizierungsabläufe an geeigneten ALE-Stellen, aber Wiederautorisierungen und Abschlusszustände müssen sehr sorgfältig behandelt werden. Deshalb darf die Windows-Schicht keine unbegrenzte oder doppelte Pending-Operation erzeugen. ([Microsoft Learn][2])
+
+## `broker/backpressure`
+
+Backpressure muss vor der KI und vor der Sandbox greifen.
+
+Reihenfolge:
+
+```text
+Kernel-Limit
+→ Broker-Queue-Limit
+→ Service-Limit
+→ Parser-Limit
+→ Detector-Limit
+→ Sandbox-Limit
+```
+
+Nicht:
+
+```text
+unbegrenzt annehmen
+→ später versuchen, die Sandboxwarteschlange zu begrenzen
+```
+
+## `core/risk` und `policy_authorization`
+
+Die Risikobewertung darf keine finale Blockierinstanz sein.
+
+Richtig:
+
+```text
+Detektoren
+→ RiskAssessment
+→ PolicyAuthorization
+→ FailPolicy
+→ FinalDisposition
+```
+
+Die Policy muss immer die letzte fachliche Entscheidung treffen.
+
+Beispiel:
+
+```text
+Risk Score 95
++ Dienst ist kritischer Administrator-Endpunkt
+→ blockieren
+
+Risk Score 95
++ Analyse läuft im reinen Beobachtungsmodus
+→ zulassen, protokollieren, Incident erzeugen
+```
+
+---
+
+# 4. Nächster verbindlicher Release: `v0.2.0-integrated-core`
+
+Bevor ein echter Windows-Treiber Daten blockiert, braucht der Core einen vollständigen Replay-Pfad.
+
+## Neues ausführbares Programm
+
+```text
+ai_shield_replay.exe
+```
+
+Dieses Programm liest deterministische Flow-Szenarien aus binären Testdateien:
+
+```text
+FlowOpen
+FlowData
+ServiceIdentity
+ProtocolHint
+ProcessEvidence
+FileEvidence
+FlowClose
+```
+
+Es führt anschließend exakt denselben Shared-Core-Pfad aus, den später der Windows-Broker verwendet.
+
+## Verbindlicher Ablauf
+
+```text
+1. ABI validieren
+2. Flow im flow_control registrieren
+3. Dienst über service_identity auflösen
+4. Policy aus policy_store laden
+5. Protokoll bestimmen
+6. Protokoll-Preflight ausführen
+7. kanonische Repräsentation erzeugen
+8. Features extrahieren
+9. Signaturen auswerten
+10. Baseline auswerten
+11. Sequenzmodell auswerten
+12. Mutationsdetektor auswerten
+13. Isolation Forest auswerten
+14. Campaign Engine aktualisieren
+15. Gesamtrisiko berechnen
+16. Policy autorisieren
+17. Fail-Policy anwenden
+18. finale Disposition erzeugen
+19. Auditdatensatz anhängen
+20. Causal Graph aktualisieren
+21. Ergebnis deterministisch ausgeben
+```
+
+## Abnahmekriterien
+
+`v0.2.0-integrated-core` ist nur fertig, wenn:
+
+* derselbe Input immer denselben Output erzeugt
+* jede Entscheidung eine Begründung enthält
+* jede Entscheidung einen Auditdatensatz erzeugt
+* jeder Auditdatensatz offline verifizierbar ist
+* unbekannte ABI-Daten sicher abgelehnt werden
+* kein Szenario unbegrenzten Speicher erzeugt
+* alle Parser unter Fuzzing ohne Crash laufen
+* Detektorausfälle durch `fail_policy` abgefangen werden
+* der Causal Graph keine verwaisten Knoten enthält
+* jede finale Entscheidung auf eine Policy-Version verweist
+
+---
+
+# 5. Danach: Windows-Plattformstruktur
+
+```text
+platform/windows/
+├── common/
+│   ├── win_status.cpp
+│   ├── win_unicode.cpp
+│   ├── win_security.cpp
+│   └── abi_translation.cpp
+│
+├── service/
+│   ├── service_main.cpp
+│   ├── driver_channel.cpp
+│   ├── broker_channel.cpp
+│   └── service_hardening.cpp
+│
+├── wfp/
+│   ├── driver/
+│   ├── installer/
+│   ├── policy_provider/
+│   └── adapter/
+│
+├── minifilter/
+│   ├── driver/
+│   ├── communication/
+│   └── provenance_adapter/
+│
+├── process_guard/
+│   ├── driver/
+│   ├── sensor/
+│   └── consequence_enforcer/
+│
+├── sandbox/
+│   ├── appcontainer/
+│   └── hyperv/
+│
+└── installer/
+```
+
+Nur `abi_translation.cpp` übersetzt Windows-Daten in Shared-Core-Strukturen.
+
+Der Shared Core darf nicht einmal indirekt Windows-Header inkludieren.
+
+Eine CI-Regel sollte dies automatisch prüfen:
+
+```text
+Suche in include/ai_shield und src/shared-core nach:
+
+windows.h
+ntddk.h
+wdm.h
+fwpsk.h
+fwpmk.h
+fltKernel.h
+HANDLE
+NTSTATUS
+UNICODE_STRING
+IRP
+NET_BUFFER_LIST
+```
+
+Jeder Treffer bricht den Build.
+
+---
+
+# 6. Windows-Meilenstein 1: Telemetry-Only-WFP
+
+Der erste WFP-Treiber darf noch nicht blockieren.
+
+Microsoft empfiehlt, einen Callout auf der höchsten geeigneten Filterebene zu implementieren. ALE eignet sich für Verbindungsautorisierung und Flow-Zustände; die Stream-Ebene erlaubt die Verarbeitung bidirektionaler Streamdaten. ([Microsoft Learn][3])
+
+## Erster Funktionsumfang
+
+```text
+eingehende TCP-Verbindung erkennen
+ausgehende TCP-Verbindung erkennen
+UDP-Endpunkt erkennen
+PID/Prozessmetadaten erfassen
+lokale und entfernte Adresse erfassen
+Port und Protokoll erfassen
+Flow-ID erzeugen
+Flow-Lifecycle melden
+keine Payload kopieren
+keine Verbindung blockieren
+```
+
+## Relevante WFP-Funktionen
+
+Architektonisch werden benötigt:
+
+```text
+ALE_AUTH_CONNECT
+ALE_AUTH_RECV_ACCEPT
+ALE_FLOW_ESTABLISHED
+ALE_ENDPOINT_CLOSURE
+```
+
+Die genauen IPv4- und IPv6-Layer werden im Windows-Adapter registriert. ALE stellt unter anderem Autorisierungs-, Flow- und Ressourcenereignisse bereit. ([Microsoft Learn][4])
+
+## Abnahmekriterien
+
+* 24 Stunden Netzwerkverkehr ohne Speicherwachstum
+* korrekte Flow-Open-/Flow-Close-Paare
+* keine verlorenen Sequenznummern unter Normallast
+* definierte Drop-Zähler bei Überlast
+* IPv4 und IPv6
+* TCP und UDP
+* parallele Browser-, Update- und lokale Serververbindungen
+* Treiberentladung ohne offene Ressourcen
+* Driver Verifier ohne Fehler
+* Betrieb mit aktivierter Speicherintegrität
+
+Microsoft verlangt für HVCI-Kompatibilität unter anderem Tests mit Driver Verifier, aktivierter Memory Integrity und dem entsprechenden HLK-Test. ([Microsoft Learn][5])
+
+---
+
+# 7. Windows-Meilenstein 2: Verbindungs-Enforcement
+
+Erst danach wird eine Verbindung angehalten oder blockiert.
+
+## Ablauf
+
+```text
+ALE_AUTH_RECV_ACCEPT
+→ lokale Fast-Policy im Treiber
+→ unbekannte Verbindung wird gependet
+→ Broker erhält FlowDescriptor
+→ Core berechnet PreliminaryDisposition
+→ Windows-Adapter validiert Entscheidung
+→ Operation wird genau einmal abgeschlossen
+```
+
+## Harte Regeln
+
+Der Treiber darf nur lokal entscheiden:
+
+```text
+ALLOW
+BLOCK
+PEND
+```
+
+Komplexe Aktionen bleiben im Userspace:
+
+```text
+Sandbox
+Quarantäne
+Kampagnenkorrelation
+Modellanalyse
+Incident-Paket
+```
+
+## Kernel-Fast-Policy
+
+Der Treiber besitzt nur eine signierte, kompakte Policy:
+
+```text
+bekannter erlaubter Dienst
+bekannter blockierter Port
+temporär blockierte Quelle
+maximale Pend-Anzahl
+Timeout-Aktion
+Broker-Verfügbarkeit
+```
+
+Keine HTTP-, PDF-, ZIP- oder PE-Analyse im Kernel.
+
+## Timeout-Verhalten
+
+Beispiel:
+
+```text
+administrativer Dienst:
+    Broker nicht erreichbar → BLOCK
+
+normaler lokaler Entwicklungsdienst:
+    Broker nicht erreichbar → BLOCK
+
+Browser-Rückverkehr:
+    Broker nicht erreichbar → ALLOW_MONITORED
+
+unbekannter Listener:
+    Broker nicht erreichbar → BLOCK
+```
+
+Die Entscheidung kommt aus `fail_policy`, nicht aus fest codierten Treiber-Sonderfällen.
+
+---
+
+# 8. Windows-Meilenstein 3: HTTP-End-to-End-Vertikalschnitt
+
+HTTP/1 ist das ideale erste Inhaltsprotokoll, weil du bereits besitzt:
+
+```text
+http1
+http_canonicalizer
+json_preflight
+xml_preflight
+zip_preflight
+pdf_preflight
+pe_preflight
+tlsmeta
+signature_detector
+features
+mutation_detector
+risk
+policy
+```
+
+## Zielpfad
+
+```text
+eingehende TCP-Verbindung
+→ registrierter HTTP-Dienst
+→ Streamdaten
+→ HTTP-Parser
+→ HTTP-Kanonisierung
+→ Body-Klassifikation
+→ optional JSON/XML/ZIP/PDF/PE Preflight
+→ Detektorensemble
+→ Risiko
+→ Entscheidung
+```
+
+## Noch nicht zulässig
+
+* universelle TLS-Entschlüsselung
+* SMB
+* RDP
+* beliebige Binärprotokolle
+* automatisches Reverse-Proxying aller Anwendungen
+
+Zuerst muss ein kontrollierter HTTP-Testdienst vollständig geschützt werden.
+
+## Verbindliche Testfälle
+
+```text
+gültiger GET
+gültiger POST
+fragmentierter Header
+fragmentierter Body
+mehrfacher Content-Length
+Content-Length/Transfer-Encoding-Konflikt
+ungültiges Chunking
+Header Folding
+extreme Headerzahl
+extreme Headerlänge
+doppelte Host-Header
+Path Traversal
+mehrfache URL-Kodierung
+JSON-Tiefenangriff
+XML-Entity-Angriff
+ZIP-Bombe
+PDF-Strukturanomalie
+PE-Upload
+Mutationsserie
+Low-and-slow-Serie
+verteilte Quelladressen mit gleicher Mutation
+```
+
+---
+
+# 9. Windows-Meilenstein 4: AppContainer-Sandbox
+
+Deine vorhandenen Module:
+
+```text
+shadow_catalog
+sandbox_budget
+sandbox/result
+```
+
+sind die Orchestrierungsgrundlage.
+
+AppContainer isoliert Prozesse von nicht benötigten Ressourcen und verwendet explizit gewährte Fähigkeiten. Microsoft dokumentiert sowohl AppContainer als auch Less-Privileged AppContainer für kontrollierte Prozessausführung. ([Microsoft Learn][6])
+
+## Erste Sandbox-Funktion
+
+Nicht sofort ganze fremde Windows-Dienste klonen.
+
+Zuerst:
+
+```text
+ai_shield_shadow_parser.exe
+```
+
+Dieser Prozess erhält:
+
+```text
+Analyse-ID
+Parser-ID
+Payload-Segment
+Budget
+virtuelle Zeitgrenze
+erlaubte Fähigkeiten
+```
+
+Er liefert ausschließlich:
+
+```text
+Parse Result
+Exception Result
+Resource Consumption
+Observed Effects
+Evidence Hash
+```
+
+## Sandbox-Regeln
+
+```text
+kein echtes Netzwerk
+kein Zugriff auf Benutzerprofile
+kein Zugriff auf Credential Stores
+nur temporäres Arbeitsverzeichnis
+Job-Object-Limits
+Speicherlimit
+CPU-Zeitlimit
+Prozessanzahllimit
+Handle-Limit
+keine Child-Prozesse, außer explizit erlaubt
+```
+
+Jeder Sandboxprozess ist nach einer Analyse wegwerfbar.
+
+---
+
+# 10. Windows-Meilenstein 5: Minifilter und Provenance
+
+Der Minifilter wird erst integriert, wenn der Netzwerkpfad stabil ist.
+
+Aufgabe:
+
+```text
+extern erzeugte Datei erkennen
+→ Provenance zuweisen
+→ Dateioperationen verfolgen
+→ Ausführungsgate vorbereiten
+```
+
+Nicht Aufgabe:
+
+```text
+komplexe Inhaltsanalyse im Kernel
+Hashing großer Dateien im Pre-Operation Callback
+KI-Auswertung
+Archivextraktion
+PDF-Analyse
+```
+
+Der Kernel sammelt nur Identität und Ereignisse. Inhaltsanalyse erfolgt im Userspace.
+
+---
+
+# 11. Windows-Meilenstein 6: Prozess-Konsequenz-Gate
+
+Ziel:
+
+```text
+externer Flow
+→ Dienst verarbeitet Daten
+→ Dienst startet Kindprozess
+→ Prozessereignis wird mit Flow korreliert
+→ consequence_policy entscheidet
+→ Windows-Enforcer blockiert oder suspendiert
+```
+
+Verbindliche Hochrisikoereignisse:
+
+* Netzwerkdienst startet Shell oder Skriptinterpreter
+* extern erzeugte Datei wird ausgeführt
+* Parserprozess startet Kindprozess
+* Dienst öffnet unerwartete ausgehende Verbindung
+* Prozess versucht Persistenz zu erzeugen
+* Prozess greift auf Credentials zu
+* nicht autorisierte ausführbare Speichertransformation
+
+Nicht jede dieser Beobachtungen kann durch denselben Sensor erfasst werden. Der Windows-Adapter liefert mehrere Evidenzquellen; der Shared Core bewertet ihre Konsistenz.
+
+---
+
+# 12. Empfohlene Release-Reihenfolge
+
+```text
+v0.2.0  Integrated Core Replay
+v0.3.0  Windows Service und ABI Channel
+v0.4.0  WFP Telemetry Only
+v0.5.0  WFP Connection Enforcement
+v0.6.0  HTTP/1 Vertical Slice
+v0.7.0  AppContainer Shadow Parser
+v0.8.0  File Provenance Minifilter
+v0.9.0  Process Consequence Guard
+v1.0.0  Windows Integrated Mode
+v1.1.0  Hyper-V Sandbox
+v2.0.0  Sovereign Mode Foundation
+```
+
+# Mein klares Urteil
+
+Der aktuelle Stand ist **fachlich weit fortgeschritten und sauber getrennt**, aber die nächste Qualitätsstufe entsteht ausschließlich durch Integration.
+
+Die drei wichtigsten nächsten Aufgaben sind:
+
+1. `ai_shield_replay.exe` als vollständiger deterministischer Core-Datenpfad.
+2. Windows-Service und streng validierter Treiberkanal.
+3. WFP zunächst im reinen Telemetriemodus.
+
+Ab jetzt sollte jedes neue Feature nachweisen, wo es in diesem Pfad liegt:
+
+```text
+Sensor
+→ Normalisierung
+→ Analyse
+→ Entscheidung
+→ Durchsetzung
+→ Audit
+```
+
+Kann ein Modul keinem dieser Schritte eindeutig zugeordnet werden oder wird es für den ersten Windows-Vertikalschnitt nicht benötigt, bleibt es zunächst eingefroren. Das verhindert, dass AI Shield zu einer Sammlung guter Sicherheitskomponenten wird, und zwingt das Projekt zu dem, was es sein soll: **eine durchgängige, kausal nachweisbare und tatsächlich durchsetzende Windows-Sicherheitsbarriere.**
+
+[1]: https://learn.microsoft.com/en-us/windows-hardware/drivers/ifs/about-file-system-filter-drivers?utm_source=chatgpt.com "About File System Filter Drivers - Windows"
+[2]: https://learn.microsoft.com/en-us/windows-hardware/drivers/network/processing-classify-callouts-asynchronously?utm_source=chatgpt.com "Processing Classify Callouts Asynchronously"
+[3]: https://learn.microsoft.com/en-us/windows/win32/fwp/ale-layers?utm_source=chatgpt.com "ALE Layers - Win32 apps"
+[4]: https://learn.microsoft.com/en-us/windows/win32/api/fwpsu/ne-fwpsu-fwps_builtin_layers?utm_source=chatgpt.com "FWPS_BUILTIN_LAYERS - Win32 apps"
+[5]: https://learn.microsoft.com/en-us/windows-hardware/test/hlk/testref/driver-compatibility-with-device-guard?utm_source=chatgpt.com "Driver compatibility with memory integrity and VBS"
+[6]: https://learn.microsoft.com/en-us/windows/win32/secauthz/appcontainer-isolation?utm_source=chatgpt.com "AppContainer isolation - Win32 apps"

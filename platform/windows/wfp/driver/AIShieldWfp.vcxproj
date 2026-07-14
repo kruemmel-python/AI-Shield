@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\drivers.props" />
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B7B0F456-685F-4E06-9D6F-12BD403563F1}</ProjectGuid>
+    <RootNamespace>AIShieldWfp</RootNamespace>
+    <TargetName>AIShieldWfp</TargetName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ClCompile Include="ai_shield_wfp.c" />
+  </ItemGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(DDK_LIB_PATH)fwpkclnt.lib;$(DDK_LIB_PATH)wdmsec.lib;$(SDK_LIB_PATH)uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

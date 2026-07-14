@@ -1,0 +1,11 @@
+{
+    "schema":  "AIShieldDriverABI/1.1",
+    "protocol_version":  "0x00010001",
+    "freeze_revision":  1,
+    "packing":  8,
+    "policy_size":  32,
+    "status_size":  56,
+    "event_size":  72,
+    "schema_sha256":  "1dd9fcfea3aafd1f3d179cf18d7dd3d8ea38e07fb46404a0eacd770eaf0cbb88",
+    "canonical_schema":  "AI_SHIELD_ABI_1_1|POLICY:32:0,4,8,12,16,20,24,28|STATUS:56:0,4,8,12,16,24,32,40,48|EVENT:72:0,4,8,12,16,24,32,40,48,52,56,60,64,68"
+}

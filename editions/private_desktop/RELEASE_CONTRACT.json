@@ -1,0 +1,176 @@
+{
+  "schema": "AIShieldPrivateReleaseContract/1",
+  "release": "2.0.0-rc.8",
+  "release_epoch_utc": "2026-07-13T16:30:00Z",
+  "kernel_abi": "1.2",
+  "kernel_abi_freeze_revision": 2,
+  "internal_abi": "2.0",
+  "policy_schema": 1,
+  "artifacts": [
+    {
+      "path": "platform/windows/common/ai_shield_driver_protocol.h",
+      "sha256": "70F00ADCB61FB7A79DF40D7F4529FC24B41234ECDAF610087401802E04D52FDC"
+    },
+    {
+      "path": "include/ai_shield/abi2.hpp",
+      "sha256": "170B9D062DD18ED3FFC8B2E876252003503F5A2302696ADBA7C7447C990CB17B"
+    },
+    {
+      "path": "platform/windows/policy/ai_shield_policy.ps1",
+      "sha256": "3DF45C2079531FA47EFF458FCA04C66DB306C3B7286E7C02918727957D9B7E08"
+    },
+    {
+      "path": "editions/private_desktop/edition.json",
+      "sha256": "D4FBC422D2CFE82BBA1377129356A944B9E84E56814CF8208D2A626CD9651B73"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "8E30CE8FB74558E7CF83AA23E71E3788EAF360368D641CBCAA05D01DDAF5BECA"
+    },
+    {
+      "path": "platform/windows/drivers.props",
+      "sha256": "5E6824DD961F7D2B4DC72B199E1CAE71DA79BE76201B8403B14A25A55C19B4B7"
+    },
+    {
+      "path": "platform/windows/build_drivers.ps1",
+      "sha256": "654917CFA5F7FA34BE675BF88642DC3B34B55030BFDD4A3D0F82892F665637FE"
+    },
+    {
+      "path": "tools/package_private_desktop.ps1",
+      "sha256": "ED076B061926B5323F74E6160134671B7685011D00585CE1B1F76F0E9780EF7A"
+    },
+    {
+      "path": "editions/private_desktop/install_private_desktop.ps1",
+      "sha256": "B6D0A163D3B1EA67773FB43DE1F11A5F165ADCD949B9ADB0AB1CE015B25D83DC"
+    },
+    {
+      "path": "editions/private_desktop/msi_product_action.ps1",
+      "sha256": "29E09920091906CEEB6F9A72C655982E809FD21E24D35AD43462F999D620E4FB"
+    },
+    {
+      "path": "platform/windows/msi/AIShieldPrivateDesktop.wxs",
+      "sha256": "8B55B7A73EBEEBDAB1CCBEDA193FC54A047B666AA7B1E10735BED4AB58D42BEE"
+    },
+    {
+      "path": "platform/windows/msi/build_msi.ps1",
+      "sha256": "DE51D1B4F1B0FBD8F58D4220598B4D51BA2B77F95F8DD247B0EC97365A495245"
+    },
+    {
+      "path": "platform/windows/installer/install_drivers.ps1",
+      "sha256": "03E90D1F64AAB742F0066A49070679F65878FB78DDAAA9A6DC9B1E6D4EB16ED9"
+    },
+    {
+      "path": "editions/private_desktop/uninstall_private_desktop.ps1",
+      "sha256": "05C193183AC85CF8C6A9966EBE3000D38C471ED4B65177B3FA2D0DD2F23A23D1"
+    },
+    {
+      "path": "editions/private_desktop/AI_Shield_UI.cmd",
+      "sha256": "0A410FEFF763FC3C2625B3D603BA89ABF0956A18ED2A9A80A8D3D2509D0D4D69"
+    },
+    {
+      "path": "editions/private_desktop/ui/AIShield.PrivateDesktop.UI.xaml",
+      "sha256": "E58B76C68D572EACBDBB9CC065FB08284E5BFACC9F565C76AFCDC187B2A4C65A"
+    },
+    {
+      "path": "editions/private_desktop/ui/AIShield.AuditViewer.xaml",
+      "sha256": "D1DC87E9E5754741DFBFC058A0D5D2917FFF9DEC1CDBAEB2D80ED0A909AAA7A6"
+    },
+    {
+      "path": "editions/private_desktop/ui/start_private_ui.ps1",
+      "sha256": "B30FD8519FD93EF92339A9C095E544EF3ACD9D6BD4D9B7EAAF2D2E0A14AD6757"
+    },
+    {
+      "path": "editions/private_desktop/ui/private_security_settings.ps1",
+      "sha256": "8D7DB8B7FC81DF0C1B80E585B6A43806C8BF346E674694B6DE35554E1890699B"
+    },
+    {
+      "path": "editions/private_desktop/ui/verify_ui_contract.ps1",
+      "sha256": "93ACDE75622E7AC1BA855DD32CCF880D8ACA3539EAF2D8DF4A4D6528B2C70802"
+    },
+    {
+      "path": "platform/windows/browser_extension/manifest.json",
+      "sha256": "E741B21CC479BB8961DE3B41C7471D1E8077BB27B97470E30B58B72C1CB2C8B0"
+    },
+    {
+      "path": "platform/windows/browser_extension/service_worker.js",
+      "sha256": "D895FFC9DC62DBCEEEE032C16DE6F9CF484DFDB0D1ED1868B8ABDC49424A3717"
+    },
+    {
+      "path": "platform/windows/browser_extension/install_browser_sensor.ps1",
+      "sha256": "67C0920FEFAD0E5EB4EB3D795BEDA83C7A7020056D6772AC993E8E3F9C70DA05"
+    },
+    {
+      "path": "platform/windows/process_guard/driver/ai_shield_process_guard.c",
+      "sha256": "84D458FA30EA2FB9A032352B0A7EF78CA24613416D5524CAEDC59A6F591C2801"
+    },
+    {
+      "path": "platform/windows/security/kernel_hardware_hardening.ps1",
+      "sha256": "AA904C73B10B3283F0FC7ED9DB7D37A4561B2F701661B431590AD6BE7434827D"
+    },
+    {
+      "path": "include/ai_shield/ransomware.hpp",
+      "sha256": "D527FAB54BF63F7B8EE02FDF00E9A5108372E8C811DA9A5054C268F44578EF46"
+    },
+    {
+      "path": "src/ransomware.cpp",
+      "sha256": "9583A4A39620F764E6328AC368EC30AC2D26FCAEC2630C618A61D078A8ADC6EA"
+    },
+    {
+      "path": "include/ai_shield/recovery_vault.hpp",
+      "sha256": "0ED73DCCC7221E8986312567376EFDF655B886BD6F04E5F36761ED1A71043714"
+    },
+    {
+      "path": "src/recovery_vault.cpp",
+      "sha256": "6A83D5BF6400DF287C761C8EDC03359D63CD399DB0A7BE69D3F68582CECBDEA5"
+    },
+    {
+      "path": "platform/windows/ransomware/ransomware_recovery.ps1",
+      "sha256": "9D775905F782ED020AD1F6CF2EBC64D04CEB477A39BF9A1BECB7A31785AC45D7"
+    },
+    {
+      "path": "tests/windows_ransomware_recovery.ps1",
+      "sha256": "C22F4366493AF87F55D2BB9CD44857A024AD3F40F8BE8133B3A50DD7C68B2AE2"
+    },
+    {
+      "path": "tools/ai_shield_broker/main.cpp",
+      "sha256": "0491E433647604D093CCF4D2025C04D28C1B3B17DD2B7877F31BD04E9788CFFD"
+    },
+    {
+      "path": "platform/windows/minifilter/driver/ai_shield_minifilter.c",
+      "sha256": "6D834F97F5E43CF485519CAEAA1570A07270631E5D677DFBE351266035D32EFD"
+    },
+    {
+      "path": "platform/windows/admin/ai_shield_admin.ps1",
+      "sha256": "FF83353EBB592229C2BC0430C1A3EBCBABF4F461B0C2F39D7F537A1B8F99A47F"
+    }
+  ],
+  "drivers": [
+    "AIShieldWfp.sys",
+    "AIShieldMiniFilter.sys",
+    "AIShieldProcessGuard.sys"
+  ],
+  "services": [
+    "AIShieldBroker",
+    "AIShieldCore"
+  ],
+  "consumer_scope": [
+    "dual-stack network metadata and worm egress guard",
+    "file provenance and bounded quarantine",
+    "process creation and handle enforcement",
+    "signed local policy and rollback",
+    "local audit and health posture",
+    "graphical local administration with reboot resume and quarantine workflow",
+    "per-category download content policy with isolated AMSI and structural scanning",
+    "integrated AISHAD02 integrity verification and audit viewer",
+    "Edge and Chrome privacy-preserving navigation and download metadata sensor",
+    "transactional kernel and hardware mitigation baseline with measured capability status",
+    "ransomware behavior correlation, protected recovery vault, confirmed restore and external hash backup"
+  ],
+  "excluded_scope": [
+    "web gateway by default",
+    "central collectors",
+    "fleet management",
+    "SOC console",
+    "enterprise browser policy"
+  ]
+}

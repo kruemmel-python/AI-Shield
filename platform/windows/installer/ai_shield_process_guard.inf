@@ -1,0 +1,37 @@
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+DriverVer=07/11/2026,0.3.0.0
+CatalogFile=ai_shield_process_guard.cat
+
+[DestinationDirs]
+DefaultDestDir=12
+
+[SourceDisksNames]
+1=%DiskName%,,,
+
+[SourceDisksFiles]
+AIShieldProcessGuard.sys=1
+
+[DefaultInstall.NTamd64]
+CopyFiles=DriverCopyFiles
+
+[DefaultInstall.NTamd64.Services]
+AddService=AIShieldProcessGuard,0x00000002,AIShieldProcessGuard_Service
+
+[DriverCopyFiles]
+AIShieldProcessGuard.sys
+
+[AIShieldProcessGuard_Service]
+DisplayName=%AIShieldProcessGuard.DisplayName%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\AIShieldProcessGuard.sys
+
+[Strings]
+ManufacturerName="AI Shield"
+AIShieldProcessGuard.DisplayName="AI Shield Process Consequence Sensor"
+DiskName="AI Shield Process Guard Driver Package"

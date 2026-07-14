@@ -1,0 +1,54 @@
+# Local build trees and IDE state
+/build*/
+/.vs/
+/.vscode/
+/.idea/
+/**/x64/
+/**/Debug/
+/**/Release/
+*.user
+*.suo
+*.VC.db
+*.VC.VC.opendb
+
+# Runtime state, qualification output and local test data
+/runtime/
+/dist/
+/test_backend/
+*.log
+*.tmp
+*.bak
+
+# Generated driver and Microsoft-submission packages
+/driver_package/
+/submission/microsoft/packages/
+/submission/microsoft/AIShieldDrivers-x64.cab
+/submission/microsoft/SHA256SUMS.json
+*.sys
+*.cat
+*.cer
+*.cab
+*.msi
+*.wixpdb
+*.obj
+*.pdb
+*.ilk
+*.tlog
+
+# Generated distribution archives
+*.zip
+/AI_Shield_ZIP_SHA256SUMS.txt
+/setup.inf
+/setup.rpt
+*.preview.png
+
+# Never publish private signing or authentication material
+*.pfx
+*.pvk
+*.p12
+*.pem
+*.key
+id_rsa*
+.env
+.env.*
+!.env.example

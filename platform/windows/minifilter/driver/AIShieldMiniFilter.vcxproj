@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\drivers.props" />
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3E0E7E11-9F7A-4A46-9AF7-5B1B33EEA81B}</ProjectGuid>
+    <RootNamespace>AIShieldMiniFilter</RootNamespace>
+    <TargetName>AIShieldMiniFilter</TargetName>
+    <DriverType>Filter</DriverType>
+  </PropertyGroup>
+  <ItemGroup>
+    <ClCompile Include="ai_shield_minifilter.c" />
+  </ItemGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(DDK_LIB_PATH)fltMgr.lib;$(DDK_LIB_PATH)wdmsec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

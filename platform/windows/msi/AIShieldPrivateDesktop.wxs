@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="1EABE7E9-9CFB-4B7D-88F1-FE75FE013FD1"
+           Name="AI Shield Private Desktop"
+           Language="1031"
+           Version="2.0.8"
+           Manufacturer="AI Shield"
+           UpgradeCode="357A6A93-5FDA-43D2-8D41-4D24BF080EDD">
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine"
+             InstallPrivileges="elevated" Platform="x64"
+             Description="AI Shield Private Desktop 2.0.0-rc.8" />
+    <MajorUpgrade DowngradeErrorMessage="Eine neuere Version von AI Shield Private Desktop ist bereits installiert."
+                  Schedule="afterInstallInitialize" />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <Property Id="ARPCONTACT" Value="AI Shield Development" />
+    <Property Id="ARPNOREPAIR" Value="1" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="System64Folder" />
+      <Directory Id="ProgramFiles64Folder">
+        <Directory Id="INSTALLFOLDER" Name="AI_Shield_Private_Desktop" />
+      </Directory>
+    </Directory>
+
+    <Feature Id="ProductFeature" Title="AI Shield Private Desktop" Level="1" Absent="disallow">
+      <ComponentGroupRef Id="PayloadComponents" />
+    </Feature>
+
+    <CustomAction Id="InstallAIShieldResources" Directory="INSTALLFOLDER"
+                  ExeCommand='&quot;[System64Folder]WindowsPowerShell\v1.0\powershell.exe&quot; -NoProfile -NonInteractive -ExecutionPolicy Bypass -File &quot;[ProgramFiles64Folder]AI_Shield_Private_Desktop\msi_product_action.ps1&quot; -Action install'
+                  Execute="deferred" Impersonate="no" Return="check" />
+    <CustomAction Id="RemoveAIShieldResources" Directory="INSTALLFOLDER"
+                  ExeCommand='&quot;[System64Folder]WindowsPowerShell\v1.0\powershell.exe&quot; -NoProfile -NonInteractive -ExecutionPolicy Bypass -File &quot;[ProgramFiles64Folder]AI_Shield_Private_Desktop\msi_product_action.ps1&quot; -Action uninstall'
+                  Execute="deferred" Impersonate="no" Return="check" />
+    <CustomAction Id="RemoveAIShieldProgramDirectory" Directory="System64Folder"
+                  ExeCommand='cmd.exe /d /c if exist &quot;[ProgramFiles64Folder]AI_Shield_Private_Desktop&quot; rd /s /q &quot;[ProgramFiles64Folder]AI_Shield_Private_Desktop&quot;'
+                  Execute="deferred" Impersonate="no" Return="ignore" />
+
+    <InstallExecuteSequence>
+      <Custom Action="RemoveAIShieldResources" Before="RemoveFiles">
+        REMOVE="ALL" AND NOT UPGRADINGPRODUCTCODE
+      </Custom>
+      <Custom Action="RemoveAIShieldProgramDirectory" After="RemoveFiles">
+        REMOVE="ALL" AND NOT UPGRADINGPRODUCTCODE
+      </Custom>
+      <Custom Action="InstallAIShieldResources" After="InstallFiles">
+        NOT Installed
+      </Custom>
+    </InstallExecuteSequence>
+
+    <UIRef Id="WixUI_Minimal" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.SourceDir)\License.rtf" />
+  </Product>
+</Wix>

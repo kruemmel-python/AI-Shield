@@ -1,0 +1,22 @@
+{
+  "schema": "AIShieldEdition/1",
+  "id": "private-desktop",
+  "display_name": "AI Shield Private Desktop",
+  "release": "2.0.0-rc.8",
+  "target": "private Windows single-user workstation",
+  "network_mode": "local dual-stack host protection",
+  "gateway_enabled_by_default": false,
+  "enterprise_connectors_included": false,
+  "browser_sensor_enabled_by_default": true,
+  "default_policy": {
+    "mode": "enforce",
+    "system_network_guard": true,
+    "block_quarantine_execution": true,
+    "block_user_temp_execution": true,
+    "block_risky_script_command": true,
+    "block_office_child_process": true,
+    "block_download_execution": true,
+    "block_unsolicited_inbound": false,
+    "block_browser_non_web": false
+  }
+}

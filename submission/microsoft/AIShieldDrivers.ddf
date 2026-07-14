@@ -1,0 +1,21 @@
+.OPTION EXPLICIT
+.Set CabinetNameTemplate=AIShieldDrivers-x64.cab
+.Set DiskDirectoryTemplate=D:\AI_Shield\submission\microsoft
+.Set CompressionType=MSZIP
+.Set Cabinet=on
+.Set Compress=on
+.Set DestinationDir=wfp
+"D:\AI_Shield\submission\microsoft\packages\wfp\ai_shield_wfp.cat"
+"D:\AI_Shield\submission\microsoft\packages\wfp\ai_shield_wfp.inf"
+"D:\AI_Shield\submission\microsoft\packages\wfp\AIShieldWfp.pdb"
+"D:\AI_Shield\submission\microsoft\packages\wfp\AIShieldWfp.sys"
+.Set DestinationDir=minifilter
+"D:\AI_Shield\submission\microsoft\packages\minifilter\ai_shield_minifilter.cat"
+"D:\AI_Shield\submission\microsoft\packages\minifilter\ai_shield_minifilter.inf"
+"D:\AI_Shield\submission\microsoft\packages\minifilter\AIShieldMiniFilter.pdb"
+"D:\AI_Shield\submission\microsoft\packages\minifilter\AIShieldMiniFilter.sys"
+.Set DestinationDir=process_guard
+"D:\AI_Shield\submission\microsoft\packages\process_guard\ai_shield_process_guard.cat"
+"D:\AI_Shield\submission\microsoft\packages\process_guard\ai_shield_process_guard.inf"
+"D:\AI_Shield\submission\microsoft\packages\process_guard\AIShieldProcessGuard.pdb"
+"D:\AI_Shield\submission\microsoft\packages\process_guard\AIShieldProcessGuard.sys"

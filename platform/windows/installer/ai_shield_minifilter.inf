@@ -1,0 +1,45 @@
+[Version]
+Signature="$WINDOWS NT$"
+Class=ActivityMonitor
+ClassGuid={b86dff51-a31e-4bac-b3cf-e8cfe75c9fc2}
+Provider=%ManufacturerName%
+DriverVer=07/11/2026,0.3.0.0
+CatalogFile=ai_shield_minifilter.cat
+
+[DestinationDirs]
+DefaultDestDir=12
+MiniFilter.DriverFiles=12
+
+[SourceDisksNames]
+1=%DiskName%,,,
+
+[SourceDisksFiles]
+AIShieldMiniFilter.sys=1
+
+[DefaultInstall.NTamd64]
+CopyFiles=MiniFilter.DriverFiles
+
+[DefaultInstall.NTamd64.Services]
+AddService=AIShieldMiniFilter,0x00000002,AIShieldMiniFilter.Service
+
+[MiniFilter.DriverFiles]
+AIShieldMiniFilter.sys
+
+[AIShieldMiniFilter.Service]
+DisplayName=%AIShieldMiniFilter.DisplayName%
+ServiceType=2
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\AIShieldMiniFilter.sys
+LoadOrderGroup=FSFilter Activity Monitor
+AddReg=AIShieldMiniFilter.AddRegistry
+
+[AIShieldMiniFilter.AddRegistry]
+HKR,"Instances","DefaultInstance",0x00000000,"AIShieldMiniFilter Instance"
+HKR,"Instances\AIShieldMiniFilter Instance","Altitude",0x00000000,"370120"
+HKR,"Instances\AIShieldMiniFilter Instance","Flags",0x00010001,0
+
+[Strings]
+ManufacturerName="AI Shield"
+AIShieldMiniFilter.DisplayName="AI Shield File Provenance Minifilter"
+DiskName="AI Shield Minifilter Driver Package"

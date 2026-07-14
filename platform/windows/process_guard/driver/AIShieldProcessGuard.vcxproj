@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\drivers.props" />
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FD27654D-EB58-4658-A5A5-3E723D922E2A}</ProjectGuid>
+    <RootNamespace>AIShieldProcessGuard</RootNamespace>
+    <TargetName>AIShieldProcessGuard</TargetName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ClCompile Include="ai_shield_process_guard.c" />
+  </ItemGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>/INTEGRITYCHECK %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>$(DDK_LIB_PATH)wdmsec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

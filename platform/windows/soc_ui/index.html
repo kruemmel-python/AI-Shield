@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AI Shield SOC</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body data-csrf="__AI_SHIELD_CSRF__">
+  <header>
+    <div><strong>AI Shield</strong><span>SOC-Konsole</span></div>
+    <button id="refresh" type="button">Aktualisieren</button>
+  </header>
+  <main>
+    <section class="summary" aria-label="Systemzustand">
+      <div><span>Schutzstatus</span><strong id="mode">Wird geladen</strong></div>
+      <div><span>Komponenten</span><strong id="components">-</strong></div>
+      <div><span>Policy / Modell</span><strong id="versions">-</strong></div>
+      <div><span>Audit</span><strong id="audit">-</strong></div>
+    </section>
+    <section>
+      <div class="section-title"><h1>Dienste und Sensoren</h1><span id="updated"></span></div>
+      <table><thead><tr><th>Komponente</th><th>Status</th><th>Start</th></tr></thead><tbody id="services"></tbody></table>
+    </section>
+    <section class="actions">
+      <div>
+        <h2>Safe Mode</h2>
+        <p>Setzt den Fehlerzähler zurück. Enforcement wird nur bei gesunden Komponenten wieder zugelassen.</p>
+        <button id="safe-reset" type="button">Safe Mode zurücksetzen</button>
+      </div>
+      <form id="release-form">
+        <h2>Quarantänefreigabe</h2>
+        <label>Objekt-ID<input id="object-id" required pattern="[A-Fa-f0-9]{64}" maxlength="64"></label>
+        <label>Zielpfad<input id="destination" required maxlength="500"></label>
+        <label>Begründung<textarea id="reason" required minlength="3" maxlength="256"></textarea></label>
+        <button type="submit">Freigabe protokollieren</button>
+      </form>
+    </section>
+    <output id="message" role="status"></output>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+[Version]
+Signature="$WINDOWS NT$"
+Class=NetService
+ClassGuid={4D36E974-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+DriverVer=07/11/2026,0.3.0.0
+CatalogFile=ai_shield_wfp.cat
+
+[DestinationDirs]
+DefaultDestDir=12
+
+[SourceDisksNames]
+1=%DiskName%,,,
+
+[SourceDisksFiles]
+AIShieldWfp.sys=1
+
+[DefaultInstall.NTamd64]
+CopyFiles=DriverCopyFiles
+
+[DefaultInstall.NTamd64.Services]
+AddService=AIShieldWfp,0x00000002,AIShieldWfp_Service
+
+[DriverCopyFiles]
+AIShieldWfp.sys
+
+[AIShieldWfp_Service]
+DisplayName=%AIShieldWfp.DisplayName%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\AIShieldWfp.sys
+LoadOrderGroup=NDIS
+
+[Strings]
+ManufacturerName="AI Shield"
+AIShieldWfp.DisplayName="AI Shield WFP Telemetry Driver"
+DiskName="AI Shield WFP Driver Package"
