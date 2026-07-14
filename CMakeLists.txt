@@ -217,4 +217,10 @@ if(WIN32)
         COMMAND powershell.exe -NoProfile -ExecutionPolicy Bypass -File
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/windows_ransomware_recovery.ps1
         -RepositoryRoot ${CMAKE_CURRENT_SOURCE_DIR})
+    add_test(NAME ai_shield_tray_agent_contract
+        COMMAND powershell.exe -NoProfile -ExecutionPolicy Bypass -File
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/windows_tray_agent_contract.ps1)
+    add_test(NAME ai_shield_private_ui_contract
+        COMMAND powershell.exe -NoProfile -ExecutionPolicy Bypass -STA -File
+        ${CMAKE_CURRENT_SOURCE_DIR}/editions/private_desktop/ui/verify_ui_contract.ps1)
 endif()

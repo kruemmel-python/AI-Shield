@@ -1,6 +1,6 @@
 # AI Shield Private Desktop
 
-Release Candidate: `2.0.0-rc.9`. ABI-, Policy- und Funktionsumfang sind durch
+Release Candidate: `2.0.0-rc.10`. ABI-, Policy- und Funktionsumfang sind durch
 [`RELEASE_CONTRACT.json`](RELEASE_CONTRACT.json) eingefroren. Änderungen an sicherheitsrelevanten
 Verträgen werden von `validate_release_freeze.ps1` abgelehnt, bis ein bewusst neuer Vertrag erstellt
 wird.
@@ -57,6 +57,7 @@ automatisch.
 2. `Installieren.cmd` doppelt anklicken und die UAC-Abfrage bestätigen.
    Nach der Installation startet die grafische Oberfläche automatisch und ist danach im Startmenü
    unter **AI Shield Private Desktop** erreichbar. Alternativ öffnet `AI_Shield_UI.cmd` die UI.
+   Zusätzlich wird der Tray-Agent für jede Windows-Anmeldung eingerichtet.
 3. Nach erfolgreicher Installation mit `Status_anzeigen.cmd` prüfen, dass drei Treiber sowie Broker
    und Core laufen.
 4. `Schutz_starten.cmd` aktiviert den Schutz nach einem manuellen Stopp erneut.
@@ -76,6 +77,15 @@ Ordner, wenn noch kein Snapshot existiert. Weitere Snapshots, externe Sicherunge
 Rücksicherung sind bewusste Benutzeraktionen. Nach Bestätigung startet Windows neu; bei der nächsten Anmeldung öffnet eine
 einmalige erhöhte Aufgabe die UI wieder und liest den wirksamen Zustand ein. Details stehen in
 [`ui\README.md`](ui/README.md).
+
+Die drei Kernel-Treiber sowie Broker und Core laufen als automatisch gestartete Windows-Dienste
+bereits vor einer Benutzeranmeldung und unabhängig von UI oder Tray. Der Tray-Agent zeigt diesen
+Zustand im Windows-Infobereich an. Doppelklick öffnet die UI; das Kontextmenü kann den Status
+aktualisieren, die Schutzdienste erhöht neu starten oder die Windows-Diensteverwaltung öffnen.
+**Tray-Agent beenden** entfernt nur das Symbol der aktuellen Anmeldung und beendet keinen Schutz.
+Der Schalter **AI Shield im Infobereich** verwaltet den automatischen Start bei der Anmeldung.
+Minimieren oder `X` verbergen die UI vollständig aus der Taskleiste. Der Tray-Doppelklick stellt
+dieselbe laufende Einzelinstanz ohne erneute UAC-Abfrage wieder her.
 
 Der signierte Native-Messaging-Host für Edge und Chrome wird standardmäßig installiert. Die
 Erweiterung benötigt ohne veröffentlichte HTTPS-Updatequelle je Browser einmalig den von der UI

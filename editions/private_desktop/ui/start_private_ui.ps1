@@ -2,6 +2,27 @@ param([switch]$ResumeAfterReboot)
 
 $ErrorActionPreference="Stop"
 $script:UiScriptPath=$PSCommandPath
+$uiRuntimeRoot=Join-Path $env:LocalAppData "AIShield"
+$uiInstancePath=Join-Path $uiRuntimeRoot "private-ui.instance.json"
+$uiSignalPath=Join-Path $uiRuntimeRoot "private-ui.show.signal"
+$uiLifecyclePath=Join-Path $uiRuntimeRoot "private-ui.lifecycle.log"
+function Write-UiLifecycle([string]$Event){New-Item -ItemType Directory -Force -Path $uiRuntimeRoot|Out-Null;if((Test-Path $uiLifecyclePath)-and(Get-Item $uiLifecyclePath).Length-gt128KB){Move-Item $uiLifecyclePath "$uiLifecyclePath.previous" -Force};Add-Content -LiteralPath $uiLifecyclePath -Value ("{0} pid={1} event={2}"-f[DateTime]::UtcNow.ToString("o"),$PID,$Event) -Encoding UTF8}
+function Signal-ExistingUi {
+    if(-not(Test-Path -LiteralPath $uiInstancePath)){return $false}
+    try {
+        $instance=Get-Content -LiteralPath $uiInstancePath -Raw|ConvertFrom-Json
+        if($instance.schema-ne"AIShieldPrivateUiInstance/1"){throw "invalid schema"}
+        $process=Get-Process -Id ([int]$instance.pid) -ErrorAction Stop
+        if($process.StartTime.ToUniversalTime().Ticks-ne[long]$instance.start_ticks){throw "stale process"}
+        New-Item -ItemType Directory -Force -Path $uiRuntimeRoot|Out-Null
+        [IO.File]::WriteAllText($uiSignalPath,[Guid]::NewGuid().ToString("N"),[Text.UTF8Encoding]::new($false))
+        return $true
+    } catch {
+        Remove-Item -LiteralPath $uiInstancePath,$uiSignalPath -Force -ErrorAction SilentlyContinue
+        return $false
+    }
+}
+if(Signal-ExistingUi){exit 0}
 $principal=[Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
 if(-not$principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)){
     $arguments=@("-NoProfile","-WindowStyle","Hidden","-ExecutionPolicy","Bypass","-STA","-File",('"'+$PSCommandPath+'"'))
@@ -11,6 +32,12 @@ if(-not$principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrato
 }
 
 Add-Type -AssemblyName PresentationFramework,PresentationCore,WindowsBase,System.Xaml,System.Windows.Forms
+New-Item -ItemType Directory -Force -Path $uiRuntimeRoot|Out-Null
+$currentProcess=Get-Process -Id $PID
+$instance=[ordered]@{schema="AIShieldPrivateUiInstance/1";pid=$PID;start_ticks=$currentProcess.StartTime.ToUniversalTime().Ticks}
+[IO.File]::WriteAllText($uiInstancePath,($instance|ConvertTo-Json -Compress),[Text.UTF8Encoding]::new($false))
+Remove-Item -LiteralPath $uiSignalPath -Force -ErrorAction SilentlyContinue
+Write-UiLifecycle "instance-registered"
 . (Join-Path $PSScriptRoot "..\private_common.ps1")
 $root=Get-AIShieldPrivateRoot
 $stateRoot=Join-Path $env:ProgramData "AIShield\private-desktop"
@@ -18,9 +45,15 @@ $uiStatePath=Join-Path $stateRoot "ui-settings.json"
 $resumeTask="AIShieldPrivateUIResume"
 $script:refreshing=$false
 $script:knownQuarantineIds=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+$script:allowUiExit=$false
 
 function Show-Error([string]$Message){[Windows.MessageBox]::Show($Message,"AI Shield",[Windows.MessageBoxButton]::OK,[Windows.MessageBoxImage]::Error)|Out-Null}
 function Set-Message([string]$Message){$StatusMessage.Text=$Message}
+function Get-TrayStatus {
+    $manager=Join-Path $PSScriptRoot "..\tray\manage_tray_agent.ps1"
+    if(-not(Test-Path -LiteralPath $manager)){return [pscustomobject]@{registered=$false;running=$false}}
+    return (& powershell.exe -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File $manager -Action status|ConvertFrom-Json)
+}
 function Read-UiState {
     if(Test-Path -LiteralPath $uiStatePath){$state=Get-Content $uiStatePath -Raw|ConvertFrom-Json;if($state.schema-eq"AIShieldPrivateUiSettings/2"){return $state}}
     return [pscustomobject]@{schema="AIShieldPrivateUiSettings/2";harden_downloads=$true;strict_browser=$false;block_unsolicited_inbound=$false}
@@ -198,6 +231,8 @@ function Refresh-All {
         $running=@($services|Where-Object { $_.Status -eq "Running" }).Count;$protected=$running-eq5
         $ProtectionState.Text=$(if($protected){"AKTIV"}else{"EINGESCHRÄNKT"});$ProtectionState.Foreground=[Windows.Media.BrushConverter]::new().ConvertFromString($(if($protected){"#138A72"}else{"#C85A4A"}));$ComponentState.Text="$running / 5";$SidebarState.Text=$(if($protected){"Geschützt"}else{"Prüfung erforderlich"});$ServiceGrid.ItemsSource=$services
         $CoreToggle.IsChecked=$protected
+        $trayStatus=Get-TrayStatus;$TrayToggle.IsChecked=[bool]$trayStatus.registered
+        $TrayDetail.Text=$(if($trayStatus.running){"Aktiv; startet automatisch bei jeder Windows-Anmeldung"}elseif($trayStatus.registered){"Registriert; wird bei der nächsten Anmeldung gestartet"}else{"Nicht für den automatischen Start registriert"})
         $uiState=Read-UiState;$DownloadsToggle.IsChecked=[bool]$uiState.harden_downloads;$BrowserToggle.IsChecked=[bool]$uiState.strict_browser;$InboundToggle.IsChecked=[bool]$uiState.block_unsolicited_inbound
         $contentPolicy=Get-ContentPolicy;$mask=[int]$contentPolicy.enabled_categories
         $DocumentsToggle.IsChecked=($mask-band 1)-ne0;$ArchivesToggle.IsChecked=($mask-band 2)-ne0;$ImagesToggle.IsChecked=($mask-band 4)-ne0
@@ -223,11 +258,14 @@ function Refresh-All {
     }catch{Set-Message "Status konnte nicht vollständig geladen werden";Show-Error $_.Exception.Message}finally{$script:refreshing=$false}
 }
 
+Write-UiLifecycle "xaml-load-start"
 $reader=[System.Xml.XmlNodeReader]::new(([xml](Get-Content (Join-Path $PSScriptRoot "AIShield.PrivateDesktop.UI.xaml") -Raw)))
 $window=[Windows.Markup.XamlReader]::Load($reader)
-foreach($name in @("Pages","PageTitle","StatusMessage","SidebarState","ProtectionState","ComponentState","AuditState","ServiceGrid","AuditGrid","QuarantineGrid","RecoveryStatus","IncidentGrid","SnapshotButton","BackupButton","DetectRansomwareButton","RestorePlanButton","RestoreIncidentButton","RefreshButton","RestartButton","CoreToggle","DownloadsToggle","DocumentsToggle","ArchivesToggle","ImagesToggle","AudioToggle","VideoToggle","WebFilesToggle","ProgramsToggle","WindowsScriptsToggle","DeveloperScriptsToggle","LaunchersToggle","ReleaseRequiredToggle","ScanFailureToggle","BrowserToggle","InboundToggle","BrowserSensorToggle","BrowserSensorDetail","EdgeSetupButton","ChromeSetupButton","KernelHardwareToggle","KernelHardwareDetail","BitLockerButton","HvciToggle","CredentialToggle","FirewallToggle","DefenderToggle","HvciDetail","CredentialDetail","ViewAuditButton","OpenAuditFileButton","VerifyAuditButton","ExportAuditButton","ReleaseButton","NavDashboard","NavProtection","NavAudit","NavQuarantine","NavRecovery","NavSystem")){Set-Variable -Name $name -Value $window.FindName($name) -Scope Script}
+Write-UiLifecycle "xaml-load-complete"
+foreach($name in @("Pages","PageTitle","StatusMessage","SidebarState","ProtectionState","ComponentState","AuditState","ServiceGrid","AuditGrid","QuarantineGrid","RecoveryStatus","IncidentGrid","SnapshotButton","BackupButton","DetectRansomwareButton","RestorePlanButton","RestoreIncidentButton","RefreshButton","RestartButton","TrayToggle","TrayDetail","CoreToggle","DownloadsToggle","DocumentsToggle","ArchivesToggle","ImagesToggle","AudioToggle","VideoToggle","WebFilesToggle","ProgramsToggle","WindowsScriptsToggle","DeveloperScriptsToggle","LaunchersToggle","ReleaseRequiredToggle","ScanFailureToggle","BrowserToggle","InboundToggle","BrowserSensorToggle","BrowserSensorDetail","EdgeSetupButton","ChromeSetupButton","KernelHardwareToggle","KernelHardwareDetail","BitLockerButton","HvciToggle","CredentialToggle","FirewallToggle","DefenderToggle","HvciDetail","CredentialDetail","ViewAuditButton","OpenAuditFileButton","VerifyAuditButton","ExportAuditButton","ReleaseButton","NavDashboard","NavProtection","NavAudit","NavQuarantine","NavRecovery","NavSystem")){Set-Variable -Name $name -Value $window.FindName($name) -Scope Script}
 $nav=@(@($NavDashboard,0,"Übersicht"),@($NavProtection,1,"Schutzfunktionen"),@($NavAudit,2,"Audit"),@($NavQuarantine,3,"Quarantäne"),@($NavRecovery,4,"Wiederherstellung"),@($NavSystem,5,"Windows-Sicherheit"));foreach($item in $nav){$button=$item[0];$index=$item[1];$title=$item[2];$button.Add_Click({$Pages.SelectedIndex=$index;$PageTitle.Text=$title}.GetNewClosure())}
 $RefreshButton.Add_Click({Refresh-All})
+$TrayToggle.Add_Click({if($script:refreshing){return};try{$manager=Join-Path $PSScriptRoot "..\tray\manage_tray_agent.ps1";$action=$(if($TrayToggle.IsChecked){"install"}else{"uninstall"});& powershell.exe -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File $manager -Action $action|Out-Null;if($LASTEXITCODE-ne0){throw "Tray-Agent konnte nicht geändert werden."};Refresh-All}catch{Show-Error $_.Exception.Message;Refresh-All}})
 $CoreToggle.Add_Click({if($script:refreshing){return};try{if($CoreToggle.IsChecked){Apply-ProtectionState}else{& powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "..\stop_private_desktop.ps1")|Out-Null};Refresh-All}catch{Show-Error $_.Exception.Message;Refresh-All}})
 foreach($entry in @(@($DownloadsToggle,"harden_downloads"),@($BrowserToggle,"strict_browser"),@($InboundToggle,"block_unsolicited_inbound"))){$toggle=$entry[0];$property=$entry[1];$toggle.Add_Click({if($script:refreshing){return};try{$state=Read-UiState;$state.$property=[bool]$toggle.IsChecked;Write-UiState $state;Apply-ProtectionState;Refresh-All}catch{Show-Error $_.Exception.Message;Refresh-All}}.GetNewClosure())}
 foreach($toggle in @($DocumentsToggle,$ArchivesToggle,$ImagesToggle,$AudioToggle,$VideoToggle,$WebFilesToggle,$ProgramsToggle,$WindowsScriptsToggle,$DeveloperScriptsToggle,$LaunchersToggle,$ReleaseRequiredToggle,$ScanFailureToggle)){$toggle.Add_Click({if($script:refreshing){return};try{Set-ContentPolicy;Set-Message "Dateityp-Richtlinie wurde aktiviert"}catch{Show-Error $_.Exception.Message;Refresh-All}})}
@@ -252,5 +290,17 @@ $RestoreIncidentButton.Add_Click({try{$selected=$IncidentGrid.SelectedItem;if($n
 $RestartButton.Add_Click({if([Windows.MessageBox]::Show("Windows jetzt neu starten? Die AI-Shield-Oberfläche öffnet sich nach der Anmeldung automatisch erneut.","Neustart erforderlich",[Windows.MessageBoxButton]::YesNo,[Windows.MessageBoxImage]::Question)-eq[Windows.MessageBoxResult]::Yes){Register-ResumeTask;Restart-Computer -Force}})
 if($ResumeAfterReboot){Unregister-ScheduledTask -TaskName $resumeTask -Confirm:$false -ErrorAction SilentlyContinue;$window.Add_Loaded({Set-Message "Neustart abgeschlossen. Einstellungen wurden neu eingelesen."})}
 $quarantineTimer=[Windows.Threading.DispatcherTimer]::new();$quarantineTimer.Interval=[TimeSpan]::FromSeconds(2);$quarantineTimer.Add_Tick({try{Update-QuarantineNotifications}catch{Set-Message "Quarantänestatus konnte nicht aktualisiert werden"}})
+$uiSignalTimer=[Windows.Threading.DispatcherTimer]::new();$uiSignalTimer.Interval=[TimeSpan]::FromMilliseconds(350);$uiSignalTimer.Add_Tick({if(Test-Path -LiteralPath $uiSignalPath){Remove-Item -LiteralPath $uiSignalPath -Force -ErrorAction SilentlyContinue;$window.ShowInTaskbar=$true;$window.Show();$window.WindowState=[Windows.WindowState]::Normal;$window.Activate()|Out-Null;Refresh-All}})
+$window.Add_StateChanged({if($window.WindowState-eq[Windows.WindowState]::Minimized){$window.Dispatcher.BeginInvoke([Action]{$window.ShowInTaskbar=$false;$window.Hide()})|Out-Null}})
+$window.Add_Closing({param($sender,$eventArgs)Write-UiLifecycle "closing-allow-$script:allowUiExit";if(-not$script:allowUiExit){$eventArgs.Cancel=$true;$sender.Dispatcher.BeginInvoke([Action]{$sender.ShowInTaskbar=$false;$sender.Hide()})|Out-Null}})
+$sessionEndingHandler=[Microsoft.Win32.SessionEndingEventHandler]{param($sender,$eventArgs)Write-UiLifecycle "session-ending";$script:allowUiExit=$true;$window.Dispatcher.BeginInvoke([Action]{$window.Close()})|Out-Null}
+Write-UiLifecycle "session-handler-start"
+[Microsoft.Win32.SystemEvents]::add_SessionEnding($sessionEndingHandler)
+Write-UiLifecycle "session-handler-complete"
 $window.Add_Loaded({try{Initialize-RecoveryBaselineIfRequired;Refresh-All;Initialize-QuarantineNotifications;$quarantineTimer.Start()}catch{Show-Error $_.Exception.Message}})
-$window.Add_Closed({$quarantineTimer.Stop()});$window.ShowDialog()|Out-Null
+$window.Add_Loaded({Write-UiLifecycle "loaded";$uiSignalTimer.Start()})
+$window.Add_Closed({Write-UiLifecycle "closed";$quarantineTimer.Stop();$uiSignalTimer.Stop();[Microsoft.Win32.SystemEvents]::remove_SessionEnding($sessionEndingHandler);Remove-Item -LiteralPath $uiInstancePath,$uiSignalPath -Force -ErrorAction SilentlyContinue;$window.Dispatcher.InvokeShutdown()})
+Write-UiLifecycle "dispatcher-start"
+$window.Show()
+[Windows.Threading.Dispatcher]::Run()
+Write-UiLifecycle "dispatcher-return"

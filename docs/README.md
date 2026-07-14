@@ -1,6 +1,6 @@
 # AI Shield Dokumentation
 
-Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.9`
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.10`
 
 Dieser Ordner ist der zentrale Einstieg in die Projekt-, Betriebs- und Entwicklungsdokumentation.
 Der aktuelle Vertrag verwendet Kernel-Transport ABI `1.2` (Freeze-Revision `2`) und intern ABI
@@ -17,7 +17,7 @@ Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
 | Sicherheitsanalyse | [Audit Viewer](AUDIT_VIEWER_DE.md) | AISHAD02 prüfen, anzeigen, filtern und als JSON dekodieren |
 | Downloadkontrolle | [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md) | Policy v3, Dateigruppen, Quarantäne, Warnungen und Freigabe |
 | Wiederherstellung | [Ransomware-Schutz und Recovery](RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md) | Versionsspeicher, Erkennung, externe Sicherung und bestätigte Rücksicherung |
-| RC9-Systemnachweis | [RC9 Release- und Installationsnachweis](RC9_RELEASE_NACHWEIS_DE.md) | Policy v3, Download-Freigabeschranke, Tests und veröffentlichte Artefakte vom 14. Juli 2026 |
+| RC10-Systemnachweis | [RC10 Release- und Installationsnachweis](RC10_RELEASE_NACHWEIS_DE.md) | Tray-Autostart, Einzelinstanz, Close-to-Tray, Tests und veröffentlichte Artefakte |
 | Architekturentscheidung | [Editionen und Versionen](EDITIONEN_UND_VERSIONEN_DE.md) | Gemeinsamer Core, Unterschiede und Freigabestatus |
 
 ## Technische Referenz
@@ -30,7 +30,8 @@ Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
   [Kernel-/Hardware-Schutz](KERNEL_HARDWARE_SCHUTZ_DE.md)
 - [Ransomware-Schutz und Wiederherstellung](RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md)
 - [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md)
-- [RC9 Release- und Installationsnachweis](RC9_RELEASE_NACHWEIS_DE.md)
+- [RC10 Release- und Installationsnachweis](RC10_RELEASE_NACHWEIS_DE.md)
+- [Historischer RC9-Nachweis](RC9_RELEASE_NACHWEIS_DE.md)
 - [Historischer RC8-Nachweis](RC8_RELEASE_NACHWEIS_DE.md)
 - [Windows-Hardening](WINDOWS_HARDENING_DE.md) und
   [Enterprise-Sicherheitsintegrationen](ENTERPRISE_SECURITY_INTEGRATIONS_DE.md)

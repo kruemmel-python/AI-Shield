@@ -12,7 +12,7 @@ $required = @(
     "Pages", "PageTitle", "StatusMessage", "SidebarState", "ProtectionState",
     "ComponentState", "AuditState", "ServiceGrid", "AuditGrid", "QuarantineGrid",
     "RecoveryStatus", "IncidentGrid", "SnapshotButton", "BackupButton", "DetectRansomwareButton", "RestorePlanButton", "RestoreIncidentButton",
-    "RefreshButton", "RestartButton", "CoreToggle", "DownloadsToggle",
+    "RefreshButton", "RestartButton", "TrayToggle", "TrayDetail", "CoreToggle", "DownloadsToggle",
     "DocumentsToggle", "ArchivesToggle", "ImagesToggle", "AudioToggle", "VideoToggle", "WebFilesToggle",
     "ProgramsToggle", "WindowsScriptsToggle", "DeveloperScriptsToggle", "LaunchersToggle", "ReleaseRequiredToggle", "ScanFailureToggle", "BrowserToggle",
     "InboundToggle", "BrowserSensorToggle", "BrowserSensorDetail", "EdgeSetupButton", "ChromeSetupButton",
@@ -39,6 +39,12 @@ if($scriptText-notmatch'Get-CurrentProcessNames'-or$scriptText-notmatch'ProcessN
 if ($scriptText -notmatch '\$parameters\s*=\s*@\{\s*Action\s*=\s*\$Action\s*\}' -or
     $scriptText -match '\$arguments\s*=\s*@\(''-Action''') {
     throw "Recovery actions must use named hashtable splatting."
+}
+foreach ($pattern in @('AIShieldPrivateUiInstance/1', 'private-ui.show.signal', 'Add_StateChanged', 'Add_Closing', 'ShowInTaskbar=\$false')) {
+    if ($scriptText -notmatch $pattern) { throw "Close-to-tray contract is missing: $pattern" }
+}
+if ($scriptText -notmatch '\[Windows\.Threading\.Dispatcher\]::Run\(\)' -or $scriptText -match '\$window\.ShowDialog\(\)') {
+    throw "Close-to-tray requires a persistent non-modal WPF dispatcher."
 }
 
 if ($RenderPreview) {

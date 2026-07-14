@@ -311,7 +311,7 @@ powershell -ExecutionPolicy Bypass `
 
 ## Abnahmecheckliste
 
-- [ ] Alle zwölf CTest-Ziele bestehen.
+- [ ] Alle 14 CTest-Ziele bestehen.
 - [ ] Browser-Host besitzt eine gueltige Signatur des erwarteten Publishers.
 - [ ] Verwaltete Extension-ID entspricht exakt `allowed_origins`.
 - [ ] Browser-Test erzeugt ein minimiertes `AIShieldBrowser`-Ereignis.

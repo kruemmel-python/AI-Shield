@@ -9,6 +9,15 @@ if (-not (Test-AIShieldAdministrator)) {
     exit 0
 }
 $root = Get-AIShieldPrivateRoot
+$uiProcessPattern = [regex]::Escape([IO.Path]::GetFullPath((Join-Path $PSScriptRoot "ui\start_private_ui.ps1")))
+Get-CimInstance Win32_Process -Filter "Name='powershell.exe' OR Name='pwsh.exe'" -ErrorAction SilentlyContinue |
+    Where-Object { [string]$_.CommandLine -match $uiProcessPattern } |
+    ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
+$trayManager = Join-Path $PSScriptRoot "tray\manage_tray_agent.ps1"
+if (Test-Path -LiteralPath $trayManager -PathType Leaf) {
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $trayManager -Action uninstall
+    if ($LASTEXITCODE -ne 0) { throw "Tray autostart removal failed; uninstall stopped." }
+}
 Unregister-ScheduledTask -TaskName "AIShieldPrivateUIResume" -Confirm:$false -ErrorAction SilentlyContinue
 Remove-Item -LiteralPath (Join-Path $env:ProgramData "Microsoft\Windows\Start Menu\Programs\AI Shield") `
     -Recurse -Force -ErrorAction SilentlyContinue

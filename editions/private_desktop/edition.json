@@ -2,7 +2,7 @@
   "schema": "AIShieldEdition/1",
   "id": "private-desktop",
   "display_name": "AI Shield Private Desktop",
-  "release": "2.0.0-rc.9",
+  "release": "2.0.0-rc.10",
   "target": "private Windows single-user workstation",
   "network_mode": "local dual-stack host protection",
   "gateway_enabled_by_default": false,

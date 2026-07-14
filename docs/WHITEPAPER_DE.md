@@ -4,6 +4,15 @@
 
 Whitepaper, Stand 14. Juli 2026
 
+## RC10: Schutz ohne dauerhaft geöffnetes Administrationsfenster
+
+Die Schutzwirkung hängt nicht vom sichtbaren Desktopfenster ab. WFP, Minifilter, ProcessGuard,
+Broker und Core starten als Windows-Systemkomponenten. Ein schlanker Tray-Agent stellt den Zustand
+im Benutzerkontext dar und öffnet die administrative Oberfläche nur bei Bedarf. Minimieren und
+Schließen verbergen die UI aus der Taskleiste, lassen aber dieselbe abgesicherte Einzelinstanz und
+den Schutzkern weiterlaufen. Diese Trennung reduziert unnötige privilegierte Interaktion und macht
+den Prototyp für den dauerhaften Einzelplatzbetrieb bedienbarer.
+
 ## RC9: Download ist nicht gleich Vertrauen
 
 Content-Policy v3 schließt eine praktische Lücke zwischen erfolgreichem Scan und Benutzeröffnung.

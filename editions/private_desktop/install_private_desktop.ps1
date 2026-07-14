@@ -29,6 +29,7 @@ $recoveryScript = Join-Path $root "platform\windows\ransomware\ransomware_recove
 $markerRoot = Join-Path $env:ProgramData "AIShield\private-desktop"
 $markerPath = Join-Path $markerRoot "install.json"
 $uiLauncher = Join-Path $PSScriptRoot "AI_Shield_UI.cmd"
+$trayManager = Join-Path $PSScriptRoot "tray\manage_tray_agent.ps1"
 
 function Install-AIShieldPrivateUiShortcut {
     Assert-AIShieldFile $uiLauncher "Private desktop UI launcher"
@@ -40,6 +41,13 @@ function Install-AIShieldPrivateUiShortcut {
     $shortcut.WorkingDirectory = $PSScriptRoot
     $shortcut.Description = "AI Shield Private Desktop öffnen"
     $shortcut.Save()
+}
+function Install-AIShieldPrivateTray {
+    Assert-AIShieldFile $trayManager "Private desktop tray manager"
+    $arguments = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $trayManager, "-Action", "install")
+    if ([Security.Principal.WindowsIdentity]::GetCurrent().IsSystem) { $arguments += "-NoImmediateStart" }
+    & powershell.exe @arguments
+    if ($LASTEXITCODE -ne 0) { throw "Tray autostart installation failed." }
 }
 function Install-AIShieldBrowserSensor {
     $browserCertificate = [Security.Cryptography.X509Certificates.X509Certificate2]::new($certificate)
@@ -88,6 +96,7 @@ if (Test-Path -LiteralPath $markerPath) {
     Install-AIShieldBrowserSensor
     Initialize-AIShieldRecoveryBaseline
     Install-AIShieldPrivateUiShortcut
+    Install-AIShieldPrivateTray
     if (-not $SuppressUiLaunch) { Start-Process -FilePath $uiLauncher }
     exit 0
 }
@@ -97,6 +106,7 @@ foreach ($required in @($driverctl, $kernelctl, $certificate, $installDrivers, $
         $policyScript, $browserScript, $recoveryScript, (Join-Path $root "build_vs\Release\ai_shield_browser_host.exe"),
         $uiLauncher, (Join-Path $PSScriptRoot "ui\start_private_ui.ps1"),
         (Join-Path $PSScriptRoot "ui\AIShield.PrivateDesktop.UI.xaml"),
+        $trayManager, (Join-Path $PSScriptRoot "tray\start_tray_agent.ps1"),
         (Join-Path $package "AIShieldWfp.sys"),
         (Join-Path $package "AIShieldMiniFilter.sys"), (Join-Path $package "AIShieldProcessGuard.sys"))) {
     Assert-AIShieldFile $required "Required package file"
@@ -207,6 +217,7 @@ $marker = [ordered]@{
     [Text.UTF8Encoding]::new($false))
 
 Install-AIShieldPrivateUiShortcut
+Install-AIShieldPrivateTray
 
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "start_private_desktop.ps1") `
     -HardenDownloads
