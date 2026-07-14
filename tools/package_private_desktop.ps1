@@ -30,7 +30,7 @@ $editionFiles = @(
     "uninstall_private_desktop.ps1"
 )
 $binaries = @("ai_shield_driverctl.exe", "ai_shield_kernelctl.exe", "ai_shield_broker.exe", "ai_shield_diag.exe",
-    "ai_shield_service.exe", "ai_shield_integrations.exe", "ai_shield_browser_host.exe")
+    "ai_shield_service.exe", "ai_shield_integrations.exe", "ai_shield_file_scanner.exe", "ai_shield_browser_host.exe")
 $driverFiles = @("ai_shield_minifilter.inf", "ai_shield_process_guard.inf", "ai_shield_wfp.inf",
     "ai_shield_testsigning.cer", "AIShieldMiniFilter.sys", "AIShieldProcessGuard.sys", "AIShieldWfp.sys")
 $scripts = @(

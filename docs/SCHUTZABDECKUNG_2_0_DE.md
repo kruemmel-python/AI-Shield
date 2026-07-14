@@ -12,6 +12,9 @@ ZIP-Preflight prüfen zusätzlich aktive, fehlerhafte, verschlüsselte und struk
 Inhalte. Nicht prüfbare risikoreiche Formate können fail-closed quarantänisiert werden. Content-
 Policy v3 ergänzt eine standardmäßig aktive Freigabeschranke: Auch sauber geprüfte Downloads
 aktiver Gruppen werden bis zur begründeten Benutzerfreigabe quarantänisiert und in der UI gemeldet.
+RC11 erweitert diese Schranke mit Content-Policy v4 auf unbekannte und spezialisierte Formate,
+Magic-/Extension-Abgleich, Polyglot-/Trailing-Data-Erkennung, einen Handle-gebundenen Minimalworker
+und eine WFP-erzwungene Netzwerksperre des Scanners.
 Details enthält [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md).
 
 ## Audit Viewer

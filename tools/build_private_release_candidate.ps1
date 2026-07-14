@@ -65,7 +65,7 @@ try {
     & $CTestExe --test-dir $buildDebug -C Debug --output-on-failure
     Assert-ExternalSuccess "ctest-debug"
 
-    $executables=@("ai_shield_broker.exe","ai_shield_driverctl.exe","ai_shield_integrations.exe",
+    $executables=@("ai_shield_broker.exe","ai_shield_driverctl.exe","ai_shield_integrations.exe","ai_shield_file_scanner.exe",
         "ai_shield_kernelctl.exe","ai_shield_service.exe")
     $hashA=Get-ArtifactHashes (Join-Path $buildA "Release") $executables
     $hashB=Get-ArtifactHashes (Join-Path $buildB "Release") $executables

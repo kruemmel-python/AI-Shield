@@ -25,6 +25,7 @@
 #include "ai_shield/egress_gate.hpp"
 #include "ai_shield/fail_policy.hpp"
 #include "ai_shield/features.hpp"
+#include "ai_shield/file_preflight.hpp"
 #include "ai_shield/flow_baseline.hpp"
 #include "ai_shield/flow_control.hpp"
 #include "ai_shield/flow_state.hpp"
@@ -79,6 +80,7 @@
 #include "ai_shield/update_manager.hpp"
 #include "ai_shield/worker_supervisor.hpp"
 #include "ai_shield/xml_preflight.hpp"
+#include "ai_shield/wav_preflight.hpp"
 #include "ai_shield/zip_preflight.hpp"
 
 namespace {
@@ -1382,6 +1384,95 @@ void test_replay_path_is_deterministic_and_bounded() {
     AI_SHIELD_CHECK(first.value().correlation.model_version == 4U);
 }
 
+void test_wav_command_metadata_and_malformed_audio() {
+    const std::string payload = "curl.exe example.com";
+    std::vector<std::byte> wav;
+    const auto append = [&wav](std::string_view text) {
+        for (const unsigned char character : text) wav.push_back(static_cast<std::byte>(character));
+    };
+    const auto append_u32 = [&wav](std::uint32_t value) {
+        for (unsigned int shift = 0U; shift < 32U; shift += 8U)
+            wav.push_back(static_cast<std::byte>((value >> shift) & 0xffU));
+    };
+    append("RIFF");
+    append_u32(static_cast<std::uint32_t>(36U + payload.size()));
+    append("WAVEfmt ");
+    append_u32(16U);
+    const std::array<std::byte, 16> format{};
+    wav.insert(wav.end(), format.begin(), format.end());
+    append("LIST");
+    append_u32(static_cast<std::uint32_t>(payload.size()));
+    append(payload);
+
+    const auto parsed = ai_shield::protocols::wav::preflight(wav);
+    AI_SHIELD_CHECK(parsed.ok());
+    AI_SHIELD_CHECK(parsed.value().suspicious_metadata);
+    AI_SHIELD_CHECK(parsed.value().malformed);
+
+    std::vector<std::byte> benign;
+    const auto append_benign = [&benign](std::string_view text) {
+        for (const unsigned char character : text) benign.push_back(static_cast<std::byte>(character));
+    };
+    const auto append_benign_u32 = [&benign](std::uint32_t value) {
+        for (unsigned int shift = 0U; shift < 32U; shift += 8U)
+            benign.push_back(static_cast<std::byte>((value >> shift) & 0xffU));
+    };
+    append_benign("RIFF");
+    append_benign_u32(38U);
+    append_benign("WAVEfmt ");
+    append_benign_u32(16U);
+    const std::array<std::byte, 16> pcm_format{
+        std::byte{1}, std::byte{0}, std::byte{1}, std::byte{0}, std::byte{0x44}, std::byte{0xac},
+        std::byte{0}, std::byte{0}, std::byte{0x44}, std::byte{0xac}, std::byte{0}, std::byte{0},
+        std::byte{1}, std::byte{0}, std::byte{8}, std::byte{0}};
+    benign.insert(benign.end(), pcm_format.begin(), pcm_format.end());
+    append_benign("data");
+    append_benign_u32(2U);
+    benign.push_back(std::byte{0x80});
+    benign.push_back(std::byte{0x80});
+    const auto benign_parsed = ai_shield::protocols::wav::preflight(benign);
+    AI_SHIELD_CHECK(benign_parsed.ok());
+    AI_SHIELD_CHECK(!benign_parsed.value().malformed);
+    AI_SHIELD_CHECK(!benign_parsed.value().suspicious_metadata);
+}
+
+void test_universal_file_preflight_attack_classes() {
+    const auto to_bytes = [](std::string_view text) {
+        std::vector<std::byte> result;
+        result.reserve(text.size());
+        for (const unsigned char value : text) result.push_back(static_cast<std::byte>(value));
+        return result;
+    };
+
+    auto disguised_pe = to_bytes("MZ");
+    disguised_pe.resize(512U);
+    const auto disguised = ai_shield::file_preflight::inspect(disguised_pe, L"holiday.jpg");
+    AI_SHIELD_CHECK(disguised.extension_mismatch);
+    AI_SHIELD_CHECK(disguised.high_risk());
+
+    const auto polyglot_bytes = to_bytes("%PDF-1.7\n1 0 obj <<>> endobj\nxref\n%%EOF\nPK\x03\x04payload");
+    const auto polyglot = ai_shield::file_preflight::inspect(polyglot_bytes, L"report.pdf");
+    AI_SHIELD_CHECK(polyglot.polyglot);
+    AI_SHIELD_CHECK(polyglot.trailing_data);
+
+    const auto svg_bytes = to_bytes(
+        "<svg xmlns=\"http://www.w3.org/2000/svg\" onload=\"fetch('https://example.invalid/x')\"><script/></svg>");
+    const auto svg = ai_shield::file_preflight::inspect(svg_bytes, L"logo.svg");
+    AI_SHIELD_CHECK(svg.active_content);
+    AI_SHIELD_CHECK(svg.automatic_action);
+    AI_SHIELD_CHECK(svg.external_reference_count > 0U);
+
+    const auto deceptive = ai_shield::file_preflight::inspect(to_bytes("echo harmless"), L"invoice.pdf.cmd");
+    AI_SHIELD_CHECK(deceptive.suspicious_filename);
+
+    const auto serialized = ai_shield::file_preflight::inspect(to_bytes("model-state"), L"weights.pkl");
+    AI_SHIELD_CHECK(serialized.unsafe_deserialization);
+
+    const auto benign = ai_shield::file_preflight::inspect(
+        to_bytes("plain notes without active content or remote references"), L"notes.txt");
+    AI_SHIELD_CHECK(!benign.high_risk());
+}
+
 void test_abi2_hmac_and_validation() {
     const auto key = ai_shield::crypto::sha256("abi2-channel-key");
     ai_shield::abi2::SensorEvent event{};
@@ -1589,6 +1680,8 @@ int main() {
     test_tlsmeta_detects_downgrade();
     test_xml_external_entity_risk();
     test_pdf_active_content();
+    test_wav_command_metadata_and_malformed_audio();
+    test_universal_file_preflight_attack_classes();
     test_campaign_adaptive_correlation();
     test_flow_control_rate_and_redirect_limits();
     test_worker_supervisor_crash_isolation();

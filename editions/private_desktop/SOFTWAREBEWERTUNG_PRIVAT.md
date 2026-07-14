@@ -7,7 +7,7 @@ Administration, Flottenbetrieb, externe Ereignissammler und Security-Operations-
 nicht zum Umfang dieser Edition und fließen weder positiv noch negativ in die Wertung ein.
 
 Die Bewertung basiert auf Quellcode, lokalen Build- und Testergebnissen sowie dem dokumentierten
-Installationsstand vom 14. Juli 2026 einschließlich Content-Policy v3 und Download-
+Installationsstand vom 14. Juli 2026 einschließlich Content-Policy v4 und Download-
 Freigabeschranke. Sie ist kein unabhängiger Penetrationstest und keine
 Produktzertifizierung.
 

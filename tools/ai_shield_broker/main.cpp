@@ -35,6 +35,7 @@
 #include "platform/windows/common/ai_shield_driver_protocol.h"
 #include "platform/windows/common/abi_translation.hpp"
 #include "platform/windows/security/secure_runtime_state.hpp"
+#include "platform/windows/sandbox/appcontainer_launcher.hpp"
 
 namespace {
 
@@ -51,14 +52,15 @@ constexpr std::uint32_t kContentPrograms = 1U << 6U;
 constexpr std::uint32_t kContentWindowsScripts = 1U << 7U;
 constexpr std::uint32_t kContentDeveloperScripts = 1U << 8U;
 constexpr std::uint32_t kContentLaunchers = 1U << 9U;
+constexpr std::uint32_t kContentUnknown = 1U << 10U;
 constexpr std::uint32_t kContentLegacyAll = (1U << 6U) - 1U;
 constexpr std::uint32_t kContentExecutionAll = kContentPrograms | kContentWindowsScripts |
                                                kContentDeveloperScripts | kContentLaunchers;
-constexpr std::uint32_t kContentAll = kContentLegacyAll | kContentExecutionAll;
+constexpr std::uint32_t kContentAll = kContentLegacyAll | kContentExecutionAll | kContentUnknown;
 
 struct ContentPolicy final {
     std::uint32_t magic = 0x50435341U;
-    std::uint32_t version = 3U;
+    std::uint32_t version = 4U;
     std::uint32_t enabled_categories = kContentAll;
     std::uint32_t fail_closed = 1U;
     std::uint32_t release_required = 1U;
@@ -232,16 +234,23 @@ std::uint32_t content_category(const std::filesystem::path& path) {
     const auto extension = lower_extension(path);
     constexpr auto documents = std::to_array<std::wstring_view>({
         L".pdf", L".doc", L".docx", L".docm", L".xls", L".xlsx", L".xlsm", L".ppt", L".pptx", L".pptm",
-        L".rtf", L".odt", L".ods", L".odp", L".one"});
-    constexpr auto archives = std::to_array<std::wstring_view>({L".zip", L".7z", L".rar", L".iso", L".cab"});
+        L".rtf", L".odt", L".ods", L".odp", L".one", L".fdf", L".xps", L".oxps", L".djvu",
+        L".csv", L".tsv", L".eml", L".msg", L".ics", L".vcf", L".epub", L".mobi", L".azw", L".azw3", L".fb2"});
+    constexpr auto archives = std::to_array<std::wstring_view>({
+        L".zip", L".7z", L".rar", L".iso", L".cab", L".tar", L".gz", L".bz2", L".xz", L".zst",
+        L".img", L".vhd", L".vhdx", L".vmdk", L".wim", L".esd", L".dmg", L".apk", L".nupkg", L".crx", L".xpi", L".vsix"});
     constexpr auto images = std::to_array<std::wstring_view>({
-        L".jpg", L".jpeg", L".jfif", L".png", L".gif", L".bmp", L".tif", L".tiff", L".webp", L".ico", L".svg"});
-    constexpr auto audio = std::to_array<std::wstring_view>({L".mp3", L".wav", L".flac", L".aac", L".ogg", L".m4a"});
+        L".jpg", L".jpeg", L".jfif", L".png", L".gif", L".bmp", L".tif", L".tiff", L".webp", L".ico", L".svg",
+        L".heif", L".heic", L".avif", L".jxl", L".psd", L".raw"});
+    constexpr auto audio = std::to_array<std::wstring_view>({
+        L".mp3", L".wav", L".flac", L".aac", L".ogg", L".m4a", L".wma", L".aiff", L".opus",
+        L".m3u", L".m3u8", L".pls", L".asx", L".cue"});
     constexpr auto video = std::to_array<std::wstring_view>({L".mp4", L".m4v", L".mov", L".avi", L".mkv", L".webm", L".wmv"});
-    constexpr auto web = std::to_array<std::wstring_view>({L".html", L".htm"});
+    constexpr auto web = std::to_array<std::wstring_view>({
+        L".html", L".htm", L".mhtml", L".mht", L".xhtml", L".xml", L".xsl", L".xslt", L".json", L".yaml", L".yml", L".toml"});
     constexpr auto programs = std::to_array<std::wstring_view>({
         L".exe", L".com", L".scr", L".pif", L".dll", L".ocx", L".cpl", L".sys", L".drv",
-        L".msi", L".msp", L".mst", L".msix", L".msixbundle", L".appx", L".appxbundle", L".appinstaller"});
+        L".msi", L".msp", L".mst", L".msix", L".msixbundle", L".appx", L".appxbundle", L".appinstaller", L".efi"});
     constexpr auto windows_scripts = std::to_array<std::wstring_view>({
         L".bat", L".cmd", L".ps1", L".psm1", L".psd1", L".vbs", L".vbe", L".js", L".jse",
         L".wsf", L".wsh", L".hta", L".sct"});
@@ -252,7 +261,8 @@ std::uint32_t content_category(const std::filesystem::path& path) {
     constexpr auto launchers = std::to_array<std::wstring_view>({
         L".lnk", L".url", L".scf", L".application", L".appref-ms", L".gadget", L".diagcab",
         L".diagpkg", L".reg", L".inf", L".chm", L".xll", L".iqy", L".oqy", L".rqy", L".slk",
-        L".settingcontent-ms", L".library-ms", L".search-ms"});
+        L".settingcontent-ms", L".library-ms", L".search-ms", L".torrent", L".rdp", L".pbk", L".mobileconfig",
+        L".pkl", L".pickle", L".joblib", L".dill", L".pt", L".pth", L".ckpt", L".onnx", L".safetensors", L".gguf"});
     const auto contains = [&extension](const auto& values) {
         return std::find(values.begin(), values.end(), extension) != values.end();
     };
@@ -266,7 +276,7 @@ std::uint32_t content_category(const std::filesystem::path& path) {
     if (contains(windows_scripts)) return kContentWindowsScripts;
     if (contains(developer_scripts)) return kContentDeveloperScripts;
     if (contains(launchers)) return kContentLaunchers;
-    return 0U;
+    return kContentUnknown;
 }
 
 bool executable_extension(const std::filesystem::path& path, std::uint32_t enabled = kContentAll) {
@@ -296,17 +306,24 @@ ContentPolicy load_content_policy() {
     bool valid = false;
     if (clear.cbData == sizeof(policy)) {
         std::memcpy(&policy, clear.pbData, sizeof(policy));
-        valid = policy.version == 3U;
+        if (policy.version == 3U) {
+            policy.version = 4U;
+            policy.enabled_categories |= kContentUnknown;
+            valid = true;
+        } else {
+            valid = policy.version == 4U;
+        }
     } else if (clear.cbData == sizeof(LegacyContentPolicy)) {
         LegacyContentPolicy legacy{};
         std::memcpy(&legacy, clear.pbData, sizeof(legacy));
         if (legacy.version == 1U || legacy.version == 2U) {
             policy.magic = legacy.magic;
-            policy.version = 3U;
+            policy.version = 4U;
             policy.enabled_categories = legacy.enabled_categories;
             policy.fail_closed = legacy.fail_closed;
             policy.release_required = 1U;
             if (legacy.version == 1U) policy.enabled_categories |= kContentExecutionAll;
+            policy.enabled_categories |= kContentUnknown;
             valid = true;
         }
     }
@@ -344,26 +361,27 @@ bool has_external_zone(const std::filesystem::path& path) {
     return text.find("ZoneId=3") != std::string_view::npos || text.find("ZoneId=4") != std::string_view::npos;
 }
 
-bool read_locked_file(HANDLE file, std::uint64_t expected_size, std::vector<std::byte>& content,
-                      ai_shield::crypto::Sha256Digest& digest) {
+bool hash_locked_file(HANDLE file, std::uint64_t expected_size, ai_shield::crypto::Sha256Digest& digest) {
     LARGE_INTEGER size{};
     if (!GetFileSizeEx(file, &size) || size.QuadPart < 0 ||
         static_cast<std::uint64_t>(size.QuadPart) != expected_size)
         return false;
-    if (expected_size > kMaximumClassifiedFileSize) {
-        BY_HANDLE_FILE_INFORMATION information{};
-        if (!GetFileInformationByHandle(file, &information)) return false;
-        const std::array<std::uint64_t, 4> identity{
-            information.dwVolumeSerialNumber,
-            (static_cast<std::uint64_t>(information.nFileIndexHigh) << 32U) | information.nFileIndexLow,
-            expected_size,
-            (static_cast<std::uint64_t>(information.ftLastWriteTime.dwHighDateTime) << 32U) |
-                information.ftLastWriteTime.dwLowDateTime};
-        digest = ai_shield::crypto::sha256(std::as_bytes(std::span(identity)));
-        return true;
+    BCRYPT_ALG_HANDLE algorithm = nullptr;
+    BCRYPT_HASH_HANDLE hash = nullptr;
+    DWORD object_size = 0U;
+    DWORD received_property = 0U;
+    if (!BCRYPT_SUCCESS(BCryptOpenAlgorithmProvider(&algorithm, BCRYPT_SHA256_ALGORITHM, nullptr, 0U)) ||
+        !BCRYPT_SUCCESS(BCryptGetProperty(algorithm, BCRYPT_OBJECT_LENGTH,
+            reinterpret_cast<PUCHAR>(&object_size), sizeof(object_size), &received_property, 0U))) {
+        if (algorithm != nullptr) BCryptCloseAlgorithmProvider(algorithm, 0U);
+        return false;
     }
-    content.resize(static_cast<std::size_t>(size.QuadPart));
-    std::array<std::byte, 1U << 20U> chunk{};
+    std::vector<UCHAR> object(object_size);
+    if (!BCRYPT_SUCCESS(BCryptCreateHash(algorithm, &hash, object.data(), object_size, nullptr, 0U, 0U))) {
+        BCryptCloseAlgorithmProvider(algorithm, 0U);
+        return false;
+    }
+    std::vector<std::byte> chunk(1U << 20U);
     std::uint64_t offset = 0;
     bool ok = true;
     HANDLE read_event = CreateEventW(nullptr, TRUE, FALSE, nullptr);
@@ -393,13 +411,19 @@ bool read_locked_file(HANDLE file, std::uint64_t expected_size, std::vector<std:
             ok = false;
             break;
         }
-        std::copy_n(chunk.begin(), bytes, content.begin() + static_cast<std::size_t>(offset));
+        if (!BCRYPT_SUCCESS(BCryptHashData(hash, reinterpret_cast<PUCHAR>(chunk.data()), bytes, 0U))) {
+            ok = false;
+            break;
+        }
         offset += bytes;
     }
     CloseHandle(read_event);
-    if (!ok || offset != expected_size) return false;
-    digest = ai_shield::crypto::sha256(content);
-    return ok;
+    if (ok && offset == expected_size)
+        ok = BCRYPT_SUCCESS(BCryptFinishHash(hash, reinterpret_cast<PUCHAR>(digest.data()),
+                                             static_cast<ULONG>(digest.size()), 0U));
+    BCryptDestroyHash(hash);
+    BCryptCloseAlgorithmProvider(algorithm, 0U);
+    return ok && offset == expected_size;
 }
 
 enum class DefenderVerdict { clean, threat, unavailable, suspicious };
@@ -428,35 +452,79 @@ std::filesystem::path defender_command() {
     return {};
 }
 
-DefenderVerdict scan_with_defender(const std::filesystem::path& path, std::uint64_t size) {
+DefenderVerdict scan_with_defender(const std::filesystem::path& path, std::uint64_t size, HANDLE source_handle,
+                                   DWORD& diagnostic) {
+    diagnostic = ERROR_SUCCESS;
     if (size > 0U && size <= kMaximumClassifiedFileSize) {
         std::array<wchar_t, 32768> module_path{};
         const DWORD module_length = GetModuleFileNameW(nullptr, module_path.data(), static_cast<DWORD>(module_path.size()));
-        if (module_length == 0U || module_length >= module_path.size()) return DefenderVerdict::unavailable;
-        const auto scanner = std::filesystem::path(module_path.data()).parent_path() / L"ai_shield_integrations.exe";
-        if (!std::filesystem::exists(scanner)) return DefenderVerdict::unavailable;
-        std::wstring arguments = L"\"" + scanner.wstring() + L"\" amsi-scan-file \"" + path.wstring() + L"\"";
+        if (module_length == 0U || module_length >= module_path.size()) { diagnostic = GetLastError(); return DefenderVerdict::unavailable; }
+        const auto scanner = std::filesystem::path(module_path.data()).parent_path() / L"ai_shield_file_scanner.exe";
+        if (!std::filesystem::exists(scanner)) { diagnostic = ERROR_FILE_NOT_FOUND; return DefenderVerdict::unavailable; }
+        HANDLE inherited_handle = INVALID_HANDLE_VALUE;
+        if (source_handle == INVALID_HANDLE_VALUE ||
+            !DuplicateHandle(GetCurrentProcess(), source_handle, GetCurrentProcess(), &inherited_handle, 0U, TRUE,
+                             DUPLICATE_SAME_ACCESS)) { diagnostic = GetLastError(); return DefenderVerdict::unavailable; }
+        std::wstring arguments = L"\"" + scanner.wstring() + L"\" scan-handle " +
+                                 std::to_wstring(reinterpret_cast<std::uintptr_t>(inherited_handle)) + L" " +
+                                 std::to_wstring(size) + L" \"" + path.filename().wstring() + L"\"";
         std::vector<wchar_t> mutable_arguments(arguments.begin(), arguments.end());
         mutable_arguments.push_back(L'\0');
-        STARTUPINFOW startup{};
-        startup.cb = sizeof(startup);
-        PROCESS_INFORMATION process{};
-        if (!CreateProcessW(scanner.c_str(), mutable_arguments.data(), nullptr, nullptr, FALSE, CREATE_NO_WINDOW,
-                            nullptr, nullptr, &startup, &process)) return DefenderVerdict::unavailable;
-        const DWORD wait = WaitForSingleObject(process.hProcess, 10'000U);
+        const auto launched = ai_shield::platform::windows::sandbox::launch_shadow_parser({
+            .analysis_id = GetTickCount64() + 1U,
+            .parser_id = 1U,
+            .budget = {.wall_time_ns = 10'000'000'000ULL, .memory_bytes = 512ULL * 1024ULL * 1024ULL,
+                       .max_processes = 1U, .network_allowed = false},
+            .allow_network = false,
+            .allow_child_processes = false,
+            .executable_path = scanner.wstring(),
+            .command_line = mutable_arguments.data(),
+            .work_directory = scanner.parent_path().wstring(),
+            .inherited_handle = inherited_handle});
+        if (!launched.ok()) { CloseHandle(inherited_handle); diagnostic = 0xE001U + static_cast<DWORD>(launched.status()); return DefenderVerdict::unavailable; }
+        auto isolated = launched.value();
+        if (!ai_shield::platform::windows::sandbox::resume_launched_process(isolated).ok()) {
+            ai_shield::platform::windows::sandbox::close_launched_process(isolated);
+            CloseHandle(inherited_handle);
+            diagnostic = 0xE100U;
+            return DefenderVerdict::unavailable;
+        }
+        const DWORD wait = WaitForSingleObject(isolated.process, 10'000U);
         DWORD exit_code = ERROR_GEN_FAILURE;
-        if (wait == WAIT_TIMEOUT) TerminateProcess(process.hProcess, ERROR_TIMEOUT);
-        const bool completed = wait == WAIT_OBJECT_0 && GetExitCodeProcess(process.hProcess, &exit_code) != FALSE;
-        CloseHandle(process.hThread);
-        CloseHandle(process.hProcess);
-        if (!completed) return DefenderVerdict::unavailable;
+        if (wait == WAIT_TIMEOUT) TerminateProcess(isolated.process, ERROR_TIMEOUT);
+        const bool completed = wait == WAIT_OBJECT_0 && GetExitCodeProcess(isolated.process, &exit_code) != FALSE;
+        ai_shield::platform::windows::sandbox::close_launched_process(isolated);
+        bool restricted_fallback = false;
+        if (completed && exit_code == 0xC0000142U) {
+            auto fallback = ai_shield::platform::windows::sandbox::launch_restricted_parser({
+                .analysis_id = GetTickCount64() + 1U, .parser_id = 1U,
+                .budget = {.wall_time_ns = 10'000'000'000ULL, .memory_bytes = 512ULL * 1024ULL * 1024ULL,
+                           .max_processes = 1U, .network_allowed = false},
+                .allow_network = false, .allow_child_processes = false, .executable_path = scanner.wstring(),
+                .command_line = mutable_arguments.data(), .work_directory = scanner.parent_path().wstring(),
+                .inherited_handle = inherited_handle});
+            if (fallback.ok()) {
+                auto restricted_process = fallback.value();
+                if (ai_shield::platform::windows::sandbox::resume_launched_process(restricted_process).ok()) {
+                    const DWORD fallback_wait = WaitForSingleObject(restricted_process.process, 10'000U);
+                    exit_code = ERROR_GEN_FAILURE;
+                    restricted_fallback = fallback_wait == WAIT_OBJECT_0 &&
+                        GetExitCodeProcess(restricted_process.process, &exit_code) != FALSE;
+                }
+                ai_shield::platform::windows::sandbox::close_launched_process(restricted_process);
+            }
+        }
+        CloseHandle(inherited_handle);
+        diagnostic = restricted_fallback ? 0x00010000U + exit_code :
+            (completed ? exit_code : (wait == WAIT_TIMEOUT ? ERROR_TIMEOUT : GetLastError()));
+        if (!completed || (exit_code == 0xC0000142U && !restricted_fallback)) return DefenderVerdict::unavailable;
         if (exit_code == 0U) return DefenderVerdict::clean;
         if (exit_code == 10U) return DefenderVerdict::threat;
         if (exit_code == 11U) return DefenderVerdict::suspicious;
         return DefenderVerdict::unavailable;
     }
     const auto command = defender_command();
-    if (command.empty()) return DefenderVerdict::unavailable;
+    if (command.empty()) { diagnostic = ERROR_FILE_NOT_FOUND; return DefenderVerdict::unavailable; }
     std::wstring arguments = L"\"" + command.wstring() + L"\" -Scan -ScanType 3 -File \"" +
                              path.wstring() + L"\" -DisableRemediation";
     std::vector<wchar_t> mutable_arguments(arguments.begin(), arguments.end());
@@ -466,6 +534,7 @@ DefenderVerdict scan_with_defender(const std::filesystem::path& path, std::uint6
     PROCESS_INFORMATION process{};
     if (!CreateProcessW(command.c_str(), mutable_arguments.data(), nullptr, nullptr, FALSE, CREATE_NO_WINDOW,
                         nullptr, nullptr, &startup, &process)) {
+        diagnostic = GetLastError();
         return DefenderVerdict::unavailable;
     }
     const DWORD wait = WaitForSingleObject(process.hProcess, 30'000U);
@@ -474,6 +543,7 @@ DefenderVerdict scan_with_defender(const std::filesystem::path& path, std::uint6
     const bool completed = wait == WAIT_OBJECT_0 && GetExitCodeProcess(process.hProcess, &exit_code) != FALSE;
     CloseHandle(process.hThread);
     CloseHandle(process.hProcess);
+    diagnostic = completed ? exit_code : (wait == WAIT_TIMEOUT ? ERROR_TIMEOUT : GetLastError());
     if (!completed) return DefenderVerdict::unavailable;
     if (exit_code == 0U) return DefenderVerdict::clean;
     if (exit_code == 2U) return DefenderVerdict::threat;
@@ -499,7 +569,9 @@ bool suspicious_structure(const std::filesystem::path& path, std::span<const std
         const auto result = ai_shield::protocols::zip::preflight(content);
         if (!result.ok()) return true;
         const auto& summary = result.value();
-        return summary.path_escape || summary.bomb_risk || summary.encrypted_entry;
+        return summary.malformed || summary.path_escape || summary.bomb_risk || summary.encrypted_entry ||
+               summary.unsupported_compression || summary.executable_entry || summary.active_content_entry ||
+               summary.nested_container || summary.duplicate_name;
     }
     return false;
 }
@@ -539,6 +611,12 @@ bool trusted_signature(const std::filesystem::path& path) {
 }
 
 class QuarantineManager final {
+    struct FileStamp final {
+        std::uint64_t size = 0U;
+        std::filesystem::file_time_type modified{};
+        bool operator==(const FileStamp&) const = default;
+    };
+
 public:
     explicit QuarantineManager(std::filesystem::path directory)
         : directory_(std::move(directory)), objects_(directory_ / L"objects"), journal_(directory_ / L"journal.jsonl"),
@@ -574,7 +652,11 @@ public:
                 const bool executable = executable_extension(entry.path(), policy_.enabled_categories);
                 if ((!downloads_root && !executable) ||
                     (downloads_root && !executable && !parser_risk_extension(entry.path(), policy_.enabled_categories))) continue;
-                processed_.insert(entry.path().wstring());
+                const auto modified = entry.last_write_time(error);
+                if (error) continue;
+                const auto size = entry.file_size(error);
+                if (error) continue;
+                processed_[entry.path().wstring()] = FileStamp{size, modified};
                 ++baseline;
                 if (baseline >= 20'000U) break;
             }
@@ -607,12 +689,14 @@ public:
                 const auto modified = entry.last_write_time(error);
                 if (error) continue;
                 const auto size = entry.file_size(error);
-                if (error || !has_external_zone(entry.path())) continue;
+                if (error || (!downloads_root && !has_external_zone(entry.path()))) continue;
                 const auto key = entry.path().wstring();
-                if (processed_.contains(key)) continue;
+                const FileStamp stamp{size, modified};
+                const auto processed = processed_.find(key);
+                if (processed != processed_.end() && processed->second == stamp) continue;
                 const auto found = stable_sizes_.find(key);
-                if (found == stable_sizes_.end() || found->second != size) {
-                    stable_sizes_[key] = size;
+                if (found == stable_sizes_.end() || found->second != stamp) {
+                    stable_sizes_[key] = stamp;
                     continue;
                 }
                 candidates.push_back({entry.path(), size, modified});
@@ -629,7 +713,7 @@ public:
         }
         constexpr std::size_t maximum_per_pass = 256U;
         for (std::size_t i = 0; i < (std::min)(candidates.size(), maximum_per_pass); ++i) {
-            classify(candidates[i].path, candidates[i].size);
+            classify(candidates[i].path, candidates[i].size, candidates[i].modified);
         }
     }
 
@@ -674,7 +758,8 @@ private:
         return ok;
     }
 
-    void classify(const std::filesystem::path& source, std::uint64_t size) {
+    void classify(const std::filesystem::path& source, std::uint64_t size,
+                  std::filesystem::file_time_type modified) {
         HANDLE source_handle = CreateFileW(source.c_str(), GENERIC_READ | FILE_READ_ATTRIBUTES,
                                            FILE_SHARE_READ | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING,
                                            FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN |
@@ -697,7 +782,7 @@ private:
         if (!identity_safe) {
             CloseHandle(source_handle);
             append_record(health_, "{\"event\":\"identity_rejected\"}\r\n");
-            processed_.insert(source.wstring());
+            processed_[source.wstring()] = FileStamp{size, modified};
             return;
         }
         const std::array<std::uint64_t, 4> identity{
@@ -708,12 +793,21 @@ private:
                 source_info.ftLastWriteTime.dwLowDateTime};
         const auto digest = ai_shield::crypto::sha256(std::as_bytes(std::span(identity)));
         const std::string identifier = digest_hex(digest);
+        ai_shield::crypto::Sha256Digest content_digest{};
+        if (!hash_locked_file(source_handle, size, content_digest)) {
+            CloseHandle(source_handle);
+            append_record(health_, "{\"event\":\"content_hash_failed\"}\r\n");
+            return;
+        }
+        const std::string content_sha256 = digest_hex(content_digest);
         const bool executable = executable_extension(source, policy_.enabled_categories);
         const bool parser_risk = parser_risk_extension(source, policy_.enabled_categories);
         const bool trusted = executable && trusted_signature(source);
-        const auto defender = scan_with_defender(source, size);
+        DWORD scanner_diagnostic = ERROR_SUCCESS;
+        const auto defender = scan_with_defender(source, size, source_handle, scanner_diagnostic);
         append_record(health_, "{\"event\":\"defender_complete\",\"verdict\":" +
-                               std::to_string(static_cast<unsigned int>(defender)) + "}\r\n");
+                               std::to_string(static_cast<unsigned int>(defender)) + ",\"diagnostic\":" +
+                               std::to_string(scanner_diagnostic) + "}\r\n");
         const bool structure_suspicious = defender == DefenderVerdict::suspicious;
         const bool release_pending = parser_risk && policy_.release_required != 0U;
         const bool quarantine = release_pending || (executable && !trusted) || structure_suspicious ||
@@ -727,6 +821,7 @@ private:
             trusted ? "external_trusted_scanned" : "external_content_scanned_safe";
         const std::string record = "{\"id\":\"" + identifier + "\",\"source\":\"" +
                                     json_escape(source.wstring()) + "\",\"size\":" + std::to_string(size) +
+                                    ",\"sha256\":\"" + content_sha256 + "\"" +
                                     ",\"classification\":\"" + classification + "\",\"defender\":\"" +
                                     (defender == DefenderVerdict::clean ? "clean" :
                                      defender == DefenderVerdict::threat ? "threat" :
@@ -734,7 +829,7 @@ private:
         if (!append_record(provenance_, record)) { CloseHandle(source_handle); return; }
         if (!quarantine) {
             CloseHandle(source_handle);
-            processed_.insert(source.wstring());
+            processed_[source.wstring()] = FileStamp{size, modified};
             return;
         }
         HANDLE enforcement_handle = CreateFileW(source.c_str(), DELETE | FILE_READ_ATTRIBUTES,
@@ -784,8 +879,8 @@ private:
     std::filesystem::path provenance_;
     std::filesystem::path health_;
     std::vector<std::filesystem::path> roots_;
-    std::map<std::wstring, std::uint64_t> stable_sizes_;
-    std::set<std::wstring> processed_;
+    std::map<std::wstring, FileStamp> stable_sizes_;
+    std::map<std::wstring, FileStamp> processed_;
     HANDLE objects_handle_ = INVALID_HANDLE_VALUE;
     BY_HANDLE_FILE_INFORMATION objects_info_{};
     ContentPolicy policy_{};
@@ -966,9 +1061,11 @@ int self_test() {
     if (suspicious_structure(L"benign.pdf", bytes(benign_pdf)) ||
         !suspicious_structure(L"active.pdf", bytes(active_pdf)) ||
         !parser_risk_extension(L"photo.webp") || !parser_risk_extension(L"movie.mp4") ||
-        parser_risk_extension(L"notes.txt") || parser_risk_extension(L"photo.webp", kContentDocuments) ||
+        !parser_risk_extension(L"notes.txt") || parser_risk_extension(L"notes.txt", kContentDocuments) ||
+        parser_risk_extension(L"photo.webp", kContentDocuments) ||
         content_category(L"report.pdf") != kContentDocuments || content_category(L"track.mp3") != kContentAudio ||
-        content_category(L"setup.msi") != kContentPrograms || content_category(L"deploy.ps1") != kContentWindowsScripts ||
+        content_category(L"setup.msi") != kContentPrograms || content_category(L"notes.txt") != kContentUnknown ||
+        content_category(L"deploy.ps1") != kContentWindowsScripts ||
         content_category(L"bootstrap.sh") != kContentDeveloperScripts || content_category(L"target.lnk") != kContentLaunchers ||
         !executable_extension(L"deploy.ps1") || !executable_extension(L"module.psm1") ||
         !executable_extension(L"tool.py") || !executable_extension(L"package.jar") ||
@@ -980,7 +1077,7 @@ int self_test() {
 int runtime_command(int argc, wchar_t** argv) {
     if (argc == 2 && std::wstring_view(argv[1]) == L"content-policy-status") {
         const auto policy = load_content_policy();
-        std::wcout << L"{\"schema\":\"AIShieldContentPolicy/3\",\"enabled_categories\":"
+        std::wcout << L"{\"schema\":\"AIShieldContentPolicy/4\",\"enabled_categories\":"
                    << policy.enabled_categories << L",\"fail_closed\":"
                    << (policy.fail_closed != 0U ? L"true" : L"false") << L",\"release_required\":"
                    << (policy.release_required != 0U ? L"true" : L"false") << L"}\n";

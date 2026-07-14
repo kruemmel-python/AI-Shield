@@ -1,5 +1,10 @@
 # AI Shield Architecture Foundation
 
+Der RC11-Dateipfad führt jedes neue oder veränderte Downloadobjekt zunächst über einen universellen
+Magic-/Extension-/Namens-Preflight. Anschließend erhält der isolierte Minimalworker ausschließlich
+das bereits gesperrte Datei-Handle. SHA-256 und Dateiidentität binden Analyse, Provenienz und
+Quarantäneentscheidung; der WFP-Treiber sperrt den Worker vollständig vom IPv4-/IPv6-Netz.
+
 Stand: 14. Juli 2026. Der zentrale Dokumentationseinstieg und die Abgrenzung von Private Desktop,
 Enterprise-Betriebsprofil, Developer Full und Gateway-Prototyp stehen in
 [`README.md`](README.md) und [`EDITIONEN_UND_VERSIONEN_DE.md`](EDITIONEN_UND_VERSIONEN_DE.md).

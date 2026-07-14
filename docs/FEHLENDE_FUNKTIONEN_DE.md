@@ -1,6 +1,6 @@
 # AI Shield: Noch auszuführende Produktnachweise
 
-Stand: 14. Juli 2026, nach Abschluss des RC10-Desktop-, Download-, Recovery- und Ransomware-Schutzpfads
+Stand: 14. Juli 2026, nach Abschluss des RC11-Datei-, Desktop-, Download-, Recovery- und Ransomware-Schutzpfads
 
 ## Noch auszuführende Produktnachweise
 
@@ -45,6 +45,13 @@ RC10 ergänzt den automatisch gestarteten Tray-Agenten, die UI-Einzelinstanz und
 Minimieren und `X` beenden weder UI-Prozess noch Schutzkern; der Tray-Doppelklick stellt dieselbe
 PID ohne weitere UAC-Abfrage wieder her. Damit ist der lokale Hintergrundbetrieb als Produktcode
 geschlossen und verbleibt nur als Kompatibilitäts- und Dauertestgegenstand.
+
+RC11 ergänzt Content-Policy v4, die Kategorie für unbekannte und spezialisierte Formate, einen
+universellen Magic-/Namens-/Polyglot-Preflight, WAV-/ZIP-Härtung, SHA-256-Provenienz über dasselbe
+gesperrte Datei-Handle und einen isolierten Minimalworker. Der WFP-Treiber blockiert dessen gesamte
+IPv4-/IPv6-Kommunikation. Nicht vorhandene Spezialparser führen damit nicht mehr zur automatischen
+Positivfreigabe, sondern zur konservativen Freigabeschranke. Formatspezifische Vollparser und CDR
+für jede Spezialdomäne bleiben Qualitätsausbau, nicht still offene Umgehung.
 
 Der lokale Dateisystempfad wurde zusätzlich gegen nicht auflösbare Junctions und andere Reparse
 Points gehärtet. Der automatisierte Test enthält dafür ein negatives Junction-Szenario. Auf dem

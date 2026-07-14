@@ -14,7 +14,7 @@ $required = @(
     "RecoveryStatus", "IncidentGrid", "SnapshotButton", "BackupButton", "DetectRansomwareButton", "RestorePlanButton", "RestoreIncidentButton",
     "RefreshButton", "RestartButton", "TrayToggle", "TrayDetail", "CoreToggle", "DownloadsToggle",
     "DocumentsToggle", "ArchivesToggle", "ImagesToggle", "AudioToggle", "VideoToggle", "WebFilesToggle",
-    "ProgramsToggle", "WindowsScriptsToggle", "DeveloperScriptsToggle", "LaunchersToggle", "ReleaseRequiredToggle", "ScanFailureToggle", "BrowserToggle",
+    "ProgramsToggle", "WindowsScriptsToggle", "DeveloperScriptsToggle", "LaunchersToggle", "UnknownToggle", "ReleaseRequiredToggle", "ScanFailureToggle", "BrowserToggle",
     "InboundToggle", "BrowserSensorToggle", "BrowserSensorDetail", "EdgeSetupButton", "ChromeSetupButton",
     "KernelHardwareToggle", "KernelHardwareDetail", "BitLockerButton",
     "HvciToggle", "CredentialToggle", "FirewallToggle", "DefenderToggle",

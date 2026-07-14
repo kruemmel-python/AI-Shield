@@ -5,7 +5,7 @@ Stand: 14. Juli 2026
 ## Build
 
 Der aktuelle Quellstand wurde mit Visual Studio 2022, Windows SDK/WDK 10.0.26100.0 und CMake als
-x64-Release gebaut. Alle 14 CTest-Ziele bestanden in Release und Debug. Anschließend wurden WFP-, Minifilter- und
+x64-Release gebaut. Alle 15 CTest-Ziele bestanden in Release und Debug. Anschließend wurden WFP-, Minifilter- und
 ProcessGuard-Treiber mit `/W4 /WX` neu gebaut, lokal test-signiert und installiert.
 
 Reproduzierbarer administrativer Ablauf:
@@ -23,13 +23,13 @@ aktiviert abschließend eine neue signierte Audit-Policy. Das Transkript liegt u
 ## Signierte Treiber
 
 Alle drei Paketdateien besitzen eine gültige Signatur des lokalen Testzertifikats
-`125D756E7666534CDF4558A2B9E96E96907B3FFC`.
+`A46C01AB4A59310C660FCDC28A4CDE7518C701D2`.
 
 | Datei | SHA-256 der vollständigen signierten Datei |
 |---|---|
-| `AIShieldMiniFilter.sys` | `6BC8B6BC6936E430F27CC155007B4E285D82AAE411D0CE0C1478B863C706F2E4` |
-| `AIShieldProcessGuard.sys` | `6C964917579995C7BADBF51FF49457941B49FD02497FC0EAE27A7009ADF79023` |
-| `AIShieldWfp.sys` | `96BB3CBD64E1ACEFF9A402D7C5D06FAC74465C1B1F8F03FE4F6E58141BC27A9E` |
+| `AIShieldMiniFilter.sys` | `2FA9CACE0241FC12C4FBABBD4848A1A8885687EB6B811324CF3718B85D33077D` |
+| `AIShieldProcessGuard.sys` | `29E2C8E017410BB54B47C19119997EA446BC29AF9FC31C8AE5C06A5D9716B3C8` |
+| `AIShieldWfp.sys` | `424A0EE534231FC583EDC53CE693D7C8B7FAF90438FE0F09B7A631D281AD7F5E` |
 
 Lokales Testsigning ersetzt keine Microsoft-Produktionssignatur.
 
@@ -49,14 +49,19 @@ AIShieldProcessGuard Running System
 AIShieldWfp          Running System
 ```
 
-## RC10-Desktop- und Downloadnachweis
+## RC11-Datei- und Downloadnachweis
 
-Der installierte Broker verwendet `AIShieldContentPolicy/3` mit allen zehn Gruppen,
+Der installierte Broker verwendet `AIShieldContentPolicy/4` mit allen elf Gruppen,
 `fail_closed=true` und `release_required=true`. Der reale Test auf dem Referenzrechner meldete:
 
 ```text
 safe_image_requires_release=true
 active_pdf_quarantined=true
+wav_without_motw_quarantined=true
+disguised_pe_quarantined=true
+active_svg_quarantined=true
+unknown_extension_release_gated=true
+content_sha256_recorded=true
 provenance_recorded=true
 ```
 
@@ -125,7 +130,7 @@ Installer, Windows-Skripte, Entwickler-/Shell-Skripte sowie Verknüpfungen/Syste
 Mark-of-the-Web-Downloads werden abhängig von dieser Policy durch einen isolierten,
 zeitbegrenzten Defender-/AMSI- und Struktur-Scanner geprüft. ProcessGuard blockiert direkte Starts
 aus `Downloads` und erweitert die indirekte Sperre auf Sprachinterpreter, MSIExec, Java/.NET und
-relevante Windows-Systemlauncher. Die Content-Policy v3 aktiviert standardmäßig eine zusätzliche
+relevante Windows-Systemlauncher. Die Content-Policy v4 aktiviert standardmäßig eine zusätzliche
 Freigabeschranke: Auch sauber geprüfte Downloads aktiver Gruppen werden quarantänisiert, in der UI
 gemeldet und erst nach begründeter Freigabe wieder bereitgestellt. Bestehende Policy-v1-/v2-Daten
 werden sicher migriert.

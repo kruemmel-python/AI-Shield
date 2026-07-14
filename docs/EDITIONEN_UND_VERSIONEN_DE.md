@@ -47,7 +47,7 @@ nicht erforderlich.
 
 | Vertrag | Aktueller Stand |
 |---|---|
-| Release Candidate | `2.0.0-rc.10` |
+| Release Candidate | `2.0.0-rc.11` |
 | Kernel-Transport | `1.2` |
 | ABI-Freeze | Revision `2` |
 | Interne Ereignis-ABI | `2.0` |

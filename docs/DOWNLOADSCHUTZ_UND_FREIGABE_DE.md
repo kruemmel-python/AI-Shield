@@ -1,12 +1,15 @@
 # Downloadschutz und Freigabeschranke
 
-Stand: 14. Juli 2026, Content-Policy `AIShieldContentPolicy/3`
+Stand: 14. Juli 2026, Content-Policy `AIShieldContentPolicy/4`
 
 ## Ziel
 
 AI Shield behandelt einen erfolgreichen Download nicht automatisch als vertrauenswürdig. Neue
-Dateien mit Windows Mark-of-the-Web werden nach Abschluss des Schreibvorgangs anhand einer
-DPAPI-Machine-geschützten Dateityp-Policy geprüft. Bei aktiver Freigabeschranke werden auch saubere
+Dateien im Downloadordner werden nach Abschluss des Schreibvorgangs anhand einer
+DPAPI-Machine-geschützten Dateityp-Policy geprüft. Mark-of-the-Web bleibt ein zusätzliches
+Provenienzsignal, ist aber seit der WAV-Härtung keine Voraussetzung mehr: Auch Browser-Downloads
+über „Speichern unter“, bei denen Windows keinen `Zone.Identifier` anlegt, werden erfasst. Bei
+aktiver Freigabeschranke werden auch saubere
 Dateien zunächst aus `Downloads` in die geschützte Quarantäne verschoben. Erst eine bewusste,
 begründete Freigabe stellt sie wieder bereit.
 
@@ -25,6 +28,8 @@ Die Desktop-UI bietet getrennte Schalter für:
 5. Windows-Skripte, etwa BAT, CMD, PS1, PSM1, VBS, JS, WSF und HTA.
 6. Entwickler- und Shell-Skripte, etwa SH, Python, Node, Perl, Ruby, PHP und JAR.
 7. Verknüpfungen und Systemaktionen, etwa LNK, URL, REG, INF, CHM und ClickOnce.
+8. Unbekannte und Spezialformate, einschließlich Dateien ohne bekannte Endung, Modellgewichte,
+   Firmware, CAD/GIS, Plugins, Mods und proprietäre Container.
 
 Ein deaktivierter Gruppenschalter bedeutet ausdrücklich, dass AI Shield für diese Gruppe weder die
 Inhaltsprüfung noch die Freigabeschranke durchsetzt. Der zusätzliche ProcessGuard-Schutz kann
@@ -35,9 +40,11 @@ direkte oder interpretergestützte Ausführung aus `Downloads` unabhängig davon
 ```text
 Browserdownload
       │
-      ├─► Mark-of-the-Web und stabile Dateigröße prüfen
+      ├─► neue/geänderte Datei und stabile Größe prüfen
+      ├─► Mark-of-the-Web auswerten, falls vorhanden
       ├─► Reparse Point, Hardlink, ADS und Dateiidentität prüfen
-      ├─► Defender/AMSI sowie PDF-/ZIP-Strukturprüfung
+      ├─► universeller Magic-/Polyglot-/Fähigkeiten-Preflight
+      ├─► isolierter Minimalworker: AMSI sowie PDF-/ZIP-/RIFF-WAV-Strukturprüfung
       │
       ├─► Schadsoftware/Strukturrisiko ─► Quarantäne: Sicherheitsbefund
       └─► sauber + Freigabeschranke ────► Quarantäne: wartet auf Freigabe
@@ -49,6 +56,17 @@ Der Broker wiederholt die Downloadsuche im Ein-Sekunden-Takt und verlangt zwei i
 Größenbeobachtungen, damit eine noch geschriebene Datei nicht vorzeitig verarbeitet wird. Die UI
 prüft alle zwei Sekunden auf neue Quarantäneobjekte und zeigt ein Warnfenster. Dieser asynchrone
 Ablauf reduziert das Zeitfenster erheblich, ist aber kein synchroner Kernel-Dialog beim Öffnen.
+
+Der Edge-/Chrome-Sensor liefert Navigations- und Downloadmetadaten. Er ist nicht der lokale
+Byte-Scanner und erzeugt deshalb nicht zwingend die integrierte Browsermeldung „gefährlicher
+Download“. Inhaltsentscheidung, Quarantäne und UI-Warnung erfolgen durch Broker und Scanner nach
+dem Speichern. Vorhandene Dateien werden beim Brokerstart baseliniert; neue Dateien und spätere
+Änderungen an bekannten Pfaden werden anhand von Größe und Änderungszeit erneut geprüft.
+
+Der WAV-Preflight validiert RIFF-Größe, Chunk-Grenzen, `fmt `- und `data`-Chunk. Befehlsähnliche
+Launcher-Tokens in Metadaten-Chunks werden als Strukturrisiko behandelt. Text in Metadaten wird
+nicht ausgeführt; dieses Signal schützt gegen missbräuchliche Container und dient zusammen mit
+Containerfehlern und AMSI/Defender der Klassifizierung.
 
 ## Quarantäne und Freigabe
 
@@ -66,8 +84,8 @@ fachlicher Analyse freigegeben werden.
 
 ## Migration
 
-Policy-v1- und Policy-v2-Daten werden beim Lesen auf Policy v3 migriert. Neue Ausführungsgruppen und
-`release_required=true` werden sicher voreingestellt. Die persistente Datei bleibt mit Windows
+Policy-v1- bis Policy-v3-Daten werden beim Lesen auf Policy v4 migriert. Neue Ausführungsgruppen,
+die Gruppe für unbekannte Formate und `release_required=true` werden sicher voreingestellt. Die persistente Datei bleibt mit Windows
 DPAPI im Maschinenkontext geschützt.
 
 Status prüfen:
@@ -76,17 +94,29 @@ Status prüfen:
 .\build_vs\Release\ai_shield_broker.exe content-policy-status
 ```
 
-Erwarteter RC10-Standard:
+Aktueller Standard:
 
 ```json
-{"schema":"AIShieldContentPolicy/3","enabled_categories":1023,"fail_closed":true,"release_required":true}
+{"schema":"AIShieldContentPolicy/4","enabled_categories":2047,"fail_closed":true,"release_required":true}
 ```
 
 ## Qualifikation
 
-Der automatisierte Test `tests/windows_download_content_protection.ps1` erzeugt ein sauberes Bild
-und eine aktive PDF mit Mark-of-the-Web. Er weist nach, dass das Bild eine Benutzerfreigabe benötigt,
-die aktive PDF als Strukturfund quarantänisiert und beide Entscheidungen in der Provenienz erfasst
-werden. Der Test bereinigt seine Quarantäneobjekte anschließend über den kontrollierten
-Restore-Pfad.
+Der automatisierte Test `tests/windows_download_content_protection.ps1` erzeugt ein sauberes Bild,
+eine aktive PDF mit Mark-of-the-Web, eine absichtlich auffällige WAV ohne Mark-of-the-Web, ein PE
+unter Bildendung, ein aktives SVG und eine unbekannte Endung. Er
+weist nach, dass das Bild eine Benutzerfreigabe benötigt und PDF sowie WAV als Strukturfund
+quarantänisiert werden. Ein zusätzlicher Unit-Test stellt sicher, dass eine korrekt aufgebaute
+harmlose PCM-WAV keinen strukturellen Alarm auslöst. Der Test bereinigt seine Quarantäneobjekte
+anschließend über den kontrollierten Restore-Pfad.
+
+Der Scanner wird über dasselbe gesperrte Datei-Handle versorgt, das der Broker für Identitäts- und
+Hashprüfung verwendet. Er erhält keinen Dateipfad zum erneuten Öffnen. Ein AppContainer ist der
+primäre Startmodus. Falls der Windows-Loader eigene Binärdateien mit `0xC0000142` ablehnt, wird
+explizit auf einen privilegienlosen Low-Integrity-Token im gleichen Einprozess-/Speicher-/Zeit-Job
+zurückgefallen; ein LocalSystem-Parserfallback existiert nicht.
+
+Der WFP-Treiber sperrt für `ai_shield_file_scanner.exe` zusätzlich sämtliche ein- und ausgehenden
+IPv4-/IPv6-Verbindungen. Die Sperre gilt unabhängig vom normalen Policy-Modus und verhindert auch
+im Low-Integrity-Fallback einen Netzwerkkanal aus dem Parserprozess.
 

@@ -8,7 +8,7 @@
            UpgradeCode="357A6A93-5FDA-43D2-8D41-4D24BF080EDD">
     <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine"
              InstallPrivileges="elevated" Platform="x64"
-             Description="AI Shield Private Desktop 2.0.0-rc.9" />
+             Description="AI Shield Private Desktop 2.0.0-rc.11" />
     <MajorUpgrade DowngradeErrorMessage="Eine neuere Version von AI Shield Private Desktop ist bereits installiert."
                   Schedule="afterInstallInitialize" />
     <MediaTemplate EmbedCab="yes" CompressionLevel="high" />

@@ -4,6 +4,20 @@
 
 Whitepaper, Stand 14. Juli 2026
 
+## RC11: Dateiinhalt statt Dateiendung
+
+RC11 führt eine universelle Preflight-Stufe vor der formatspezifischen Analyse ein. Sie vergleicht
+Dateinamen, Endung und echte Magic-Signatur, erkennt Tarnung, Polyglots, eingebettete Formate,
+Trailing-Data, externe Referenzen, automatische Aktionen und Befehlsindikatoren. Unbekannte oder
+nicht tief interpretierbare Formate werden nicht als harmlos angenommen, sondern bleiben bei
+aktiver Freigabeschranke in Quarantäne.
+
+Analyse und Entscheidung referenzieren dasselbe gesperrte Datei-Handle. Volume-/File-ID, Größe,
+Änderungszeit und SHA-256 verbinden Provenienz, Befund und Quarantäne und reduzieren damit
+Race-/TOCTOU-Angriffe. Der Minimalworker läuft mit Prozess-, Speicher- und Deadline-Grenzen im
+AppContainer oder einem auditierten Low-Integrity-Fallback. Der WFP-Treiber sperrt für ihn
+unabhängig vom übrigen Policy-Modus alle IPv4-/IPv6-Verbindungen.
+
 ## RC10: Schutz ohne dauerhaft geöffnetes Administrationsfenster
 
 Die Schutzwirkung hängt nicht vom sichtbaren Desktopfenster ab. WFP, Minifilter, ProcessGuard,
@@ -15,7 +29,7 @@ den Prototyp für den dauerhaften Einzelplatzbetrieb bedienbarer.
 
 ## RC9: Download ist nicht gleich Vertrauen
 
-Content-Policy v3 schließt eine praktische Lücke zwischen erfolgreichem Scan und Benutzeröffnung.
+Content-Policy v3 schloss erstmals eine praktische Lücke zwischen erfolgreichem Scan und Benutzeröffnung.
 Auch ein formal sauberes Bild, Audioformat, Video oder Dokument kann einen unbekannten Parserfehler
 des zugeordneten Programms erreichen. Deshalb kann die Private-Desktop-Ausgabe alle aktivierten
 Dateigruppen nach dem Scan zunächst in eine TOCTOU-gehärtete Quarantäne verschieben. Die UI meldet

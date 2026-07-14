@@ -1,6 +1,6 @@
 # AI Shield Dokumentation
 
-Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.10`
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.11`
 
 Dieser Ordner ist der zentrale Einstieg in die Projekt-, Betriebs- und Entwicklungsdokumentation.
 Der aktuelle Vertrag verwendet Kernel-Transport ABI `1.2` (Freeze-Revision `2`) und intern ABI
@@ -15,9 +15,9 @@ Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
 | Verwaltete Umgebung | [Enterprise-Betriebsprofil](ENTERPRISE_EDITION_HANDBUCH_DE.md) | WEF, SIEM, WDAC, Browserverwaltung, Policy- und Rolloutprozesse |
 | Entwicklerteam | [Developer Full Handbuch](DEVELOPER_FULL_HANDBUCH_DE.md) | Vollständiger Build, Tests, Treiberpaket und Referenzinstallation |
 | Sicherheitsanalyse | [Audit Viewer](AUDIT_VIEWER_DE.md) | AISHAD02 prüfen, anzeigen, filtern und als JSON dekodieren |
-| Downloadkontrolle | [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md) | Policy v3, Dateigruppen, Quarantäne, Warnungen und Freigabe |
+| Downloadkontrolle | [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md) | Policy v4, universeller Preflight, Quarantäne und Freigabe |
 | Wiederherstellung | [Ransomware-Schutz und Recovery](RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md) | Versionsspeicher, Erkennung, externe Sicherung und bestätigte Rücksicherung |
-| RC10-Systemnachweis | [RC10 Release- und Installationsnachweis](RC10_RELEASE_NACHWEIS_DE.md) | Tray-Autostart, Einzelinstanz, Close-to-Tray, Tests und veröffentlichte Artefakte |
+| RC11-Systemnachweis | [RC11 Release- und Installationsnachweis](RC11_RELEASE_NACHWEIS_DE.md) | Datei-Preflight, Scannerisolation, Tests und veröffentlichte Artefakte |
 | Architekturentscheidung | [Editionen und Versionen](EDITIONEN_UND_VERSIONEN_DE.md) | Gemeinsamer Core, Unterschiede und Freigabestatus |
 
 ## Technische Referenz
@@ -30,7 +30,9 @@ Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
   [Kernel-/Hardware-Schutz](KERNEL_HARDWARE_SCHUTZ_DE.md)
 - [Ransomware-Schutz und Wiederherstellung](RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md)
 - [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md)
-- [RC10 Release- und Installationsnachweis](RC10_RELEASE_NACHWEIS_DE.md)
+- [Dateibasierte Angriffe und RC11-Implementierungszuordnung](../AI_Shield_Dateibasierte_Angriffe_und_Scananforderungen_DE.md)
+- [RC11 Release- und Installationsnachweis](RC11_RELEASE_NACHWEIS_DE.md)
+- [Historischer RC10-Nachweis](RC10_RELEASE_NACHWEIS_DE.md)
 - [Historischer RC9-Nachweis](RC9_RELEASE_NACHWEIS_DE.md)
 - [Historischer RC8-Nachweis](RC8_RELEASE_NACHWEIS_DE.md)
 - [Windows-Hardening](WINDOWS_HARDENING_DE.md) und

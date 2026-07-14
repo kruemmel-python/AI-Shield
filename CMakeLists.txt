@@ -4,6 +4,9 @@ project(ai_shield LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+if(MSVC)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
 
 option(AI_SHIELD_STRICT "Treat warnings as errors" ON)
 option(AI_SHIELD_ENABLE_CLOUD "Build optional cloud export connector" OFF)
@@ -25,6 +28,7 @@ add_library(ai_shield_core
     src/dns.cpp
     src/fail_policy.cpp
     src/features.cpp
+    src/file_preflight.cpp
     src/flow_baseline.cpp
     src/flow_control.cpp
     src/egress_gate.cpp
@@ -72,6 +76,7 @@ add_library(ai_shield_core
     src/update_manager.cpp
     src/worker_supervisor.cpp
     src/xml_preflight.cpp
+    src/wav_preflight.cpp
     src/zip_preflight.cpp
     src/pdf_preflight.cpp
     src/policy_authorization.cpp
@@ -196,6 +201,17 @@ if(WIN32 AND AI_SHIELD_ENABLE_WINDOWS_PLATFORM)
     if(MSVC)
         target_compile_options(ai_shield_integrations PRIVATE /W4 /permissive- /sdl /GS)
     endif()
+
+    add_executable(ai_shield_file_scanner tools/ai_shield_file_scanner/main.cpp)
+    target_link_libraries(ai_shield_file_scanner PRIVATE ai_shield_core)
+    target_compile_definitions(ai_shield_file_scanner PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX)
+    if(MSVC)
+        target_compile_options(ai_shield_file_scanner PRIVATE /W4 /permissive- /sdl /GS)
+        if(AI_SHIELD_STRICT)
+            target_compile_options(ai_shield_file_scanner PRIVATE /WX)
+        endif()
+    endif()
+    add_test(NAME ai_shield_file_scanner_self_test COMMAND ai_shield_file_scanner self-test)
 endif()
 
 if(WIN32)

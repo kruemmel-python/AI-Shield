@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 #include <string_view>
 
 #include <windows.h>
@@ -17,8 +18,10 @@ struct AppContainerLaunchSpec final {
     bool allow_network = false;
     bool allow_child_processes = false;
     std::wstring_view executable_path;
+    std::wstring_view command_line;
     std::wstring_view work_directory;
     std::wstring_view result_pipe_name;
+    HANDLE inherited_handle = INVALID_HANDLE_VALUE;
 };
 
 struct LaunchedProcess final {
@@ -29,7 +32,9 @@ struct LaunchedProcess final {
 };
 
 [[nodiscard]] ai_shield::Result<void> validate_launch_spec(const AppContainerLaunchSpec& spec) noexcept;
+[[nodiscard]] ai_shield::Result<std::wstring> parser_profile_sid();
 [[nodiscard]] ai_shield::Result<LaunchedProcess> launch_shadow_parser(const AppContainerLaunchSpec& spec) noexcept;
+[[nodiscard]] ai_shield::Result<LaunchedProcess> launch_restricted_parser(const AppContainerLaunchSpec& spec) noexcept;
 [[nodiscard]] ai_shield::Result<void> resume_launched_process(LaunchedProcess& process) noexcept;
 void close_launched_process(LaunchedProcess& process) noexcept;
 

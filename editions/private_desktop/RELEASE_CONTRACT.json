@@ -1,7 +1,7 @@
 {
   "schema": "AIShieldPrivateReleaseContract/1",
-  "release": "2.0.0-rc.10",
-  "release_epoch_utc": "2026-07-14T16:00:00Z",
+  "release": "2.0.0-rc.11",
+  "release_epoch_utc": "2026-07-14T17:30:00Z",
   "kernel_abi": "1.2",
   "kernel_abi_freeze_revision": 2,
   "internal_abi": "2.0",
@@ -21,11 +21,11 @@
     },
     {
       "path": "editions/private_desktop/edition.json",
-      "sha256": "6BC80633064CE460121DD49FFEDCA0F5B8B7DB40FC10149B81CDC05B9FE77291"
+      "sha256": "8A3672467AF7CE98DB942B7AC81ADBAB90920F19CD1E71DBDB8BA0A598B71076"
     },
     {
       "path": "CMakeLists.txt",
-      "sha256": "0EBC4CB1CC54A4B669869CA91F997F420C920291A933C1270E16909AAA0EBBDB"
+      "sha256": "8F105208BDF10B03330C2D16BCAA2316F5447FEC3388D00668510EFD4482AF2B"
     },
     {
       "path": "platform/windows/drivers.props",
@@ -37,11 +37,11 @@
     },
     {
       "path": "tools/package_private_desktop.ps1",
-      "sha256": "0CE63DACF9779305BC9B0C1D85D371643496DA66B36C40FA60627A149ACC434D"
+      "sha256": "7A37E90AE37371A9401DB8685514218FC88ED20515DABD0BAA66768D2B151441"
     },
     {
       "path": "editions/private_desktop/install_private_desktop.ps1",
-      "sha256": "BD1C1DE78D3D3EE79D8CF999F86D2980B39054E1F349587944FDF84FDC1DD9F9"
+      "sha256": "15423D6E65E7A7AC2B665F522D5435A348B948D2B14F0B9DFD9D525728CB820F"
     },
     {
       "path": "editions/private_desktop/msi_product_action.ps1",
@@ -49,11 +49,11 @@
     },
     {
       "path": "platform/windows/msi/AIShieldPrivateDesktop.wxs",
-      "sha256": "43340959E14E1D530A0E51008496F681D87D8425BE8A0EAB1FA603B126B5F64B"
+      "sha256": "9FD53A3933A9A23D2B79E4A727224D880662C522ED685B583F00D73C3CB871CA"
     },
     {
       "path": "platform/windows/msi/build_msi.ps1",
-      "sha256": "BA746992DABA6FE88A856E838DFDB6D9447BF578BF5F176CE2D85CA295D53A5F"
+      "sha256": "A004A18721BCD6DDA60EABA0ECF211987C3C625138FC2C73960504295598270C"
     },
     {
       "path": "platform/windows/installer/install_drivers.ps1",
@@ -61,7 +61,7 @@
     },
     {
       "path": "editions/private_desktop/uninstall_private_desktop.ps1",
-      "sha256": "2BB37F6E2A203E7A125902DD066A529EE417A1E20FFBE14314A72B98324E43E9"
+      "sha256": "B2976E7B13E9227CEA3B8503643726127C926B3BF8AC188CB5867831E9247C56"
     },
     {
       "path": "editions/private_desktop/AI_Shield_UI.cmd",
@@ -69,7 +69,7 @@
     },
     {
       "path": "editions/private_desktop/ui/AIShield.PrivateDesktop.UI.xaml",
-      "sha256": "057FA85693E5CE7A8326B5E618A96AE1208B70BD1C124AC7D047EB3659F728CE"
+      "sha256": "C10D5C2F1C4AF6994DD937526C4063DC4B3D072691E9E746DDE103819772947C"
     },
     {
       "path": "editions/private_desktop/ui/AIShield.AuditViewer.xaml",
@@ -77,7 +77,7 @@
     },
     {
       "path": "editions/private_desktop/ui/start_private_ui.ps1",
-      "sha256": "758790F96747CFCC3DD970FD6562425C514BC1DDF8E60F07131C806B9B52C3DD"
+      "sha256": "F69353CFFD415266383DCE2363D289AB8B5E01AC7966CF00B5C3754533793EDF"
     },
     {
       "path": "editions/private_desktop/ui/private_security_settings.ps1",
@@ -85,27 +85,27 @@
     },
     {
       "path": "editions/private_desktop/ui/verify_ui_contract.ps1",
-      "sha256": "814CFB72FE4D056831C568B0D50CF8F6271AD7E49C32771559CA5E81C2072CE3"
+      "sha256": "1168EC8E1A5669061572603C0906CE6B4DF367E6EB2D4538F3DD2ACC0A3C1D97"
     },
     {
       "path": "editions/private_desktop/tray/start_tray_agent.ps1",
-      "sha256": "975E05CE5F556B389CB2FA00038B9A0ACF54A8CE9B9BD97A4C045F668C647219"
+      "sha256": "8AC07146DA9D7F053AA195A25E1AE800D8D59BC251BB5BD5A3D553EAE4A7C403"
     },
     {
       "path": "editions/private_desktop/tray/manage_tray_agent.ps1",
-      "sha256": "56C8193FF107423F077AEA5BEE897DAD534B667829C23338191FF835AE719634"
+      "sha256": "24FF33E2A40C9902E56C154C78EE49C212C88AD6087E913939ED8C9FC649D1AF"
     },
     {
       "path": "tests/windows_tray_agent_contract.ps1",
-      "sha256": "2280811AC89EA56F1E794E97769D85A64F9CB6661E98758FD6A72BF714C72877"
+      "sha256": "41625F1F22EF40FAF5FB9622FC9DFCA4EC5D5B1CAE83BD8130BEF43233F6E86A"
     },
     {
       "path": "tools/deploy_private_tray.ps1",
-      "sha256": "97085346D7CC0BD6CBC0B0BD132DED1322A4FD4F1CECF7469DF8181BE3ABDBBB"
+      "sha256": "E4945CB8740B54C5DFA1FE3B2BB860C8D7760974A7346DCDA7DEC80F98987638"
     },
     {
       "path": "tools/diagnose_private_ui.ps1",
-      "sha256": "A4D712E7298A156268EFFB9FF0194DFF9F376B21C7CF574B360C70E48592A004"
+      "sha256": "7645E7D4D979E997DB968D33177950AFFA0D7B5DB25630F3CB980C069CB37A5B"
     },
     {
       "path": "platform/windows/browser_extension/manifest.json",
@@ -157,11 +157,11 @@
     },
     {
       "path": "tests/windows_download_content_protection.ps1",
-      "sha256": "9F89D6A80E82FADFA7F31DE0DB3C54C1B3B073A2FA94060079452D32B706BE78"
+      "sha256": "2DD0CA445942249B7BF912DC86CC730B8FF56ED7124DE98EC864F74C72BF828D"
     },
     {
       "path": "tools/ai_shield_broker/main.cpp",
-      "sha256": "D4C30BD4D7F90779B0857ED588BE6C5E3092E46AF2BF6FD993AEAD3FAFE5951C"
+      "sha256": "5793C0EBFA59DE55A50D1B8282D1C165CCFE06AD9D82964C2DAC7C37960DC2C2"
     },
     {
       "path": "platform/windows/minifilter/driver/ai_shield_minifilter.c",
@@ -170,6 +170,58 @@
     {
       "path": "platform/windows/admin/ai_shield_admin.ps1",
       "sha256": "FF83353EBB592229C2BC0430C1A3EBCBABF4F461B0C2F39D7F537A1B8F99A47F"
+    },
+    {
+      "path": "include/ai_shield/file_preflight.hpp",
+      "sha256": "437C1168D370F75C7975EF75511D2288958CB1454A0419F6CAE3B6C917466049"
+    },
+    {
+      "path": "src/file_preflight.cpp",
+      "sha256": "6EF6F691A65B757AEF2E420CD6238C4859F29AEE0713C98D8B76E92F4B4F98D0"
+    },
+    {
+      "path": "include/ai_shield/wav_preflight.hpp",
+      "sha256": "A370997982E5D0AF86D6D487D188D76CAC194E171DC87C2C1101FFC2BAF8C44B"
+    },
+    {
+      "path": "src/wav_preflight.cpp",
+      "sha256": "08687AA5575A8AA7A691836FAFFED7824CDCC3CEBB174631FAFAC3E514F1EFAA"
+    },
+    {
+      "path": "include/ai_shield/zip_preflight.hpp",
+      "sha256": "7F35F374AFE101C01DA3F9C15FD99B54827851DB8E05C856F72485599B9797E1"
+    },
+    {
+      "path": "src/zip_preflight.cpp",
+      "sha256": "0BA51A6745AAC60DFF537A760B6327072593C62F81D88673D071AD6D98888411"
+    },
+    {
+      "path": "tools/ai_shield_file_scanner/main.cpp",
+      "sha256": "875A7D4BE890A78040E20CB30986D5B8908A0DC6D2BE83A09AC98FBF4B0EF633"
+    },
+    {
+      "path": "platform/windows/sandbox/appcontainer_launcher.hpp",
+      "sha256": "A480F58DEE28B3DA707CA7917A3241CDDB2A583F010CF18F4896AFBD5CED4211"
+    },
+    {
+      "path": "platform/windows/sandbox/appcontainer_launcher.cpp",
+      "sha256": "0E307E8D1D8CCB3F9A2BA87D9E9E08BBF93A8A1342842CC551FA4C6CCDE69A85"
+    },
+    {
+      "path": "platform/windows/wfp/driver/ai_shield_wfp.c",
+      "sha256": "90439EDE8E2734777BE47E36503C0F886CDF6225BBBE5178BA09A6A4E0019856"
+    },
+    {
+      "path": "platform/windows/installer/install_broker.ps1",
+      "sha256": "B292939ADD7083F0EAD636E235158FD54B035CE729CF8C01BEFDA6D79944852F"
+    },
+    {
+      "path": "tools/deploy_download_content_protection.ps1",
+      "sha256": "C7A1D2130D97862183C67112A9034175E1FBBF025E5EE58102B18618E1855DD6"
+    },
+    {
+      "path": "tools/deploy_scanner_network_isolation.ps1",
+      "sha256": "C4D5764E796779223979F7B52B647CAE1F62C979C6D671BB52A9E9FB1E10A8AD"
     }
   ],
   "drivers": [

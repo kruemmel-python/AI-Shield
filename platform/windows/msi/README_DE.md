@@ -21,7 +21,7 @@ powershell -ExecutionPolicy Bypass -File platform\windows\msi\build_msi.ps1
 ```
 
 Nur für einen internen, nicht verteilbaren Build kann `-SkipSigning` verwendet werden. Ausgabe:
-`dist\msi\AI_Shield_Private_Desktop_2.0.0-rc.9_x64.msi` plus SHA-256-Datei.
+`dist\msi\AI_Shield_Private_Desktop_2.0.0-rc.11_x64.msi` plus SHA-256-Datei.
 
 ## Installieren und deinstallieren
 

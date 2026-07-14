@@ -6,10 +6,11 @@ param(
 $ErrorActionPreference = "Stop"
 $repo = Resolve-Path (Join-Path $PSScriptRoot "..\..\..")
 $brokerSource = Join-Path $repo "build_vs\Release\ai_shield_broker.exe"
-$scannerSource = Join-Path $repo "build_vs\Release\ai_shield_integrations.exe"
+$scannerSource = Join-Path $repo "build_vs\Release\ai_shield_file_scanner.exe"
+$profileTool = Join-Path $repo "build_vs\Release\ai_shield_integrations.exe"
 $installRoot = Join-Path $env:ProgramFiles "AIShield\bin"
 $broker = Join-Path $installRoot "ai_shield_broker.exe"
-$scanner = Join-Path $installRoot "ai_shield_integrations.exe"
+$scanner = Join-Path $installRoot "ai_shield_file_scanner.exe"
 $auditDir = Join-Path $env:ProgramData "AIShield\audit"
 $quarantineDir = Join-Path $env:ProgramData "AIShield\quarantine"
 $serviceName = "AIShieldBroker"
@@ -39,6 +40,12 @@ New-Item -ItemType Directory -Force -Path $installRoot | Out-Null
 if ($LASTEXITCODE -ne 0) { throw "Could not secure AI Shield installation directory." }
 Copy-Item -LiteralPath $brokerSource -Destination $broker -Force
 Copy-Item -LiteralPath $scannerSource -Destination $scanner -Force
+$parserSid=(& $profileTool appcontainer-sid|Select-Object -First 1).Trim()
+if($LASTEXITCODE-ne0-or$parserSid-notmatch'^S-1-15-2-'){throw 'AppContainer parser profile provisioning failed.'}
+& icacls.exe (Split-Path $installRoot -Parent) /grant "*$parserSid`:(RX)"|Out-Null
+if($LASTEXITCODE-ne0){throw 'AppContainer parser traversal ACL provisioning failed.'}
+& icacls.exe $installRoot /grant "*$parserSid`:(OI)(CI)(RX)" /T /C|Out-Null
+if($LASTEXITCODE-ne0){throw 'AppContainer parser read/execute ACL provisioning failed.'}
 $sourceHash = (Get-FileHash -LiteralPath $brokerSource -Algorithm SHA256).Hash
 $installedHash = (Get-FileHash -LiteralPath $broker -Algorithm SHA256).Hash
 if ($sourceHash -ne $installedHash) { throw "Installed broker hash verification failed." }

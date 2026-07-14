@@ -78,6 +78,10 @@ static BOOLEAN AiShieldIsBrowser(const FWPS_INCOMING_METADATA_VALUES0* metadata)
            AiShieldProcessPathContains(metadata, L"\\opera.exe");
 }
 
+static BOOLEAN AiShieldIsFileScanner(const FWPS_INCOMING_METADATA_VALUES0* metadata) {
+    return AiShieldProcessPathContains(metadata, L"\\ai_shield_file_scanner.exe");
+}
+
 static BOOLEAN AiShieldIsWebPort(UINT16 port) {
     return port == 53U || port == 80U || port == 443U || port == 853U;
 }
@@ -149,6 +153,15 @@ static void NTAPI AiShieldAuthorizeClassify(const FWPS_INCOMING_VALUES0* values,
             values->incomingValue[FWPS_FIELD_ALE_AUTH_CONNECT_V6_IP_REMOTE_ADDRESS].value.byteArray16->byteArray16,
             16U);
         outbound = TRUE;
+    }
+    if (AiShieldIsFileScanner(metadata)) {
+        classifyOut->actionType = FWP_ACTION_BLOCK;
+        classifyOut->rights &= ~FWPS_RIGHT_ACTION_WRITE;
+        InterlockedIncrement64(&g_Status.Blocked);
+        event.Decision = FWP_ACTION_BLOCK;
+        event.Flags |= AI_SHIELD_EVENT_FLAG_BLOCKED;
+        if (!AiShieldEventQueuePush(&g_EventQueue, &event)) InterlockedIncrement64(&g_Status.DroppedTelemetry);
+        return;
     }
     if (policy.Mode == AI_SHIELD_POLICY_ENFORCE && outbound &&
         (((policy.Flags & AI_SHIELD_POLICY_SYSTEM_NETWORK_GUARD) != 0U && AiShieldIsWormEgressPort(port)) ||

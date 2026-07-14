@@ -17,6 +17,11 @@ struct EntrySummary final {
     bool path_escape = false;
     bool bomb_risk = false;
     bool encrypted_entry = false;
+    bool unsupported_compression = false;
+    bool executable_entry = false;
+    bool active_content_entry = false;
+    bool nested_container = false;
+    bool duplicate_name = false;
 };
 
 [[nodiscard]] Result<EntrySummary> preflight(std::span<const std::byte> data) noexcept;

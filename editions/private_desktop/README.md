@@ -1,6 +1,6 @@
 # AI Shield Private Desktop
 
-Release Candidate: `2.0.0-rc.10`. ABI-, Policy- und Funktionsumfang sind durch
+Release Candidate: `2.0.0-rc.11`. ABI-, Policy- und Funktionsumfang sind durch
 [`RELEASE_CONTRACT.json`](RELEASE_CONTRACT.json) eingefroren. Änderungen an sicherheitsrelevanten
 Verträgen werden von `validate_release_freeze.ps1` abgelehnt, bis ein bewusst neuer Vertrag erstellt
 wird.
@@ -108,9 +108,10 @@ Die Private-Desktop-Standardkonfiguration blockiert direkte Programmstarts aus `
 Interpreterstarts, deren Befehlszeile ein Skript aus `Downloads` referenziert. Erfasst werden unter
 anderem PowerShell, CMD, WSH, MSHTA, Bash, WSL, Python, Node, Perl, Ruby, PHP, Java, .NET,
 MSIExec, Rundll32, Regsvr32 und weitere Windows-Systemlauncher. Alle nach dem Brokerstart
-neu angelegten Downloads mit Mark-of-the-Web werden zusätzlich unter festgehaltener Dateiidentität
+neu angelegten oder geänderten Downloads werden unabhängig vom Vorhandensein eines
+Mark-of-the-Web unter festgehaltener Dateiidentität
 in einem zeitlich begrenzten, isolierten Inhaltscanner mit Microsoft Defender/AMSI geprüft. PDF- und
-ZIP-Inhalte erhalten dort eine lokale Strukturprüfung; aktive oder fehlerhafte PDFs,
+ZIP- und RIFF/WAV-Inhalte erhalten dort eine lokale Strukturprüfung; aktive oder fehlerhafte PDFs,
 gefährliche/verschlüsselte Archive, Malwarefunde und
 nicht prüfbare risikoreiche Parserformate werden in die AI-Shield-Quarantäne verschoben. Saubere
 Bilder, Medien und Dokumente werden bei aktiver Freigabeschranke ebenfalls gesichert und bleiben
@@ -119,7 +120,9 @@ einzeln schaltbar und zusätzlich per PowerShell verfügbar:
 
 Unter **Schutzfunktionen > Dateityp-Schutz** lassen sich Dokumente, Archive, Bilder, Audio, Video,
 Webdateien, Programme/Installer, Windows-Skripte, Entwickler-/Shell-Skripte sowie Verknüpfungen und
-Systemaktionen separat ein- oder ausschalten. Die Ausführungsgruppen umfassen unter anderem
+Systemaktionen separat ein- oder ausschalten. Policy v4 ergänzt **Unbekannte und Spezialformate**,
+damit unbekannte Endungen, Modelle, Firmware-, CAD/GIS-, Plugin- und Mod-Container nicht ungeprüft
+durchfallen. Die Ausführungsgruppen umfassen unter anderem
 `EXE`, `MSI`, `MSIX`, `APPX`, `BAT`, `CMD`, `PS1`, `PSM1`, `VBS`, `JS`, `WSF`, `HTA`, `SH`, `PY`,
 `JAR`, `LNK`, `URL`, `REG`, `INF` und `CHM`. Ein aktiver Schalter bedeutet Inhaltsprüfung. Mit der
 standardmäßig aktiven Option **Freigabe vor dem Öffnen erzwingen** werden auch sauber gescannte
@@ -128,8 +131,9 @@ erst eine begründete Freigabe stellt die Datei wieder bereit. Ein deaktivierter
 gibt diese Gruppe ohne AI-Shield-Inhaltsprüfung frei. Die Option
 **Bei Scanfehler sicher quarantänisieren** bestimmt das Fail-closed-Verhalten. Diese Richtlinie wird
 atomar und mit DPAPI-Machine-Schutz gespeichert und vom Broker ohne Neustart neu geladen.
-Bestehende Policy-v1-/v2-Dateien werden auf Policy v3 migriert; die vier neuen Ausführungsgruppen
-und die Freigabeschranke sind beim Upgrade zunächst eingeschaltet. Der globale Schalter **Downloads härten** bleibt die
+Bestehende Policy-v1-/v2-/v3-Dateien werden auf Policy v4 migriert. Die Ausführungsgruppen,
+**Unbekannte und Spezialformate** und die Freigabeschranke sind beim Upgrade zunächst
+eingeschaltet. Der globale Schalter **Downloads härten** bleibt die
 zusätzliche ProcessGuard-Sperre für direkte und interpretergestützte Starts aus `Downloads`.
 
 ```powershell

@@ -13,7 +13,8 @@ if(-not([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity
 $log=Join-Path $repo 'build_vs\download-content-protection-deploy.log'
 Start-Transcript -Path $log -Force|Out-Null
 $source=Join-Path $repo 'build_vs\Release\ai_shield_broker.exe'
-$scannerSource=Join-Path $repo 'build_vs\Release\ai_shield_integrations.exe'
+$scannerSource=Join-Path $repo 'build_vs\Release\ai_shield_file_scanner.exe'
+$profileTool=Join-Path $repo 'build_vs\Release\ai_shield_integrations.exe'
 $test=Join-Path $repo 'tests\windows_download_content_protection.ps1'
 $uiSource=Join-Path $repo 'editions\private_desktop\ui\AIShield.PrivateDesktop.UI.xaml'
 $uiScriptSource=Join-Path $repo 'editions\private_desktop\ui\start_private_ui.ps1'
@@ -28,7 +29,7 @@ if(-not$service){throw 'AIShieldBroker service is not installed.'}
 $installed=([regex]::Match($service.PathName,'^"?([^\"]+?\.exe)"?(?:\s|$)')).Groups[1].Value
 if(-not$installed){throw 'Could not resolve installed broker path.'}
 $backup=$installed+'.before-content-protection.bak'
-$scannerInstalled=Join-Path (Split-Path $installed -Parent) 'ai_shield_integrations.exe'
+$scannerInstalled=Join-Path (Split-Path $installed -Parent) 'ai_shield_file_scanner.exe'
 $scannerBackup=$scannerInstalled+'.before-content-protection.bak'
 $uiInstalled='C:\Program Files\AI_Shield_Private_Desktop\ui\AIShield.PrivateDesktop.UI.xaml'
 $uiBackup=$uiInstalled+'.before-content-protection.bak'
@@ -49,6 +50,13 @@ try {
     if(Test-Path $scannerInstalled){Copy-Item -LiteralPath $scannerInstalled -Destination $scannerBackup -Force}
     Copy-Item -LiteralPath $source -Destination $installed -Force
     Copy-Item -LiteralPath $scannerSource -Destination $scannerInstalled -Force
+    $parserSid=(& $profileTool appcontainer-sid|Select-Object -First 1).Trim()
+    if($LASTEXITCODE-ne0-or$parserSid-notmatch'^S-1-15-2-'){throw 'AppContainer parser profile provisioning failed.'}
+    $parserBin=Split-Path $scannerInstalled -Parent
+    & icacls.exe (Split-Path $parserBin -Parent) /grant "*$parserSid`:(RX)"|Out-Null
+    if($LASTEXITCODE-ne0){throw 'AppContainer parser traversal ACL provisioning failed.'}
+    & icacls.exe $parserBin /grant "*$parserSid`:(OI)(CI)(RX)" /T /C|Out-Null
+    if($LASTEXITCODE-ne0){throw 'AppContainer parser read/execute ACL provisioning failed.'}
     if(Test-Path $uiInstalled){
         Copy-Item -LiteralPath $uiInstalled -Destination $uiBackup -Force
         Copy-Item -LiteralPath $uiSource -Destination $uiInstalled -Force

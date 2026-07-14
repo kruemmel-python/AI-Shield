@@ -1,6 +1,6 @@
 # Softwarebewertung: AI Shield 2.0
 
-Stand: 14. Juli 2026, bewertet wird Release Candidate `2.0.0-rc.10`
+Stand: 14. Juli 2026, bewertet wird Release Candidate `2.0.0-rc.11`
 
 Nachtrag zum verifizierten RC8-Stand: Die Recovery-Erstbaseline wurde auf dem Referenzrechner mit
 13.353 Dateien und null Übersprüngen abgeschlossen. Nicht auflösbare Junctions und Reparse Points
@@ -15,6 +15,11 @@ und eine aktive PDF ist Bestandteil des Release-Nachweises.
 
 RC10 ergänzt den für Endanwender notwendigen Hintergrundbetrieb: Tray-Autostart, Status der fünf
 Schutzkomponenten, UI-Einzelinstanz und Close-to-Tray wurden implementiert und real geprüft.
+
+RC11 ergänzt die universelle Datei-Preflight-Kette, die unbekannte Formate nicht mehr umgeht,
+Dateiidentität und SHA-256 über dasselbe gesperrte Handle bindet und den isolierten Scanner durch
+Job-Limits sowie eine WFP-Netzwerksperre begrenzt. Die Regressionen umfassen 15 Release- und
+Debug-CTest-Ziele sowie reale erhöhte Downloadtests.
 
 ## Gegenstand und Bewertungsrahmen
 
@@ -34,7 +39,7 @@ noch eine Microsoft-Zertifizierung oder eine Freigabe für den Produktivbetrieb.
 | Kernel-Transport | Eingefrorener ABI 1.2 |
 | Interne Ereigniskorrelation | AISHAD02 / ABI 2.0 |
 | Lokale Plattform | Windows x64, Testsigning-Umgebung |
-| Automatisierte Tests | 14 CTest-Ziele, in Release und Debug erfolgreich |
+| Automatisierte Tests | 15 CTest-Ziele, in Release und Debug erfolgreich |
 | Treiber | WFP, Minifilter und ProcessGuard lokal testsigniert und lauffähig |
 | Produktfreigabe | Nicht erteilt |
 
