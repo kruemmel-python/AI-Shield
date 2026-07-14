@@ -74,5 +74,18 @@ foreach ($driver in $drivers) {
     }
 }
 
+$browserHost = Join-Path $repo "build_vs\Release\ai_shield_browser_host.exe"
+if (Test-Path -LiteralPath $browserHost -PathType Leaf) {
+    & $signtool sign /fd SHA256 /sha1 $existing.Thumbprint /s My /sm $browserHost
+    if ($LASTEXITCODE -ne 0) {
+        exit $LASTEXITCODE
+    }
+    & $signtool verify /pa /v $browserHost
+    if ($LASTEXITCODE -ne 0) {
+        exit $LASTEXITCODE
+    }
+    Write-Output "signed browser host: $browserHost"
+}
+
 Write-Output "signed package: $resolvedPackage"
 Write-Output "certificate thumbprint: $($existing.Thumbprint)"

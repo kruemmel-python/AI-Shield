@@ -81,6 +81,16 @@ try {
         $signature=Get-AuthenticodeSignature -LiteralPath (Join-Path $driverPackage $name)
         if($signature.Status-ne"Valid"){throw "Consumer driver signature is not valid: $name ($($signature.Status))"}
     }
+    $packageCertificate = [Security.Cryptography.X509Certificates.X509Certificate2]::new(
+        (Join-Path $driverPackage "ai_shield_testsigning.cer"))
+    $browserHost = Join-Path $repo "build_vs\Release\ai_shield_browser_host.exe"
+    $browserSignature = Get-AuthenticodeSignature -LiteralPath $browserHost
+    if ($browserSignature.Status -ne "Valid" -or $null -eq $browserSignature.SignerCertificate) {
+        throw "Consumer browser host requires a valid Authenticode signature."
+    }
+    if ($browserSignature.SignerCertificate.Thumbprint -ne $packageCertificate.Thumbprint) {
+        throw "Consumer browser host signature does not match the package publisher certificate."
+    }
     foreach ($name in $scripts) {
         Copy-RequiredFile (Join-Path $repo $name) (Join-Path $root $name)
     }

@@ -37,7 +37,7 @@
     },
     {
       "path": "tools/package_private_desktop.ps1",
-      "sha256": "7A37E90AE37371A9401DB8685514218FC88ED20515DABD0BAA66768D2B151441"
+      "sha256": "2EDA8B33B5C2DD2AFFE0CD02FC89908A2E5A3A39A63954D3F26F935AE7A9B737"
     },
     {
       "path": "editions/private_desktop/install_private_desktop.ps1",
@@ -222,6 +222,10 @@
     {
       "path": "tools/deploy_scanner_network_isolation.ps1",
       "sha256": "C4D5764E796779223979F7B52B647CAE1F62C979C6D671BB52A9E9FB1E10A8AD"
+    },
+    {
+      "path": "platform/windows/installer/sign_driver_package.ps1",
+      "sha256": "52D76C2B66BC1A0B27D348453CB6F38FAB4616F2892566C7573ADB7A5835DBD1"
     }
   ],
   "drivers": [
