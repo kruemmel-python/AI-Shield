@@ -1,6 +1,6 @@
 # AI Shield: Noch auszuführende Produktnachweise
 
-Stand: 14. Juli 2026, nach Abschluss des RC9-Download-, Recovery- und Ransomware-Schutzpfads
+Stand: 14. Juli 2026, nach Abschluss des RC10-Desktop-, Download-, Recovery- und Ransomware-Schutzpfads
 
 ## Noch auszuführende Produktnachweise
 
@@ -40,6 +40,11 @@ Integrationstest weist nach, dass auch eine sauber geprüfte Bilddatei vor dem �
 werden muss. Damit ist die zuvor beobachtete automatische Freigabe von Medien im lokalen
 Produktcode geschlossen; synchrones Kernel-Pending für jeden Dateizugriff bleibt ein gesondertes
 Kompatibilitäts- und Qualifikationsthema, keine ungeprüft aktivierbare RC9-Funktion.
+
+RC10 ergänzt den automatisch gestarteten Tray-Agenten, die UI-Einzelinstanz und Close-to-Tray.
+Minimieren und `X` beenden weder UI-Prozess noch Schutzkern; der Tray-Doppelklick stellt dieselbe
+PID ohne weitere UAC-Abfrage wieder her. Damit ist der lokale Hintergrundbetrieb als Produktcode
+geschlossen und verbleibt nur als Kompatibilitäts- und Dauertestgegenstand.
 
 Der lokale Dateisystempfad wurde zusätzlich gegen nicht auflösbare Junctions und andere Reparse
 Points gehärtet. Der automatisierte Test enthält dafür ein negatives Junction-Szenario. Auf dem

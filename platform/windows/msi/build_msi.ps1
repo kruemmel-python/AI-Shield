@@ -30,9 +30,6 @@ $extract = Join-Path $work "extract"
 $obj = Join-Path $work "obj"
 $payload = Join-Path $extract "AI_Shield_Private_Desktop"
 $harvest = Join-Path $work "Payload.wxs"
-$msiName = "AI_Shield_Private_Desktop_2.0.0-rc.9_x64.msi"
-$msiPath = Join-Path $outputRoot $msiName
-
 try {
     New-Item -ItemType Directory -Force -Path $extract, $obj, $outputRoot | Out-Null
     Expand-Archive -LiteralPath $packagePath -DestinationPath $extract -Force
@@ -40,6 +37,11 @@ try {
         throw "Consumer package root or manifest is invalid."
     }
     $manifest = Get-Content -LiteralPath (Join-Path $payload "PACKAGE_MANIFEST.json") -Raw | ConvertFrom-Json
+    if ([string]$manifest.release -notmatch '^\d+\.\d+\.\d+-rc\.\d+$') {
+        throw "Consumer package has an invalid release identifier: $($manifest.release)"
+    }
+    $msiName = "AI_Shield_Private_Desktop_$($manifest.release)_x64.msi"
+    $msiPath = Join-Path $outputRoot $msiName
     foreach ($entry in $manifest.files) {
         $file = Join-Path $payload ([string]$entry.path).Replace('/', '\')
         if (-not (Test-Path -LiteralPath $file -PathType Leaf)) { throw "Manifest file is missing: $($entry.path)" }

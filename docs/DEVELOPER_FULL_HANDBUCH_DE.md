@@ -31,7 +31,8 @@ powershell -ExecutionPolicy Bypass -File platform\windows\build_drivers.ps1 `
   -Configuration Release -PackageDirectory driver_package\Release -Rebuild
 ```
 
-Der aktuelle Stand besitzt zwölf CTest-Ziele. Das zwölfte Gate prüft den Recovery-Vault einschließlich
+Der aktuelle Stand besitzt 14 CTest-Ziele. Die zusätzlichen Gates prüfen Tray-Autostart,
+UI-Einzelinstanz und Close-to-Tray. Das Recovery-Gate prüft den Vault einschließlich
 Snapshot, Erkennung, Restore, externem Backup und einem nicht auflösbaren Junction-Ziel. Release-Tests verwenden eine eigene wirksame
 Testprüfung und dürfen sich nicht auf durch `NDEBUG` entfernte C-Assertions verlassen.
 
@@ -62,5 +63,6 @@ selbst ist keine Microsoft-signierte Produktionsdistribution.
 Weitere Details: [Entwickler-Schnellstart](ENTWICKLER_SCHNELLSTART_DE.md),
 [ABI Freeze/HLK](ABI_FREEZE_UND_HLK_DE.md) und
 [Produktqualifikation](PRODUKTQUALIFIKATION_DE.md). Der zuletzt verifizierte Referenzlauf ist im
-[RC9 Release- und Installationsnachweis](RC9_RELEASE_NACHWEIS_DE.md) dokumentiert. Der
-[RC8-Nachweis](RC8_RELEASE_NACHWEIS_DE.md) bleibt als historische Baseline erhalten.
+[RC10 Release- und Installationsnachweis](RC10_RELEASE_NACHWEIS_DE.md) dokumentiert. Die
+[RC9-](RC9_RELEASE_NACHWEIS_DE.md) und [RC8-Nachweise](RC8_RELEASE_NACHWEIS_DE.md) bleiben als
+historische Baselines erhalten.

@@ -1,12 +1,15 @@
-# Qualifikationsstatus AI Shield Private Desktop 2.0.0-rc.9
+# Qualifikationsstatus AI Shield Private Desktop 2.0.0-rc.10
 
 Stand: 14. Juli 2026
 
 ## Bestätigte lokale Gates
 
 - Kernel-Transport ABI 1.2, Freeze-Revision 2 und internes ABI 2.0 entsprechen dem Releasevertrag.
-- Release- und Debug-Build bestanden jeweils alle 12 CTest-Ziele.
-- Der WPF-Vertrag enthält 59 gebundene Controls in sechs Ansichten.
+- Release- und Debug-Build bestehen jeweils alle 14 CTest-Ziele einschließlich Tray-,
+  Einzelinstanz- und Close-to-Tray-Vertrag.
+- Der WPF-Vertrag enthält 61 gebundene Controls in sechs Ansichten.
+- Der Tray-Vertrag und der reale Laufzeittest bestätigen Einzelinstanz, Fünf-Komponenten-Status,
+  maschinenweiten Anmeldeautostart und eine vom Schutzkern unabhängige Beendigung.
 - Content-Policy v3 migriert v1/v2 und aktiviert zehn Dateigruppen, Fail-closed und die
   Freigabeschranke standardmäßig.
 - Der reale Downloadtest quarantänisierte eine aktive PDF und verlangte auch für eine saubere
@@ -16,11 +19,11 @@ Stand: 14. Juli 2026
 - WFP, Minifilter und ProcessGuard wurden mit WDK `/W4 /WX` neu gebaut, testsigniert, installiert
   und mit `state=4` geladen.
 - Broker und Core laufen als automatische LocalSystem-Dienste.
-- Das signierte RC9-MSI wurde erfolgreich mit Windows Installer/WiX erzeugt und seine
-  Authenticode-Signatur lokal verifiziert.
+- Das signierte RC10-MSI wurde erfolgreich mit Windows Installer/WiX erzeugt und seine lokale
+  Authenticode-Testsignatur verifiziert.
 - Desktop-, ABI2- und Developer-Full-ZIP besitzen sichere Pfade; Desktop- und Full-Manifeste wurden
   vollständig gegen SHA-256 geprüft.
-- Der eingefrorene RC9-Quellvertrag ist gültig.
+- Der eingefrorene RC10-Quellvertrag ist gültig.
 
 ## Signierte Treiberhashes
 

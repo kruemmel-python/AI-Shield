@@ -1,6 +1,6 @@
 # AI Shield Private Desktop Handbuch
 
-Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.9`
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.10`
 
 ## Zweck und Voraussetzungen
 
@@ -16,13 +16,25 @@ mit aktivem Secure Boot und deaktiviertem Testsigning erfolgen.
 ## Installation und Start
 
 Bevorzugt wird `AI_Shield_Private_Desktop.msi` mit UAC-Bestätigung installiert. Die Installation
-richtet drei Treiber, `AIShieldBroker`, `AIShieldCore`, lokale Policy, Browser-Host, Startmenüeintrag
-und UI ein. Der Eintrag unter **Installierte Apps** führt den vollständigen Rückbau aus.
+richtet drei Treiber, `AIShieldBroker`, `AIShieldCore`, lokale Policy, Browser-Host, Startmenüeintrag,
+UI und den Tray-Autostart ein. Der Eintrag unter **Installierte Apps** führt den vollständigen
+Rückbau aus.
 
 Nach der Installation startet **AI Shield Private Desktop** über das Startmenü. Die notwendige
 Administratorbestätigung bleibt sichtbar; die PowerShell-Konsole läuft anschließend verborgen im
 Hintergrund. Ein erforderlicher Neustart wird in der UI angeboten. Nach Zustimmung öffnet eine
 einmalige erhöhte Anmeldeaufgabe die UI nach der Anmeldung erneut und liest den wirksamen Zustand.
+
+Die fünf Schutzkomponenten starten als Windows-Dienste beziehungsweise Systemtreiber bereits beim
+Booten. Die UI muss dafür nicht geöffnet bleiben. Nach jeder Benutzeranmeldung erscheint zusätzlich
+der AI-Shield-Tray-Agent im Windows-Infobereich. Ein Doppelklick öffnet die UI. Das Kontextmenü zeigt
+den Komponentenstatus, kann die Dienste nach UAC-Bestätigung neu starten und öffnet bei Bedarf
+`services.msc`. Das Beenden des Tray-Agenten beendet ausdrücklich nicht den Schutzkern. Der Schalter
+**AI Shield im Infobereich** aktiviert oder entfernt nur diesen Anmeldeautostart.
+
+Wird das UI-Fenster minimiert oder über `X` geschlossen, verschwindet es aus der Taskleiste und
+bleibt ausschließlich über das Tray-Symbol erreichbar. Ein Doppelklick stellt dieselbe UI-Instanz
+wieder her; die Schutzdienste laufen währenddessen unverändert weiter.
 
 ## Übersicht
 

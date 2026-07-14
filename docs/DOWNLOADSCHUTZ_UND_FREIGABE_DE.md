@@ -76,7 +76,7 @@ Status prüfen:
 .\build_vs\Release\ai_shield_broker.exe content-policy-status
 ```
 
-Erwarteter RC9-Standard:
+Erwarteter RC10-Standard:
 
 ```json
 {"schema":"AIShieldContentPolicy/3","enabled_categories":1023,"fail_closed":true,"release_required":true}

@@ -15,6 +15,16 @@ Die Oberfläche enthält sechs Ansichten:
   Rücksicherung und externe hashmanifestierte Sicherung;
 - **Windows-Sicherheit:** HVCI, Credential Guard, Firewall- und Defender-Auditbaseline.
 
+Der separate Tray-Agent unter `tray\start_tray_agent.ps1` läuft ohne Administratorrechte in der
+interaktiven Benutzersitzung. Er überwacht die fünf Windows-Komponenten, zeigt Zustandsänderungen im
+Infobereich und öffnet die erhöhte UI auf Doppelklick. Der Schutzkern läuft davon unabhängig als
+Windows-Dienst beziehungsweise Kernel-Treiber. Installation und UI verwalten den maschinenweiten
+Anmeldeautostart über `tray\manage_tray_agent.ps1`; die Deinstallation entfernt ihn wieder.
+Minimieren und das Schließen über `X` verbergen die UI und entfernen sie aus der Taskleiste. Die
+bereits laufende UI bleibt als Einzelinstanz erhalten. Ein Doppelklick auf das Tray-Symbol signalisiert
+dieser Instanz, wieder sichtbar zu werden; dadurch entsteht weder ein zweites Fenster noch eine neue
+UAC-Abfrage. Tray-Agent, UI und privilegierter Schutzkern bleiben getrennte Prozesse.
+
 HVCI, Credential Guard und die Kernel-/Hardware-Baseline werden transaktional verwaltet. Die UI sichert den vorherigen Registry-
 Zustand und deaktiviert keine Einstellung, die sie nicht selbst aktiviert hat. Wenn Windows einen
 Neustart benötigt, erscheint **Jetzt neu starten**. Vor dem Neustart wird eine einmalige, erhöhte

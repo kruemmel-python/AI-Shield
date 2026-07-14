@@ -5,7 +5,7 @@ Stand: 14. Juli 2026
 ## Build
 
 Der aktuelle Quellstand wurde mit Visual Studio 2022, Windows SDK/WDK 10.0.26100.0 und CMake als
-x64-Release gebaut. Alle zwölf CTest-Ziele bestanden. Anschließend wurden WFP-, Minifilter- und
+x64-Release gebaut. Alle 14 CTest-Ziele bestanden in Release und Debug. Anschließend wurden WFP-, Minifilter- und
 ProcessGuard-Treiber mit `/W4 /WX` neu gebaut, lokal test-signiert und installiert.
 
 Reproduzierbarer administrativer Ablauf:
@@ -49,7 +49,7 @@ AIShieldProcessGuard Running System
 AIShieldWfp          Running System
 ```
 
-## RC9-Downloadnachweis
+## RC10-Desktop- und Downloadnachweis
 
 Der installierte Broker verwendet `AIShieldContentPolicy/3` mit allen zehn Gruppen,
 `fail_closed=true` und `release_required=true`. Der reale Test auf dem Referenzrechner meldete:
@@ -63,6 +63,10 @@ provenance_recorded=true
 Die installierte Desktop-UI zeigt neue Quarantäneobjekte innerhalb weniger Sekunden und
 unterscheidet Freigabewarteschlange, Malware, Strukturbefund, Scanfehler und nicht vertrauenswürdige
 Ausführung. Details stehen in [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md).
+
+Der Tray-Agent ist maschinenweit für jede Benutzeranmeldung registriert. Minimieren und `X`
+verbergen die UI aus der Taskleiste; der reale Laufzeittest bestätigte einen weiterlaufenden Prozess
+und die Wiederherstellung derselben PID. Alle fünf Schutzkomponenten laufen unabhängig davon.
 
 Ein früherer Installationslauf meldete folgenden geschützten Runtime-State; Policy- und
 Generationsnummern können sich bei jeder Aktivierung erhöhen:

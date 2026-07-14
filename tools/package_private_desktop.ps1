@@ -24,6 +24,7 @@ $editionFiles = @(
     "Schutz_starten.cmd", "Schutz_beenden.cmd", "Status_anzeigen.cmd", "Deinstallieren.cmd",
     "AI_Shield_UI.cmd", "ui\README.md", "ui\AIShield.PrivateDesktop.UI.xaml", "ui\AIShield.AuditViewer.xaml", "ui\start_private_ui.ps1",
     "ui\private_security_settings.ps1", "ui\verify_ui_contract.ps1",
+    "tray\start_tray_agent.ps1", "tray\manage_tray_agent.ps1",
     "private_common.ps1", "install_private_desktop.ps1", "msi_product_action.ps1", "start_private_desktop.ps1",
     "stop_private_desktop.ps1", "status_private_desktop.ps1", "private_posture.ps1",
     "uninstall_private_desktop.ps1"

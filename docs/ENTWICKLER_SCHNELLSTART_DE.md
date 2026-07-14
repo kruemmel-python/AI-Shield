@@ -35,7 +35,7 @@ $CTEST_EXE = "C:\Program Files\CMake\bin\ctest.exe"
 & $CTEST_EXE --test-dir build_vs -C Release --output-on-failure
 ```
 
-Der aktuelle Stand besitzt zwölf CTest-Ziele. Danach kann der gefahrlose Demo-Modus ohne Treiber
+Der aktuelle Stand besitzt 14 CTest-Ziele. Danach kann der gefahrlose Demo-Modus ohne Treiber
 gestartet werden:
 
 ```powershell

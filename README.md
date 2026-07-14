@@ -6,7 +6,7 @@ ABI-2.0-Vertrag und bewertet sie anhand lokaler Richtlinien. Der aktuelle Stand 
 Windows-Kerneltreiber, LocalSystem-Dienste, isolierte Parser, Downloadquarantäne, Audit-Ketten,
 Recovery-Funktionen und eine grafische Private-Desktop-Oberfläche.
 
-> **Projektstatus:** `2.0.0-rc.9` ist ein funktionsfähiger Entwicklungs- und Pilotprototyp. Die
+> **Projektstatus:** `2.0.0-rc.10` ist ein funktionsfähiger Entwicklungs- und Pilotprototyp. Die
 > Private-Desktop-Ausgabe kann auf einem einzelnen Windows-PC installiert und getestet werden. Die
 > enthaltenen Treiber sind lokal testsigniert. Eine öffentliche Produktionsverteilung unter
 > aktiviertem Secure Boot erfordert weiterhin Microsoft-Treibersignierung, HLK/WHCP-Qualifikation,
@@ -27,6 +27,7 @@ Recovery-Funktionen und eine grafische Private-Desktop-Oberfläche.
 - Ransomware-Erkennung, versionierter Recovery-Vault, externe Sicherung und bestätigte
   hashverifizierte Wiederherstellung.
 - Private-Desktop-UI für Schutzfunktionen, Quarantäne, Audits, Recovery und Windows-Härtung.
+- Automatischer Tray-Agent mit Komponentenstatus, Einzelinstanz und Close-to-Tray ohne erneute UAC-Abfrage.
 
 ## Architektur
 
@@ -51,7 +52,7 @@ lokale MITM-Zertifizierungsstelle.
 |---|---|
 | Shared Core und internes ABI 2.0 | Implementiert und automatisiert getestet |
 | Broker, Core-Dienst, Audit und Replay | Implementiert und lokal betreibbar |
-| Private-Desktop-UI und Quarantäne | Implementiert; RC9-Pilotstand |
+| Private-Desktop-UI, Tray und Quarantäne | Implementiert; RC10-Pilotstand |
 | WFP-, Minifilter- und ProcessGuard-Treiber | WDK-Prototyp, lokal testsignierbar |
 | Edge-/Chrome-Sensor | Lokal ladbar; Store-/HTTPS-Verteilung ausstehend |
 | Microsoft-Produktionstreibersignierung | Ausstehender externer Meilenstein |
@@ -92,7 +93,7 @@ Die aktuelle Desktop-Ausgabe steht zusätzlich als MSI- und ZIP-Artefakt im
 
 ### Wichtiger Secure-Boot-Hinweis
 
-Die veröffentlichten RC9-Treiber sind **nicht Microsoft-produktionssigniert**. Für lokale
+Die veröffentlichten RC10-Treiber sind **nicht Microsoft-produktionssigniert**. Für lokale
 Testsignierung muss Secure Boot in der UEFI-Firmware deaktiviert und Windows `TESTSIGNING`
 aktiviert werden. Das schwächt die Windows-Startvertrauenskette und ist nur für kontrollierte
 Entwicklungs- oder Pilotgeräte vorgesehen. Vor UEFI-Änderungen muss ein BitLocker-
@@ -189,7 +190,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ### Qualifikation und externe Prüfungen
 
-- [RC9-Release-Nachweis](docs/RC9_RELEASE_NACHWEIS_DE.md)
+- [RC10-Release-Nachweis](docs/RC10_RELEASE_NACHWEIS_DE.md)
+- [Historischer RC9-Nachweis](docs/RC9_RELEASE_NACHWEIS_DE.md)
 - [Produktqualifikation](docs/PRODUKTQUALIFIKATION_DE.md)
 - [Noch auszuführende Produktnachweise](docs/FEHLENDE_FUNKTIONEN_DE.md)
 - [Auftrag für unabhängiges Security Review](docs/EXTERNER_SECURITY_REVIEW_AUFTRAG_DE.md)
