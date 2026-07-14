@@ -101,7 +101,24 @@ static BOOLEAN AiShieldIsDownloadedScriptLaunch(const PPS_CREATE_NOTIFY_INFO cre
                   AiShieldContains(createInfo->ImageFileName, L"\\py.exe") ||
                   AiShieldContains(createInfo->ImageFileName, L"\\node.exe") ||
                   AiShieldContains(createInfo->ImageFileName, L"\\perl.exe") ||
-                  AiShieldContains(createInfo->ImageFileName, L"\\ruby.exe");
+                  AiShieldContains(createInfo->ImageFileName, L"\\ruby.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\php.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\java.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\javaw.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\dotnet.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\csi.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\msiexec.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\rundll32.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\regsvr32.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\control.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\hh.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\reg.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\regedit.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\cmstp.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\installutil.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\regasm.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\regsvcs.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\msbuild.exe");
     downloadPath = AiShieldContains(createInfo->CommandLine, L"\\Downloads\\") ||
                    AiShieldContains(createInfo->CommandLine, L"/Downloads/") ||
                    AiShieldContains(createInfo->CommandLine, L"\\Downloads/") ||

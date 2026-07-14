@@ -1,6 +1,6 @@
 # AI Shield Schutzabdeckung 2.0
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Browser- und Download-Inhaltsprüfung
 
@@ -9,7 +9,10 @@ signierten Native-Messaging-Host. Neu angelegte Mark-of-the-Web-Dateien werden a
 DPAPI-Machine-geschützten Dateityp-Policy an eine feste Dateiidentität gebunden und in einem
 zeitbegrenzten isolierten Scanner geprüft. Defender/AMSI deckt bekannte Schadsoftware ab; PDF- und
 ZIP-Preflight prüfen zusätzlich aktive, fehlerhafte, verschlüsselte und strukturell riskante
-Inhalte. Nicht prüfbare risikoreiche Formate können fail-closed quarantänisiert werden.
+Inhalte. Nicht prüfbare risikoreiche Formate können fail-closed quarantänisiert werden. Content-
+Policy v3 ergänzt eine standardmäßig aktive Freigabeschranke: Auch sauber geprüfte Downloads
+aktiver Gruppen werden bis zur begründeten Benutzerfreigabe quarantänisiert und in der UI gemeldet.
+Details enthält [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md).
 
 ## Audit Viewer
 

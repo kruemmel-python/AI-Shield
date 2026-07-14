@@ -3,12 +3,12 @@
   <Product Id="1EABE7E9-9CFB-4B7D-88F1-FE75FE013FD1"
            Name="AI Shield Private Desktop"
            Language="1031"
-           Version="2.0.8"
+           Version="2.0.9"
            Manufacturer="AI Shield"
            UpgradeCode="357A6A93-5FDA-43D2-8D41-4D24BF080EDD">
     <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine"
              InstallPrivileges="elevated" Platform="x64"
-             Description="AI Shield Private Desktop 2.0.0-rc.8" />
+             Description="AI Shield Private Desktop 2.0.0-rc.9" />
     <MajorUpgrade DowngradeErrorMessage="Eine neuere Version von AI Shield Private Desktop ist bereits installiert."
                   Schedule="afterInstallInitialize" />
     <MediaTemplate EmbedCab="yes" CompressionLevel="high" />

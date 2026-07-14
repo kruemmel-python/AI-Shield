@@ -1,6 +1,6 @@
 # AI Shield: Enterprise-Sicherheitsintegrationen
 
-Stand: 13. Juli 2026. Diese Integrationen bilden das verwaltete Enterprise-Betriebsprofil; die
+Stand: 14. Juli 2026. Diese Integrationen bilden das verwaltete Enterprise-Betriebsprofil; die
 Einzelplatzedition und ihre lokale Browserinstallation sind in
 [`PRIVATE_DESKTOP_HANDBUCH_DE.md`](PRIVATE_DESKTOP_HANDBUCH_DE.md) getrennt dokumentiert.
 

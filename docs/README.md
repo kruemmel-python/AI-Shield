@@ -1,6 +1,6 @@
 # AI Shield Dokumentation
 
-Stand: 13. Juli 2026, Release Candidate `2.0.0-rc.8`
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.9`
 
 Dieser Ordner ist der zentrale Einstieg in die Projekt-, Betriebs- und Entwicklungsdokumentation.
 Der aktuelle Vertrag verwendet Kernel-Transport ABI `1.2` (Freeze-Revision `2`) und intern ABI
@@ -15,8 +15,9 @@ Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
 | Verwaltete Umgebung | [Enterprise-Betriebsprofil](ENTERPRISE_EDITION_HANDBUCH_DE.md) | WEF, SIEM, WDAC, Browserverwaltung, Policy- und Rolloutprozesse |
 | Entwicklerteam | [Developer Full Handbuch](DEVELOPER_FULL_HANDBUCH_DE.md) | Vollständiger Build, Tests, Treiberpaket und Referenzinstallation |
 | Sicherheitsanalyse | [Audit Viewer](AUDIT_VIEWER_DE.md) | AISHAD02 prüfen, anzeigen, filtern und als JSON dekodieren |
+| Downloadkontrolle | [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md) | Policy v3, Dateigruppen, Quarantäne, Warnungen und Freigabe |
 | Wiederherstellung | [Ransomware-Schutz und Recovery](RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md) | Versionsspeicher, Erkennung, externe Sicherung und bestätigte Rücksicherung |
-| RC8-Systemnachweis | [RC8 Release- und Installationsnachweis](RC8_RELEASE_NACHWEIS_DE.md) | Verifizierte Tests, reale Baseline, Installation und Artefaktstatus vom 13. Juli 2026 |
+| RC9-Systemnachweis | [RC9 Release- und Installationsnachweis](RC9_RELEASE_NACHWEIS_DE.md) | Policy v3, Download-Freigabeschranke, Tests und veröffentlichte Artefakte vom 14. Juli 2026 |
 | Architekturentscheidung | [Editionen und Versionen](EDITIONEN_UND_VERSIONEN_DE.md) | Gemeinsamer Core, Unterschiede und Freigabestatus |
 
 ## Technische Referenz
@@ -28,7 +29,9 @@ Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
 - [Netzwerkschutz](NETZWERKSCHUTZ_DE.md), [Schutzabdeckung](SCHUTZABDECKUNG_2_0_DE.md) und
   [Kernel-/Hardware-Schutz](KERNEL_HARDWARE_SCHUTZ_DE.md)
 - [Ransomware-Schutz und Wiederherstellung](RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md)
-- [RC8 Release- und Installationsnachweis](RC8_RELEASE_NACHWEIS_DE.md)
+- [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md)
+- [RC9 Release- und Installationsnachweis](RC9_RELEASE_NACHWEIS_DE.md)
+- [Historischer RC8-Nachweis](RC8_RELEASE_NACHWEIS_DE.md)
 - [Windows-Hardening](WINDOWS_HARDENING_DE.md) und
   [Enterprise-Sicherheitsintegrationen](ENTERPRISE_SECURITY_INTEGRATIONS_DE.md)
 

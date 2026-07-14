@@ -1,6 +1,6 @@
 # AI Shield Entwickler-Schnellstart
 
-Stand: 13. Juli 2026, interner ABI-Stand 2.0, Kernel-Transport ABI 1.2
+Stand: 14. Juli 2026, interner ABI-Stand 2.0, Kernel-Transport ABI 1.2
 
 ## 1. Inhalt des Entwicklerpakets
 

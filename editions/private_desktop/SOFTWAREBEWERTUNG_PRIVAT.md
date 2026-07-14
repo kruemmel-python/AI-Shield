@@ -7,7 +7,8 @@ Administration, Flottenbetrieb, externe Ereignissammler und Security-Operations-
 nicht zum Umfang dieser Edition und fließen weder positiv noch negativ in die Wertung ein.
 
 Die Bewertung basiert auf Quellcode, lokalen Build- und Testergebnissen sowie dem dokumentierten
-Installationsstand vom 13. Juli 2026. Sie ist kein unabhängiger Penetrationstest und keine
+Installationsstand vom 14. Juli 2026 einschließlich Content-Policy v3 und Download-
+Freigabeschranke. Sie ist kein unabhängiger Penetrationstest und keine
 Produktzertifizierung.
 
 Der RC-1-Lauf bestätigt inzwischen reproduzierbare User-Mode- und Treiberbuilds, drei erfolgreiche

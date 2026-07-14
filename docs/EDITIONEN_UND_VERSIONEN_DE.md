@@ -1,6 +1,6 @@
 # AI Shield Editionen und Versionen
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Gemeinsame technische Basis
 
@@ -47,7 +47,7 @@ nicht erforderlich.
 
 | Vertrag | Aktueller Stand |
 |---|---|
-| Release Candidate | `2.0.0-rc.8` |
+| Release Candidate | `2.0.0-rc.9` |
 | Kernel-Transport | `1.2` |
 | ABI-Freeze | Revision `2` |
 | Interne Ereignis-ABI | `2.0` |

@@ -1,6 +1,6 @@
 # AI Shield Developer Full Handbuch
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Paketinhalt
 
@@ -62,4 +62,5 @@ selbst ist keine Microsoft-signierte Produktionsdistribution.
 Weitere Details: [Entwickler-Schnellstart](ENTWICKLER_SCHNELLSTART_DE.md),
 [ABI Freeze/HLK](ABI_FREEZE_UND_HLK_DE.md) und
 [Produktqualifikation](PRODUKTQUALIFIKATION_DE.md). Der zuletzt verifizierte Referenzlauf ist im
-[RC8 Release- und Installationsnachweis](RC8_RELEASE_NACHWEIS_DE.md) dokumentiert.
+[RC9 Release- und Installationsnachweis](RC9_RELEASE_NACHWEIS_DE.md) dokumentiert. Der
+[RC8-Nachweis](RC8_RELEASE_NACHWEIS_DE.md) bleibt als historische Baseline erhalten.

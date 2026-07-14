@@ -2,7 +2,20 @@
 
 ## Eine verhaltens- und kausalitätsbasierte Schutzarchitektur für Windows-Desktops
 
-Whitepaper, Stand 13. Juli 2026
+Whitepaper, Stand 14. Juli 2026
+
+## RC9: Download ist nicht gleich Vertrauen
+
+Content-Policy v3 schließt eine praktische Lücke zwischen erfolgreichem Scan und Benutzeröffnung.
+Auch ein formal sauberes Bild, Audioformat, Video oder Dokument kann einen unbekannten Parserfehler
+des zugeordneten Programms erreichen. Deshalb kann die Private-Desktop-Ausgabe alle aktivierten
+Dateigruppen nach dem Scan zunächst in eine TOCTOU-gehärtete Quarantäne verschieben. Die UI meldet
+das neue Objekt; erst eine begründete Freigabe stellt es wieder bereit. Schadsoftware- und
+Strukturbefunde bleiben von dieser neutralen Freigabewarteschlange unterscheidbar.
+
+Diese Kontrolle ist bewusst keine Behauptung, jedes Dateiformat semantisch vollständig analysieren
+zu können. Sie reduziert stattdessen die automatische Vertrauensannahme und schafft einen sichtbaren,
+protokollierten Entscheidungspunkt zwischen Netzwerkherkunft und lokaler Verarbeitung.
 
 ## Systemweite Netzwerkabdeckung
 

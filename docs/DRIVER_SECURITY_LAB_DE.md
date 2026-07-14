@@ -1,6 +1,6 @@
 # AI Shield: HVCI- und Driver-Verifier-Labor
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 Diese Prüfungen können einen Testrechner unbootbar machen oder absichtlich einen Bugcheck auslösen.
 Sie dürfen nur auf einem wiederherstellbaren Laborrechner oder VM-Snapshot ausgeführt werden.

@@ -17,6 +17,7 @@ $stateRoot=Join-Path $env:ProgramData "AIShield\private-desktop"
 $uiStatePath=Join-Path $stateRoot "ui-settings.json"
 $resumeTask="AIShieldPrivateUIResume"
 $script:refreshing=$false
+$script:knownQuarantineIds=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
 
 function Show-Error([string]$Message){[Windows.MessageBox]::Show($Message,"AI Shield",[Windows.MessageBoxButton]::OK,[Windows.MessageBoxImage]::Error)|Out-Null}
 function Set-Message([string]$Message){$StatusMessage.Text=$Message}
@@ -77,9 +78,12 @@ function Set-ContentPolicy {
     if($DocumentsToggle.IsChecked){$mask=$mask-bor 1};if($ArchivesToggle.IsChecked){$mask=$mask-bor 2}
     if($ImagesToggle.IsChecked){$mask=$mask-bor 4};if($AudioToggle.IsChecked){$mask=$mask-bor 8}
     if($VideoToggle.IsChecked){$mask=$mask-bor 16};if($WebFilesToggle.IsChecked){$mask=$mask-bor 32}
+    if($ProgramsToggle.IsChecked){$mask=$mask-bor 64};if($WindowsScriptsToggle.IsChecked){$mask=$mask-bor 128}
+    if($DeveloperScriptsToggle.IsChecked){$mask=$mask-bor 256};if($LaunchersToggle.IsChecked){$mask=$mask-bor 512}
     $fail=$(if($ScanFailureToggle.IsChecked){1}else{0})
+    $release=$(if($ReleaseRequiredToggle.IsChecked){1}else{0})
     $broker=Get-ContentPolicyBroker
-    & $broker content-policy-set $mask $fail|Out-Null
+    & $broker content-policy-set $mask $fail $release|Out-Null
     if($LASTEXITCODE-ne0){throw "Dateityp-Richtlinie konnte nicht DPAPI-geschützt gespeichert werden."}
 }
 function Get-CurrentProcessNames {
@@ -124,7 +128,21 @@ function Get-Quarantine {
     $journal=Join-Path $env:ProgramData "AIShield\quarantine\journal.jsonl";if(-not(Test-Path -LiteralPath $journal)){return @()}
     $latest=[ordered]@{};Get-Content -LiteralPath $journal -ErrorAction SilentlyContinue|ForEach-Object{try{$row=$_|ConvertFrom-Json;if($row.id){$latest[[string]$row.id]=$row}}catch{}}
     $restore=Join-Path $env:ProgramData "AIShield\quarantine\restore.jsonl";if(Test-Path $restore){Get-Content $restore|ForEach-Object{try{$r=$_|ConvertFrom-Json;if($latest.Contains([string]$r.id)){$latest[[string]$r.id]|Add-Member NoteProperty state "released" -Force}}catch{}}}
-    return @($latest.Values|Where-Object{$_.state-in@("committed","released")}|ForEach-Object{[pscustomobject]@{Id=[string]$_.id;Source=[string]$_.source;Size=$(if($_.size){("{0:N1} KiB"-f([double]$_.size/1KB))}else{"-"});State=[string]$_.state}})
+    return @($latest.Values|Where-Object{$_.state-in@("committed","released")}|ForEach-Object{
+        $classification=switch([string]$_.classification){"pending_user_release"{"Wartet auf Freigabe"};"malware_detected"{"Schadsoftware erkannt"};"suspicious_file_structure"{"Verdächtige Dateistruktur"};"parser_risk_scan_unavailable"{"Prüfung nicht möglich"};"external_untrusted_executable"{"Nicht vertrauenswürdige Ausführung"};default{[string]$_.classification}}
+        [pscustomobject]@{Id=[string]$_.id;Source=[string]$_.source;Size=$(if($_.size){("{0:N1} KiB"-f([double]$_.size/1KB))}else{"-"});State=[string]$_.state;Classification=$classification}})
+}
+function Initialize-QuarantineNotifications {
+    foreach($item in @(Get-Quarantine)){if($item.State-eq"committed"){$null=$script:knownQuarantineIds.Add($item.Id)}}
+}
+function Update-QuarantineNotifications {
+    $items=@(Get-Quarantine);$QuarantineGrid.ItemsSource=$items
+    $new=@($items|Where-Object{$_.State-eq"committed"-and$script:knownQuarantineIds.Add($_.Id)})
+    if($new.Count-eq0){return}
+    $names=@($new|Select-Object -First 3|ForEach-Object{[IO.Path]::GetFileName($_.Source)})-join"`n"
+    $suffix=$(if($new.Count-gt3){"`n... und $($new.Count-3) weitere"}else{""})
+    [Windows.MessageBox]::Show("AI Shield hat $($new.Count) neuen Download gesichert. Die Datei kann erst nach Prüfung und begründeter Freigabe auf der Seite 'Quarantäne' geöffnet werden.`n`n$names$suffix","Download gesichert",[Windows.MessageBoxButton]::OK,[Windows.MessageBoxImage]::Warning)|Out-Null
+    Set-Message "$($new.Count) Download(s) warten auf Freigabe"
 }
 function Invoke-Recovery([string]$Action, [string]$IncidentId = '', [string]$BackupRoot = '', [switch]$ConfirmRestore) {
     $scriptPath = Join-Path $root "platform\windows\ransomware\ransomware_recovery.ps1"
@@ -184,7 +202,10 @@ function Refresh-All {
         $contentPolicy=Get-ContentPolicy;$mask=[int]$contentPolicy.enabled_categories
         $DocumentsToggle.IsChecked=($mask-band 1)-ne0;$ArchivesToggle.IsChecked=($mask-band 2)-ne0;$ImagesToggle.IsChecked=($mask-band 4)-ne0
         $AudioToggle.IsChecked=($mask-band 8)-ne0;$VideoToggle.IsChecked=($mask-band 16)-ne0;$WebFilesToggle.IsChecked=($mask-band 32)-ne0
+        $ProgramsToggle.IsChecked=($mask-band 64)-ne0;$WindowsScriptsToggle.IsChecked=($mask-band 128)-ne0
+        $DeveloperScriptsToggle.IsChecked=($mask-band 256)-ne0;$LaunchersToggle.IsChecked=($mask-band 512)-ne0
         $ScanFailureToggle.IsChecked=[bool]$contentPolicy.fail_closed
+        $ReleaseRequiredToggle.IsChecked=[bool]$contentPolicy.release_required
         $browserStatus=Get-BrowserSensorStatus;$BrowserSensorToggle.IsChecked=[bool]$browserStatus.ready
         $BrowserSensorDetail.Text=$(if(-not$browserStatus.ready){"Nicht installiert"}elseif($browserStatus.connected){"Verbunden; letztes Browserereignis: "+([DateTime]$browserStatus.last_event_utc).ToLocalTime().ToString("dd.MM.yyyy HH:mm")}elseif($browserStatus.edge_loaded-or$browserStatus.chrome_loaded){"Erweiterung geladen, aber Native Host noch nicht verbunden; auf 'Neu laden' klicken"}else{"Host installiert; Ordner selbst auswählen, nicht manifest.json"})
         $EdgeSetupButton.IsEnabled=[bool]$browserStatus.ready;$ChromeSetupButton.IsEnabled=[bool]$browserStatus.ready
@@ -204,12 +225,12 @@ function Refresh-All {
 
 $reader=[System.Xml.XmlNodeReader]::new(([xml](Get-Content (Join-Path $PSScriptRoot "AIShield.PrivateDesktop.UI.xaml") -Raw)))
 $window=[Windows.Markup.XamlReader]::Load($reader)
-foreach($name in @("Pages","PageTitle","StatusMessage","SidebarState","ProtectionState","ComponentState","AuditState","ServiceGrid","AuditGrid","QuarantineGrid","RecoveryStatus","IncidentGrid","SnapshotButton","BackupButton","DetectRansomwareButton","RestorePlanButton","RestoreIncidentButton","RefreshButton","RestartButton","CoreToggle","DownloadsToggle","DocumentsToggle","ArchivesToggle","ImagesToggle","AudioToggle","VideoToggle","WebFilesToggle","ScanFailureToggle","BrowserToggle","InboundToggle","BrowserSensorToggle","BrowserSensorDetail","EdgeSetupButton","ChromeSetupButton","KernelHardwareToggle","KernelHardwareDetail","BitLockerButton","HvciToggle","CredentialToggle","FirewallToggle","DefenderToggle","HvciDetail","CredentialDetail","ViewAuditButton","OpenAuditFileButton","VerifyAuditButton","ExportAuditButton","ReleaseButton","NavDashboard","NavProtection","NavAudit","NavQuarantine","NavRecovery","NavSystem")){Set-Variable -Name $name -Value $window.FindName($name) -Scope Script}
+foreach($name in @("Pages","PageTitle","StatusMessage","SidebarState","ProtectionState","ComponentState","AuditState","ServiceGrid","AuditGrid","QuarantineGrid","RecoveryStatus","IncidentGrid","SnapshotButton","BackupButton","DetectRansomwareButton","RestorePlanButton","RestoreIncidentButton","RefreshButton","RestartButton","CoreToggle","DownloadsToggle","DocumentsToggle","ArchivesToggle","ImagesToggle","AudioToggle","VideoToggle","WebFilesToggle","ProgramsToggle","WindowsScriptsToggle","DeveloperScriptsToggle","LaunchersToggle","ReleaseRequiredToggle","ScanFailureToggle","BrowserToggle","InboundToggle","BrowserSensorToggle","BrowserSensorDetail","EdgeSetupButton","ChromeSetupButton","KernelHardwareToggle","KernelHardwareDetail","BitLockerButton","HvciToggle","CredentialToggle","FirewallToggle","DefenderToggle","HvciDetail","CredentialDetail","ViewAuditButton","OpenAuditFileButton","VerifyAuditButton","ExportAuditButton","ReleaseButton","NavDashboard","NavProtection","NavAudit","NavQuarantine","NavRecovery","NavSystem")){Set-Variable -Name $name -Value $window.FindName($name) -Scope Script}
 $nav=@(@($NavDashboard,0,"Übersicht"),@($NavProtection,1,"Schutzfunktionen"),@($NavAudit,2,"Audit"),@($NavQuarantine,3,"Quarantäne"),@($NavRecovery,4,"Wiederherstellung"),@($NavSystem,5,"Windows-Sicherheit"));foreach($item in $nav){$button=$item[0];$index=$item[1];$title=$item[2];$button.Add_Click({$Pages.SelectedIndex=$index;$PageTitle.Text=$title}.GetNewClosure())}
 $RefreshButton.Add_Click({Refresh-All})
 $CoreToggle.Add_Click({if($script:refreshing){return};try{if($CoreToggle.IsChecked){Apply-ProtectionState}else{& powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "..\stop_private_desktop.ps1")|Out-Null};Refresh-All}catch{Show-Error $_.Exception.Message;Refresh-All}})
 foreach($entry in @(@($DownloadsToggle,"harden_downloads"),@($BrowserToggle,"strict_browser"),@($InboundToggle,"block_unsolicited_inbound"))){$toggle=$entry[0];$property=$entry[1];$toggle.Add_Click({if($script:refreshing){return};try{$state=Read-UiState;$state.$property=[bool]$toggle.IsChecked;Write-UiState $state;Apply-ProtectionState;Refresh-All}catch{Show-Error $_.Exception.Message;Refresh-All}}.GetNewClosure())}
-foreach($toggle in @($DocumentsToggle,$ArchivesToggle,$ImagesToggle,$AudioToggle,$VideoToggle,$WebFilesToggle,$ScanFailureToggle)){$toggle.Add_Click({if($script:refreshing){return};try{Set-ContentPolicy;Set-Message "Dateityp-Richtlinie wurde aktiviert"}catch{Show-Error $_.Exception.Message;Refresh-All}})}
+foreach($toggle in @($DocumentsToggle,$ArchivesToggle,$ImagesToggle,$AudioToggle,$VideoToggle,$WebFilesToggle,$ProgramsToggle,$WindowsScriptsToggle,$DeveloperScriptsToggle,$LaunchersToggle,$ReleaseRequiredToggle,$ScanFailureToggle)){$toggle.Add_Click({if($script:refreshing){return};try{Set-ContentPolicy;Set-Message "Dateityp-Richtlinie wurde aktiviert"}catch{Show-Error $_.Exception.Message;Refresh-All}})}
 $BrowserSensorToggle.Add_Click({if($script:refreshing){return};try{$script=Join-Path $root "platform\windows\browser_extension\install_browser_sensor.ps1";$action=$(if($BrowserSensorToggle.IsChecked){"install"}else{"uninstall"});$arguments=@("-NoProfile","-ExecutionPolicy","Bypass","-File",$script,"-Action",$action,"-ConfirmSystemChange");if($action-eq"install"){$certificate=[Security.Cryptography.X509Certificates.X509Certificate2]::new((Join-Path $root "driver_package\Release\ai_shield_testsigning.cer"));$arguments+=@("-PublisherThumbprint",$certificate.Thumbprint)};& powershell.exe @arguments|Out-Null;if($LASTEXITCODE-ne0){throw "Browsersensor konnte nicht geändert werden."};Refresh-All}catch{Show-Error $_.Exception.Message;Refresh-All}})
 $EdgeSetupButton.Add_Click({try{Open-BrowserSensorSetup "edge"}catch{Show-Error $_.Exception.Message}})
 $ChromeSetupButton.Add_Click({try{Open-BrowserSensorSetup "chrome"}catch{Show-Error $_.Exception.Message}})
@@ -230,4 +251,6 @@ $RestorePlanButton.Add_Click({try{$selected=$IncidentGrid.SelectedItem;if($null-
 $RestoreIncidentButton.Add_Click({try{$selected=$IncidentGrid.SelectedItem;if($null-eq$selected){Set-Message "Bitte zuerst einen Vorfall auswählen";return};$plan=Invoke-Recovery 'restore-plan' $selected.Id;if(@($plan.items).Count-eq0){throw "Für diesen Vorfall sind keine verifizierten Versionen verfügbar."};$answer=[Windows.MessageBox]::Show("$(@($plan.items).Count) Dateien auf den Stand vor dem Vorfall zurücksetzen? Bestehende geänderte Dateien werden im Konfliktspeicher aufbewahrt.","Wiederherstellung bestätigen",[Windows.MessageBoxButton]::YesNo,[Windows.MessageBoxImage]::Warning);if($answer-eq[Windows.MessageBoxResult]::Yes){$result=Invoke-Recovery 'restore' $selected.Id -ConfirmRestore;Set-Message "$($result.restored) Dateien wurden hashverifiziert wiederhergestellt";Update-RecoveryStatus}}catch{Show-Error $_.Exception.Message}})
 $RestartButton.Add_Click({if([Windows.MessageBox]::Show("Windows jetzt neu starten? Die AI-Shield-Oberfläche öffnet sich nach der Anmeldung automatisch erneut.","Neustart erforderlich",[Windows.MessageBoxButton]::YesNo,[Windows.MessageBoxImage]::Question)-eq[Windows.MessageBoxResult]::Yes){Register-ResumeTask;Restart-Computer -Force}})
 if($ResumeAfterReboot){Unregister-ScheduledTask -TaskName $resumeTask -Confirm:$false -ErrorAction SilentlyContinue;$window.Add_Loaded({Set-Message "Neustart abgeschlossen. Einstellungen wurden neu eingelesen."})}
-$window.Add_Loaded({try{Initialize-RecoveryBaselineIfRequired;Refresh-All}catch{Show-Error $_.Exception.Message}});$window.ShowDialog()|Out-Null
+$quarantineTimer=[Windows.Threading.DispatcherTimer]::new();$quarantineTimer.Interval=[TimeSpan]::FromSeconds(2);$quarantineTimer.Add_Tick({try{Update-QuarantineNotifications}catch{Set-Message "Quarantänestatus konnte nicht aktualisiert werden"}})
+$window.Add_Loaded({try{Initialize-RecoveryBaselineIfRequired;Refresh-All;Initialize-QuarantineNotifications;$quarantineTimer.Start()}catch{Show-Error $_.Exception.Message}})
+$window.Add_Closed({$quarantineTimer.Stop()});$window.ShowDialog()|Out-Null
