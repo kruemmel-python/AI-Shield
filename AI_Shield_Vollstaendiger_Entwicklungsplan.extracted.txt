@@ -1,0 +1,928 @@
+AI SHIELD
+Vollständiger Entwicklungsplan für Windows-first Zero-Trust-Exploit-Containment
+Kernelnahe Netzwerkschutzschicht · Spekulative Sandbox-Ausführung · Kausale Herkunftsverfolgung · Adaptive Angriffserkennung
+Leitprinzip: Externe Daten dürfen erst wirken, nachdem ihre Struktur, Herkunft und mögliche Wirkung bewertet wurden.
+Dokumentlenkung und verbindliche Lesart
+Dieses Dokument ist keine Ideensammlung und kein unverbindliches Konzept. Es ist die verbindliche technische und organisatorische Entwicklungsgrundlage für das vollständige Produkt AI Shield. Alle als „muss“, „wird“, „verbindlich“ oder „nicht zulässig“ formulierten Aussagen sind Abnahmekriterien. Abweichungen benötigen einen dokumentierten Architecture Decision Record, zwei Senior-Freigaben und die Zustimmung des Security Architecture Leads.
+Die Entwicklung erfolgt in einer festgelegten Reihenfolge, aber alle beschriebenen Produktkomponenten sind Bestandteil des Gesamtprogramms. Ein früher funktionsfähiger Stand ist ein Integrationsmeilenstein und kein Ersatz für das vollständige Zielsystem.
+Inhaltsübersicht
+1. 1. Verbindliche Produktentscheidungen
+2. 2. Zielbild, Nutzen und Nicht-Ziele
+3. 3. Bedrohungsmodell
+4. 4. Vertrauensmodell und Umgang mit unbekannten Windows-Lücken
+5. 5. Zielplattform und Systemvoraussetzungen
+6. 6. Gesamtarchitektur
+7. 7. Daten- und Entscheidungsfluss
+8. 8. Komponentenspezifikation
+9. 9. ABI, Datenmodelle und Protokolle
+10. 10. Sichere C++-Entwicklungsregeln
+11. 11. Speicher-, Thread- und Ressourcenmodell
+12. 12. Erkennungs- und KI-Architektur
+13. 13. Sandbox- und Shadow-Target-Architektur
+14. 14. Policy, Risiko und Blockierentscheidungen
+15. 15. Audit, Datenschutz und Nachvollziehbarkeit
+16. 16. Funktionale Anforderungen
+17. 17. Nichtfunktionale Anforderungen
+18. 18. Repository und Buildsystem
+19. 19. Arbeitspakete
+20. 20. Teammodell für Junior und Senior Developer
+21. 21. Zeit- und Integrationsplan
+22. 22. Test-, Fuzzing- und Zertifizierungsplan
+23. 23. Installation, Update und Betrieb
+24. 24. Incident Response und Forensik
+25. 25. Linux-Erweiterbarkeit
+26. 26. Sovereign Mode
+27. 27. Risikoregister
+28. 28. Definition of Done und finale Abnahme
+29. Anhänge und Referenzen
+1. Verbindliche Produktentscheidungen
+1.1 Produkteditionen
+2. Zielbild, Nutzen und Nicht-Ziele
+AI Shield ist eine lokale, kernelnahe und später hardwareisolierte Sicherheitsbarriere. Sie erfasst extern beeinflusste Daten, rekonstruiert und normalisiert sie, bewertet bekannte und neuartige Angriffsmuster, führt risikoreiche Eingaben in einem isolierten Zielzwilling aus und kontrolliert die nachfolgenden Datei-, Prozess-, Speicher- und Netzwerkfolgen.
+Externes Netz
+    -> Verbindungs- und Flow-Gate
+    -> Stream-Rekonstruktion
+    -> Protokoll-Normalisierung
+    -> Regel-/Anomalie-/Kampagnenanalyse
+    -> risikobasierte Shadow-Ausführung
+    -> deterministische Policy-Entscheidung
+    -> reale Anwendung
+    -> Runtime-Consequence-Guard
+    -> Audit und Gegenmaßnahme
+2.1 Primäre Schutzziele
+Bekannte Angriffe über Signaturen, Protokollregeln und explizite Verbote blockieren.
+Unbekannte Angriffe über Neuartigkeit, adaptive Mutation, Parserabweichungen und beobachtete Folgen erkennen.
+Die Lernschleife einer Angreifer-KI durch Antwortnormalisierung, Rate-Limits, Kampagnenkorrelation und Täuschungsendpunkte unterbrechen.
+Erfolgreiche Parser- oder Dienstkompromittierungen durch Prozess-, Datei-, Token- und Egress-Beschränkungen wirkungslos halten.
+Jede Entscheidung mit einer kausalen und kryptografisch verketteten Beweiskette nachvollziehbar machen.
+Auch bei Ausfall einzelner Windows-Sensoren einen definierten, sicheren Degradationsmodus erhalten.
+2.2 Nicht-Ziele
+Keine Garantie, jeden Zero-Day anhand der Payload allein zu erkennen.
+Kein Ersatz für Betriebssystemupdates, sichere Konfiguration, Backups oder privilegienarme Konten.
+Keine Cloud-SOC-Plattform und kein zentraler Datensammler als Voraussetzung für Schutzwirkung.
+Kein universelles Entschlüsseln fremder TLS-Verbindungen.
+Kein vollständiger Ersatz für EDR; AI Shield konzentriert sich auf externe Herkunft, Vorwirkung und kausale Konsequenzkontrolle.
+Keine selbstmodifizierende Produktions-KI und kein autonomes Ausrollen unvalidierter Regeln.
+3. Bedrohungsmodell
+3.1 Angreiferklassen
+3.2 Zu schützende Assets
+Benutzerdaten, Zugangsdaten, Schlüsselmaterial und Browser-/Anwendungsprofile.
+Windows-Kernel, Treiber, Systemdienste, Bootkette und Sicherheitskonfiguration.
+AI-Shield-Policy, Modelle, Signatursätze, Audit-Schlüssel und Update-Schlüssel.
+Netzwerkdienste, Parser, Dateiformatbibliotheken und lokale APIs.
+Integrität der Shield-Entscheidungen und Verfügbarkeit des Systems.
+3.3 Zentrale Missbrauchsfälle
+4. Vertrauensmodell und Umgang mit unbekannten Windows-Lücken
+AI Shield behandelt dokumentierte Windows-APIs als potenziell fehlerhafte Abhängigkeiten. Eine API-Antwort ist Evidenz, aber kein absoluter Wahrheitsbeweis. Negative Telemetrie – ein Ereignis wurde nicht gemeldet – ist niemals allein ausreichend, um das Nichtvorhandensein eines Ereignisses zu beweisen.
+4.1 Regeln für Windows-Schnittstellen
+1. Jede Windows-API wird in einem klar benannten Adapter gekapselt; Windows-Typen dürfen die Core-Grenze nicht überschreiten.
+2. Alle Daten aus Treibern, ETW, AMSI, WFP, Filter Manager und Hyper-V werden so validiert, als kämen sie von einem nicht vertrauenswürdigen Sender.
+3. Kritische Entscheidungen benötigen entweder zwei unabhängige Evidenzquellen oder eine direkte Durchsetzungsquelle.
+4. Sensor-Ausfall, Sequenzlücken und widersprüchliche Zeitstempel erhöhen den Risikowert; sie werden nicht still ignoriert.
+5. Das System besitzt für jede Windows-Abhängigkeit einen expliziten Degradationsmodus und einen Health-Monitor.
+6. Der Integrated Mode behauptet nicht, einen vollständig kompromittierten Windows-Kernel kontrollieren zu können; genau dafür ist der Sovereign Mode vorgesehen.
+4.2 Mehrquellenkorrelation
+Beispiel Prozessstart:
+  Quelle A: PsSetCreateProcessNotifyRoutineEx
+  Quelle B: ETW-Kernelprozess-Provider
+  Quelle C: Image-Load-Callback
+  Quelle D: Dateiprovenienz und Image-Hash
+
+Konsistent: A+B+C passen zusammen.
+Inkonsistent: C meldet ein neues Image, A/B fehlen -> Sensorintegritätsalarm und erhöhte Schutzstufe.
+5. Zielplattform und Systemvoraussetzungen
+Das Entwicklungsteam baut mit dem jeweils aktuell unterstützten Visual Studio und WDK. Für den Start dieses Plans wird Visual Studio 2026 mit Windows SDK/WDK 10.0.28000.1839 verwendet. Als Laufzeitbaseline gilt Windows 11 25H2; 26H1 ist zusätzliche Validierungsplattform, da Microsoft 26H1 primär für neue Gerätegenerationen vorsieht.
+6. Gesamtarchitektur
+[Physische NIC]
+      |
+      v
+[ai_shield_wfp.sys] -- Flow-/Connect-Gate, Redirect, Stream-Metadaten
+      |
+      v
+[ai_shield_broker.exe] -- Socket-Proxy, Reassembly, TLS-Endpunkt für verwaltete Dienste
+      |
+      +--> [protocol_worker_*.exe] -- normalisieren, parse, invariants
+      |
+      +--> [detection_engine.exe] -- Regeln, Statistik, Kampagnen
+      |
+      +--> [sandbox_orchestrator.exe]
+              +--> AppContainer Fast Sandbox
+              +--> Hyper-V Isolated Sandbox
+      |
+      v
+[Policy Engine]
+      | allow / monitor / rate-limit / sandbox / drop / block
+      v
+[Reale Anwendung]
+      |
+      +--> [ai_shield_fs.sys] -- Provenance, Quarantäne, Execute Gate
+      +--> [ai_shield_guard.sys] -- Prozess, Image, Handle, Egress-Korrelation
+      |
+      v
+[Audit Store + Console]
+6.1 Prozess- und Treiberbestand
+6.2 Schutzmodi
+7. Daten- und Entscheidungsfluss
+7.1 TCP-Ingress
+1. WFP erkennt einen eingehenden Verbindungsversuch an ALE Receive/Accept und ordnet Quelladresse, Zielport, Prozess und App-ID zu.
+2. Unregistrierte extern erreichbare Ports werden unmittelbar blockiert. Registrierte Dienste erhalten eine Flow-ID.
+3. Falls die Policy eine Benutzerentscheidung oder tiefere Prüfung erfordert, wird die Klassifizierung asynchron gependet und fristgebunden abgeschlossen.
+4. Für verwaltete Dienste übernimmt der Broker den externen Port oder WFP leitet den Flow zum lokalen Proxy um.
+5. Der Broker liest die Daten in festen Segmenten, rekonstruiert den Stream und berechnet inkrementelle Hashes und Merkmale.
+6. Der Protokolldetektor bestimmt das tatsächliche Protokoll; Portnummern sind nur ein Hinweis.
+7. Der Canonicalizer erzeugt eine eindeutige Darstellung. Mehrdeutigkeit ist ein Risikoereignis.
+8. Regel- und Anomalieengine erzeugen Evidenz und einen vorläufigen Score.
+9. Bei Sandboxpflicht wird der Request an einen Shadow Target übergeben; die reale Anwendung wartet innerhalb eines definierten Budgets.
+10. Die Policy Engine entscheidet. Freigegebene Daten werden weitergeleitet; blockierte Daten werden verworfen und optional generisch beantwortet.
+11. Alle Folgeereignisse des realen Dienstes werden mit der Flow-ID korreliert.
+7.2 UDP und QUIC
+UDP wird als zeitlich begrenzter Flow aus Quell-/Zieltuple, Prozess und Protokollfingerprint behandelt.
+DNS erhält einen eigenen Parser und strikte Größen-, Kompressions- und Zustandsregeln.
+Unbekannte UDP-Dienste sind standardmäßig blockiert, sofern keine Service-Policy existiert.
+QUIC-Inhalte sind ohne Schlüssel nicht transparent. Standardmodus: Metadatenanalyse; Strict-Modus kann QUIC blockieren, um Anwendungsfallback auf TCP/TLS zu erzwingen, wenn dies mit der Anwendung kompatibel ist.
+Verwaltete Server-QUIC-Dienste werden in Version 1.0 nicht freigegeben; sie verwenden TCP/TLS hinter dem Shield.
+7.3 Downloads und verschlüsselte Clientdaten
+Für fremde Clientanwendungen erfolgt kein globales TLS-Aufbrechen. Sobald entschlüsselte Daten als Datei, Cacheobjekt oder ausführbares Image materialisiert werden, übernimmt die Datei- und Prozessschicht. Der Schutzvertrag lautet: Opaque Netzwerkdaten werden metadatenbasiert bewertet; ausführbare oder parserrelevante Resultate werden vor Wirkung erneut geprüft.
+8. Komponentenspezifikation
+8.1 ai_shield_wfp.sys
+Der WFP-Treiber ist klein, deterministisch und frei von komplexer Analyse. Er nutzt dokumentierte WFP-Schichten für Autorisierung, Redirect und bei ausgewählten Flows Stream-Inspektion. Langwierige Entscheidungen werden niemals innerhalb des Classify-Callbacks ausgeführt.
+Der Treiber darf niemals direkt ein Modell aufrufen.
+Jeder Callback prüft IRQL, Parameter, Rechteflags, Metadatenfelder und Lebensdauer.
+Jede Queue besitzt feste Obergrenzen; Überlauf aktiviert die konfigurierte Fail-Policy und erzeugt ein Audit-Ereignis.
+Ein ungültiger Userspace-Befehl kann höchstens den betreffenden Flow blockieren, niemals beliebige Kerneloperationen auslösen.
+8.2 ai_shield_fs.sys
+Der Minifilter erfasst externe Herkunft und verhindert Time-of-check/Time-of-use-Lücken zwischen Analyse und Ausführung. Er registriert ausschließlich benötigte Operationen und hält Callback-Pfade kurz.
+Überwachung von Create/Open, Write, SetInformation/Rename, Cleanup/Close sowie relevanten Section-Synchronisations- und Imagepfaden.
+Dateiidentität besteht aus Volume-ID, stabiler File-ID, Stream-ID, Content-Hash und Provenance-ID.
+Alternate Data Streams dürfen als Komfortmetadatum dienen, sind aber nicht die Vertrauensquelle. Autoritativ ist der signierte Provenance Store.
+Eine extern erzeugte PE-, DLL-, Skript-, Treiber- oder unbekannte ausführbare Datei erhält den Zustand EXECUTION_PENDING.
+Image-Mapping oder Prozessstart wird blockiert, bis ein gültiges Verdict mit passendem Hash und unveränderter File-ID vorliegt.
+Änderung nach Freigabe invalidiert das Verdict sofort.
+Archive propagieren Herkunft rekursiv auf entpackte Inhalte bis zur konfigurierten Maximaltiefe.
+8.3 ai_shield_guard.sys
+Registriert Prozess- und Image-Load-Callbacks sowie Object Callbacks für sensible Prozess-/Thread-Handles.
+Blockiert Prozessanlage über CreationStatus, wenn die Image-Provenienz oder Policy dies verlangt.
+Reduziert angeforderte Prozesszugriffsrechte bei nicht vertrauenswürdigen Akteuren, insbesondere PROCESS_VM_WRITE, PROCESS_CREATE_THREAD und PROCESS_DUP_HANDLE.
+Erfasst Bild-Hash, Signaturstatus, Parent-/Creator-Beziehung und verknüpft sie mit Origin- und Flow-ID.
+Führt keine umfangreiche Dateianalyse im Callback aus; nur Cache-Lookup und deterministische Entscheidung.
+Ein Kindprozess eines extern beeinflussten Netzwerkdienstes erbt die Provenance, sofern kein expliziter Trust-Break durch signierte Policy vorliegt.
+8.4 ai_shield_core.exe
+Läuft als geschützter Antimalware-Dienst, sobald Signierung und ELAM-/Protected-Service-Anforderungen erfüllt sind.
+Besitzt keine Benutzeroberfläche und keine Plugin-Ladefunktion.
+Validiert alle Nachrichten aus Treibern und Workern: ABI-Version, Größe, Sequenz, MAC, Zeitfenster und Objektbezug.
+Verwaltet Policy-Version, Modellversion, Health-Zustände, Service Registry, Degradationsmodi und Shutdown-Reihenfolge.
+Alle Konfigurationsänderungen sind transaktional, signiert und auditierbar.
+8.5 ai_shield_broker.exe
+8.6 Protokoll-Worker
+Jeder Parser läuft als eigener, capability-armer Worker. Ein Parserfehler darf weder andere Protokolle noch den Core kompromittieren. Der Worker erhält nur einen begrenzten Inputbuffer und schreibt ausschließlich ein festes Ergebnisobjekt.
+8.7 Policy Engine
+Die Policy Engine ist rein deterministisch und arbeitet ohne Netzwerkzugriff.
+Sie nimmt Evidenzobjekte entgegen, prüft ihre Vertrauensklasse und erzeugt genau eine Aktion mit Ablaufzeit.
+Hard Rules überschreiben Scores: bekannte Exploitstruktur, ungültige Signatur, verbotene Prozessfolge oder manipulierter Modellcontainer führt unmittelbar zu Block/Quarantäne.
+Eine KI- oder Statistikkomponente darf maximal eine Evidenzbewertung liefern, aber keinen Kernelbefehl formulieren.
+Policy-Pakete sind ECDSA-P-256-signiert, versioniert und besitzen eine minimale kompatible ABI-Version.
+8.8 Sandbox Orchestrator
+Pflegt einen warmen Pool von Fast-Sandboxes und einen kleineren Pool Hyper-V-isolierter Worker.
+Nimmt ausschließlich immutable Analysis Packages entgegen.
+Verwendet pro Analyse ein frisches Copy-on-Write-Arbeitsvolume und verwirft es nach Abschluss.
+Erlaubt keinen direkten Zugriff auf Benutzerprofil, Host-Zwischenablage, Host-Netzwerk oder Gerätepässe.
+Beendet Analyse hart bei CPU-, Speicher-, Event- oder Zeitbudgetüberschreitung.
+Erzeugt ein minimales Resultat plus optional komprimiertes Beweispaket; niemals einen unvalidierten Objektgraphen.
+8.9 Audit Engine
+Append-only Segmente mit fester Headerstruktur, CRC32C für Übertragungsfehler und SHA-256-Hash-Kette für Integrität.
+Jedes Segment enthält vorherigen Segmenthash, monotone Sequenz, Zeitbasis, Policy-/Modellversion und Gerätezustand.
+Schlüsselmaterial liegt TPM-gebunden; Export erzeugt ein separat signiertes Paket.
+Vollständige Payloads werden standardmäßig nicht dauerhaft gespeichert. Es gelten begrenzte Evidenzfenster.
+Auditlöschung ist ein administrativer, zweistufig bestätigter Vorgang und selbst ein Audit-Ereignis.
+8.10 Konsole
+Native Win32-/Direct2D-/DirectWrite-Oberfläche in C++; kein Electron, kein eingebetteter Browser, kein Webserver.
+Dashboard: Schutzstatus, Treiberzustand, Sandboxkapazität, letzte Blockaden, Degradationswarnungen.
+Ereignisansicht: Quelle, Ziel, Flow, Regel, Score, Sandboxfolgen und kausale Kette.
+Service Registry: extern erlaubte Dienste, Ports, Protokolle, Zertifikate, Fail-Policy und Limits.
+Policyänderungen benötigen Administratorrechte; Hochrisikoänderungen erfordern erneute lokale Bestätigung.
+Keine Funktion zum Ausführen beliebiger Skripte oder Befehle.
+9. ABI, Datenmodelle und Protokolle
+Alle sicherheitskritischen Nachrichten verwenden standard-layout, trivially-copyable C++-Strukturen mit expliziter Größe, Version und Alignment. Zeiger, STL-Container, HANDLE-Werte und Windows-spezifische Strukturen werden niemals über Prozess- oder Kernelgrenzen übertragen.
+enum class ShieldAction : std::uint32_t {
+    allow = 0,
+    allow_monitored,
+    rate_limit,
+    redirect_sandbox,
+    quarantine,
+    drop_flow,
+    block_origin,
+    suspend_target
+};
+
+struct alignas(64) ShieldDecision final {
+    std::uint32_t abi_version;
+    std::uint32_t structure_size;
+    std::uint64_t decision_id;
+    std::uint64_t flow_id;
+    ShieldAction action;
+    std::uint16_t risk_score;
+    std::uint16_t confidence;
+    std::uint32_t reason_mask;
+    std::uint64_t valid_until_monotonic_ns;
+    std::array<std::byte, 32> evidence_hash;
+    std::array<std::byte, 32> message_mac;
+};
+
+static_assert(std::is_standard_layout_v<ShieldDecision>);
+static_assert(std::is_trivially_copyable_v<ShieldDecision>);
+9.1 Gemeinsamer Nachrichtenheader
+9.2 Zustandsautomaten
+FlowState:
+  new -> authorized -> proxied -> classifying -> inspecting
+      -> sandbox_pending -> allowed -> active -> closed
+      -> blocked -> closed
+      -> quarantined -> closed
+
+Ungültige Transition:
+  allowed -> new
+  blocked -> active
+  closed -> allowed
+Jede ungültige Transition ist ein Integritätsereignis.
+10. Sichere C++-Entwicklungsregeln
+10.1 Verbotene Muster
+reinterpret_cast auf externe Puffer ohne vorherige Größen- und Alignmentprüfung.
+C-String-Funktionen ohne explizite Länge.
+Unbegrenzte Rekursion oder verschachtelte Parser ohne Depth Budget.
+Unbegrenzte std::vector-/string-Vergrößerung aus externen Längenfeldern.
+Doppelte Interpretation derselben Bytes mit abweichenden Normalisierungsregeln.
+Callback-Lambdas mit unklarer Lebensdauer in Kernel- oder IOCP-Hotpaths.
+Detached Threads, Thread-per-Connection und nicht abbrechbare Hintergrundoperationen.
+Dynamisches Laden nicht signierter DLLs oder Plugins.
+Silent catch, ignorierte Statuscodes, magic numbers und implizite Narrowing Conversions.
+10.2 Reviewpflicht
+Kernelcode: zwei Senior-Reviews, davon mindestens eines durch den Kernel Lead.
+Parser: ein Security-Review und verpflichtende Fuzz-Harness-Erweiterung.
+Policy-/ABI-Änderung: Architecture Decision Record und Kompatibilitätstest.
+Kryptografie/Signierung: Review durch Security Architecture Lead; keine Eigenkryptografie.
+Junior-Code darf produktiv werden, wenn Tests, Review und Ownership identisch streng erfüllt sind; Junioren erhalten jedoch keine alleinige Merge-Berechtigung für Kernel, Update, Signierung oder Policy-Verifier.
+11. Speicher-, Thread- und Ressourcenmodell
+11.1 Speicherbudgets
+11.2 Threadmodell
+Kernel: minimale DPC/Callback-Arbeit; passive Worker nur für erlaubte Operationen; keine blockierenden Aufrufe in Classify-/Minifilter-Callbacks.
+Broker: IOCP, N Worker = logische Kerne minus reservierte Shield-/UI-Kerne; Minimum 2, Maximum 16 standardmäßig.
+Parser: Prozesspool, pro Worker maximal eine aktive Analyse, um Zustandslecks zu vermeiden.
+Detection Engine: lock-freie SPSC-Ringe zwischen festen Stufen; MPMC nur dort, wo Messdaten den Nutzen belegen.
+Sandbox: Orchestrator-Thread plus begrenzte Instanzworker; keine unbeschränkten Task Queues.
+11.3 Zeitbudgets
+12. Erkennungs- und KI-Architektur
+Version 1.0 verwendet ein erklärbares, lokal trainierbares Ensemble aus deterministischen Regeln und klassischen statistischen Modellen. Es gibt keine Abhängigkeit von Python, PyTorch, TensorFlow oder Cloudmodellen. Der CPU-Referenzpfad ist maßgeblich; SIMD-Optimierungen müssen bit- oder toleranzidentische Resultate liefern.
+12.1 Detektoren
+12.2 Featuregruppen
+Netzwerk: Paket-/Segmentgrößen, Richtung, Bursts, Interarrival, Retransmits, Handshakeabweichung.
+Protokoll: Methoden, Headeranzahl, Längenbeziehungen, Tiefe, Zeichensätze, Kompression, Framing.
+Semantik: abstrahierte Operationen wie PATH_TRAVERSAL, EXECUTE_COMMAND, LOAD_REMOTE_OBJECT und DESERIALIZE_OBJECT.
+Mutation: veränderte Bytebereiche, Feldfolgen, Grenzwertsuche, Antwortabhängigkeit.
+Konsequenz: Kindprozess, neue ausführbare Seite, Dateiablage, Tokenzugriff, Registry-Persistenz, Egress.
+Integrität: fehlende Sequenzen, widersprüchliche Sensoren, ungültige Signaturen, Zeitdrift.
+12.3 Modelllebenszyklus
+1. Datenerfassung im Shadow-Modus mit Datenschutzfilter und Dataset-Version.
+2. Labeling durch reproduzierbare Regeln plus menschliche Review für Grenzfälle.
+3. Offline-Training ausschließlich in C++-Werkzeugen.
+4. Evaluation gegen feste benign/malicious/adversarial Splits und historische Regressionen.
+5. Modellpaket erzeugen, Metadaten und Feature-Schema einfrieren.
+6. Paket signieren; kein unsigniertes Modell darf geladen werden.
+7. Canary nur im Monitor-Modus; Vergleich mit aktuellem Produktionsmodell.
+8. Promotion nach Abnahmeschwellen; A/B-Rollback jederzeit möglich.
+12.4 Schutz vor adversarial ML
+Kein direktes Lernen aus Live-Traffic im Enforcement.
+Feature-Clipping und harte Wertebereiche verhindern numerische Extremwerte.
+Modellpaket enthält Trainingsdaten-Fingerprint und Feature-Schemahash.
+Evasion-Tests mutieren Payloads, Reihenfolgen, Timing und Protokollkodierung.
+Poisoning-Tests prüfen, ob große Mengen ungewöhnlicher, aber harmloser Daten die Baseline verschieben würden.
+Modellextraktionsschutz: externe Antworten enthalten keine Scores oder Regel-IDs.
+13. Sandbox- und Shadow-Target-Architektur
+13.1 Tier 1 – Fast Sandbox
+Low-privilege AppContainer mit leerem Capability-Satz; zusätzliche explizite Rechte nur pro Parserprofil.
+Job Object begrenzt CPU, Speicher, Prozessanzahl, Handles und Laufzeit.
+Temporäres Copy-on-Write-Verzeichnis; kein Zugriff auf reale Benutzerprofile.
+Netzwerk standardmäßig verboten; Fake-Netzwerk über einen streng kontrollierten lokalen Broker.
+Geeignet für strukturierte Parser, Archive, JSON/XML, PE-Preflight und kurze Shadow-Dienste.
+13.2 Tier 2 – Hyper-V Sandbox
+Eigener isolierter Kernel und Utility VM; Hostzugriff nur über minimalen VMBus-/Socket-Kanal.
+Keine Hostverzeichnisse, Clipboard, GPU- oder Geräteweitergabe.
+Basisimage read-only; Analysevolume differenziell und nach Abschluss gelöscht.
+Virtuelles Netzwerk ausschließlich zu Fake-Diensten; kein Routing ins Internet oder LAN.
+Geeignet für ausführbare Dateien, unbekannte Binärformate, komplexe Dokumente und hochriskante Shadow Targets.
+13.3 Shadow-Target-Katalog
+13.4 Inconclusive-Regel
+Ein Timeout, Sandboxabsturz, fehlende Instrumentierung oder inkonsistentes Ergebnis wird niemals als „sauber“ interpretiert. Für kritische Dienste lautet das Verdict QUARANTINE/BLOCK; für interaktive, niedrig kritische Anwendungen lautet es ALLOW_MONITORED nur, wenn die Policy dies explizit erlaubt und das Runtime-Gate aktiv ist.
+14. Policy, Risiko und Blockierentscheidungen
+Risk = HardRule + Signature + Protocol + Novelty + Adaptivity
+     + Campaign + Consequence + TargetCriticality + SensorIntegrity
+
+Alle Komponenten liefern 0..100. HardRule und Consequence können sofort blockieren.
+14.1 Harte Regeln
+Ungültige oder mehrdeutige Framing-/Längenbeziehung mit bekannter Desynchronisationswirkung.
+Bekannte Exploit-, Malware- oder C2-Signatur mit gültiger Signaturdatenbank.
+Extern beeinflusster Dienst startet verbotenen Interpreter oder unsigniertes Child Image.
+Extern erzeugte Datei wird vor Freigabe als ausführbares Image gemappt.
+Sandbox erzeugt kontrollflussrelevante Zugriffsverletzung, RWX/RW->RX-Muster, Credential- oder Persistenzversuch.
+Policy-, Modell- oder Updatepaket ist ungültig signiert oder zurückgestuft.
+Kernel-/Userspace-Nachricht verletzt ABI, Sequenz oder MAC.
+14.2 Fail-Policies
+15. Audit, Datenschutz und Nachvollziehbarkeit
+Auditexport entfernt standardmäßig personenbezogene Nutzinhalte und ersetzt Adressen optional durch stabile HMAC-Pseudonyme.
+Jede Konfigurations- und Freigabeaktion enthält Benutzer-SID, Zeit, alte und neue Version sowie Grund.
+Die UI unterscheidet klar zwischen nachgewiesenem Verhalten, Heuristik und Inferenz.
+Eine Blockade zeigt konkrete Reason Codes; interne Modellfeatures werden nicht extern an den Angreifer zurückgegeben.
+16. Funktionale Anforderungen
+17. Nichtfunktionale Anforderungen
+18. Repository und Buildsystem
+ai_shield/
+  docs/
+    architecture/
+    adr/
+    threat-model/
+    protocols/
+  shared/
+    abi/
+    crypto/
+    checked/
+    containers/
+    telemetry/
+  kernel/
+    wfp/
+    filesystem/
+    guard/
+    test_drivers/
+  core/
+    service/
+    broker/
+    policy/
+    provenance/
+    audit/
+    health/
+  protocols/
+    http1/
+    http2/
+    dns/
+    tlsmeta/
+    json/
+    xml/
+    zip/
+    pe/
+    pdf_preflight/
+  detection/
+    features/
+    signatures/
+    isolation_forest/
+    sequence/
+    mutation/
+    campaign/
+    consequence/
+  sandbox/
+    appcontainer/
+    hyperv/
+    guest_agent/
+    fake_services/
+    images/
+  ui/
+    console/
+    diagnostics/
+  installer/
+  updater/
+  tests/
+    unit/
+    integration/
+    fuzz/
+    adversarial/
+    performance/
+    soak/
+    hlk/
+  tools/
+    model_builder/
+    policy_compiler/
+    audit_verify/
+    corpus_builder/
+    build_orchestrator/
+18.1 Buildregeln
+Ein Visual-Studio-Solution-Tree mit getrennten Konfigurationen Debug, RelWithChecks, Release und Fuzz.
+Alle Projekte bauen mit /W4 /WX /permissive- /sdl /GS; Release zusätzlich /guard:cf, CET-Kompatibilität und /Brepro soweit unterstützt.
+Kernelprojekte verwenden /kernel, HVCI-kompatible Regeln und keine CRT-Abhängigkeit.
+Userspace verwendet statisch gelinkte Runtime, soweit Lizenz und Patchprozess dies erlauben; jede Runtimeversion ist Bestandteil der SBOM.
+Build Orchestrator ist ein C++-Tool, das MSBuild, WDK-Tests, Signierung und Paketierung mit festem Manifest ausführt.
+Keine Downloads während eines Releasebuilds. Alle Abhängigkeiten sind intern gespiegelt, gehasht und versioniert.
+Jeder Releasebuild erzeugt Binärhashes, PDBs, SBOM, Compiler-/SDK-Manifeste und Reproduzierbarkeitsreport.
+19. Arbeitspakete
+19.1 Definition eines abgeschlossenen Arbeitspakets
+1. Spezifikation und Threat-Model-Delta sind dokumentiert.
+2. Code ist vollständig, ohne TODO/FIXME/Platzhalter im Produktpfad.
+3. Unit-, Integration-, Negative- und Fuzztests sind im Repository.
+4. Alle Compilerwarnungen sind Fehler; statische Analyse ist grün.
+5. Performancebudget ist gemessen und dokumentiert.
+6. Security Review und erforderliche Senior-Reviews sind abgeschlossen.
+7. Betriebs-, Diagnose- und Recoverypfade sind implementiert.
+8. Abnahmekriterien des Arbeitspakets sind automatisiert oder reproduzierbar manuell geprüft.
+20. Teammodell für Junior und Senior Developer
+Empfohlene Teamgröße: 22 bis 26 Vollzeitkräfte. Eine Mindestbesetzung von 12 ist möglich, verlängert den Integrated-1.0-Zeitplan jedoch auf etwa 30 bis 36 Monate und darf keine Sicherheitsgates reduzieren.
+20.1 Junior-taugliche Aufgaben mit Senior-Grenzen
+Kernel-Callbackdesign, Signaturprüfung, Updatevertrauen, Hypervisorcode und finale Policy-Durchsetzung werden nicht allein von Junioren verantwortet. Junioren dürfen daran mitarbeiten, erhalten aber immer Pairing, Review und klar begrenzte Module.
+21. Zeit- und Integrationsplan
+Der Integrated-1.0-Plan ist auf 18 Monate bei empfohlener Teamgröße ausgelegt. Arbeitspakete laufen parallel, aber Integrationsgates sind strikt sequenziell. Kein Gate wird durch Zeitdruck übersprungen.
+21.1 Integrationsgates
+22. Test-, Fuzzing- und Zertifizierungsplan
+22.1 Testpyramide
+22.2 Pflichtcorpora
+Benigne reale Protokollcorpora mit Datenschutzbereinigung.
+Bekannte CVE-/Exploitstrukturen in sicherer, nicht produktiv ausführbarer Testform.
+HTTP Request Smuggling, Chunking, Content-Length, Unicode- und Encoding-Varianten.
+ZIP Bombs, Path Traversal, Polyglots, tiefe JSON/XML-Strukturen.
+PE-Dateien mit ungewöhnlichen Sections, Imports, Overlays und Signaturen.
+Adaptive Mutationssequenzen, bei denen jede nächste Payload von der vorherigen Antwort abhängt.
+Sensorfehler: fehlende ETW-Events, verspätete Callbackmeldungen, Queuekorruption, Core-Restart.
+22.3 Release-Abnahmeschwellen
+23. Installation, Update und Betrieb
+1. Installer prüft Edition, Secure Boot, TPM, Virtualisierung, HVCI-Kompatibilität, freien Speicher und Konflikttreiber.
+2. Treiber werden über signierte INF-Pakete installiert; Dienste erhalten minimal notwendige Konten und ACLs.
+3. Nach Installation startet Learning Mode für höchstens 14 Tage; harte Regeln sind sofort aktiv.
+4. Administrator registriert extern erreichbare Dienste oder bestätigt automatisch erkannte Listener.
+5. Updatepakete werden offline vollständig verifiziert und in inaktiven A/B-Slot geschrieben.
+6. Aktivierung erfolgt transaktional; Boot Health entscheidet über Commit oder Rollback.
+7. Deinstallation ist nur im Wartungsmodus möglich und entfernt keine Auditdaten ohne separate Bestätigung.
+23.1 Updatepaket
+Manifest mit Produkt-, ABI-, Mindest-OS-, Treiber-, Policy- und Modellversion.
+SHA-256 pro Datei und ECDSA-P-256-Signatur über das gesamte Manifest.
+Monotone Sicherheitsversionsnummer gegen Downgrade.
+Separater Recovery-Slot mit letztem bekannten guten Treiber-/Core-Satz.
+Keine Postinstall-Skripte; alle Migrationsschritte sind versionierte C++-Routinen.
+24. Incident Response und Forensik
+Incident Package enthält signierte Timeline, Hashes, Versionen, Reason Codes, Sandboxereignisse und relevante begrenzte Payloadausschnitte.
+Es enthält niemals private Schlüssel oder vollständige Benutzerdaten ohne explizite Freigabe.
+Für S4 wird ein Recovery-Assistent angeboten, aber keine automatische destructive remediation durchgeführt.
+Die Ereigniskette muss auch offline durch ai_shield_diag.exe verifizierbar sein.
+25. Linux-Erweiterbarkeit
+Linux-Unterstützung wird nicht durch bedingte Windows-Codepfade im Core vorbereitet, sondern durch harte Plattformgrenzen. Die Linux-Portierung ersetzt Adapter, nicht Datenmodelle oder Policies.
+Kein HANDLE, NTSTATUS, UNICODE_STRING oder WFP-Typ in shared/ oder core/.
+Pfadsemantik wird als normalisierte interne URI repräsentiert; plattformspezifische Pfade bleiben Adapterdetail.
+Alle Zeitstempel im Core verwenden monotone Nanosekunden plus getrennte Wandzeit-Metadaten.
+Endianess und Strukturgrößen sind explizit definiert.
+26. Sovereign Mode
+AI Shield Sovereign verschiebt die primäre Vertrauensgrenze unter Windows. Windows erhält keinen direkten Besitz der physischen NIC und keinen Zugriff auf Shield-Speicher oder Audit-Schlüssel.
+[Hardware: CPU/IOMMU/TPM/NIC]
+        |
+[AI Shield Micro-Hypervisor]
+   |                     |
+[Security Domain]     [Windows Guest]
+  NIC owner             virtual NIC only
+  Policy/Audit          untrusted T3
+  Sandbox
+26.1 TCB des Sovereign Mode
+CPU-Virtualisierung und EPT/NPT-Verwaltung.
+IOMMU-Domänen und DMA-Zuordnung.
+Minimaler physischer NIC-Treiber oder dedizierte Security-NIC.
+Virtuelle NIC und Shared-Ring-Protokoll zu Windows.
+Policy-Verifier, Bootmeasurement und Audit-Kern.
+Keine Dateiformatparser, UI, Modelle oder umfangreiche Netzwerkprotokolle im Hypervisor.
+26.2 Entwicklungsfolge
+1. Bootbarer Minimalhypervisor mit serieller Diagnose und TPM-Messung.
+2. Speicher- und CPU-Isolation einer Test-VM.
+3. IOMMU und sichere DMA-Domänen.
+4. Virtuelle NIC mit statischem Testverkehr.
+5. Security Domain übernimmt physischen Netzwerkpfad.
+6. Windows Guest erhält ausschließlich gefilterte virtuelle NIC.
+7. Integrated-Core-Policy und Audit werden in Security Domain portiert.
+8. Red-Team gegen Guest-to-Hypervisor, DMA und Ring-Protokoll.
+27. Risikoregister
+28. Definition of Done und finale Abnahme
+AI Shield Integrated 1.0 ist nur dann abgeschlossen, wenn sämtliche folgenden Bedingungen gleichzeitig erfüllt sind:
+1. Alle FR- und NFR-Anforderungen sind umgesetzt und mit nachvollziehbarem Testnachweis verknüpft.
+2. WFP-, Minifilter- und Guard-Treiber bestehen Driver Verifier, HVCI-Kompatibilität und die vorgesehenen HLK-Tests.
+3. Der vollständige Datenpfad von externem Flow bis kausaler Prozess-/Dateifolge ist integriert.
+4. AppContainer- und Hyper-V-Sandbox funktionieren mit festen Ressourcen- und Sicherheitsgrenzen.
+5. Kein Produktpfad enthält TODO, FIXME, Platzhalter, Dummy-Verdicts oder unimplementierte Fail-Policies.
+6. Alle Parser besitzen Fuzz-Harness, Corpus und dokumentierte Invarianten.
+7. Produktionsmodelle und Policies sind signiert; Online-Lernen ist technisch ausgeschlossen.
+8. Installer, Update, Rollback, Recovery und Deinstallation sind auf allen Referenzsystemen getestet.
+9. Der 30-Tage-Soak und die Performance-/False-Positive-Schwellen sind erfüllt.
+10. Ein unabhängiges Red-Team hat die Release Candidate-Version geprüft; kritische Findings sind geschlossen.
+11. Betriebs-, Entwickler-, Architektur-, Incident- und Recoverydokumentation ist vollständig.
+Eine teilweise funktionierende Firewall, ein alleiniger KI-Klassifikator oder eine Sandbox ohne Runtime-Gate erfüllt diese Definition ausdrücklich nicht.
+Anhang A – Reason-Code-Katalog (Startbestand)
+Anhang B – Referenzhardware für Abnahme
+Anhang C – Quellen und technische Referenzen
+[R1] Microsoft: Introduction to Windows Filtering Platform Callout Drivers – https://learn.microsoft.com/en-us/windows-hardware/drivers/network/introduction-to-windows-filtering-platform-callout-drivers
+[R2] Microsoft: Processing Classify Callouts Asynchronously – https://learn.microsoft.com/en-us/windows-hardware/drivers/network/processing-classify-callouts-asynchronously
+[R3] Microsoft: Using Bind or Connect Redirection – https://learn.microsoft.com/en-us/windows-hardware/drivers/network/using-bind-or-connect-redirection
+[R4] Microsoft: Stream Inspection – https://learn.microsoft.com/en-us/windows-hardware/drivers/network/stream-inspection
+[R5] Microsoft: Filter Manager Concepts – https://learn.microsoft.com/en-us/windows-hardware/drivers/ifs/filter-manager-concepts
+[R6] Microsoft: AppContainer Isolation / Launch an AppContainer – https://learn.microsoft.com/en-us/windows/win32/secauthz/appcontainer-isolation
+[R7] Microsoft: Hyper-V Isolation Modes – https://learn.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/hyperv-container
+[R8] Microsoft: Handling Exceptions in Windows Drivers – https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/handling-exceptions
+[R9] Microsoft: /kernel compiler option – https://learn.microsoft.com/en-us/cpp/build/reference/kernel-create-kernel-mode-binary
+[R10] Microsoft: Driver Verifier – https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/driver-verifier
+[R11] Microsoft: Memory Integrity and VBS – https://learn.microsoft.com/en-us/windows-hardware/drivers/bringup/device-guard-and-credential-guard
+[R12] Microsoft: Windows 11 release information – https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information
+[R13] Microsoft: WDK Downloads and Windows 11 26H1 development – https://learn.microsoft.com/en-us/windows-hardware/drivers/download-the-wdk
+[R14] NIST SP 800-218 Secure Software Development Framework – https://csrc.nist.gov/pubs/sp/800/218/final
+[R15] NIST AI 100-2e2025 Adversarial Machine Learning – https://csrc.nist.gov/pubs/ai/100/2/e2025/final
+[R16] CISA Secure by Design – https://www.cisa.gov/securebydesign
+[R17] CISA Known Exploited Vulnerabilities Catalog – https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+Schlussfestlegung
+Dieses Dokument legt das vollständige Zielsystem fest. Das Entwicklerteam beginnt mit AI Shield Integrated, liefert es nach den definierten Gates produktionsfähig aus und führt anschließend den Sovereign-Track aus. Sicherheit entsteht nicht durch das Etikett „KI“, sondern durch eine kleine Vertrauensbasis, eindeutige Datenverträge, spekulative Vorwirkungserkennung, harte Konsequenzkontrolle, reproduzierbare Tests und die Annahme, dass jede Abhängigkeit – einschließlich Windows – unbekannte Fehler enthalten kann.
+
+[TABLE 1]
+Dokumentstatus || Verbindliche Entwicklungsgrundlage
+Version || 1.0
+Stand || 11. Juli 2026
+Primärplattform || Windows 11 Pro/Enterprise 25H2 und 26H1, x64
+Programmiersprache || Ausschließlich C++
+Zielgruppe || Junior-, Mid-Level- und Senior-Entwickler; Security Engineering; QA; Release Engineering
+Geltungsbereich || AI Shield Integrated 1.x und AI Shield Sovereign 2.x
+
+[TABLE 2]
+Rolle || Verantwortung
+Product Owner || Priorisiert Geschäftsnutzen und Freigaben, darf jedoch keine Sicherheitsanforderung ohne Security-Review entfernen.
+Chief Architect || Verwaltet Gesamtarchitektur, ABI, Trust Boundaries und technische Ausnahmen.
+Security Architecture Lead || Besitzt Bedrohungsmodell, Missbrauchsfälle, Sicherheitsgates und Incident-Definitionen.
+Kernel Lead || Verantwortet WFP-, Minifilter- und Prozessschutztreiber.
+Sandbox Lead || Verantwortet AppContainer-, Hyper-V- und Shadow-Target-Ausführung.
+Detection Lead || Verantwortet Regeln, statistische Modelle, Kampagnenkorrelation und Modellpakete.
+QA/Safety Lead || Besitzt Teststrategie, Fuzzing, Driver Verifier, HLK und Release-Abnahme.
+Release Lead || Besitzt reproduzierbare Builds, Signierung, Installer, Updates und Rollback.
+
+[TABLE 3]
+ID || Entscheidung || Verbindliche Festlegung
+D-001 || Primärplattform || Windows 11 Pro und Enterprise ab Version 25H2, x64. Windows 26H1 wird als zusätzliche Hardware- und Treibervalidierungsplattform geführt. Windows Home ist für Version 1.0 nicht freigegeben.
+D-002 || Sprache || Der gesamte selbst entwickelte Produktcode ist C++. Userspace: C++23. Kernel: vom aktuellen WDK unterstützter, eingeschränkter C++-Umfang mit /kernel.
+D-003 || Keine Sprachausgabe || Die Bedienung erfolgt ausschließlich visuell und textuell. Keine Text-to-Speech-Komponente und kein Sprachassistent.
+D-004 || Kein Cloud-Zwang || Analyse, Modelle, Audit und Entscheidungen funktionieren vollständig lokal. Netzwerkzugriff für Updates ist optional und explizit administrierbar.
+D-005 || Windows ist nicht Root of Trust || Windows-Schnittstellen sind Sensoren und Adapter, aber niemals alleinige Beweis- oder Vertrauensquelle.
+D-006 || Kein autonomes Online-Training || Das Enforcement-Modell ist signiert, unveränderlich und versioniert. Lernen findet nur im getrennten Shadow-Modus statt.
+D-007 || Kernel-Minimalismus || Keine KI, keine komplexen Protokollparser, kein JSON und keine dynamischen Modelle im Kernel.
+D-008 || Sandbox vor Wirkung || Risikoreiche Daten werden vor Übergabe an den realen Zielparser in einem isolierten Shadow Target ausgeführt.
+D-009 || Defense in Depth || Vorabprüfung, Runtime-Containment, Provenance, Egress-Kontrolle und Audit müssen gemeinsam wirksam sein.
+D-010 || Linux-Offenheit || Core, ABI, Policy, Modelle und Dateiformate bleiben plattformneutral. Windows-APIs sind auf Adapterverzeichnisse begrenzt.
+D-011 || Keine globale TLS-Aufbrechung || Version 1.0 führt keinen universellen TLS-MITM für fremde Desktopanwendungen durch. Eigene Dienste können TLS im Shield terminieren.
+D-012 || Sichere Standardwerte || Unregistrierte extern erreichbare Ports werden blockiert. Kritische Dienste arbeiten bei Ausfall fail-closed.
+
+[TABLE 4]
+Edition || Zweck || Sicherheitsgrenze || Status im Gesamtprogramm
+AI Shield Integrated 1.x || Produktiver Schutz bestehender Windows-Desktops. || WFP, Minifilter, Prozessschutz, AppContainer und Hyper-V innerhalb der Windows-Plattform. || Erster vollständig auszuliefernder Produktzweig.
+AI Shield Sovereign 2.x || Maximale Isolation gegen kompromittierte Windows-Kernel und unbekannte Windows-Schnittstellenlücken. || Eigene minimale Hypervisor-/Security-Domäne vor Windows; kontrollierte virtuelle NIC und unabhängiger Audit-Kern. || Verbindlicher zweiter Produktzweig nach Stabilisierung von 1.x.
+
+[TABLE 5]
+Klasse || Fähigkeiten || Relevante Gegenmaßnahmen
+A1 – Standardangreifer || Bekannte Exploits, Scanner, Malware, Credential Stuffing. || Signaturen, Rate-Limits, Protokollregeln, Dienst-Allowlist.
+A2 – Professioneller Operator || Mehrstufige Kampagnen, Verschleierung, verteilte Quellen, Living-off-the-Land. || Cross-Flow-Korrelation, Provenance, Prozess- und Egress-Gate.
+A3 – Adaptive Angreifer-KI || Automatisiertes Fuzzing, Antwortmessung, Payload-Mutation, neue Exploitketten. || Mutationsgraphen, Antwortnormalisierung, Shadow-Ausführung, Langzeitgedächtnis.
+A4 – Lokaler Administrator/Insider || Versuch, Dienst zu stoppen, Policy zu ändern, Audit zu löschen. || Protected Service, restriktive ACLs, signierte Policy, TPM-gebundene Schlüssel, Hash-Kette.
+A5 – Kompromittierter Windows-Kernel || Sensorunterdrückung, gefälschte Events, WFP-/ETW-/Minifilter-Umgehung. || Mehrquellenkorrelation, Degradationsalarm; langfristig Sovereign Mode.
+A6 – Supply-Chain-Angreifer || Manipulierte Bibliotheken, Treiber, Modelle oder Updates. || Reproduzierbare Builds, Signaturkette, SBOM, A/B-Update, Offline-Verifikation.
+
+[TABLE 6]
+ID || Missbrauchsfall || Verbindliche Abwehr
+TM-001 || KI-gesteuertes Remote-Fuzzing eines lokalen Dienstes || Mutationsrate, strukturelle Ähnlichkeit und Antwortkorrelation erkennen; Flow eskalieren; generische Antwort.
+TM-002 || Formal gültiger Request löst unbekannten Speicherfehler aus || Shadow Target mit Instrumentierung; bei Abweichung blockieren; realen Dienst zusätzlich capability-beschränken.
+TM-003 || TLS verschleiert schädlichen Download || Datei-Minifilter markiert externe Herkunft; Image-Mapping bis Verdict blockieren.
+TM-004 || Angriff nutzt legitimen Dienst zum Start von PowerShell || Prozessherkunft korrelieren; Kindprozess blockieren; Dienst suspendieren; Egress sperren.
+TM-005 || Angreifer vergiftet Online-Modell || Kein Online-Lernen im Enforcement; getrennte, signierte Modellpromotion.
+TM-006 || Windows-Sensor liefert falsche oder keine Ereignisse || Unabhängige Sensorquellen vergleichen; Unsicherheit erhöht Risiko; Sovereign Mode als höchste Schutzstufe.
+TM-007 || DoS gegen Sandbox-Pool || Admission Control, Token Buckets, feste Speicherbudgets, pro Quelle und Ziel begrenzte Quoten.
+TM-008 || Sandbox Escape || AppContainer nur Tier 1; Tier 2 Hyper-V; keine Host-Freigaben; minimales Ergebnis-ABI.
+TM-009 || Manipuliertes Update oder Modellpaket || ECDSA-P-256-Signatur, monotone Version, Rollback-Schutz, A/B-Slots.
+TM-010 || Angreifer erkennt Sandbox und bleibt inaktiv || Umgebungsvariation, virtuelle Zeit, Mehrfachläufe, Runtime-Gate nach Freigabe.
+
+[TABLE 7]
+Trust Level || Inhalt || Vertrauensannahme
+T0 – Hardware Root || CPU-Virtualisierung, IOMMU, TPM 2.0, Secure Boot. || Höchste verfügbare technische Vertrauensbasis; Firmware bleibt Restrisiko.
+T1 – Shield TCB || Kernel-Minimalcode, Policy-Verifier, Signaturprüfung, Audit-Kern; im Sovereign Mode zusätzlich Micro-Hypervisor. || Klein, statisch, auditierbar, ohne komplexe Parser.
+T2 – Isolierte Analyse || Parser-Worker, Sandbox, Modelle, Shadow Targets. || Darf abstürzen oder kompromittiert werden, ohne T1 zu übernehmen.
+T3 – Windows und Anwendungen || Windows-Kernel, WFP, ETW, AMSI, Minifilter-Infrastruktur, Dienste und Fremdtreiber. || Funktional benötigt, aber sicherheitstechnisch nicht uneingeschränkt vertrauenswürdig.
+T4 – Externe Daten || Netzwerk, Downloads, Dateien, Remote Shares und Geräte. || Standardmäßig nicht vertrauenswürdig.
+
+[TABLE 8]
+Kategorie || Mindestanforderung || Empfehlung
+Betriebssystem || Windows 11 Pro/Enterprise 25H2 x64 || Windows 11 Enterprise 25H2 oder 26H1 x64
+CPU || 4 Kerne, AMD-V oder Intel VT-x, SLAT, NX/XD || 8+ Kerne, IOMMU, CET/Shadow Stack
+RAM || 16 GiB || 32 GiB oder mehr
+Speicher || SSD, 20 GiB frei || NVMe, 50 GiB Reserve für Sandbox-Snapshots und Audit
+Firmware || UEFI, Secure Boot, TPM 2.0 || Aktuelle Firmware, aktiviertes IOMMU/VT-d/AMD-Vi
+Netzwerk || 1-GbE oder WLAN || 2.5-GbE; RSS/RSC-fähige NIC
+Edition || Pro oder Enterprise || Enterprise für zentrale Richtlinien und längere Wartung
+
+[TABLE 9]
+Komponente || Laufzeitklasse || Aufgabe
+ai_shield_wfp.sys || Kernel || ALE-/Stream-Callouts, Flow-ID, Redirect, Blockade, Health.
+ai_shield_fs.sys || Kernel || Dateiprovenienz, Quarantäne, Rename/Write/Image-bezogene Gates.
+ai_shield_guard.sys || Kernel || Prozess-/Image-/Handle-Sensorik und begrenzte Durchsetzung.
+ai_shield_core.exe || Protected Service || Orchestrierung, Policy, Health, Konfiguration und Lifecycle.
+ai_shield_broker.exe || Service || TCP-/UDP-Proxy, Service-Registry, Stream-Reassembly.
+ai_shield_protocol_host.exe || Worker Host || Startet isolierte protokollspezifische Worker.
+ai_shield_detector.exe || Service || Featureextraktion, Regeln, statistische Modelle, Kampagnen.
+ai_shield_sandbox.exe || Service || AppContainer- und Hyper-V-Orchestrierung.
+ai_shield_audit.exe || Service || Append-only Audit, Hash-Kette, Export.
+ai_shield_console.exe || Desktop UI || Status, Ereignisse, Service-Policies, Freigaben und Diagnose.
+ai_shield_updater.exe || Dienst/Tool || Signierte A/B-Updates, Rollback, Recovery.
+ai_shield_diag.exe || CLI || Lokale Diagnose, Supportpakete und Offline-Validierung.
+
+[TABLE 10]
+Modus || Verhalten
+Learning || Keine automatischen Blockaden außer harten Sicherheitsregeln. Erzeugt Baseline und Reports. Maximal 14 Tage.
+Balanced || Standardmodus. Bekannte Angriffe blockieren; mittlere Risiken überwachen oder sandboxen; konservative Fehlalarmsteuerung.
+Strict || Unbekannte externe Dienste blockieren, hohe Sandboxquote, strenge Egress- und Prozessregeln.
+Lockdown || Nur explizit registrierte Dienste und Ziele; fail-closed; für Incident Response oder Hochsicherheitsgeräte.
+
+[TABLE 11]
+Bereich || Festlegung
+WFP-Schichten || ALE_AUTH_RECV_ACCEPT v4/v6, ALE_BIND_REDIRECT v4/v6, ALE_CONNECT_REDIRECT v4/v6 für unterstützte Proxyfälle; Stream v4/v6 nur conditional on flow.
+Asynchronität || FwpsAcquireClassifyHandle + FwpsPendClassify; Abschluss ausschließlich über fristgebundenes FwpsCompleteClassify.
+Hot Path || Keine Heap-Allokation; Lookaside-/Fixed Pools; O(1)-Lookup per Flow-ID.
+Timeout || Standard 150 ms für Connect-Gate; kritischer Dienst maximal 1000 ms; danach dienstspezifische Fail-Policy.
+Payload || Kernel speichert nur das absolut notwendige Initialfenster; volle Streamverarbeitung bevorzugt im Broker.
+Reentrancy || Proxy-Verbindungen werden über Redirect Records markiert, damit keine Redirect-Loops entstehen.
+Health || Monotone Heartbeats, Queue-Tiefe, Timeoutzähler und last-complete timestamp.
+Unload || Nur im Wartungsmodus; alle Pends abschließen, Filter entfernen, Flows drainen.
+
+[TABLE 12]
+Unterfunktion || Vorgabe
+Socket Broker || IOCP-basiert, feste Connection Objects, keine Thread-per-Connection-Architektur.
+TCP Reassembly || Im Proxy-Pfad durch Winsock-Stream; im transparenten Inspektionspfad segmentweise mit harten Grenzen.
+UDP Sessionization || Zeitfenster und serviceabhängige Zustandsautomaten.
+TLS Managed Service || TLS-Endpunkt nur für explizit registrierte Dienste und durch den Administrator bereitgestellte Zertifikate.
+Backpressure || Pro Flow, Quelle, Dienst und globaler Ebene.
+Response Normalization || Einheitliche Fehlerklasse bei adaptiven Angriffen, ohne interne Erkennungsdetails.
+
+[TABLE 13]
+Version 1.0 Parser || Pflichtumfang
+HTTP/1.1 || Request line, Header, Content-Length/Transfer-Encoding-Konflikte, Chunking, URL- und Zeichensatznormalisierung, Multipart-Grenzen.
+HTTP/2 || Framezustand, Headergrößen, Streamzustand; kein vollständiger Browserersatz.
+DNS || UDP/TCP, Kompressionszeiger, Rekursion, Größen und Record-Invarianten.
+TLS Metadata || ClientHello/ServerHello, Versionen, SNI soweit sichtbar, Cipher-/Extension-Fingerprint; keine Entschlüsselung ohne Endpunktkontrolle.
+JSON || Tiefe, Elementanzahl, String-/Zahlgrenzen, Duplikatschlüssel, Unicode-Normalisierung.
+XML || Externe Entitäten deaktiviert, Tiefe/Größe begrenzt, Namespace- und Encoding-Konsistenz.
+ZIP || Central Directory, Pfadnormalisierung, Entpackfaktor, verschachtelte Archive, Dateianzahl.
+PE/COFF || Header, Sections, Imports, Signaturen, ungewöhnliche RWX-Merkmale, Overlay und Inkonsistenzen.
+Portable Dokumente || PDF-Struktur-Preflight als Eingangsfilter; tiefe Ausführung erfolgt in Sandbox mit realem Viewer/Parser.
+
+[TABLE 14]
+Feld || Typ || Regel
+magic || uint32 || Konstante AI-SHIELD-Kennung; bei Abweichung verwerfen.
+abi_version || uint16 || Major/Minor; inkompatible Major-Version blockieren.
+message_type || uint16 || Explizite Enum; unbekannte Werte verwerfen.
+structure_size || uint32 || Muss mindestens und höchstens zur Version passen.
+sequence || uint64 || Monoton pro Kanal; Replay und Lücken erkennen.
+timestamp || uint64 || Monotone Zeit; keine Sicherheitsentscheidung allein aus Wanduhr.
+payload_length || uint32 || Vor Addition geprüft; nie implizit vertrauen.
+flags || uint32 || Unbekannte Bits müssen null sein.
+mac || 32 Byte || HMAC-SHA-256 über Header und Payload.
+
+[TABLE 15]
+Regel || Userspace || Kernel
+Standard || C++23 || Eingeschränkter WDK-C++-Modus; /kernel
+Exceptions || Deaktiviert in sicherheitskritischen Komponenten || Nicht zulässig
+RTTI || Deaktiviert || Nicht zulässig
+Allokation im Hot Path || Vorallokierte Pools/Arenen || Nicht zulässig
+Ownership || unique_ptr, span, RAII; keine shared_ptr-Zyklen || Explizite Owner, Scope Guards ohne Runtime-Magie
+Fehler || std::expected oder eigener Result-Typ || NTSTATUS/ShieldStatus, explizite Pfade
+Stringverarbeitung || string_view/span plus explizites Encoding || UNICODE_STRING nur am Adapterrand
+Arithmetik || Checked Add/Mul/Sub/Align || Checked Helpers verpflichtend
+Globals || Nur immutable constexpr; keine globalen Mutables || Keine globalen Konstruktoren; State in explizitem Device Context
+
+[TABLE 16]
+Bereich || Standardbudget || Hartes Verhalten bei Überschreitung
+Pending Flow Kernel || 4 KiB Metadaten pro Flow; max. 4096 Flows || Admission Control; dienstspezifisch block/restricted allow.
+Broker Initial Window || 64 KiB pro nicht klassifiziertem Flow || Deep Inspection abbrechen; Quarantäne oder Block.
+Normalisierter Request || 1 MiB Standard, 16 MiB nur explizit pro Dienst || 413/Block und Audit.
+Parser Worker || 128 MiB Working Set || Job-Object-Abbruch, Worker neu starten.
+Fast Sandbox || 512 MiB pro Instanz || Instanz verwerfen.
+Hyper-V Sandbox || 1.5 GiB pro Instanz || Analyse abbrechen und als inconclusive-high-risk behandeln.
+Audit Cache || 64 MiB || Synchron flush; keine unkontrollierte Expansion.
+
+[TABLE 17]
+Pfad || p95-Ziel || p99-Hartgrenze
+WFP Connect Fast Decision || < 100 µs || 250 µs
+Broker/Policy für bekannten Flow || < 500 µs || 1 ms
+Strukturelle Requestprüfung || < 5 ms || 20 ms
+Fast Sandbox || < 80 ms || 250 ms
+Hyper-V Sandbox interaktiv || < 750 ms || 2 s
+Datei-/Downloadanalyse || objektabhängig || 30 s Standard; danach Quarantäne bleibt bestehen
+
+[TABLE 18]
+Detektor || Verfahren || Ausgabe
+Signature Detector || Hashsets, Aho-Corasick/Trie, strukturierte CVE-Regeln || Treffer, Regel-ID, Härtegrad.
+Protocol Invariant Detector || Explizite Zustandsautomaten und checked arithmetic || Verletzte Invariante, Parserdifferenz.
+Flow Baseline Detector || Exponentially weighted robuste Statistiken je Dienst/Prozess || Abweichung 0–100.
+Isolation Forest || Eigene C++-Implementierung, offline trainiert, unveränderliches Modell || Anomaliewert und Featurebeiträge.
+Sequence Model || N-Gramm-/Markov-Modell über normalisierte Ereignistoken || Sequenzneuartigkeit.
+Mutation Detector || SimHash/MinHash, Edit-Signaturen, Delta-Features || Mutationsfamilie und Adaptivitätswert.
+Campaign Graph || Zeitfenstergraph über Quellen, Ziele, Payloadfamilien und Antworten || Campaign-ID und Kampagnenrisiko.
+Consequence Detector || Regelbasiert über Prozess-, Datei-, Speicher- und Egressereignisse || Exploit-Phänotyp, meist Hard Block.
+
+[TABLE 19]
+Targettyp || Ausführung || Beobachtung
+HTTP Service Twin || Gleiche Binärversion und Konfiguration mit synthetischen Daten. || Crash, Kindprozess, Datei, Egress, Token, ungewöhnliche Antwort.
+Parser Twin || Realer Parser/Viewer in Isolation. || Exceptions, Speicher- und Prozessfolgen, Laufzeit, Hänger.
+Download Twin || PE/DLL/Skript mit Fake-Dokumenten und Fake-Netz. || Persistenz, Evasion, C2, Credential-Zugriff.
+Multi-Flow Twin || Mehrere koordinierte Verbindungen und variierte Reihenfolge. || Race-/State-Angriffe, Desync, sessionübergreifende Effekte.
+
+[TABLE 20]
+Score/Regel || Aktion
+Hard Block Rule || Flow blockieren, Origin temporär sperren, Incident erzeugen.
+0–24 || ALLOW
+25–49 || ALLOW_MONITORED
+50–74 || DEEP_INSPECTION oder RATE_LIMIT
+75–99 || REDIRECT_SANDBOX
+100–149 || QUARANTINE/DROP_FLOW
+150+ || BLOCK_ORIGIN, Zielprozess ggf. suspendieren, Incident-Paket.
+
+[TABLE 21]
+Dienstklasse || Bei KI-Ausfall || Bei Sandbox-Ausfall || Bei Core-Ausfall
+Admin/RDP/Management || Deterministische Regeln, sonst block || Block || Block
+Dateidownload || Quarantäne bleibt || Quarantäne bleibt || Keine Ausführung
+Web/API Server || Regeln + bekannte Baseline || High risk block, low risk monitored || Externen Listener schließen
+Medien/Spiel || Regeln + Rate Limits || Monitored allow bei niedriger Kritikalität || Restricted allow nur bestehende Flows
+Unregistrierter Dienst || Block || Block || Block
+
+[TABLE 22]
+Datenklasse || Standardaufbewahrung || Inhalt
+Flow-Metadaten || 30 Tage || Tuple, Prozess, Zeiten, Volumen, Verdict, keine vollständige Payload.
+Security Incident || 90 Tage || Evidenzmerkmale, begrenzte Byteausschnitte, Hashes, kausale Kette.
+Sandbox Report || 30 Tage; Incident 90 Tage || Ereignisse, Prozesse, Dateien, Netzversuche, keine echten Geheimnisse.
+Vollpayload || Standard: nicht dauerhaft || Nur explizit administrativ und größenbegrenzt.
+Health/Performance || 14 Tage || Latenz, Queue, Speicher, Fehler, keine Nutzinhalte.
+
+[TABLE 23]
+ID || Anforderung || Abnahme
+FR-NET-001 || Alle eingehenden IPv4/IPv6-TCP-Verbindungen erfassen und einem Prozess/Dienst zuordnen. || Systemtest mit registrierten und unregistrierten Listenern.
+FR-NET-002 || Unregistrierte externe Ports standardmäßig blockieren. || Portscan zeigt keine erreichbaren nicht registrierten Dienste.
+FR-NET-003 || Asynchrone WFP-Entscheidungen mit Timeout und Completion unterstützen. || 10 Mio. Pend/Complete-Zyklen ohne Leak oder Deadlock.
+FR-NET-004 || Proxyloop durch Redirect Tracking verhindern. || Mehrfachproxy-Test ohne Endlosschleife.
+FR-NET-005 || UDP-Flows sessionisieren und begrenzen. || DNS-/UDP-Stresstest.
+FR-PRO-001 || Protokoll unabhängig vom Port erkennen. || Cross-port Corpus.
+FR-PRO-002 || HTTP-Framing kanonisch normalisieren. || Smuggling-Corpus vollständig erkannt.
+FR-PRO-003 || Parser in isolierten Workern ausführen. || Workercrash beeinträchtigt Core nicht.
+FR-PRO-004 || Mehrdeutige Parserresultate als Risiko behandeln. || Differential-Parser-Test.
+FR-SBX-001 || Fast Sandbox für kleine Parser und Requests. || Warmstart und 250-ms-Grenze.
+FR-SBX-002 || Hyper-V Sandbox für Hochrisikoobjekte. || Hostescape- und Netzwerkisolationsprüfung.
+FR-SBX-003 || Inconclusive niemals als clean werten. || Timeout-/Crash-Tests.
+FR-FS-001 || Externe Herkunft über Dateioperationen propagieren. || Download, rename, copy, archive extraction.
+FR-FS-002 || Ausführung externer Datei ohne Verdict blockieren. || PE/DLL/Skript-Test.
+FR-GRD-001 || Prozessstart und Image Load mit Provenance verknüpfen. || Kausalketten-Test.
+FR-GRD-002 || Verbotene Kindprozesse blockieren. || Dienst->PowerShell/cmd/mshta Test.
+FR-AI-001 || Flow- und Protokollanomalien erklären. || Featurebeiträge und Reason Codes vorhanden.
+FR-AI-002 || Mutationsfamilien über wechselnde Quellen erkennen. || Verteilte Kampagnensimulation.
+FR-AI-003 || Produktionsmodell nicht online verändern. || Integritäts- und Schreibschutztest.
+FR-POL-001 || Signierte Policy transaktional aktivieren. || Power-loss- und Rollback-Test.
+FR-AUD-001 || Auditsegmente kryptografisch verketten. || Manipulation wird beim Verify erkannt.
+FR-UI-001 || Blockade kausal und verständlich anzeigen. || UX-Abnahme mit Junior/SOC-Nutzerprofil.
+FR-UPD-001 || A/B-Update mit Rollback. || Fehlerhaftes Paket bootet auf vorherige Version zurück.
+FR-HLT-001 || Sensor- und Queue-Ausfälle sichtbar machen. || Fault injection erzeugt Degradationsalarm.
+
+[TABLE 24]
+ID || Verbindliche Qualitätsanforderung
+NFR-SEC-001 || Kein unsignierter Kernel-, Policy-, Modell- oder Updatecode wird geladen.
+NFR-SEC-002 || Kernelcode ist HVCI-kompatibel und besteht Driver Verifier/HLK.
+NFR-SEC-003 || Keine C++-Exceptions/RTTI in sicherheitskritischen Komponenten.
+NFR-PERF-001 || Mindestens 90 % des ungeschützten 1-GbE-Durchsatzes im Balanced-Modus.
+NFR-PERF-002 || p99 Connect-Fastpath ≤ 250 µs auf Referenzhardware.
+NFR-REL-001 || 30 Tage Soak ohne Deadlock, Leak, Bugcheck oder Schutzverlust.
+NFR-REL-002 || Crash eines Parser- oder Sandboxworkers wird automatisch isoliert und neu gestartet.
+NFR-PRV-001 || Keine Cloudübertragung ohne explizite opt-in Policy.
+NFR-MNT-001 || ABI und Dateiformate besitzen Major/Minor-Versionen und Migrationspfade.
+NFR-OBS-001 || Jede Blockade hat mindestens einen konkreten Reason Code und Evidence Hash.
+NFR-CMP-001 || Windows 11 25H2/26H1, HVCI, Secure Boot und Standard-VPN-Clients werden getestet.
+
+[TABLE 25]
+WP || Name || Lieferumfang || Planaufwand
+WP-00 || Program Foundation || Architektur, Threat Model, ADR-Prozess, Toolchain, Coding Standard, Testlab. || 4 Wochen
+WP-01 || Shared Core/ABI || Status-/Result-Typen, checked arithmetic, message ABI, crypto wrapper, ring buffers. || 8 Wochen
+WP-02 || WFP Driver || ALE Gate, Redirect, Pend/Complete, Stream flags, Health, Installer. || 16 Wochen
+WP-03 || Broker/Service Registry || IOCP proxy, Service Policies, TLS managed endpoint, Backpressure. || 18 Wochen
+WP-04 || Protocol Engine || Workerhost, HTTP1/2, DNS, TLS metadata, JSON/XML/ZIP/PE/PDF preflight. || 24 Wochen
+WP-05 || Policy/Detection || Rules, score engine, baseline, isolation forest, mutation/campaign graph. || 24 Wochen
+WP-06 || Fast Sandbox || AppContainer profiles, Job limits, fake services, result ABI. || 14 Wochen
+WP-07 || Hyper-V Sandbox || Base image, COW, guest agent, isolated channel, warm pool. || 24 Wochen
+WP-08 || File Provenance || Minifilter, store, execution gate, archive propagation. || 20 Wochen
+WP-09 || Process Guard || Process/image/object callbacks, provenance inheritance, block actions. || 16 Wochen
+WP-10 || Audit/UI || Hash-chain store, native console, incident views, diagnostics. || 18 Wochen
+WP-11 || Installer/Updater || Signed packages, A/B, recovery, protected service path. || 16 Wochen
+WP-12 || System Hardening || HVCI, Driver Verifier, HLK, fuzzing, perf, compatibility. || laufend + 16 Wochen Releasegate
+WP-13 || Linux Portability Layer || Platform interfaces, build guards, test doubles, format neutrality. || laufend
+WP-14 || Sovereign Mode || Micro-hypervisor, Security Domain, virtual NIC, independent audit. || 18–24 Monate nach 1.0
+
+[TABLE 26]
+Rolle || Anzahl empfohlen || Kernverantwortung
+Chief Architect || 1 || Gesamtsystem, ABI, Trust Boundaries, ADR.
+Security Architecture || 2 || Threat Model, Abuse Cases, Policy, Reviews.
+Windows Kernel Senior || 4 || WFP, Minifilter, Guard, Debugging, HLK.
+Network/Protocol || 4 || Broker, Parser, Normalisierung, Protokolltests.
+Sandbox/Virtualization || 4 || AppContainer, Hyper-V, Guest Agent, COW.
+Detection/AI || 3 || Features, Modelle, Kampagnen, Evaluation.
+UI/Operations || 2 || Native Console, Diagnose, Installer, Update.
+QA/Fuzz/Performance || 4 || Fuzzing, Lab, Soak, Perf, Compatibility.
+Release/Supply Chain || 2 || Reproduzierbare Builds, Signierung, SBOM.
+
+[TABLE 27]
+Junior-Aufgabe || Pflichtbegleitung
+Unit- und Property-Tests für checked arithmetic und ABI || Review durch Core Senior.
+Parser-Teilmodule und Testcorpora || Parser Senior definiert Invarianten und Fuzz-Harness.
+UI-Ansichten, Diagnoseexport, Dokumentation || Security Review für sensitive Daten.
+Featureextraktion und Dataset-Werkzeuge || Detection Senior prüft Leakage und Wertebereiche.
+Performancebenchmarks und Testautomatisierung || QA Lead definiert Messmethodik.
+Sandbox-Fake-Services || Sandbox Senior prüft Isolation und Protokoll.
+
+[TABLE 28]
+Zeitraum || Gate || Ergebnis
+M1–M2 || Foundation || WP-00, ABI-Skeleton, Testlab, Threat Model, Toolchain.
+M2–M5 || Kernel/Flow Foundation || WFP Gate, Core Service, IPC, Health, unregistrierte Ports blockieren.
+M4–M8 || Broker/Protocols || Proxy, HTTP1, DNS, TLS metadata, Normalisierung, Rule Engine.
+M6–M10 || Fast Sandbox + Provenance || AppContainer, Minifilter, Process Guard, PE/ZIP/JSON/XML.
+M8–M13 || Hyper-V + Detection || Isolated pool, campaign graph, isolation forest, consequence engine.
+M11–M15 || Operations || Audit, UI, installer, updater, protected service.
+M14–M17 || Hardening || Fuzzing, Driver Verifier, HVCI, compatibility, performance, red-team.
+M18 || Release Gate || 30-day soak abgeschlossen, HLK, signed release candidate, recovery drill.
+Nach 1.0 || Sovereign Track || 18–24 Monate: Micro-Hypervisor und unabhängige Security Domain.
+
+[TABLE 29]
+Gate || Verbindliche Bedingung
+G0 || Toolchain reproduzierbar; Bedrohungsmodell und Coding Standard freigegeben.
+G1 || WFP kann registrierte Flows erlauben, unbekannte blockieren und sicher degradieren.
+G2 || Broker und HTTP/DNS-Parser laufen stabil unter Last; keine Kernel-Payloadanalyse nötig.
+G3 || Fast Sandbox und File/Process Gate verhindern Test-Exploitfolgen.
+G4 || Hyper-V Sandbox und Detection Ensemble sind integriert; Campaign-Simulation erkannt.
+G5 || Installer/Updater/Audit/UI vollständig; Recovery ohne manuellen Registry-Hack.
+G6 || Security Hardening, Performance, HLK und 30-Tage-Soak bestanden.
+G7 || Produktionsfreigabe 1.0.
+
+[TABLE 30]
+Ebene || Pflichtumfang
+Unit || Alle checked helpers, Zustandsautomaten, Parserprimitiven, Risk/Policy-Funktionen.
+Property-Based || Längen, Offsets, Normalisierung, Idempotenz, Roundtrip, Unicode.
+Fuzz || Jeder Parser, jeder ABI-Decoder, Auditreader, Policy-/Modellloader.
+Kernel || Driver Verifier, fault injection, low-resource, cancellation, unload, race.
+Integration || WFP->Broker->Parser->Policy->Target und Datei->Provenance->Process.
+Adversarial || Mutationskampagnen, verteilte Quellen, Timing, Sandbox detection, model evasion.
+Performance || 1/2.5-GbE, viele kleine Flows, große Streams, UDP, Sandbox burst.
+Compatibility || VPN, Hyper-V, VBS/HVCI, Defender, gängige Browser und Netzwerktreiber.
+Soak || 30 Tage auf mindestens 10 Hardwareprofilen.
+Certification || HLK-relevante Treibertests, Signierung und Upgrade-/Rollbacktests.
+
+[TABLE 31]
+Metrik || Schwelle
+Known Attack Corpus || 100 % der als blockpflichtig markierten Fälle blockiert.
+Benign False Block || < 0,01 % im freigegebenen Referenzcorpus.
+Mutation Campaign Detection || >= 95 % der simulierten Kampagnen innerhalb des definierten Beobachtungsfensters.
+Consequence Guard || 100 % der verbotenen Kindprozess-/Execution-Pending-Testfälle blockiert.
+Fuzzing || Keine reproduzierbare Memory-Safety-Verletzung; jeder Parser mindestens 1 Milliarde aggregierte Testfälle oder 30 CPU-Tage.
+Driver Verifier || 72 Stunden pro Treiberkonfiguration ohne Verifier-Verstoß.
+Soak || 30 Tage, 10 Systeme, kein Bugcheck/Deadlock/ungeklärter Schutzverlust.
+Performance || >= 90 % Baseline bei 1-GbE Balanced, p99 Fastpath im Budget.
+Recovery || Fehlerhaftes Update rollt innerhalb eines Neustarts automatisch zurück.
+
+[TABLE 32]
+Severity || Beispiel || Automatische Aktion
+S1 Informational || Ungewöhnliche, aber erlaubte Anfrage. || Audit und Baselineupdate im Shadow Store.
+S2 Suspicious || Mutationsserie, leichte Parserabweichung. || Rate limit, monitored allow oder sandbox.
+S3 High || Sandboxcrash, verbotener Prozessversuch. || Flow block, Zielprozess überwachen/suspendieren, Evidence Package.
+S4 Critical || Kernel-/Sensorintegritätsbruch, Policymanipulation, Sandboxescapeindikator. || Lockdown, Netzwerkzugang reduzieren, Update/Recovery sperren, lokaler Alarm.
+
+[TABLE 33]
+Plattformneutral || Windows-Adapter || Späterer Linux-Adapter
+FlowDescriptor, Policy, Evidence, Modelle, Auditformat || WFP/ALE/Stream || eBPF/XDP/Netfilter/AF_XDP
+Protokollparser und Normalisierung || Win32 Socket Broker || epoll/io_uring Broker
+Provenance-Modell || Minifilter/File IDs || LSM/fanotify/inotify/file handles
+Prozessfolge-Modell || Process/Image/Object callbacks || LSM, audit, proc events
+Sandbox Result ABI || AppContainer/Hyper-V || Namespaces/seccomp/KVM
+
+[TABLE 34]
+ID || Risiko || Bewertung || Gegenmaßnahme
+R-001 || WFP-/Treiberinteraktion verursacht Instabilität || Hoch || Minimaler Callout, WFPSampler-Referenz, Compatibility Lab, Driver Verifier, progressive rollout.
+R-002 || Sandboxlatenz beeinträchtigt Nutzung || Hoch || Dreistufiger Pfad, warme Pools, dienstspezifische Budgets, nur risikobasiert sandboxen.
+R-003 || False Positives blockieren legitime Dienste || Hoch || Learning, explainable scores, monitored allow, corpus gates, pro Service Policy.
+R-004 || Sandbox wird erkannt oder umgangen || Mittel/Hoch || Mehrfachläufe, Umweltvariation, Runtime-Gate, Hyper-V Tier.
+R-005 || Windows-Kernel kompromittiert Sensoren || Hoch || Mehrquellenkorrelation, Integritätsalarme, Sovereign Mode.
+R-006 || DoS durch Pending/Sandbox Exhaustion || Hoch || Feste Budgets, Token Buckets, Admission Control, Quelle/Dienst-Limits.
+R-007 || Modellvergiftung || Mittel || Kein Online-Lernen, signierte Modelle, Dataset Provenance.
+R-008 || Update-/Supply-Chain-Kompromittierung || Kritisch || Offline Build, ECDSA, SBOM, A/B, getrennte Schlüsselrollen.
+R-009 || Projektumfang übersteigt Team || Hoch || Feste WPs, 22–26 FTE, keine optionalen Nebenfeatures, Gate-Steuerung.
+R-010 || Rechtliche/Datenschutzprobleme || Mittel || Local-first, Payload-Minimierung, Retention, Exportkontrolle.
+
+[TABLE 35]
+Bit || Name || Bedeutung
+0x0001 || PROTO_MALFORMED || Grundlegende Protokollstruktur ungültig.
+0x0002 || PROTO_AMBIGUOUS || Mehrere Parserinterpretationen oder widersprüchliches Framing.
+0x0004 || SIGNATURE_KNOWN_ATTACK || Signatur einer bekannten Angriffsfamilie.
+0x0008 || NOVELTY_HIGH || Hohe Abweichung von Dienst-/Prozessbaseline.
+0x0010 || ADAPTIVE_MUTATION || Systematische payloadbasierte Lern-/Mutationsserie.
+0x0020 || CAMPAIGN_CORRELATED || Zuordnung zu verteilter Kampagne.
+0x0040 || SANDBOX_CRASH || Shadow Target oder Parser ist kontrolliert abgestürzt.
+0x0080 || CHILD_PROCESS_FORBIDDEN || Extern beeinflusster Dienst wollte verbotenen Prozess starten.
+0x0100 || EXECUTION_PENDING || Extern erzeugte Datei ohne gültiges Verdict.
+0x0200 || EGRESS_UNAUTHORIZED || Unerlaubte ausgehende Verbindung als Folge externer Daten.
+0x0400 || SENSOR_INCONSISTENT || Widerspruch oder Sequenzlücke in Sensorik.
+0x0800 || MODEL_POLICY_INTEGRITY || Signatur-/Versionsproblem bei Modell oder Policy.
+0x1000 || RESOURCE_EXHAUSTION || Budgetüberschreitung oder DoS-Indikator.
+0x2000 || SANDBOX_INCONCLUSIVE || Analyse nicht vollständig; nicht als clean gewertet.
+
+[TABLE 36]
+Profil || Konfiguration
+H1 Mainstream AMD || 8-Core Ryzen, 32 GiB, AMD-V/IOMMU, TPM 2.0, 1-GbE, Windows 11 25H2.
+H2 Mainstream Intel || 8-Core Intel, 32 GiB, VT-x/VT-d, TPM 2.0, 2.5-GbE, Windows 11 25H2.
+H3 Low End || 4-Core, 16 GiB, SATA SSD, 1-GbE, Windows 11 Pro 25H2.
+H4 New Silicon || 26H1-fähiges Gerät, 32 GiB, aktuelle WDK-/Treiberprüfung.
+H5 Virtual Test || Nested virtualization für Funktions-, nicht Performance-Abnahme.
