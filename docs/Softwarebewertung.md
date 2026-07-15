@@ -1,6 +1,6 @@
 # Softwarebewertung: AI Shield 2.0
 
-Stand: 14. Juli 2026, bewertet wird Release Candidate `2.0.0-rc.12`
+Stand: 15. Juli 2026, bewertet wird Release Candidate `2.0.0-rc.13`
 
 Nachtrag zum verifizierten RC8-Stand: Die Recovery-Erstbaseline wurde auf dem Referenzrechner mit
 13.353 Dateien und null Übersprüngen abgeschlossen. Nicht auflösbare Junctions und Reparse Points
@@ -15,6 +15,11 @@ und eine aktive PDF ist Bestandteil des Release-Nachweises.
 
 RC10 ergänzt den für Endanwender notwendigen Hintergrundbetrieb: Tray-Autostart, Status der fünf
 Schutzkomponenten, UI-Einzelinstanz und Close-to-Tray wurden implementiert und real geprüft.
+
+RC13 schließt die zuvor praktisch fehlerhafte Quarantänefreigabe. Die UI verwendet keinen von
+ProcessGuard blockierten PowerShell-Unterprozess mehr; Broker und Minifilter führen die Freigabe
+objektidentitätsgebunden, dauerhaft protokolliert und mit automatischem Rollback aus. Der reale
+Ende-zu-Ende-Test bestand.
 
 RC11 ergänzt die universelle Datei-Preflight-Kette, die unbekannte Formate nicht mehr umgeht,
 Dateiidentität und SHA-256 über dasselbe gesperrte Handle bindet und den isolierten Scanner durch

@@ -46,6 +46,10 @@ foreach ($pattern in @('AIShieldPrivateUiInstance/1', 'private-ui.show.signal', 
 if ($scriptText -notmatch '\[Windows\.Threading\.Dispatcher\]::Run\(\)' -or $scriptText -match '\$window\.ShowDialog\(\)') {
     throw "Close-to-tray requires a persistent non-modal WPF dispatcher."
 }
+if ($scriptText -notmatch '&\s*\$broker\s+quarantine-restore' -or
+    $scriptText -match 'powershell\.exe[^\r\n]+quarantine-release') {
+    throw "Quarantine release must call the signed broker directly without exposing the destination to a script host."
+}
 
 if ($RenderPreview) {
     $content = $window.Content

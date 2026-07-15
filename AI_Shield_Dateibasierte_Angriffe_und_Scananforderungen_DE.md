@@ -2,7 +2,7 @@
 
 ## Implementierungsstand in AI Shield
 
-Stand: 14. Juli 2026, `AIShieldContentPolicy/4`
+Stand: 15. Juli 2026, `AIShieldContentPolicy/4`
 
 Der Katalog ist zugleich Zielbild und Negativtestvertrag. Der produktive Downloadpfad behandelt
 inzwischen jede nach Brokerstart neu angelegte oder geänderte Datei, einschließlich unbekannter
@@ -2182,7 +2182,7 @@ Die Freigabe muss aus **Identität, Struktur, enthaltenen Fähigkeiten, Provenie
 
 # Implementiert
 
-Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.12`
+Stand: 15. Juli 2026, Release Candidate `2.0.0-rc.13`
 
 Dieser Abschnitt ordnet die in diesem Dokument geforderten Kontrollen dem tatsächlich
 implementierten RC12-Stand zu. **Implementiert** bedeutet entweder eine positive technische

@@ -5,7 +5,7 @@ $repo = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot "..\.."))
 $contractPath = Join-Path $PSScriptRoot "RELEASE_CONTRACT.json"
 $contract = Get-Content -LiteralPath $contractPath -Raw | ConvertFrom-Json
 if ($contract.schema -ne "AIShieldPrivateReleaseContract/1") { throw "Unknown release contract schema." }
-if ($contract.kernel_abi -ne "1.2" -or [int]$contract.kernel_abi_freeze_revision -ne 2 -or
+if ($contract.kernel_abi -ne "1.2" -or [int]$contract.kernel_abi_freeze_revision -ne 3 -or
     $contract.internal_abi -ne "2.0" -or [int]$contract.policy_schema -ne 1) {
     throw "Release contract version tuple is invalid."
 }

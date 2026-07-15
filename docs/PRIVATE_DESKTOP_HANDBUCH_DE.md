@@ -1,6 +1,6 @@
 # AI Shield Private Desktop Handbuch
 
-Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.12`
+Stand: 15. Juli 2026, Release Candidate `2.0.0-rc.13`
 
 ## Zweck und Voraussetzungen
 
@@ -25,7 +25,7 @@ Für ein reproduzierbares Upgrade, das alte Treiber vor dem MSI-Lauf vollständi
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass `
   -File tools\install_private_desktop_release.ps1 `
-  -MsiPath dist\msi\AI_Shield_Private_Desktop_2.0.0-rc.12_x64.msi
+  -MsiPath dist\msi\AI_Shield_Private_Desktop_2.0.0-rc.13_x64.msi
 ```
 
 Nach der Installation startet **AI Shield Private Desktop** über das Startmenü. Die notwendige
@@ -82,6 +82,13 @@ sauber geprüfte Dateien aktiver Gruppen in die Quarantäne. Die laufende UI mel
 innerhalb weniger Sekunden; auf der Seite **Quarantäne** kann der Benutzer sie mit Zielpfad und
 Begründung freigeben. Ein deaktivierter Dateitypschalter bedeutet ausdrücklich: keine AI-Shield-
 Inhaltsprüfung und keine Freigabeschranke für diese Gruppe.
+
+Die RC13-Freigabe erfolgt ohne einen zusätzlichen PowerShell-Prozess. Der Broker prüft die
+Quarantäne-ID und die feste Dateiidentität, verschiebt die Datei transaktional auf demselben Volume
+und lässt den Minifilter erst nach dauerhaftem Journal-Commit genau dieses Objekt wieder öffnen.
+Kann die Kernel-Freigabe nicht bestätigt werden, wird die Datei automatisch in die Quarantäne
+zurückgerollt. Ein Ziel auf einem anderen Laufwerk muss zuerst auf ein Ziel desselben Volumes
+geändert werden.
 
 Seit RC12 ist der Minifilter-Pending-Pfad identitätsgebunden und latenzbegrenzt: Nach dem Schreiben
 bleiben Vorschau, Lesen, Mapping und Ausführung gesperrt. Der Broker bestätigt die sichere

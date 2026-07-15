@@ -2,7 +2,23 @@
 
 ## Eine verhaltens- und kausalitätsbasierte Schutzarchitektur für Windows-Desktops
 
-Whitepaper, Stand 14. Juli 2026
+Whitepaper, Stand 15. Juli 2026
+
+## RC13: Transaktionale Rückkehr aus der Quarantäne
+
+Die Schutzentscheidung endet nicht beim Blockieren einer Datei. Eine kontrollierte Freigabe muss
+dieselbe Objektidentität erhalten, darf keine ProcessGuard-Regel umgehen und muss den Kernelzustand
+atomar mit dem Benutzerzustand synchronisieren. RC13 führt diesen Rückweg als privilegierte
+Transaktion aus: Die UI übergibt ID, Ziel und Begründung direkt an den Broker. Dieser verifiziert
+Quarantäneobjekt, Linkanzahl, Volume- und File-ID, verschiebt write-through, prüft am Ziel erneut
+dieselbe Identität und schreibt erst dann den dauerhaften Commit. Ein administrativer Minifilter-
+IOCTL setzt anschließend ausschließlich diese Datei auf `clean`.
+
+Scheitert die Kernelbestätigung, wird das Objekt in den geschützten Speicher zurückverschoben und
+der Vorgang als Rollback dokumentiert. Cross-Volume-Restores werden bewusst verweigert, solange
+Windows dabei keine identische File-ID garantieren kann. Damit schließt RC13 sowohl den früheren
+ProcessGuard-Selbstblock als auch das Risiko, dass eine verschobene Datei im Kernel weiterhin als
+quarantänisiert gilt.
 
 ## RC12: Entscheidung vor dem ersten Zugriff
 

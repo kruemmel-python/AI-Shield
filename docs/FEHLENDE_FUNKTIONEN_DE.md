@@ -1,6 +1,6 @@
 # AI Shield: Noch auszuführende Produktnachweise
 
-Stand: 15. Juli 2026, nach Abschluss des RC12-ZIP- und latenzbegrenzten Minifilter-Schutzpfads
+Stand: 15. Juli 2026, nach Abschluss der RC13-Quarantänefreigabe
 
 ## Noch auszuführende Produktnachweise
 
@@ -29,6 +29,12 @@ Dateiöffnungen bleiben bis zum identitätsgebundenen Ergebnis gesperrt. Timeout
 Warteschlangenüberlauf und ungültige Antworten bleiben `pending`. Damit enthält diese Liste
 keine bekannte, nur durch weiteren lokalen Produktcode schließbare
 Schutzlücke; offen sind Nachweise, externe Vertrauensanker und deployment-spezifische Parameter.
+
+RC13 ergänzt die zuvor fehlgeschlagene Benutzerfreigabe als transaktionalen Ende-zu-Ende-Pfad.
+UI und Broker verwenden keinen PowerShell-Unterprozess mit Downloadziel mehr. Der Broker bindet
+Move, Restore-Journal und administratives Minifilter-Clean-Urteil an dieselbe Volume-/File-ID und
+rollt bei Fehlern zurück. Der reale Integrationstest hat Quarantänisierung, Freigabe, Lesbarkeit
+und Bereinigung nachgewiesen.
 
 RC8 ergänzte einen ACL-geschützten, inhaltsadressierten Recovery-Vault, Installationsbaseline,
 Canary- und Änderungsserienerkennung, einen pro Prozess korrelierenden C++-Detektor,

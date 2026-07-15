@@ -1,6 +1,6 @@
 # AI Shield Editionen und Versionen
 
-Stand: 14. Juli 2026
+Stand: 15. Juli 2026
 
 ## Gemeinsame technische Basis
 
@@ -11,7 +11,7 @@ signierte Policylogik, dasselbe AISHAD02-Auditformat und dieselben drei Windows-
 - `AIShieldMiniFilter.sys` für Dateiprovenance, Dateiidentität und Quarantänepfade;
 - `AIShieldProcessGuard.sys` für Prozess-, Parent-, Image- und Handle-Regeln.
 
-Der Kerneltransport ist als ABI `1.2`, Freeze-Revision `2`, eingefroren. Windows-Adapter validieren
+Der Kerneltransport ist als ABI `1.2`, Freeze-Revision `3`, eingefroren. Windows-Adapter validieren
 die Kernelstrukturen und übersetzen sie an der Vertrauensgrenze in das interne ABI 2.0.
 
 ## Private Desktop
@@ -47,9 +47,9 @@ nicht erforderlich.
 
 | Vertrag | Aktueller Stand |
 |---|---|
-| Release Candidate | `2.0.0-rc.12` |
+| Release Candidate | `2.0.0-rc.13` |
 | Kernel-Transport | `1.2` |
-| ABI-Freeze | Revision `2` |
+| ABI-Freeze | Revision `3` |
 | Interne Ereignis-ABI | `2.0` |
 | Policy-Schema | `1` |
 | Auditformat | ausschließlich `AISHAD02` |

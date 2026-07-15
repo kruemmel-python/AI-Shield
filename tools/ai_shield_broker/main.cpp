@@ -614,6 +614,19 @@ bool submit_file_verdict(std::uint64_t file_id, std::uint32_t volume_id, std::ui
                            &message, sizeof(message), nullptr, 0U, &returned, nullptr) != FALSE;
 }
 
+bool submit_admin_file_verdict(std::uint64_t file_id, std::uint32_t volume_id, std::uint32_t verdict) {
+    HANDLE device = CreateFileW(L"\\\\.\\AIShieldMiniFilter", GENERIC_WRITE,
+                                FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0U, nullptr);
+    if (device == INVALID_HANDLE_VALUE) return false;
+    AI_SHIELD_FILE_VERDICT message{
+        AI_SHIELD_PROTOCOL_VERSION, sizeof(AI_SHIELD_FILE_VERDICT), file_id, volume_id, verdict};
+    DWORD returned = 0U;
+    const bool submitted = DeviceIoControl(device, AI_SHIELD_IOCTL_ADMIN_FILE_VERDICT,
+                                           &message, sizeof(message), nullptr, 0U, &returned, nullptr) != FALSE;
+    CloseHandle(device);
+    return submitted;
+}
+
 bool suspicious_structure(const std::filesystem::path& path, std::span<const std::byte> content) {
     if (content.empty()) return false;
     const auto extension = lower_extension(path);
@@ -981,20 +994,70 @@ public:
         std::error_code error;
         std::filesystem::create_directories(destination.parent_path(), error);
         if (error || std::filesystem::exists(destination, error)) return false;
-        if (MoveFileExW(source.c_str(), destination.c_str(), MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH) == FALSE)
+        HANDLE source_handle = CreateFileW(source.c_str(), FILE_READ_ATTRIBUTES,
+                                           FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr,
+                                           OPEN_EXISTING, FILE_FLAG_OPEN_REPARSE_POINT, nullptr);
+        BY_HANDLE_FILE_INFORMATION source_info{};
+        const bool source_valid = source_handle != INVALID_HANDLE_VALUE &&
+                                  GetFileInformationByHandle(source_handle, &source_info) != FALSE &&
+                                  source_info.nNumberOfLinks == 1U;
+        if (source_handle != INVALID_HANDLE_VALUE) CloseHandle(source_handle);
+        if (!source_valid) return false;
+        HANDLE destination_parent = CreateFileW(destination.parent_path().c_str(), FILE_READ_ATTRIBUTES,
+                                                FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr,
+                                                OPEN_EXISTING,
+                                                FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT, nullptr);
+        BY_HANDLE_FILE_INFORMATION destination_parent_info{};
+        const bool same_volume = destination_parent != INVALID_HANDLE_VALUE &&
+                                 GetFileInformationByHandle(destination_parent, &destination_parent_info) != FALSE &&
+                                 destination_parent_info.dwVolumeSerialNumber == source_info.dwVolumeSerialNumber;
+        if (destination_parent != INVALID_HANDLE_VALUE) CloseHandle(destination_parent);
+        if (!same_volume) return false;
+        if (MoveFileExW(source.c_str(), destination.c_str(), MOVEFILE_WRITE_THROUGH) == FALSE)
             return false;
+        HANDLE destination_handle = CreateFileW(destination.c_str(), FILE_READ_ATTRIBUTES,
+                                                FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr,
+                                                OPEN_EXISTING, FILE_FLAG_OPEN_REPARSE_POINT, nullptr);
+        BY_HANDLE_FILE_INFORMATION destination_info{};
+        const bool same_object = destination_handle != INVALID_HANDLE_VALUE &&
+                                 GetFileInformationByHandle(destination_handle, &destination_info) != FALSE &&
+                                 destination_info.dwVolumeSerialNumber == source_info.dwVolumeSerialNumber &&
+                                 destination_info.nFileIndexHigh == source_info.nFileIndexHigh &&
+                                 destination_info.nFileIndexLow == source_info.nFileIndexLow &&
+                                 destination_info.nNumberOfLinks == 1U;
+        if (destination_handle != INVALID_HANDLE_VALUE) CloseHandle(destination_handle);
+        if (!same_object) {
+            MoveFileExW(destination.c_str(), source.c_str(), MOVEFILE_WRITE_THROUGH);
+            return false;
+        }
         const auto journal_path = std::filesystem::path(L"C:\\ProgramData\\AIShield\\quarantine\\restore.jsonl");
-        HANDLE journal = CreateFileW(journal_path.c_str(), FILE_APPEND_DATA, FILE_SHARE_READ, nullptr, OPEN_ALWAYS,
-                                     FILE_ATTRIBUTE_NORMAL | FILE_FLAG_WRITE_THROUGH, nullptr);
-        if (journal == INVALID_HANDLE_VALUE) return false;
-        const std::string record = "{\"id\":\"" + json_escape(identifier) +
-                                   "\",\"destination\":\"" + json_escape(destination.wstring()) +
-                                   "\",\"reason\":\"" + json_escape(reason) + "\"}\r\n";
-        DWORD written = 0;
-        const bool logged = WriteFile(journal, record.data(), static_cast<DWORD>(record.size()), &written, nullptr) &&
-                            written == record.size() && FlushFileBuffers(journal);
-        CloseHandle(journal);
-        return logged;
+        const auto append_state = [&journal_path, identifier, &destination, reason](std::string_view state) {
+            HANDLE journal = CreateFileW(journal_path.c_str(), FILE_APPEND_DATA, FILE_SHARE_READ, nullptr, OPEN_ALWAYS,
+                                         FILE_ATTRIBUTE_NORMAL | FILE_FLAG_WRITE_THROUGH, nullptr);
+            if (journal == INVALID_HANDLE_VALUE) return false;
+            const std::string record = "{\"id\":\"" + json_escape(identifier) +
+                                       "\",\"destination\":\"" + json_escape(destination.wstring()) +
+                                       "\",\"reason\":\"" + json_escape(reason) + "\",\"state\":\"" +
+                                       std::string(state) + "\"}\r\n";
+            DWORD written = 0U;
+            const bool logged = WriteFile(journal, record.data(), static_cast<DWORD>(record.size()),
+                                          &written, nullptr) != FALSE &&
+                                written == record.size() && FlushFileBuffers(journal) != FALSE;
+            CloseHandle(journal);
+            return logged;
+        };
+        if (!append_state("committed")) {
+            MoveFileExW(destination.c_str(), source.c_str(), MOVEFILE_WRITE_THROUGH);
+            return false;
+        }
+        const std::uint64_t file_id = (static_cast<std::uint64_t>(destination_info.nFileIndexHigh) << 32U) |
+                                      destination_info.nFileIndexLow;
+        if (!submit_admin_file_verdict(file_id, destination_info.dwVolumeSerialNumber, AI_SHIELD_FILE_CLEAN)) {
+            MoveFileExW(destination.c_str(), source.c_str(), MOVEFILE_WRITE_THROUGH);
+            append_state("rolled_back");
+            return false;
+        }
+        return true;
     }
 
 private:

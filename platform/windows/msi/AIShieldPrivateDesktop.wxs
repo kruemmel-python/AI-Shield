@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="564E0119-259D-421A-9E46-15CED6D6205E"
+  <Product Id="DA62F064-8D44-4CC0-95AA-707AD16463FD"
            Name="AI Shield Private Desktop"
            Language="1031"
-           Version="2.0.10"
+           Version="2.0.13"
            Manufacturer="AI Shield"
            UpgradeCode="357A6A93-5FDA-43D2-8D41-4D24BF080EDD">
     <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine"
              InstallPrivileges="elevated" Platform="x64"
-             Description="AI Shield Private Desktop 2.0.0-rc.12" />
+             Description="AI Shield Private Desktop 2.0.0-rc.13" />
     <MajorUpgrade DowngradeErrorMessage="Eine neuere Version von AI Shield Private Desktop ist bereits installiert."
                   Schedule="afterInstallInitialize" />
     <MediaTemplate EmbedCab="yes" CompressionLevel="high" />

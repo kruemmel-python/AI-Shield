@@ -126,7 +126,7 @@ int wmain(int argc, wchar_t** argv) {
         ULONG port = 0;
         if (!parse_port(L"18081", port) || port != 18081U || parse_port(L"70000", port) ||
             sizeof(AI_SHIELD_DRIVER_POLICY) != 32U || sizeof(AI_SHIELD_DRIVER_STATUS) != 56U ||
-            sizeof(AI_SHIELD_DRIVER_EVENT) != 72U || AI_SHIELD_ABI_FREEZE_REVISION != 2U ||
+            sizeof(AI_SHIELD_DRIVER_EVENT) != 72U || AI_SHIELD_ABI_FREEZE_REVISION != 3U ||
             kDevices.size() != 3U) return 2;
         std::wcout << L"ai_shield_kernelctl self-test passed\n";
         return 0;

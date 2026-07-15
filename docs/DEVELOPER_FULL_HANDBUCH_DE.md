@@ -1,6 +1,6 @@
 # AI Shield Developer Full Handbuch
 
-Stand: 14. Juli 2026
+Stand: 15. Juli 2026
 
 ## Paketinhalt
 

@@ -1,6 +1,6 @@
 # AI Shield: ABI Freeze und HLK-Übergabe
 
-Stand: 14. Juli 2026, Kernel-Transport ABI `1.2`, Freeze-Revision `2`
+Stand: 15. Juli 2026, Kernel-Transport ABI `1.2`, Freeze-Revision `3`
 
 ## Eingefrorenes ABI
 
@@ -8,7 +8,7 @@ Das Treiberprotokoll ist als `AIShieldDriverABI/1.2` eingefroren:
 
 ```text
 protocol_version = 0x00010002
-freeze_revision = 2
+freeze_revision = 3
 packing = 8
 AI_SHIELD_DRIVER_POLICY = 32 Bytes
 AI_SHIELD_DRIVER_STATUS = 56 Bytes

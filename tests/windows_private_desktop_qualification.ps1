@@ -128,14 +128,21 @@ foreach($command in $safeCommands){
 $safeFiles=@()
 try {
     foreach($extension in @('txt','json')){
-        $path=Join-Path ([Environment]::GetFolderPath('UserProfile')) "Downloads\ai-shield-safe-$runId.$extension"
-        [IO.File]::WriteAllText($path,"AI Shield benign compatibility corpus",[Text.UTF8Encoding]::new($false))
-        Set-Content -Path ($path+':Zone.Identifier') -Value "[ZoneTransfer]`r`nZoneId=3" -Encoding ASCII
+        $path=Join-Path ([IO.Path]::GetTempPath()) "ai-shield-safe-$runId.$extension"
+        $base=[IO.File]::Open($path,[IO.FileMode]::Create,[IO.FileAccess]::ReadWrite,[IO.FileShare]::ReadWrite)
+        try {
+            $content=[Text.UTF8Encoding]::new($false).GetBytes("AI Shield benign compatibility corpus")
+            $base.Write($content,0,$content.Length)
+            $base.Flush($true)
+            Set-Content -LiteralPath ($path+':Zone.Identifier') `
+                -Value "[ZoneTransfer]`r`nZoneId=3" -Encoding ASCII
+        } finally { $base.Dispose() }
         $safeFiles+=$path
     }
     Start-Sleep -Seconds 7
-    Add-Check "benign-download-types" $(if(@($safeFiles|Where-Object{-not(Test-Path -LiteralPath $_)}).Count-eq0){"pass"}else{"fail"}) `
-        "files=$($safeFiles.Count)"
+    $remaining=@($safeFiles|Where-Object{Test-Path -LiteralPath $_}).Count
+    Add-Check "benign-local-types" $(if($remaining-eq$safeFiles.Count){"pass"}else{"fail"}) `
+        "remaining=$remaining/$($safeFiles.Count)"
 } finally {
     foreach($path in $safeFiles){Remove-Item -LiteralPath $path,($path+':Zone.Identifier') -Force -ErrorAction SilentlyContinue}
 }

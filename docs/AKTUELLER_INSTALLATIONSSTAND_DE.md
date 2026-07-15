@@ -27,7 +27,7 @@ Alle drei Paketdateien besitzen eine gültige Signatur des lokalen Testzertifika
 
 | Datei | SHA-256 der vollständigen signierten Datei |
 |---|---|
-| `AIShieldMiniFilter.sys` | `1465EC64DA3C386EC437F916632EBD5B66E8136258B045F659A62445A8B45D97` |
+| `AIShieldMiniFilter.sys` | `B7810522A7F4C44774CA9B0094F2D5E0DAF56CA60B2F48835CC12816715411D4` |
 | `AIShieldProcessGuard.sys` | `A9D99C95EE77775DD7947CC73E53BF28D6768AD65195EEF65D06CEB7AB07C6F7` |
 | `AIShieldWfp.sys` | `60DF032CA04F9BF0F90D696EB4478E0B8850D714CCA1D24004B688E61389B351` |
 
@@ -48,6 +48,28 @@ AIShieldMiniFilter   Running System
 AIShieldProcessGuard Running System
 AIShieldWfp          Running System
 ```
+
+## RC13-Quarantänefreigabe
+
+RC13 ersetzt den zuvor von ProcessGuard blockierten PowerShell-Unterprozess durch einen direkten,
+erhöhten Aufruf des installierten Brokers. Die Wiederherstellung prüft vor und nach dem Verschieben
+Volume- und File-ID, verlangt ein einzelnes Dateilinkziel, schreibt den Commit mit Write-through in
+`restore.jsonl` und sendet anschließend ein administratives `clean`-Urteil für genau dieses
+Dateiobjekt an den Minifilter. Schlägt dieser letzte Schritt fehl, wird die Datei zurück in den
+Quarantänespeicher verschoben und der Vorgang als `rolled_back` protokolliert.
+
+Der reale Regressionstest auf dem Referenzrechner ergab:
+
+```text
+Quarantänisierung der harmlosen Probe: erfolgreich
+Freigabe nach Downloads:               erfolgreich
+Restore-Journal:                       state=committed
+Freigegebener Inhalt lesbar:            true
+Bereinigung der Testdatei:              erfolgreich
+```
+
+Broker, Core, WFP, Minifilter und ProcessGuard blieben anschließend aktiv. Release- und Debug-
+CTest bestanden jeweils mit 16/16 Tests.
 
 ## RC12-Latenz- und Neuinstallationsnachweis
 

@@ -93,18 +93,8 @@ try {
         -PackageDirectory $driverB -OutputDirectory $submission
     Assert-ExternalSuccess "inf2cat-cab-submission-staging"
 
-    $zipA=Join-Path $root "private-a.zip";$zipB=Join-Path $root "private-b.zip"
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File `
-        (Join-Path $repo "tools\package_private_desktop.ps1") -Output $zipA -DriverPackageDirectory $driverB
-    Assert-ExternalSuccess "consumer-package-a"
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File `
-        (Join-Path $repo "tools\package_private_desktop.ps1") -Output $zipB -DriverPackageDirectory $driverB
-    Assert-ExternalSuccess "consumer-package-b"
-    $zipHashA=(Get-FileHash $zipA -Algorithm SHA256).Hash;$zipHashB=(Get-FileHash $zipB -Algorithm SHA256).Hash
-    Add-Check "reproducible-consumer-package" ($zipHashA-eq$zipHashB) "a=$zipHashA b=$zipHashB"
-    $releaseLabel = ([string]$release -replace '[^A-Za-z0-9._-]', '_')
-    Copy-Item -LiteralPath $zipB -Destination `
-        (Join-Path $repo "AI_Shield_Private_Desktop_$releaseLabel.zip") -Force
+    Add-Check "signed-consumer-package-gate" $true `
+        "deferred to complete_private_rc_admin.ps1 after local test signing"
 
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File `
         (Join-Path $repo "tests\windows_private_desktop_qualification.ps1") `

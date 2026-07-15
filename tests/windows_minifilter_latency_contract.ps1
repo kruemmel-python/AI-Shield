@@ -6,8 +6,10 @@ param(
 $ErrorActionPreference = "Stop"
 $filterPath = Join-Path $RepositoryRoot "platform\windows\minifilter\driver\ai_shield_minifilter.c"
 $brokerPath = Join-Path $RepositoryRoot "tools\ai_shield_broker\main.cpp"
+$protocolPath = Join-Path $RepositoryRoot "platform\windows\common\ai_shield_driver_protocol.h"
 $filter = Get-Content -LiteralPath $filterPath -Raw
 $broker = Get-Content -LiteralPath $brokerPath -Raw
+$protocol = Get-Content -LiteralPath $protocolPath -Raw
 
 if ($filter -notmatch '-250LL\s*\*\s*10LL\s*\*\s*1000LL') {
     throw "Minifilter handoff deadline is not fixed at 250 ms."
@@ -30,6 +32,11 @@ foreach ($required in @(
 }
 if ($broker -notmatch 'void\s+analysis_loop' -or $broker -notmatch 'void\s+receive_loop') {
     throw "Minifilter receive and analysis paths are not separated."
+}
+if ($protocol -notmatch 'AI_SHIELD_IOCTL_ADMIN_FILE_VERDICT' -or
+    $filter -notmatch 'AI_SHIELD_IOCTL_ADMIN_FILE_VERDICT' -or
+    $broker -notmatch 'submit_admin_file_verdict') {
+    throw "Transactional administrator quarantine release is not connected end to end."
 }
 
 Write-Output "AI Shield minifilter latency contract: PASS"

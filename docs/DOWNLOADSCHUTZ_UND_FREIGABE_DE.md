@@ -1,6 +1,6 @@
 # Downloadschutz und Freigabeschranke
 
-Stand: 14. Juli 2026, Content-Policy `AIShieldContentPolicy/4`
+Stand: 15. Juli 2026, Content-Policy `AIShieldContentPolicy/4`
 
 ## Ziel
 
@@ -90,8 +90,15 @@ Die Quarantäneansicht unterscheidet mindestens:
 - `Nicht vertrauenswürdige Ausführung`
 
 Eine Freigabe benötigt einen Zielpfad und eine Begründung. Der Broker validiert Objekt-ID,
-Dateiidentität und Zielzustand und protokolliert die Freigabe. Sicherheitsbefunde sollten nur nach
-fachlicher Analyse freigegeben werden.
+Dateiidentität und Zielzustand und protokolliert die Freigabe. Seit RC13 ruft die UI den Broker
+direkt auf; dadurch enthält die ProcessGuard-überwachte PowerShell-Kommandozeile keinen Downloadpfad
+mehr. Der Broker verlangt vor dem Verschieben genau einen Hardlink, prüft nach dem write-through
+Move dieselbe Volume-/File-ID, protokolliert den Commit dauerhaft und hebt danach über einen nur
+für Administratoren und `SYSTEM` zugänglichen Minifilter-IOCTL das Pending-/Quarantäneurteil für
+genau dieses Objekt auf. Bei einem Fehler wird die Datei zurückverschoben und als `rolled_back`
+protokolliert. Zielpfade auf einem anderen Volume werden derzeit absichtlich abgelehnt, weil dort
+keine identische File-ID erhalten werden kann. Sicherheitsbefunde sollten nur nach fachlicher
+Analyse freigegeben werden.
 
 ## Migration
 

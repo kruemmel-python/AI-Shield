@@ -1,9 +1,13 @@
 # AI Shield Private Desktop
 
-Release Candidate: `2.0.0-rc.12`. ABI-, Policy- und Funktionsumfang sind durch
+Release Candidate: `2.0.0-rc.13`. ABI-, Policy- und Funktionsumfang sind durch
 [`RELEASE_CONTRACT.json`](RELEASE_CONTRACT.json) eingefroren. Änderungen an sicherheitsrelevanten
 Verträgen werden von `validate_release_freeze.ps1` abgelehnt, bis ein bewusst neuer Vertrag erstellt
 wird.
+
+RC13 ergänzt eine direkte, transaktionale Quarantänefreigabe über Broker und Minifilter. Das Ziel
+muss auf demselben Volume wie der Quarantänespeicher liegen; bei Identitäts- oder Kernelproblemen
+wird die Datei automatisch zurückgerollt.
 
 Ein installierbares RC-Paket darf nur aus dem frisch gebauten und anschließend testsignierten
 Treiber-Staging erzeugt werden. `tools\complete_private_rc_admin.ps1` führt dieses erhöhte Gate aus;

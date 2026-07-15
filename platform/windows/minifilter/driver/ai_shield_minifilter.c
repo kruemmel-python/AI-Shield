@@ -525,6 +525,15 @@ static NTSTATUS AiShieldDeviceControl(PDEVICE_OBJECT device, PIRP irp) {
                          ? STATUS_SUCCESS
                          : STATUS_INSUFFICIENT_RESOURCES;
         } else status = STATUS_ACCESS_DENIED;
+    } else if (stack->Parameters.DeviceIoControl.IoControlCode == AI_SHIELD_IOCTL_ADMIN_FILE_VERDICT &&
+               stack->Parameters.DeviceIoControl.InputBufferLength == sizeof(AI_SHIELD_FILE_VERDICT)) {
+        AI_SHIELD_FILE_VERDICT* verdict = (AI_SHIELD_FILE_VERDICT*)irp->AssociatedIrp.SystemBuffer;
+        if (verdict->Version == AI_SHIELD_PROTOCOL_VERSION && verdict->Size == sizeof(*verdict) &&
+            (verdict->Verdict == AI_SHIELD_FILE_CLEAN || verdict->Verdict == AI_SHIELD_FILE_QUARANTINED)) {
+            status = AiShieldSetPendingVerdict(verdict->FileId, verdict->VolumeId, verdict->Verdict)
+                         ? STATUS_SUCCESS
+                         : STATUS_INSUFFICIENT_RESOURCES;
+        } else status = STATUS_INVALID_PARAMETER;
     }
     irp->IoStatus.Status = status;
     irp->IoStatus.Information = bytes;

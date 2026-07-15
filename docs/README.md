@@ -1,9 +1,9 @@
 # AI Shield Dokumentation
 
-Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.12`
+Stand: 15. Juli 2026, Release Candidate `2.0.0-rc.13`
 
 Dieser Ordner ist der zentrale Einstieg in die Projekt-, Betriebs- und Entwicklungsdokumentation.
-Der aktuelle Vertrag verwendet Kernel-Transport ABI `1.2` (Freeze-Revision `2`) und intern ABI
+Der aktuelle Vertrag verwendet Kernel-Transport ABI `1.2` (Freeze-Revision `3`) und intern ABI
 `2.0`. Die lokal gebauten Treiber sind Testsignaturen; eine öffentliche Auslieferung unter aktivem
 Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
 
@@ -17,7 +17,7 @@ Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
 | Sicherheitsanalyse | [Audit Viewer](AUDIT_VIEWER_DE.md) | AISHAD02 prüfen, anzeigen, filtern und als JSON dekodieren |
 | Downloadkontrolle | [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md) | Policy v4, universeller Preflight, Quarantäne und Freigabe |
 | Wiederherstellung | [Ransomware-Schutz und Recovery](RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md) | Versionsspeicher, Erkennung, externe Sicherung und bestätigte Rücksicherung |
-| RC12-Systemnachweis | [RC12 Release- und Installationsnachweis](RC12_RELEASE_NACHWEIS_DE.md) | ZIP-Tiefenanalyse, latenzbegrenztes Minifilter-Pending, Tests und veröffentlichte Artefakte |
+| RC13-Systemnachweis | [RC13 Release- und Installationsnachweis](RC13_RELEASE_NACHWEIS_DE.md) | Transaktionale Quarantänefreigabe, Tests und veröffentlichte Artefakte |
 | Architekturentscheidung | [Editionen und Versionen](EDITIONEN_UND_VERSIONEN_DE.md) | Gemeinsamer Core, Unterschiede und Freigabestatus |
 
 ## Technische Referenz
@@ -31,8 +31,9 @@ Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
 - [Ransomware-Schutz und Wiederherstellung](RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md)
 - [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md)
 - [ZIP-Tiefenanalyse und latenzbegrenztes Minifilter-Pending](ZIP_TIEFENANALYSE_UND_MINIFILTER_PENDING_DE.md)
-- [Dateibasierte Angriffe und RC12-Implementierungszuordnung](../AI_Shield_Dateibasierte_Angriffe_und_Scananforderungen_DE.md)
-- [RC12 Release- und Installationsnachweis](RC12_RELEASE_NACHWEIS_DE.md)
+- [Dateibasierte Angriffe und Implementierungszuordnung](../AI_Shield_Dateibasierte_Angriffe_und_Scananforderungen_DE.md)
+- [RC13 Release- und Installationsnachweis](RC13_RELEASE_NACHWEIS_DE.md)
+- [Historischer RC12-Nachweis](RC12_RELEASE_NACHWEIS_DE.md)
 - [Historischer RC11-Nachweis](RC11_RELEASE_NACHWEIS_DE.md)
 - [Historischer RC10-Nachweis](RC10_RELEASE_NACHWEIS_DE.md)
 - [Historischer RC9-Nachweis](RC9_RELEASE_NACHWEIS_DE.md)

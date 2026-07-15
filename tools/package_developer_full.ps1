@@ -48,6 +48,17 @@ function Copy-Required([string]$Source, [string]$Destination) {
     New-Item -ItemType Directory -Force -Path (Split-Path $Destination -Parent) | Out-Null
     Copy-Item -LiteralPath $Source -Destination $Destination -Force
 }
+function Set-ReleaseTimestamp([IO.FileSystemInfo]$Item, [DateTime]$Timestamp) {
+    for ($attempt = 0; $attempt -lt 40; ++$attempt) {
+        try {
+            $Item.LastWriteTimeUtc = $Timestamp
+            return
+        } catch [IO.IOException] {
+            if ($attempt -eq 39) { throw }
+            Start-Sleep -Milliseconds 100
+        }
+    }
+}
 
 try {
     New-Item -ItemType Directory -Force -Path $root | Out-Null
@@ -82,8 +93,12 @@ try {
         created_utc=$releaseEpoch.ToString("o"); files=$manifestFiles }
     [IO.File]::WriteAllText((Join-Path $root "FULL_PACKAGE_MANIFEST.json"),
         ($manifest | ConvertTo-Json -Depth 5), [Text.UTF8Encoding]::new($false))
-    Get-ChildItem -LiteralPath $root -Recurse -Force | ForEach-Object { $_.LastWriteTimeUtc = $releaseEpoch }
-    (Get-Item -LiteralPath $root).LastWriteTimeUtc = $releaseEpoch
+    $stagedItems = @(Get-ChildItem -LiteralPath $root -Recurse -Force)
+    $stagedItems | Where-Object { -not $_.PSIsContainer } |
+        ForEach-Object { Set-ReleaseTimestamp $_ $releaseEpoch }
+    $stagedItems | Where-Object PSIsContainer | Sort-Object { $_.FullName.Length } -Descending |
+        ForEach-Object { Set-ReleaseTimestamp $_ $releaseEpoch }
+    Set-ReleaseTimestamp (Get-Item -LiteralPath $root) $releaseEpoch
 
     if (Test-Path -LiteralPath $outputPath) { Remove-Item -LiteralPath $outputPath -Force }
     Add-Type -AssemblyName System.IO.Compression, System.IO.Compression.FileSystem

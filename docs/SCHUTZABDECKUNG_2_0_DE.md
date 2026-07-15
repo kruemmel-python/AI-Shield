@@ -1,6 +1,6 @@
 # AI Shield Schutzabdeckung 2.0
 
-Stand: 14. Juli 2026
+Stand: 15. Juli 2026
 
 ## Browser- und Download-Inhaltsprüfung
 
@@ -19,6 +19,10 @@ RC12 ergänzt eine rekursive ZIP-/ZIP64-Prüfung für Stored und DEFLATE samt CR
 Data-Descriptor-, Pfad- und Ressourcenvalidierung. Der Minifilter hält neue externe Dateien
 identitätsgebunden `pending`; der Broker bestätigt die Übergabe innerhalb von 250 ms und setzt das
 endgültige Analyseurteil asynchron für dieselbe Volume-/File-ID.
+RC13 schließt den Rückweg aus der Quarantäne: UI, Broker und Minifilter verwenden einen direkten
+administrativen, objektidentitätsgebundenen Freigabevertrag mit dauerhaftem Commit und Rollback.
+Damit bleibt eine freigegebene Datei nicht versehentlich im Kernelzustand `quarantined` und der
+Freigabevorgang wird nicht mehr durch die Download-Skriptregel des ProcessGuard blockiert.
 Details enthält [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md).
 
 ## Audit Viewer

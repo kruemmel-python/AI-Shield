@@ -1,6 +1,6 @@
 # ZIP-Tiefenanalyse und latenzbegrenztes Minifilter-Pending
 
-Stand: 15. Juli 2026, Release Candidate `2.0.0-rc.12`
+Stand: 15. Juli 2026, Release Candidate `2.0.0-rc.13`
 
 ## Zweck
 
