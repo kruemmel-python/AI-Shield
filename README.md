@@ -6,7 +6,7 @@ ABI-2.0-Vertrag und bewertet sie anhand lokaler Richtlinien. Der aktuelle Stand 
 Windows-Kerneltreiber, LocalSystem-Dienste, isolierte Parser, Downloadquarantäne, Audit-Ketten,
 Recovery-Funktionen und eine grafische Private-Desktop-Oberfläche.
 
-> **Projektstatus:** `2.0.0-rc.15` ist ein funktionsfähiger Entwicklungs- und Pilotprototyp. Die
+> **Projektstatus:** `2.0.0-rc.16` ist ein funktionsfähiger Entwicklungs- und Pilotprototyp. Die
 > Private-Desktop-Ausgabe kann auf einem einzelnen Windows-PC installiert und getestet werden. Die
 > enthaltenen Treiber sind lokal testsigniert. Eine öffentliche Produktionsverteilung unter
 > aktiviertem Secure Boot erfordert weiterhin Microsoft-Treibersignierung, HLK/WHCP-Qualifikation,

@@ -1,7 +1,7 @@
 {
     "schema":  "AIShieldPrivateReleaseContract/1",
-    "release":  "2.0.0-rc.15",
-    "release_epoch_utc":  "2026-07-27T12:45:00Z",
+    "release":  "2.0.0-rc.16",
+    "release_epoch_utc":  "2026-07-27T13:45:00Z",
     "kernel_abi":  "1.2",
     "kernel_abi_freeze_revision":  3,
     "internal_abi":  "2.0",
@@ -21,7 +21,7 @@
                       },
                       {
                           "path":  "editions/private_desktop/edition.json",
-                          "sha256":  "C1B5AA884B38200112430B6AA76A53A7BBA694ADDA9C9A01B168EE47539654CD"
+                          "sha256":  "0B0FE5607CBCD9D39425642F24914951EF9DC032FD81FD27B65612986D582476"
                       },
                       {
                           "path":  "CMakeLists.txt",
@@ -37,7 +37,7 @@
                       },
                       {
                           "path":  "tools/package_private_desktop.ps1",
-                          "sha256":  "6D046F8799BD1E5D2507747AA451865F14E6E2F8092717814853349BE446D7B8"
+                          "sha256":  "485671F1D08BCDC4BAAABA68AD20AFD75D51FE6C4DFFA8DFA23A09D6A93FACC9"
                       },
                       {
                           "path":  "editions/private_desktop/install_private_desktop.ps1",
@@ -49,7 +49,7 @@
                       },
                       {
                           "path":  "platform/windows/msi/AIShieldPrivateDesktop.wxs",
-                          "sha256":  "1C6F427E38233DF77F8889BA2E58B9CEC81DB17AC213B3BDA47C3ACB22284A07"
+                          "sha256":  "BE3144EBF3597F95074FB1C11728701052B53419607980E1CE63026183B20215"
                       },
                       {
                           "path":  "platform/windows/msi/build_msi.ps1",
@@ -77,7 +77,7 @@
                       },
                       {
                           "path":  "editions/private_desktop/ui/AIShield.PrivateDesktop.UI.xaml",
-                          "sha256":  "27F7E97404118DEF81AC69D639038660053B0AE597C7D8854E9B00E0E115BC4D"
+                          "sha256":  "36140CE2393F5168176D0F2985351BD1208B4ADAB12E51CD9A76D3B51EE9FAA8"
                       },
                       {
                           "path":  "editions/private_desktop/ui/AIShield.AuditViewer.xaml",
@@ -85,7 +85,7 @@
                       },
                       {
                           "path":  "editions/private_desktop/ui/start_private_ui.ps1",
-                          "sha256":  "89F7EBFB6A0761E66EFEE5D5BB305F08D1E9CB0ECAA4212982E161F157D7B358"
+                          "sha256":  "51F641B4F2215DEFF9B6F6D0CD6D216E32B8FB11BC32C99F869C7D496CEAC8DA"
                       },
                       {
                           "path":  "editions/private_desktop/ui/private_security_settings.ps1",
@@ -93,7 +93,7 @@
                       },
                       {
                           "path":  "editions/private_desktop/ui/verify_ui_contract.ps1",
-                          "sha256":  "E83853F05FF944EC5D24DB59197367809E6027B2D0A330BD66D1B233BE0168F2"
+                          "sha256":  "6A166E021143B13C726E529A76F936ED2959A8E7FB274C49949D6FDCD4A1D797"
                       },
                       {
                           "path":  "editions/private_desktop/tray/start_tray_agent.ps1",
@@ -316,12 +316,28 @@
                           "sha256":  "E9C9FB7D78C0FCAE5BC8AE69E274F451039A875E15ECFAA5C20E62ED9538859D"
                       },
                       {
-                          "path":  "tools/run_rc15_regressions.ps1",
-                          "sha256":  "7F89EADCBA5EFB7F06190C668E935BF6A60D35898BCB29C2F766257F465B595C"
+                          "path":  "tools/update_private_release_contract.ps1",
+                          "sha256":  "85253660F39B05EE98BCF11C6DB41043A33B87D410B11E3B7249EBAD6832D068"
                       },
                       {
-                          "path":  "tools/update_private_release_contract.ps1",
-                          "sha256":  "FCC23CEF14A92711405479EDFA3A998F6E521270648999D942E8CBF51853F911"
+                          "path":  "editions/private_desktop/ui/quarantine_view_model.ps1",
+                          "sha256":  "1BF44FA05D61C2F4EF2BBDBE3EFB2C4957D7DF97BFB0B1B2E5FE8940C06AA4C1"
+                      },
+                      {
+                          "path":  "docs/RC16_RELEASE_NACHWEIS_DE.md",
+                          "sha256":  "2FE746B0CCB1FC0169D3F16EEAFB79E7BFDAFF38216E984B14AF5777DA1078E7"
+                      },
+                      {
+                          "path":  "tools/package_developer_release.ps1",
+                          "sha256":  "E926712720BAFEF59DC821E1100B770E181163DE9EF24914776FE97FF4FCE27C"
+                      },
+                      {
+                          "path":  "tools/package_developer_full.ps1",
+                          "sha256":  "52EE68B66C1A9E83B3B94E7D8CA1F96C920A5DEF9C40E5B03D1A51097E0FC884"
+                      },
+                      {
+                          "path":  "tools/run_rc16_regressions.ps1",
+                          "sha256":  "C9B296980E354A0FB2E6C35137D52D88C5215BCCCB1105E10A35090733F7C3D1"
                       }
                   ],
     "drivers":  [

@@ -1,4 +1,4 @@
-# Qualifikationsstatus AI Shield Private Desktop 2.0.0-rc.15
+# Qualifikationsstatus AI Shield Private Desktop 2.0.0-rc.16
 
 Stand: 27. Juli 2026
 
@@ -14,7 +14,9 @@ Stand: 27. Juli 2026
   vollständige Zertifikatkette und Online-Widerrufsprüfung. Enrollment-Zustand ist per
   DPAPI LocalMachine und restriktiver ACL geschützt.
 - Alle User-Mode-Binärdateien werden mit Control Flow Guard, CET, ASLR und DEP/NX gebaut.
-- Der WPF-Vertrag enthält 62 gebundene Controls in sechs Ansichten.
+- Der WPF-Vertrag enthält 62 gebundene Controls in sechs Ansichten. Die Quarantänegruppierung
+  wird mit elf Dateien eines Codex-Runtime-Installationsvorgangs geprüft; Titel, Quelle,
+  Dateizahl, Sammelstatus, Aufklappbarkeit und Einzelfreigabe bleiben gebunden.
 - Der Tray-Vertrag und der reale Laufzeittest bestätigen Einzelinstanz, Fünf-Komponenten-Status,
   maschinenweiten Anmeldeautostart und eine vom Schutzkern unabhängige Beendigung.
 - Content-Policy v4 migriert v1/v2/v3 und aktiviert elf Dateigruppen, Fail-closed und die
@@ -42,11 +44,11 @@ Stand: 27. Juli 2026
 - Broker und Core laufen als automatische LocalSystem-Dienste.
 - Der MSI-Deinstallationspfad prüft nach dem Rückbau ausdrücklich, dass Broker, Core und alle drei
   Treiberregistrierungen verschwunden sind; ein unvollständiger Rückbau beendet das MSI mit Fehler.
-- Das signierte RC15-MSI wurde mit Windows Installer/WiX erzeugt und seine lokale
+- Das signierte RC16-MSI wurde mit Windows Installer/WiX erzeugt und seine lokale
   Authenticode-Testsignatur erfolgreich verifiziert.
 - Desktop-, ABI2- und Developer-Full-ZIP besitzen sichere Pfade; Desktop- und Full-Manifeste wurden
   vollständig gegen SHA-256 geprüft.
-- Der eingefrorene RC15-Quellvertrag ist gültig.
+- Der eingefrorene RC16-Quellvertrag ist gültig.
 
 ## Signierte Treiberhashes
 

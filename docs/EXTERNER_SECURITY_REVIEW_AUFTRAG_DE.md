@@ -4,7 +4,7 @@ Stand: 27. Juli 2026
 
 ## Prüfgegenstand
 
-AI Shield Private Desktop `2.0.0-rc.15`, insbesondere:
+AI Shield Private Desktop `2.0.0-rc.16`, insbesondere:
 
 - WFP-, Minifilter- und ProcessGuard-Kernelcode;
 - IOCTL-Verträge, Puffer-, Größen-, Sequenz- und Zugriffsprüfung;

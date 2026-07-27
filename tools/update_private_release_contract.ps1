@@ -25,18 +25,26 @@ $required = @(
     "src/fleet_telemetry.cpp",
     "platform/windows/enterprise/enterprise_enrollment.ps1",
     "platform/windows/enterprise/enterprise_envelope_signature.ps1",
+    "editions/private_desktop/ui/quarantine_view_model.ps1",
+    "editions/private_desktop/ui/AIShield.PrivateDesktop.UI.xaml",
+    "editions/private_desktop/ui/start_private_ui.ps1",
+    "editions/private_desktop/ui/verify_ui_contract.ps1",
     "docs/ENTERPRISE_CONTROL_PLANE_DE.md",
-    "docs/RC15_RELEASE_NACHWEIS_DE.md",
+    "docs/RC16_RELEASE_NACHWEIS_DE.md",
     "tests/enterprise/main.cpp",
     "tests/windows_enterprise_contract.ps1",
-    "tools/run_rc15_regressions.ps1",
+    "tools/package_private_desktop.ps1",
+    "tools/package_developer_release.ps1",
+    "tools/package_developer_full.ps1",
+    "tools/run_rc16_regressions.ps1",
     "tools/update_private_release_contract.ps1"
 )
 
 $paths = [Collections.Generic.List[string]]::new()
 foreach ($artifact in $contract.artifacts) {
     $path = ([string]$artifact.path).Replace('\', '/')
-    if ($path -ne "tools/run_rc14_regressions.ps1" -and -not $paths.Contains($path)) {
+    if ($path -notin @("tools/run_rc14_regressions.ps1", "tools/run_rc15_regressions.ps1") -and
+        -not $paths.Contains($path)) {
         $paths.Add($path)
     }
 }

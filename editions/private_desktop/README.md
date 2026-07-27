@@ -1,15 +1,16 @@
 # AI Shield Private Desktop
 
-Release Candidate: `2.0.0-rc.15`. ABI-, Policy- und Funktionsumfang sind durch
+Release Candidate: `2.0.0-rc.16`. ABI-, Policy- und Funktionsumfang sind durch
 [`RELEASE_CONTRACT.json`](RELEASE_CONTRACT.json) eingefroren. Änderungen an sicherheitsrelevanten
 Verträgen werden von `validate_release_freeze.ps1` abgelehnt, bis ein bewusst neuer Vertrag erstellt
 wird.
 
-RC14 korrigiert die Schaltertreue des Download- und Dateitypschutzes. Temporäre Browserdateien wie
-`.crdownload` werden bis zum finalen Rename zurückgestellt; der Rename invalidiert das vorläufige
-Verdikt und löst die Prüfung der endgültigen Endung aus. Deaktivierte Dateitypgruppen umgehen die
-AI-Shield-Inhaltsprüfung vollständig. Normale PowerShell-URL-Aufrufe bleiben erlaubt, während
-verschleierte oder versteckte Downloadketten weiterhin blockiert werden.
+RC16 gruppiert zusammengehörige Quarantäneobjekte nach belastbaren Vorgangskennungen. Ein
+Codex-Runtime-Staging wird beispielsweise als **Codex Runtime Installation** mit Quelle,
+Dateizahl und Sammelstatus dargestellt. Die Gruppe ist aufklappbar; darunter bleiben die
+einzelnen Dateien auswählbar und können weiterhin nur mit Zielpfad und Begründung freigegeben
+werden. Die Downloadbenachrichtigung spricht deshalb präzise von Dateien aus einem Download- oder
+Installationsvorgang.
 
 Ein installierbares RC-Paket darf nur aus dem frisch gebauten und anschließend testsignierten
 Treiber-Staging erzeugt werden. `tools\complete_private_rc_admin.ps1` führt dieses erhöhte Gate aus;
@@ -76,7 +77,7 @@ Broker, Core und alle drei Kernel-Treiber werden entfernt; von AI Shield angeleg
 transaktional zurückgerollt. Details und Befehle stehen in
 `platform\windows\msi\README_DE.md` des Entwicklerpakets.
 
-Die Oberfläche bietet sechs Bereiche für Status, Schutzschalter, Auditprüfung/-export, Quarantäne,
+Die Oberfläche bietet sechs Bereiche für Status, Schutzschalter, Auditprüfung/-export, gruppierte Quarantäne,
 Ransomware-Wiederherstellung und Windows-Sicherheit. HVCI und Credential Guard zeigen bei notwendigen Systemänderungen eine
 Neustartschaltfläche. Die Erstinstallation erzeugt genau dann eine Recovery-Baseline für persönliche
 Ordner, wenn noch kein Snapshot existiert. Weitere Snapshots, externe Sicherungen und jede

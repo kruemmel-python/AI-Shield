@@ -39,6 +39,7 @@ $instance=[ordered]@{schema="AIShieldPrivateUiInstance/1";pid=$PID;start_ticks=$
 Remove-Item -LiteralPath $uiSignalPath -Force -ErrorAction SilentlyContinue
 Write-UiLifecycle "instance-registered"
 . (Join-Path $PSScriptRoot "..\private_common.ps1")
+. (Join-Path $PSScriptRoot "quarantine_view_model.ps1")
 $root=Get-AIShieldPrivateRoot
 $stateRoot=Join-Path $env:ProgramData "AIShield\private-desktop"
 $uiStatePath=Join-Path $stateRoot "ui-settings.json"
@@ -166,16 +167,40 @@ function Get-Quarantine {
         $classification=switch([string]$_.classification){"pending_user_release"{"Wartet auf Freigabe"};"malware_detected"{"Schadsoftware erkannt"};"suspicious_file_structure"{"Verdächtige Dateistruktur"};"parser_risk_scan_unavailable"{"Prüfung nicht möglich"};"external_untrusted_executable"{"Nicht vertrauenswürdige Ausführung"};default{[string]$_.classification}}
         [pscustomobject]@{Id=[string]$_.id;Source=[string]$_.source;Size=$(if($_.size){("{0:N1} KiB"-f([double]$_.size/1KB))}else{"-"});State=[string]$_.state;Classification=$classification}})
 }
+function Set-QuarantineView {
+    $items = @(ConvertTo-AIShieldQuarantineViewItems -Items @(Get-Quarantine))
+    $view = [Windows.Data.CollectionViewSource]::GetDefaultView($items)
+    $view.GroupDescriptions.Clear()
+    if ($items.Count -gt 0) {
+        [void]$view.GroupDescriptions.Add(
+            [Windows.Data.PropertyGroupDescription]::new("GroupKey"))
+    }
+    $QuarantineGrid.ItemsSource = $view
+    return $items
+}
 function Initialize-QuarantineNotifications {
     foreach($item in @(Get-Quarantine)){if($item.State-eq"committed"){$null=$script:knownQuarantineIds.Add($item.Id)}}
 }
 function Update-QuarantineNotifications {
-    $items=@(Get-Quarantine);$QuarantineGrid.ItemsSource=$items
+    $items=@(Set-QuarantineView)
     $new=@($items|Where-Object{$_.State-eq"committed"-and$script:knownQuarantineIds.Add($_.Id)})
     if($new.Count-eq0){return}
     $names=@($new|Select-Object -First 3|ForEach-Object{[IO.Path]::GetFileName($_.Source)})-join"`n"
     $suffix=$(if($new.Count-gt3){"`n... und $($new.Count-3) weitere"}else{""})
-    [Windows.MessageBox]::Show("AI Shield hat $($new.Count) neuen Download gesichert. Die Datei kann erst nach Prüfung und begründeter Freigabe auf der Seite 'Quarantäne' geöffnet werden.`n`n$names$suffix","Download gesichert",[Windows.MessageBoxButton]::OK,[Windows.MessageBoxImage]::Warning)|Out-Null
+    $operationGroups=@($new|Where-Object{$_.GroupKey-like"operation:*"}|Group-Object GroupKey)
+    $operationContext=""
+    if($operationGroups.Count-eq1){
+        $first=$operationGroups[0].Group[0]
+        $operationContext="`n`nVorgang: $($first.GroupTitle)`nQuelle: $($first.GroupSource)"
+    }elseif($operationGroups.Count-gt1){
+        $operationContext="`n`nErkannte Vorgänge: $($operationGroups.Count)"
+    }
+    $message=$(if($new.Count-eq1){
+        'AI Shield hat eine neue Datei aus einem Download- oder Installationsvorgang gesichert. Sie kann erst nach Prüfung und begründeter Freigabe im Bereich „Quarantäne“ verwendet werden.'
+    }else{
+        'AI Shield hat {0} neue Dateien aus einem Download- oder Installationsvorgang gesichert. Sie können erst nach Prüfung und begründeter Freigabe im Bereich „Quarantäne“ verwendet werden.' -f $new.Count
+    })
+    [Windows.MessageBox]::Show("$message$operationContext`n`n$names$suffix","Download gesichert",[Windows.MessageBoxButton]::OK,[Windows.MessageBoxImage]::Warning)|Out-Null
     Set-Message "$($new.Count) Download(s) warten auf Freigabe"
 }
 function Invoke-Recovery([string]$Action, [string]$IncidentId = '', [string]$BackupRoot = '', [switch]$ConfirmRestore) {
@@ -247,7 +272,7 @@ function Refresh-All {
         $BrowserSensorDetail.Text=$(if(-not$browserStatus.ready){"Nicht installiert"}elseif($browserStatus.connected){"Verbunden; letztes Browserereignis: "+([DateTime]$browserStatus.last_event_utc).ToLocalTime().ToString("dd.MM.yyyy HH:mm")}elseif($browserStatus.edge_loaded-or$browserStatus.chrome_loaded){"Erweiterung geladen, aber Native Host noch nicht verbunden; auf 'Neu laden' klicken"}else{"Host installiert; Ordner selbst auswählen, nicht manifest.json"})
         $EdgeSetupButton.IsEnabled=[bool]$browserStatus.ready;$ChromeSetupButton.IsEnabled=[bool]$browserStatus.ready
         $audits=Get-Audits;$AuditGrid.ItemsSource=$audits;$AuditState.Text=$(if($audits.Count){$audits[0].Modified}else{"Keine Audits"})
-        $QuarantineGrid.ItemsSource=Get-Quarantine
+        Set-QuarantineView|Out-Null
         Update-RecoveryStatus
         $security=(& powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "private_security_settings.ps1") -Action status|ConvertFrom-Json)
         $kernelHardware=(& powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root "platform\windows\security\kernel_hardware_hardening.ps1") -Action status|ConvertFrom-Json)

@@ -12,7 +12,7 @@
   <Border Grid.Column="0" Background="#17242D"><Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
    <StackPanel Margin="20,22"><TextBlock Text="AI SHIELD" Foreground="White" FontSize="22" FontWeight="Bold"/><TextBlock Text="PRIVATE DESKTOP" Foreground="#55D1B3" FontSize="11" Margin="0,4,0,0"/></StackPanel>
    <StackPanel Grid.Row="1" Margin="10,20"><Button x:Name="NavDashboard" Style="{StaticResource NavButton}" Content="Übersicht"/><Button x:Name="NavProtection" Style="{StaticResource NavButton}" Content="Schutzfunktionen"/><Button x:Name="NavAudit" Style="{StaticResource NavButton}" Content="Audit"/><Button x:Name="NavQuarantine" Style="{StaticResource NavButton}" Content="Quarantäne"/><Button x:Name="NavRecovery" Style="{StaticResource NavButton}" Content="Wiederherstellung"/><Button x:Name="NavSystem" Style="{StaticResource NavButton}" Content="Windows-Sicherheit"/></StackPanel>
-   <StackPanel Grid.Row="2" Margin="20,16"><TextBlock Text="2.0.0-rc.15" Foreground="#7F929D"/><TextBlock x:Name="SidebarState" Text="Status wird geladen" Foreground="#55D1B3" Margin="0,5,0,0"/></StackPanel>
+   <StackPanel Grid.Row="2" Margin="20,16"><TextBlock Text="2.0.0-rc.16" Foreground="#7F929D"/><TextBlock x:Name="SidebarState" Text="Status wird geladen" Foreground="#55D1B3" Margin="0,5,0,0"/></StackPanel>
   </Grid></Border>
   <Grid Grid.Column="1" Background="#F3F6F8"><Grid.RowDefinitions><RowDefinition Height="64"/><RowDefinition Height="*"/><RowDefinition Height="38"/></Grid.RowDefinitions>
    <Border Background="White" BorderBrush="#D8E0E4" BorderThickness="0,0,0,1"><Grid Margin="24,0"><TextBlock x:Name="PageTitle" Text="Übersicht" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center"/><StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center"><Button x:Name="RefreshButton" Content="Aktualisieren"/><Button x:Name="RestartButton" Content="Jetzt neu starten" Background="#E59B32" Foreground="White" Margin="10,0,0,0" Visibility="Collapsed"/></StackPanel></Grid></Border>
@@ -46,7 +46,59 @@
      <Border Style="{StaticResource Card}"><Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Unaufgeforderte Eingänge blockieren" FontWeight="SemiBold"/><TextBlock Text="Zusätzlicher lokaler Inbound-Schutz neben der Windows-Firewall" Foreground="#60717B"/></StackPanel><ToggleButton x:Name="InboundToggle" Grid.Column="1"/></Grid></Border>
     </StackPanel></ScrollViewer></TabItem>
      <TabItem><Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions><StackPanel Orientation="Horizontal"><Button x:Name="ViewAuditButton" Content="Audit anzeigen" Background="#138A72" Foreground="White"/><Button x:Name="OpenAuditFileButton" Content="Exportierte Datei öffnen" Margin="10,0,0,0"/><Button x:Name="VerifyAuditButton" Content="Integrität prüfen" Margin="10,0,0,0"/><Button x:Name="ExportAuditButton" Content="Audits exportieren" Margin="10,0,0,0"/></StackPanel><DataGrid x:Name="AuditGrid" Grid.Row="1" Margin="0,14,0,0" AutoGenerateColumns="False" IsReadOnly="True"><DataGrid.Columns><DataGridTextColumn Header="Datei" Binding="{Binding Name}" Width="*"/><DataGridTextColumn Header="Größe" Binding="{Binding Size}" Width="120"/><DataGridTextColumn Header="Geändert" Binding="{Binding Modified}" Width="190"/><DataGridTextColumn Header="Prüfung" Binding="{Binding Verification}" Width="130"/></DataGrid.Columns></DataGrid></Grid></TabItem>
-    <TabItem><Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions><StackPanel Orientation="Horizontal"><Button x:Name="ReleaseButton" Content="Ausgewählte Datei freigeben" Background="#C85A4A" Foreground="White"/><TextBlock Text="Freigaben benötigen Zielpfad und Begründung." VerticalAlignment="Center" Foreground="#60717B" Margin="14,0"/></StackPanel><DataGrid x:Name="QuarantineGrid" Grid.Row="1" Margin="0,14,0,0" AutoGenerateColumns="False" IsReadOnly="True"><DataGrid.Columns><DataGridTextColumn Header="Objekt-ID" Binding="{Binding Id}" Width="190"/><DataGridTextColumn Header="Quelle" Binding="{Binding Source}" Width="*"/><DataGridTextColumn Header="Größe" Binding="{Binding Size}" Width="90"/><DataGridTextColumn Header="Grund" Binding="{Binding Classification}" Width="180"/><DataGridTextColumn Header="Status" Binding="{Binding State}" Width="100"/></DataGrid.Columns></DataGrid></Grid></TabItem>
+    <TabItem>
+     <Grid>
+      <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+      <StackPanel Orientation="Horizontal">
+       <Button x:Name="ReleaseButton" Content="Ausgewählte Datei freigeben" Background="#C85A4A" Foreground="White"/>
+       <TextBlock Text="Vorgänge sind aufklappbar. Freigaben benötigen Zielpfad und Begründung." VerticalAlignment="Center" Foreground="#60717B" Margin="14,0"/>
+      </StackPanel>
+      <DataGrid x:Name="QuarantineGrid" Grid.Row="1" Margin="0,14,0,0" AutoGenerateColumns="False"
+                IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single"
+                HeadersVisibility="Column" GridLinesVisibility="Horizontal">
+       <DataGrid.GroupStyle>
+        <GroupStyle>
+         <GroupStyle.ContainerStyle>
+          <Style TargetType="{x:Type GroupItem}">
+           <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+           <Setter Property="Template">
+            <Setter.Value>
+             <ControlTemplate TargetType="{x:Type GroupItem}">
+              <Expander IsExpanded="True" Margin="0,0,18,8" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch"
+                        Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}">
+               <Expander.Header>
+                <Border Background="#E7EDF0" BorderBrush="#C8D3D9" BorderThickness="1" Padding="12,9"
+                        Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}">
+                 <StackPanel>
+                  <TextBlock Text="{Binding Items[0].GroupTitle}" FontWeight="SemiBold" FontSize="15"/>
+                  <TextBlock Foreground="#60717B" Margin="0,3,0,0">
+                   <Run Text="Quelle: "/><Run Text="{Binding Items[0].GroupSource}"/>
+                   <Run Text="  ·  Enthaltene Dateien: "/><Run Text="{Binding Items[0].GroupCount}"/>
+                  </TextBlock>
+                  <TextBlock Text="{Binding Items[0].GroupStatus}" Foreground="#B14B3D"
+                             FontWeight="SemiBold" Margin="0,3,0,0"/>
+                 </StackPanel>
+                </Border>
+               </Expander.Header>
+               <ItemsPresenter Margin="14,2,0,0"/>
+              </Expander>
+             </ControlTemplate>
+            </Setter.Value>
+           </Setter>
+          </Style>
+         </GroupStyle.ContainerStyle>
+        </GroupStyle>
+       </DataGrid.GroupStyle>
+       <DataGrid.Columns>
+        <DataGridTextColumn Header="Datei" Binding="{Binding Name}" Width="220"/>
+        <DataGridTextColumn Header="Quelle" Binding="{Binding Source}" Width="*" MinWidth="320"/>
+        <DataGridTextColumn Header="Größe" Binding="{Binding Size}" Width="90"/>
+        <DataGridTextColumn Header="Grund" Binding="{Binding Classification}" Width="180"/>
+        <DataGridTextColumn Header="Status" Binding="{Binding StateDisplay}" Width="105"/>
+       </DataGrid.Columns>
+      </DataGrid>
+     </Grid>
+    </TabItem>
     <TabItem><Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
      <Border Style="{StaticResource Card}"><Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Geschützter Versionsspeicher" FontSize="17" FontWeight="SemiBold"/><TextBlock x:Name="RecoveryStatus" Text="Status wird geladen" Foreground="#60717B" Margin="0,5,0,0" TextWrapping="Wrap"/><TextBlock Text="Desktop, Dokumente, Bilder, Musik und Videos. Systemdateien werden online nicht zurückgeschrieben." Foreground="#60717B" Margin="0,5,0,0" TextWrapping="Wrap"/></StackPanel><StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="18,0,0,0"><Button x:Name="SnapshotButton" Content="Jetzt sichern" Background="#138A72" Foreground="White"/><Button x:Name="BackupButton" Content="Extern sichern" Margin="0,8,0,0"/></StackPanel></Grid></Border>
      <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,14,0,12"><Button x:Name="DetectRansomwareButton" Content="Veränderungen prüfen"/><Button x:Name="RestorePlanButton" Content="Wiederherstellungsplan" Margin="10,0,0,0"/><Button x:Name="RestoreIncidentButton" Content="Ausgewählten Stand wiederherstellen" Margin="10,0,0,0" Background="#C85A4A" Foreground="White"/></StackPanel>

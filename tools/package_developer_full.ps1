@@ -38,6 +38,11 @@ $excludedExtensions = @(".sys", ".cat", ".cer", ".pfx", ".pvk", ".zip", ".obj", 
 function Test-IncludedPath([string]$RelativePath) {
     if ($RelativePath.Replace('\','/') -in @("docs/AI_Shield.md", "docs/AI-Shield-CodeDump.md",
             "docs/AI_Shield_Developer_Full.md")) { return $false }
+    if ($RelativePath.Replace('\','/').StartsWith("docs/", [StringComparison]::OrdinalIgnoreCase) -and
+        [IO.Path]::GetExtension($RelativePath) -eq ".html") { return $false }
+    if ($RelativePath.Replace('\','/').Equals("docs/ai_shield.png", [StringComparison]::OrdinalIgnoreCase)) {
+        return $false
+    }
     foreach ($segment in ($RelativePath -split '[\\/]')) {
         if ($excludedSegments -contains $segment) { return $false }
     }

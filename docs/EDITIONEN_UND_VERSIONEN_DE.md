@@ -53,7 +53,7 @@ nicht erforderlich.
 
 | Vertrag | Aktueller Stand |
 |---|---|
-| Release Candidate | `2.0.0-rc.15` |
+| Release Candidate | `2.0.0-rc.16` |
 | Kernel-Transport | `1.2` |
 | ABI-Freeze | Revision `3` |
 | Interne Ereignis-ABI | `2.0` |

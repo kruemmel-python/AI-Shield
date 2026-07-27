@@ -23,7 +23,7 @@ $editionFiles = @(
     "edition.json", "RELEASE_CONTRACT.json", "README.md", "SOFTWAREBEWERTUNG_PRIVAT.md", "QUALIFIKATIONSSTATUS.md", "Installieren.cmd",
     "Schutz_starten.cmd", "Schutz_beenden.cmd", "Status_anzeigen.cmd", "Deinstallieren.cmd",
     "AI_Shield_UI.cmd", "ui\README.md", "ui\AIShield.PrivateDesktop.UI.xaml", "ui\AIShield.AuditViewer.xaml", "ui\start_private_ui.ps1",
-    "ui\private_security_settings.ps1", "ui\verify_ui_contract.ps1",
+    "ui\private_security_settings.ps1", "ui\quarantine_view_model.ps1", "ui\verify_ui_contract.ps1",
     "tray\start_tray_agent.ps1", "tray\manage_tray_agent.ps1",
     "private_common.ps1", "install_private_desktop.ps1", "msi_product_action.ps1", "start_private_desktop.ps1",
     "stop_private_desktop.ps1", "status_private_desktop.ps1", "private_posture.ps1",
@@ -96,8 +96,10 @@ try {
     }
     $docsRoot = Join-Path $repo "docs"
     $generatedSnapshots = @("AI_Shield.md", "AI-Shield-CodeDump.md", "AI_Shield_Developer_Full.md")
+    $generatedDocArtifacts = @("ai_shield.png")
     foreach ($file in (Get-ChildItem -LiteralPath $docsRoot -Recurse -File |
-            Where-Object { $generatedSnapshots -notcontains $_.Name })) {
+            Where-Object { $generatedSnapshots -notcontains $_.Name -and
+                $generatedDocArtifacts -notcontains $_.Name -and $_.Extension -ne ".html" })) {
         $relative = $file.FullName.Substring($docsRoot.Length + 1)
         Copy-RequiredFile $file.FullName (Join-Path $root "docs\$relative")
     }

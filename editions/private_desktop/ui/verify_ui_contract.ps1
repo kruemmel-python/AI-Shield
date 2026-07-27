@@ -4,7 +4,9 @@ $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase
 $xamlPath = Join-Path $PSScriptRoot "AIShield.PrivateDesktop.UI.xaml"
 $scriptPath = Join-Path $PSScriptRoot "start_private_ui.ps1"
+$viewModelPath = Join-Path $PSScriptRoot "quarantine_view_model.ps1"
 $viewerPath = Join-Path $PSScriptRoot "AIShield.AuditViewer.xaml"
+. $viewModelPath
 [xml]$xaml = Get-Content -LiteralPath $xamlPath -Raw
 $reader = [System.Xml.XmlNodeReader]::new($xaml)
 $window = [Windows.Markup.XamlReader]::Load($reader)
@@ -50,8 +52,51 @@ if ($scriptText -notmatch '&\s*\$broker\s+quarantine-restore' -or
     $scriptText -match 'powershell\.exe[^\r\n]+quarantine-release') {
     throw "Quarantine release must call the signed broker directly without exposing the destination to a script host."
 }
+if ($window.FindName("QuarantineGrid").GroupStyle.Count -ne 1) {
+    throw "Quarantine entries must use exactly one expandable operation grouping."
+}
+$quarantineHeaders = @($window.FindName("QuarantineGrid").Columns | ForEach-Object { [string]$_.Header })
+foreach ($header in @("Datei", "Quelle", "Größe", "Grund", "Status")) {
+    if ($quarantineHeaders -notcontains $header) { throw "Missing quarantine column: $header" }
+}
+foreach ($pattern in @(
+        'ConvertTo-AIShieldQuarantineViewItems',
+        'PropertyGroupDescription',
+        'Download- oder Installationsvorgang',
+        'Bereich „Quarantäne“')) {
+    if ($scriptText -notmatch $pattern) { throw "Quarantine operation UI contract is missing: $pattern" }
+}
+$sampleItems = @(1..11 | ForEach-Object {
+    $name = @("README.md", "LICENSE.txt", "manifest.txt")[$_ - 1]
+    if ([string]::IsNullOrWhiteSpace($name)) { $name = "payload-$_.dat" }
+    [pscustomobject]@{
+        Id = ("{0:x64}" -f $_)
+        Source = "\\?\GLOBALROOT\Device\HarddiskVolume3\Users\test\.cache\codex-runtimes\codex-runtime-install-S0oO6J\payload\$name"
+        Size = "1,0 KiB"
+        State = "committed"
+        Classification = "Wartet auf Freigabe"
+    }
+})
+$groupedItems = @(ConvertTo-AIShieldQuarantineViewItems -Items $sampleItems)
+if ($groupedItems.Count -ne 11 -or @($groupedItems.GroupKey | Select-Object -Unique).Count -ne 1) {
+    throw "Codex runtime quarantine files were not grouped into one operation."
+}
+$firstGroupItem = $groupedItems[0]
+if ($firstGroupItem.GroupTitle -ne "Codex Runtime Installation" -or
+    $firstGroupItem.GroupSource -ne "codex-runtime-install-S0oO6J" -or
+    $firstGroupItem.GroupCount -ne 11 -or
+    $firstGroupItem.GroupStatus -ne "Prüfung/Freigabe erforderlich" -or
+    $firstGroupItem.Name -ne "README.md") {
+    throw "Codex runtime quarantine group metadata is incomplete."
+}
 
 if ($RenderPreview) {
+    $previewView = [Windows.Data.CollectionViewSource]::GetDefaultView($groupedItems)
+    [void]$previewView.GroupDescriptions.Add(
+        [Windows.Data.PropertyGroupDescription]::new("GroupKey"))
+    $window.FindName("QuarantineGrid").ItemsSource = $previewView
+    $window.FindName("Pages").SelectedIndex = 3
+    $window.FindName("PageTitle").Text = "Quarantäne"
     $content = $window.Content
     $size = [Windows.Size]::new(1180, 760)
     $content.Measure($size)
@@ -67,4 +112,4 @@ if ($RenderPreview) {
     try { $encoder.Save($stream) } finally { $stream.Dispose() }
     Write-Output "preview=$preview"
 }
-Write-Output "AI Shield private desktop UI contract: PASS ($($required.Count) controls, 6 views)"
+Write-Output "AI Shield private desktop UI contract: PASS ($($required.Count) controls, 6 views, quarantine grouping)"

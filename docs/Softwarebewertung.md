@@ -1,6 +1,6 @@
 # Softwarebewertung: AI Shield 2.0
 
-Stand: 27. Juli 2026, bewertet wird Release Candidate `2.0.0-rc.15`
+Stand: 27. Juli 2026, bewertet wird Release Candidate `2.0.0-rc.16`
 
 Nachtrag zum verifizierten RC8-Stand: Die Recovery-Erstbaseline wurde auf dem Referenzrechner mit
 13.353 Dateien und null Übersprüngen abgeschlossen. Nicht auflösbare Junctions und Reparse Points

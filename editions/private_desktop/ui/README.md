@@ -10,7 +10,8 @@ Die Oberfläche enthält sechs Ansichten:
 - **Übersicht:** Zustand der drei Kernel-Treiber, des Brokers und des Core-Dienstes;
 - **Schutzfunktionen:** Kernschutz sowie optionale Download-, Browser- und Inbound-Regeln;
 - **Audit:** vorhandene Auditdateien anzeigen, kryptografisch prüfen und exportieren;
-- **Quarantäne:** isolierte Dateien anzeigen und nur mit Zielpfad und Begründung freigeben;
+- **Quarantäne:** zusammengehörige Download- und Installationsvorgänge aufklappbar anzeigen und
+  enthaltene Dateien nur mit Zielpfad und Begründung freigeben;
 - **Wiederherstellung:** Baseline-Snapshots, Ransomware-Prüfung, Vorfallplan, bestätigte
   Rücksicherung und externe hashmanifestierte Sicherung;
 - **Windows-Sicherheit:** HVCI, Credential Guard, Firewall- und Defender-Auditbaseline.
@@ -55,3 +56,10 @@ Die statische UI-Vertragsprüfung kann ohne Systemänderung ausgeführt werden:
 ```powershell
 powershell -NoProfile -STA -File .\ui\verify_ui_contract.ps1
 ```
+
+Die Quarantäne erkennt gemeinsame Vorgangskennungen in vertrauensunabhängigen Quellpfaden. Ein
+Codex-Runtime-Staging wie `codex-runtime-install-S0oO6J` erscheint deshalb als Gruppe
+**Codex Runtime Installation** mit Quelle, Dateizahl und Sammelstatus. Die Gruppe kann aufgeklappt
+werden; darunter bleiben Dateiname, vollständige Quelle, Größe, Klassifizierung und Einzelstatus
+sichtbar. Die Freigabe bleibt absichtlich dateibezogen und benötigt weiterhin einen Zielpfad und
+eine Begründung.

@@ -1,6 +1,6 @@
 # AI Shield Dokumentation
 
-Stand: 27. Juli 2026, Release Candidate `2.0.0-rc.15`
+Stand: 27. Juli 2026, Release Candidate `2.0.0-rc.16`
 
 Dieser Ordner ist der zentrale Einstieg in die Projekt-, Betriebs- und Entwicklungsdokumentation.
 Der aktuelle Vertrag verwendet Kernel-Transport ABI `1.2` (Freeze-Revision `3`) und intern ABI
@@ -20,6 +20,7 @@ Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
 | Wiederherstellung | [Ransomware-Schutz und Recovery](RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md) | Versionsspeicher, Erkennung, externe Sicherung und bestätigte Rücksicherung |
 | RC14-Systemnachweis | [RC14 Korrektur- und Installationsnachweis](RC14_RELEASE_NACHWEIS_DE.md) | Schaltertreue, Browserdownloads, Fehlalarmkorrekturen und Deinstallation |
 | RC15-Systemnachweis | [RC15 Enterprise- und Paketnachweis](RC15_RELEASE_NACHWEIS_DE.md) | Enterprise-Verträge, Binärhärtung, Build, Installation und Pakethashes |
+| RC16-Systemnachweis | [RC16 Quarantänegruppen- und Paketnachweis](RC16_RELEASE_NACHWEIS_DE.md) | Vorgangsgruppierung, präzise Benachrichtigung, Build, Installation und Pakethashes |
 | Architekturentscheidung | [Editionen und Versionen](EDITIONEN_UND_VERSIONEN_DE.md) | Gemeinsamer Core, Unterschiede und Freigabestatus |
 
 ## Technische Referenz
@@ -36,6 +37,7 @@ Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
 - [Dateibasierte Angriffe und Implementierungszuordnung](../AI_Shield_Dateibasierte_Angriffe_und_Scananforderungen_DE.md)
 - [RC14 Korrektur- und Installationsnachweis](RC14_RELEASE_NACHWEIS_DE.md)
 - [RC15 Enterprise- und Paketnachweis](RC15_RELEASE_NACHWEIS_DE.md)
+- [RC16 Quarantänegruppen- und Paketnachweis](RC16_RELEASE_NACHWEIS_DE.md)
 - [Historischer RC13-Nachweis](RC13_RELEASE_NACHWEIS_DE.md)
 - [Historischer RC12-Nachweis](RC12_RELEASE_NACHWEIS_DE.md)
 - [Historischer RC11-Nachweis](RC11_RELEASE_NACHWEIS_DE.md)
