@@ -58,7 +58,10 @@ static BOOLEAN AiShieldContains(const UNICODE_STRING* value, PCWSTR markerBuffer
 
 static BOOLEAN AiShieldIsRiskyScriptCommand(const PPS_CREATE_NOTIFY_INFO createInfo) {
     BOOLEAN scriptHost;
-    BOOLEAN riskyArgument;
+    BOOLEAN obfuscatedArgument;
+    BOOLEAN hiddenNetworkTransfer;
+    BOOLEAN knownDownloadPrimitive;
+    BOOLEAN lolbinTransfer;
     if (createInfo == NULL || createInfo->ImageFileName == NULL || createInfo->CommandLine == NULL) return FALSE;
     scriptHost = AiShieldContains(createInfo->ImageFileName, L"\\powershell.exe") ||
                  AiShieldContains(createInfo->ImageFileName, L"\\pwsh.exe") ||
@@ -69,18 +72,20 @@ static BOOLEAN AiShieldIsRiskyScriptCommand(const PPS_CREATE_NOTIFY_INFO createI
                  AiShieldContains(createInfo->ImageFileName, L"\\rundll32.exe") ||
                  AiShieldContains(createInfo->ImageFileName, L"\\certutil.exe") ||
                  AiShieldContains(createInfo->ImageFileName, L"\\bitsadmin.exe");
-    riskyArgument = AiShieldContains(createInfo->CommandLine, L" -enc ") ||
-                    AiShieldContains(createInfo->CommandLine, L" -encodedcommand ") ||
-                    AiShieldContains(createInfo->CommandLine, L"javascript:") ||
-                    AiShieldContains(createInfo->CommandLine, L"http://") ||
-                    AiShieldContains(createInfo->CommandLine, L"https://") ||
-                    AiShieldContains(createInfo->CommandLine, L" -w hidden") ||
-                    AiShieldContains(createInfo->CommandLine, L"downloadstring") ||
-                    AiShieldContains(createInfo->CommandLine, L"invoke-webrequest") ||
-                    AiShieldContains(createInfo->CommandLine, L"frombase64string") ||
-                    AiShieldContains(createInfo->CommandLine, L" -urlcache") ||
-                    AiShieldContains(createInfo->CommandLine, L" /transfer");
-    return scriptHost && riskyArgument;
+    obfuscatedArgument = AiShieldContains(createInfo->CommandLine, L" -enc ") ||
+                         AiShieldContains(createInfo->CommandLine, L" -encodedcommand ") ||
+                         AiShieldContains(createInfo->CommandLine, L"javascript:") ||
+                         AiShieldContains(createInfo->CommandLine, L"frombase64string");
+    hiddenNetworkTransfer = AiShieldContains(createInfo->CommandLine, L" -w hidden") &&
+                            (AiShieldContains(createInfo->CommandLine, L"http://") ||
+                             AiShieldContains(createInfo->CommandLine, L"https://") ||
+                             AiShieldContains(createInfo->CommandLine, L"invoke-webrequest"));
+    knownDownloadPrimitive = AiShieldContains(createInfo->CommandLine, L"downloadstring");
+    lolbinTransfer = (AiShieldContains(createInfo->ImageFileName, L"\\certutil.exe") &&
+                      AiShieldContains(createInfo->CommandLine, L" -urlcache")) ||
+                     (AiShieldContains(createInfo->ImageFileName, L"\\bitsadmin.exe") &&
+                      AiShieldContains(createInfo->CommandLine, L" /transfer"));
+    return scriptHost && (obfuscatedArgument || hiddenNetworkTransfer || knownDownloadPrimitive || lolbinTransfer);
 }
 
 static BOOLEAN AiShieldIsDownloadedScriptLaunch(const PPS_CREATE_NOTIFY_INFO createInfo) {
@@ -152,6 +157,7 @@ static BOOLEAN AiShieldIsOfficeChild(const PPS_CREATE_NOTIFY_INFO createInfo) {
 static BOOLEAN AiShieldIsCredentialOrPersistenceCommand(const PPS_CREATE_NOTIFY_INFO createInfo) {
     BOOLEAN credentialAccess;
     BOOLEAN persistence;
+    BOOLEAN externalPayload;
     if (createInfo == NULL || createInfo->ImageFileName == NULL || createInfo->CommandLine == NULL) return FALSE;
     credentialAccess = (AiShieldContains(createInfo->ImageFileName, L"\\procdump.exe") &&
                         AiShieldContains(createInfo->CommandLine, L"lsass")) ||
@@ -162,15 +168,20 @@ static BOOLEAN AiShieldIsCredentialOrPersistenceCommand(const PPS_CREATE_NOTIFY_
                         (AiShieldContains(createInfo->CommandLine, L"sam") ||
                          AiShieldContains(createInfo->CommandLine, L"security")) &&
                         AiShieldContains(createInfo->CommandLine, L" save "));
-    persistence = (AiShieldContains(createInfo->ImageFileName, L"\\schtasks.exe") &&
-                   AiShieldContains(createInfo->CommandLine, L" /create")) ||
-                  (AiShieldContains(createInfo->ImageFileName, L"\\sc.exe") &&
-                   AiShieldContains(createInfo->CommandLine, L" create ")) ||
-                  (AiShieldContains(createInfo->ImageFileName, L"\\reg.exe") &&
-                   AiShieldContains(createInfo->CommandLine, L"\\currentversion\\run") &&
-                   AiShieldContains(createInfo->CommandLine, L" add ")) ||
-                  (AiShieldContains(createInfo->ImageFileName, L"\\wmic.exe") &&
-                   AiShieldContains(createInfo->CommandLine, L"process call create"));
+    externalPayload = AiShieldContains(createInfo->CommandLine, L"\\Downloads\\") ||
+                      AiShieldContains(createInfo->CommandLine, L"\\AppData\\Local\\Temp\\") ||
+                      AiShieldContains(createInfo->CommandLine, L"\\AI_Shield_Quarantine\\") ||
+                      AiShieldContains(createInfo->CommandLine, L"\\ProgramData\\AIShield\\quarantine\\");
+    persistence = externalPayload &&
+                  ((AiShieldContains(createInfo->ImageFileName, L"\\schtasks.exe") &&
+                    AiShieldContains(createInfo->CommandLine, L" /create")) ||
+                   (AiShieldContains(createInfo->ImageFileName, L"\\sc.exe") &&
+                    AiShieldContains(createInfo->CommandLine, L" create ")) ||
+                   (AiShieldContains(createInfo->ImageFileName, L"\\reg.exe") &&
+                    AiShieldContains(createInfo->CommandLine, L"\\currentversion\\run") &&
+                    AiShieldContains(createInfo->CommandLine, L" add ")) ||
+                   (AiShieldContains(createInfo->ImageFileName, L"\\wmic.exe") &&
+                    AiShieldContains(createInfo->CommandLine, L"process call create")));
     return credentialAccess || persistence;
 }
 

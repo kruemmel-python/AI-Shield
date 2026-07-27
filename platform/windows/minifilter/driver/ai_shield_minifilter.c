@@ -280,10 +280,18 @@ static FLT_PREOP_CALLBACK_STATUS AiShieldPreSetInformation(PFLT_CALLBACK_DATA da
                                                             PCFLT_RELATED_OBJECTS objects,
                                                             PVOID* completionContext) {
     AI_SHIELD_DRIVER_EVENT event;
+    AI_SHIELD_DRIVER_POLICY policy = AiShieldReadPolicy();
     FILE_INFORMATION_CLASS informationClass = data->Iopb->Parameters.SetFileInformation.FileInformationClass;
     UNREFERENCED_PARAMETER(completionContext);
     if ((informationClass == FileRenameInformation || informationClass == FileRenameInformationEx) &&
         AiShieldBuildFileEvent(data, AI_SHIELD_EVENT_FILE_RENAME, &event, TRUE, NULL, objects)) {
+        if (!AiShieldSetPendingVerdict(event.SubjectId, event.Reserved, AI_SHIELD_FILE_PENDING) &&
+            policy.Mode == AI_SHIELD_POLICY_ENFORCE &&
+            (policy.Flags & AI_SHIELD_POLICY_BLOCK_QUARANTINE_EXECUTION) != 0U) {
+            data->IoStatus.Status = STATUS_INSUFFICIENT_RESOURCES;
+            data->IoStatus.Information = 0U;
+            return FLT_PREOP_COMPLETE;
+        }
         event.Decision = STATUS_SUCCESS;
         if (!AiShieldEventQueuePush(&g_EventQueue, &event)) InterlockedIncrement64(&g_Status.DroppedTelemetry);
     }

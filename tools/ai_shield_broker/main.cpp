@@ -531,6 +531,16 @@ DefenderVerdict scan_with_defender(const std::filesystem::path& path, std::uint6
     }
 }
 
+bool transient_download_path(const std::filesystem::path& path) {
+    const auto extension = lower_extension(path);
+    return extension == L".crdownload" || extension == L".part" || extension == L".partial" ||
+           extension == L".opdownload" || extension == L".download";
+}
+
+bool content_analysis_bypassed(const std::filesystem::path& path, std::uint32_t enabled_categories) {
+    return transient_download_path(path) || (content_category(path) & enabled_categories) == 0U;
+}
+
 bool copy_locked_to_quarantine(HANDLE source, std::uint64_t expected_size,
                                const ai_shield::crypto::Sha256Digest& expected_digest,
                                const std::filesystem::path& destination) {
@@ -873,7 +883,6 @@ public:
                 if (unique_roots.insert(key).second) roots_.push_back({std::move(path), is_downloads});
             };
             add_root(std::filesystem::path(downloads), true);
-            add_root(profile / L"AppData" / L"Local" / L"Temp", false);
         }
         std::size_t baseline = 0U;
         for (const auto& root : roots_) {
@@ -882,6 +891,7 @@ public:
             for (const auto& entry : std::filesystem::recursive_directory_iterator(
                      root.path, std::filesystem::directory_options::skip_permission_denied, error)) {
                 if (!entry.is_regular_file(error)) continue;
+                if (transient_download_path(entry.path())) continue;
                 const bool executable = executable_extension(entry.path(), policy_.enabled_categories);
                 if ((!downloads_root && !executable) ||
                     (downloads_root && !executable && !parser_risk_extension(entry.path(), policy_.enabled_categories))) continue;
@@ -917,9 +927,9 @@ public:
                      root.path, std::filesystem::directory_options::skip_permission_denied, error)) {
                 if (++visited > 20'000U) return;
                 if (error || !entry.is_regular_file(error)) continue;
+                if (transient_download_path(entry.path())) continue;
                 const bool executable = executable_extension(entry.path(), policy_.enabled_categories);
-                if ((!downloads_root && !executable) ||
-                    (downloads_root && !executable && !parser_risk_extension(entry.path(), policy_.enabled_categories))) continue;
+                if (!downloads_root && !executable) continue;
                 const auto modified = entry.last_write_time(error);
                 if (error) continue;
                 const auto size = entry.file_size(error);
@@ -956,6 +966,7 @@ public:
     std::uint32_t classify_pending(std::wstring_view normalized_path, std::uint64_t file_id,
                                    std::uint32_t volume_id) {
         std::scoped_lock lock(mutex_);
+        policy_ = load_content_policy();
         if (normalized_path.empty() || file_id == 0U || volume_id == 0U) return AI_SHIELD_FILE_PENDING;
         std::wstring win32_path(normalized_path);
         constexpr std::wstring_view dos_prefix = L"\\??\\";
@@ -1111,6 +1122,23 @@ private:
             append_record(health_, "{\"event\":\"identity_rejected\"}\r\n");
             processing_states_[source.wstring()] = FileProcessingState::identity_rejected;
             retry_not_before_[source.wstring()] = GetTickCount64() + 5'000U;
+            return;
+        }
+        const bool transient = transient_download_path(source);
+        if (content_analysis_bypassed(source, policy_.enabled_categories)) {
+            if (!submit_file_verdict(handle_file_id, source_info.dwVolumeSerialNumber, AI_SHIELD_FILE_CLEAN)) {
+                CloseHandle(source_handle);
+                append_record(health_, "{\"event\":\"kernel_verdict_failed\"}\r\n");
+                processing_states_[source.wstring()] = FileProcessingState::retry_pending;
+                retry_not_before_[source.wstring()] = GetTickCount64() + 5'000U;
+                return;
+            }
+            CloseHandle(source_handle);
+            processed_[source.wstring()] = FileStamp{size, modified};
+            processing_states_[source.wstring()] = FileProcessingState::analyzed_clean;
+            retry_not_before_.erase(source.wstring());
+            append_record(health_, transient ? "{\"event\":\"transient_download_deferred\"}\r\n" :
+                                              "{\"event\":\"content_category_disabled\"}\r\n");
             return;
         }
         const std::array<std::uint64_t, 4> identity{
@@ -1557,6 +1585,11 @@ int self_test() {
         content_category(L"bootstrap.sh") != kContentDeveloperScripts || content_category(L"target.lnk") != kContentLaunchers ||
         !executable_extension(L"deploy.ps1") || !executable_extension(L"module.psm1") ||
         !executable_extension(L"tool.py") || !executable_extension(L"package.jar") ||
+        !transient_download_path(L"download.crdownload") || !transient_download_path(L"archive.zip.part") ||
+        transient_download_path(L"archive.zip") ||
+        !content_analysis_bypassed(L"archive.zip", kContentDocuments) ||
+        content_analysis_bypassed(L"archive.zip", kContentArchives) ||
+        !content_analysis_bypassed(L"download.crdownload", kContentAll) ||
         executable_extension(L"deploy.ps1", kContentPrograms)) return 4;
     std::wcout << L"ai_shield_broker self-test passed\n";
     return 0;

@@ -44,6 +44,18 @@ if ($LASTEXITCODE -ne 0) { throw "System protection policy signing failed." }
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $policyScript -Action apply -InputFile $envelope
 Remove-Item $input,$envelope -Force -ErrorAction SilentlyContinue
 if ($LASTEXITCODE -ne 0) { throw "System protection policy activation failed." }
+$settingsRoot = Join-Path $env:ProgramData "AIShield\private-desktop"
+$settingsPath = Join-Path $settingsRoot "ui-settings.json"
+New-Item -ItemType Directory -Force -Path $settingsRoot | Out-Null
+$settings = [ordered]@{
+    schema = "AIShieldPrivateUiSettings/2"
+    harden_downloads = [bool]$HardenDownloads
+    strict_browser = [bool]$StrictBrowser
+    block_unsolicited_inbound = [bool]$BlockUnsolicitedInbound
+}
+$settingsTemporary = "$settingsPath.$PID.tmp"
+[IO.File]::WriteAllText($settingsTemporary, ($settings | ConvertTo-Json -Depth 2), [Text.UTF8Encoding]::new($false))
+Move-Item -LiteralPath $settingsTemporary -Destination $settingsPath -Force
 Write-Output "AI Shield system protection active"
 Write-Output "dual-stack telemetry: all ALE connect/accept flows"
 Write-Output "worm egress guard: active"

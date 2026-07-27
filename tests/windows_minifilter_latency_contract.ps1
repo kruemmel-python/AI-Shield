@@ -20,6 +20,20 @@ if ($filter -match '-30LL\s*\*\s*10LL\s*\*\s*1000LL\s*\*\s*1000LL') {
 if ($filter -match 'RTL_CONSTANT_STRING\(L"\\\\AppData\\\\Local\\\\Temp\\\\"\)') {
     throw "Generic AppData Temp gating would stall normal desktop processes."
 }
+if ($broker -match 'add_root\(profile\s*/\s*L"AppData"\s*/\s*L"Local"\s*/\s*L"Temp"') {
+    throw "Broker must not classify arbitrary files from the user Temp directory."
+}
+if ($broker -notmatch 'transient_download_path' -or
+    $broker -notmatch 'content_category_disabled' -or
+    $broker -notmatch 'policy_\s*=\s*load_content_policy\(\)') {
+    throw "Content-policy bypass and transient download handling are incomplete."
+}
+if ([regex]::Matches($broker, 'downloads_root\s*&&\s*!executable\s*&&\s*!parser_risk_extension').Count -ne 1) {
+    throw "The recovery scan would strand disabled download categories in kernel PENDING state."
+}
+if ($filter -notmatch 'AI_SHIELD_EVENT_FILE_RENAME[\s\S]{0,400}AI_SHIELD_FILE_PENDING') {
+    throw "A browser final-name rename must invalidate the temporary download verdict."
+}
 foreach ($required in @(
     'analysis_worker_',
     'queue_condition_',

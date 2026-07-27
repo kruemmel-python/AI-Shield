@@ -1,6 +1,6 @@
 # AI Shield Enterprise-Betriebsprofil
 
-Stand: 14. Juli 2026
+Stand: 27. Juli 2026
 
 ## Einordnung
 
@@ -11,6 +11,13 @@ Hardwarematrix, Langzeitmessung und unabhängige Prüfung bleiben Produktgates.
 
 ## Zusätzliche Integrationen
 
+- TPM-bindbare Geräteidentität mit Enrollment, Zertifikatsrotation, Widerruf und Clone Detection;
+- signierte hierarchische Policies mit Anti-Rollback, Ablaufzeit, Rollout-Ringen und Break Glass
+  unter Dual Control;
+- ausschließlich typisierte Remote-Response-Aufträge mit Lease, Nonce, Signaturprüfung,
+  Anti-Replay und getrennten Freigaben; keine Remote-Shell;
+- hashverkettete, priorisierte Fleet-Batches mit Store-and-Forward und Sequenzlückenerkennung;
+- Rollenmodell mit Trennung von Policy Author/Approver sowie Restore Operator/Approver;
 - verwalteter Edge-/Chrome-Sensor mit realer Extension-ID, HTTPS-Updatequelle und Publisherpin;
 - Windows Event Forwarding zu einem Collector mit gepinnter Zielidentität;
 - JSON-, CEF- und LEEF-SIEM-Ausgabe sowie IPv4-/IPv6-Syslog;
@@ -27,6 +34,8 @@ Publisheridentität, Servicekonten, Aufbewahrungsfristen und Notfallzugänge ber
 beispielhafte Werte dürfen nicht als produktive Konfiguration interpretiert werden. Die konkrete
 Einrichtung ist in [Enterprise-Sicherheitsintegrationen](ENTERPRISE_SECURITY_INTEGRATIONS_DE.md)
 und [Junior-Schnellstart](JUNIOR_ENTERPRISE_INTEGRATION_SCHNELLSTART_DE.md) beschrieben.
+Der vollständige Agent-/Control-Plane-Vertrag steht in
+[Enterprise Control Plane](ENTERPRISE_CONTROL_PLANE_DE.md).
 
 ## Empfohlener Rollout
 

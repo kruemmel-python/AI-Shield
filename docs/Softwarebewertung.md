@@ -1,6 +1,6 @@
 # Softwarebewertung: AI Shield 2.0
 
-Stand: 15. Juli 2026, bewertet wird Release Candidate `2.0.0-rc.13`
+Stand: 27. Juli 2026, bewertet wird Release Candidate `2.0.0-rc.15`
 
 Nachtrag zum verifizierten RC8-Stand: Die Recovery-Erstbaseline wurde auf dem Referenzrechner mit
 13.353 Dateien und null Übersprüngen abgeschlossen. Nicht auflösbare Junctions und Reparse Points
@@ -44,7 +44,7 @@ noch eine Microsoft-Zertifizierung oder eine Freigabe für den Produktivbetrieb.
 | Kernel-Transport | Eingefrorener ABI 1.2 |
 | Interne Ereigniskorrelation | AISHAD02 / ABI 2.0 |
 | Lokale Plattform | Windows x64, Testsigning-Umgebung |
-| Automatisierte Tests | 16 CTest-Ziele, in Release und Debug erfolgreich |
+| Automatisierte Tests | 18 CTest-Ziele; aktueller Enterprise-Patch in Release und Debug erfolgreich |
 | Treiber | WFP, Minifilter und ProcessGuard lokal testsigniert und lauffähig |
 | Produktfreigabe | Nicht erteilt |
 
@@ -141,6 +141,21 @@ Die lokale Hashkette ist manipulationsanzeigend, aber nicht allein unbestreitbar
 ausreichenden lokalen Rechten könnte Daten und lokale Vertrauensanker gemeinsam angreifen. Für eine
 stärkere Beweiskette müssen Auditdaten zeitnah an ein externes, gepinntes und getrennt verwaltetes
 Ziel übertragen oder extern verankert werden.
+
+### Enterprise-Agent-Vertrag
+
+Der gemeinsame Core enthält inzwischen einen begrenzten Enterprise-Agent-Vertrag für
+Geräte-Enrollment und Clone Detection, Zertifikatsrotation und Widerruf, signierte hierarchische
+Policies mit Anti-Rollback und Rollout-Ringen, typisierte Remote Response ohne Remote-Shell,
+Anti-Replay, RBAC und Dual Control sowie signierte Fleet-Batches mit Sequenz- und Hashkettenprüfung.
+Die Windows-Konfiguration validiert HTTPS, Client-Auth-EKU und SPKI-Pin und speichert den Zustand
+per DPAPI LocalMachine. Control Flow Guard, CET-Kompatibilität, ASLR und DEP/NX sind für die
+User-Mode-Ziele aktiviert.
+
+Diese Ergänzungen verbessern die Integrationsfähigkeit, machen aus dem Repository aber noch keine
+hochverfügbare Control Plane. Unternehmens-PKI/HSM, Identitätsquelle, Collector, SOC,
+Failoverbetrieb, Datenschutzfreigabe und externe Qualifikation bleiben Betreiberinfrastruktur und
+Produktnachweise.
 
 ### Netzwerk- und Webschutz
 

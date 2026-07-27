@@ -50,6 +50,16 @@ try {
 
     Invoke-AIShieldChild -Script (Join-Path $PSScriptRoot "uninstall_private_desktop.ps1") `
         -Arguments @() -LogPrefix "uninstall"
+    $deadline = [DateTime]::UtcNow.AddSeconds(10)
+    do {
+        $remaining = @("AIShieldCore", "AIShieldBroker", "AIShieldWfp", "AIShieldMiniFilter", "AIShieldProcessGuard") |
+            Where-Object { (& sc.exe query $_ 2>$null | Out-String) -match 'SERVICE_NAME' }
+        if ($remaining.Count -eq 0) { break }
+        Start-Sleep -Milliseconds 250
+    } while ([DateTime]::UtcNow -lt $deadline)
+    if ($remaining.Count -ne 0) {
+        throw "Uninstall verification found active registrations: $($remaining -join ', ')"
+    }
     Write-AIShieldMsiLog "completed; audit and quarantine data preserved"
 } catch {
     Write-AIShieldMsiLog "failed error=$($_.Exception.Message)"

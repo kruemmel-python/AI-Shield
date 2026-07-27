@@ -71,6 +71,22 @@ function Initialize-AIShieldRecoveryBaseline {
     }
 }
 
+function Start-AIShieldFromSavedSettings {
+    $arguments = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
+        (Join-Path $PSScriptRoot "start_private_desktop.ps1"))
+    $settingsPath = Join-Path $env:ProgramData "AIShield\private-desktop\ui-settings.json"
+    if (Test-Path -LiteralPath $settingsPath) {
+        $settings = Get-Content -LiteralPath $settingsPath -Raw | ConvertFrom-Json
+        if ([bool]$settings.harden_downloads) { $arguments += "-HardenDownloads" }
+        if ([bool]$settings.strict_browser) { $arguments += "-StrictBrowser" }
+        if ([bool]$settings.block_unsolicited_inbound) { $arguments += "-BlockUnsolicitedInbound" }
+    } else {
+        $arguments += "-HardenDownloads"
+    }
+    & powershell.exe @arguments
+    if ($LASTEXITCODE -ne 0) { throw "Saved protection settings could not be activated." }
+}
+
 if (Test-Path -LiteralPath $markerPath) {
     $existingMarker = Get-Content -LiteralPath $markerPath -Raw | ConvertFrom-Json
     if ($existingMarker.schema -ne "AIShieldPrivateDesktopInstall/1" -or
@@ -90,9 +106,7 @@ if (Test-Path -LiteralPath $markerPath) {
         & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installCore
         if ($LASTEXITCODE -ne 0) { throw "Core service refresh failed with exit code $LASTEXITCODE." }
     }
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "start_private_desktop.ps1") `
-        -HardenDownloads
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    Start-AIShieldFromSavedSettings
     Install-AIShieldBrowserSensor
     Initialize-AIShieldRecoveryBaseline
     Install-AIShieldPrivateUiShortcut

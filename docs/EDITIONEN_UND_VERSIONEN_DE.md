@@ -1,6 +1,6 @@
 # AI Shield Editionen und Versionen
 
-Stand: 15. Juli 2026
+Stand: 27. Juli 2026
 
 ## Gemeinsame technische Basis
 
@@ -30,6 +30,12 @@ PowerShell-Metadatenweiterleitung, Firewall- und ASR-Rollout. Reale Endpunkte, Z
 Publisheridentitäten, Rollen und Aufbewahrungsregeln müssen durch das betreibende Unternehmen
 bereitgestellt und qualifiziert werden.
 
+Der gemeinsame Core enthält jetzt zusätzlich Geräte-Enrollment und Clone Detection, signierte
+hierarchische Policy-Envelopes, feste Remote-Response-Aktionen ohne Remote-Shell, Anti-Replay,
+Dual Control, Rollen-Trennung und hashverkettete Fleet-Batches. Die Windows-Konfiguration speichert
+Endpunkt, Clientzertifikat-Referenz und SPKI-Pin maschinengebunden per DPAPI. Diese Agentfunktionen
+ersetzen nicht die deployment-spezifische Control Plane, Unternehmens-PKI oder SOC-Infrastruktur.
+
 ## Developer Full
 
 `AI_Shield_Developer_Full.zip` richtet sich an Entwicklerteams. Es enthält Quellcode, CMake-/WDK-
@@ -47,7 +53,7 @@ nicht erforderlich.
 
 | Vertrag | Aktueller Stand |
 |---|---|
-| Release Candidate | `2.0.0-rc.13` |
+| Release Candidate | `2.0.0-rc.15` |
 | Kernel-Transport | `1.2` |
 | ABI-Freeze | Revision `3` |
 | Interne Ereignis-ABI | `2.0` |

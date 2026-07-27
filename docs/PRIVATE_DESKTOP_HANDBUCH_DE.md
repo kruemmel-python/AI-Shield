@@ -1,6 +1,6 @@
 # AI Shield Private Desktop Handbuch
 
-Stand: 15. Juli 2026, Release Candidate `2.0.0-rc.13`
+Stand: 27. Juli 2026, Release Candidate `2.0.0-rc.15`
 
 ## Zweck und Voraussetzungen
 
@@ -25,7 +25,7 @@ Für ein reproduzierbares Upgrade, das alte Treiber vor dem MSI-Lauf vollständi
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass `
   -File tools\install_private_desktop_release.ps1 `
-  -MsiPath dist\msi\AI_Shield_Private_Desktop_2.0.0-rc.13_x64.msi
+  -MsiPath dist\msi\AI_Shield_Private_Desktop_2.0.0-rc.15_x64.msi
 ```
 
 Nach der Installation startet **AI Shield Private Desktop** über das Startmenü. Die notwendige

@@ -1,6 +1,6 @@
 # AI Shield Dokumentation
 
-Stand: 15. Juli 2026, Release Candidate `2.0.0-rc.13`
+Stand: 27. Juli 2026, Release Candidate `2.0.0-rc.15`
 
 Dieser Ordner ist der zentrale Einstieg in die Projekt-, Betriebs- und Entwicklungsdokumentation.
 Der aktuelle Vertrag verwendet Kernel-Transport ABI `1.2` (Freeze-Revision `3`) und intern ABI
@@ -13,11 +13,13 @@ Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
 |---|---|---|
 | Private Endanwender | [Private Desktop Handbuch](PRIVATE_DESKTOP_HANDBUCH_DE.md) | Installation, grafische Bedienung, Schutz, Audit und Quarantäne auf einem Einzelplatz-PC |
 | Verwaltete Umgebung | [Enterprise-Betriebsprofil](ENTERPRISE_EDITION_HANDBUCH_DE.md) | WEF, SIEM, WDAC, Browserverwaltung, Policy- und Rolloutprozesse |
+| Enterprise Control Plane | [Enterprise-Vertrag](ENTERPRISE_CONTROL_PLANE_DE.md) | Enrollment, PKI-Vertrag, Policyhierarchie, Remote Response, RBAC und Fleet-Telemetrie |
 | Entwicklerteam | [Developer Full Handbuch](DEVELOPER_FULL_HANDBUCH_DE.md) | Vollständiger Build, Tests, Treiberpaket und Referenzinstallation |
 | Sicherheitsanalyse | [Audit Viewer](AUDIT_VIEWER_DE.md) | AISHAD02 prüfen, anzeigen, filtern und als JSON dekodieren |
 | Downloadkontrolle | [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md) | Policy v4, universeller Preflight, Quarantäne und Freigabe |
 | Wiederherstellung | [Ransomware-Schutz und Recovery](RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md) | Versionsspeicher, Erkennung, externe Sicherung und bestätigte Rücksicherung |
-| RC13-Systemnachweis | [RC13 Release- und Installationsnachweis](RC13_RELEASE_NACHWEIS_DE.md) | Transaktionale Quarantänefreigabe, Tests und veröffentlichte Artefakte |
+| RC14-Systemnachweis | [RC14 Korrektur- und Installationsnachweis](RC14_RELEASE_NACHWEIS_DE.md) | Schaltertreue, Browserdownloads, Fehlalarmkorrekturen und Deinstallation |
+| RC15-Systemnachweis | [RC15 Enterprise- und Paketnachweis](RC15_RELEASE_NACHWEIS_DE.md) | Enterprise-Verträge, Binärhärtung, Build, Installation und Pakethashes |
 | Architekturentscheidung | [Editionen und Versionen](EDITIONEN_UND_VERSIONEN_DE.md) | Gemeinsamer Core, Unterschiede und Freigabestatus |
 
 ## Technische Referenz
@@ -32,7 +34,9 @@ Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
 - [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md)
 - [ZIP-Tiefenanalyse und latenzbegrenztes Minifilter-Pending](ZIP_TIEFENANALYSE_UND_MINIFILTER_PENDING_DE.md)
 - [Dateibasierte Angriffe und Implementierungszuordnung](../AI_Shield_Dateibasierte_Angriffe_und_Scananforderungen_DE.md)
-- [RC13 Release- und Installationsnachweis](RC13_RELEASE_NACHWEIS_DE.md)
+- [RC14 Korrektur- und Installationsnachweis](RC14_RELEASE_NACHWEIS_DE.md)
+- [RC15 Enterprise- und Paketnachweis](RC15_RELEASE_NACHWEIS_DE.md)
+- [Historischer RC13-Nachweis](RC13_RELEASE_NACHWEIS_DE.md)
 - [Historischer RC12-Nachweis](RC12_RELEASE_NACHWEIS_DE.md)
 - [Historischer RC11-Nachweis](RC11_RELEASE_NACHWEIS_DE.md)
 - [Historischer RC10-Nachweis](RC10_RELEASE_NACHWEIS_DE.md)

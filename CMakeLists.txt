@@ -32,6 +32,11 @@ add_library(ai_shield_core
     src/flow_baseline.cpp
     src/flow_control.cpp
     src/egress_gate.cpp
+    src/enterprise_command.cpp
+    src/enterprise_policy.cpp
+    src/enterprise_rbac.cpp
+    src/enterprise_trust.cpp
+    src/fleet_telemetry.cpp
     src/fuzz_plan.cpp
     src/http1.cpp
     src/http2_preflight.cpp
@@ -96,7 +101,8 @@ else()
 endif()
 
 if(MSVC)
-    add_link_options(/Brepro "/PDBALTPATH:%_PDB%")
+    add_compile_options(/guard:cf)
+    add_link_options(/Brepro "/PDBALTPATH:%_PDB%" /guard:cf /CETCOMPAT /DYNAMICBASE /NXCOMPAT)
     target_compile_options(ai_shield_core PRIVATE /W4 /permissive- /sdl /GS)
     if(AI_SHIELD_STRICT)
         target_compile_options(ai_shield_core PRIVATE /WX)
@@ -166,6 +172,10 @@ target_link_libraries(ai_shield_unit_tests PRIVATE ai_shield_core)
 
 enable_testing()
 add_test(NAME ai_shield_unit_tests COMMAND ai_shield_unit_tests)
+
+add_executable(ai_shield_enterprise_tests tests/enterprise/main.cpp)
+target_link_libraries(ai_shield_enterprise_tests PRIVATE ai_shield_core)
+add_test(NAME ai_shield_enterprise_tests COMMAND ai_shield_enterprise_tests)
 
 if(WIN32 AND AI_SHIELD_ENABLE_WINDOWS_PLATFORM)
     add_library(ai_shield_windows_platform
@@ -242,5 +252,9 @@ if(WIN32)
     add_test(NAME ai_shield_minifilter_latency_contract
         COMMAND powershell.exe -NoProfile -ExecutionPolicy Bypass -File
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/windows_minifilter_latency_contract.ps1
+        -RepositoryRoot ${CMAKE_CURRENT_SOURCE_DIR})
+    add_test(NAME ai_shield_windows_enterprise_contract
+        COMMAND powershell.exe -NoProfile -ExecutionPolicy Bypass -File
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/windows_enterprise_contract.ps1
         -RepositoryRoot ${CMAKE_CURRENT_SOURCE_DIR})
 endif()

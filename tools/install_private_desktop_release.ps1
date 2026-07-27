@@ -67,15 +67,6 @@ if ($installed) {
         "/x", $productCode, "/qn", "/norestart", "/l*v", ('"' + $uninstallLog + '"')) `
         -Operation "Existing MSI removal"
 }
-$driverctl = Join-Path $repo "build_vs\Release\ai_shield_driverctl.exe"
-if (Test-Path -LiteralPath $driverctl -PathType Leaf) {
-    & $driverctl stop
-    if ($LASTEXITCODE -ne 0) { throw "Existing drivers could not be stopped." }
-}
-& powershell.exe -NoProfile -ExecutionPolicy Bypass -File `
-    (Join-Path $repo "platform\windows\installer\uninstall_drivers.ps1")
-if ($LASTEXITCODE -ne 0) { throw "Existing drivers could not be uninstalled." }
-
 $restartRequired = (Invoke-Msi -Arguments @(
     "/i", ('"' + $msi + '"'), "/qn", "/norestart", "/l*v", ('"' + $log + '"')) `
     -Operation "MSI installation") -or $restartRequired

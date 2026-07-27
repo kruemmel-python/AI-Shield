@@ -1,6 +1,6 @@
 # AI Shield: Produktqualifikation und Microsoft-Treibersignierung
 
-Stand: 14. Juli 2026
+Stand: 27. Juli 2026
 
 ## Ausgefuehrte Hardening- und Recovery-Nachweise
 
@@ -12,8 +12,10 @@ Stand: 14. Juli 2026
   validierten Program-Files-Pfade zurueck.
 - Service-DACL und geschuetzter Installationspfad sind aktiv; normale Benutzer koennen Status lesen,
   Dienste aber nicht steuern oder rekonfigurieren.
-- 16 von 16 CTest-Zielen bestanden, einschließlich Datei-Scanner-, Recovery-, Tray-, UI- und
-  Minifilter-Latenzvertragstests.
+- Je 18 von 18 CTest-Zielen bestanden in Release und Debug, einschließlich Datei-Scanner-,
+  Recovery-, Tray-, UI-, Minifilter-Latenz- und Enterprise-Vertragstests.
+- Alle User-Mode-Ziele werden zusätzlich mit Control Flow Guard, CET-Kompatibilität, ASLR und
+  DEP/NX gebaut. Der lokale RC-Build ist noch nicht Authenticode-produktionssigniert.
 - Der Recovery-Test deckt Snapshot, Vorfallerkennung, Wiederherstellungsplan, bestätigten Restore,
   externe Backupprüfung und eine absichtlich defekte Junction ab.
 - Eine reale Erstbaseline auf dem Referenzrechner erfasste 13.353 Dateien ohne übersprungene

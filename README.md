@@ -6,7 +6,7 @@ ABI-2.0-Vertrag und bewertet sie anhand lokaler Richtlinien. Der aktuelle Stand 
 Windows-Kerneltreiber, LocalSystem-Dienste, isolierte Parser, Downloadquarantäne, Audit-Ketten,
 Recovery-Funktionen und eine grafische Private-Desktop-Oberfläche.
 
-> **Projektstatus:** `2.0.0-rc.13` ist ein funktionsfähiger Entwicklungs- und Pilotprototyp. Die
+> **Projektstatus:** `2.0.0-rc.15` ist ein funktionsfähiger Entwicklungs- und Pilotprototyp. Die
 > Private-Desktop-Ausgabe kann auf einem einzelnen Windows-PC installiert und getestet werden. Die
 > enthaltenen Treiber sind lokal testsigniert. Eine öffentliche Produktionsverteilung unter
 > aktiviertem Secure Boot erfordert weiterhin Microsoft-Treibersignierung, HLK/WHCP-Qualifikation,
@@ -34,6 +34,9 @@ Recovery-Funktionen und eine grafische Private-Desktop-Oberfläche.
 - Automatischer Tray-Agent mit Komponentenstatus, Einzelinstanz und Close-to-Tray ohne erneute UAC-Abfrage.
 - Handle-gebundener Minimalworker mit SHA-256-Provenienz und WFP-erzwungener IPv4-/IPv6-
   Netzwerksperre für den Parserprozess.
+- Enterprise-Agent-Verträge für TPM-bindbares Enrollment, Zertifikatsrotation und Clone Detection,
+  signierte Policyhierarchien, typisierte Remote Response ohne Remote-Shell, RBAC/Dual Control
+  sowie signierte Fleet-Batches mit Anti-Replay und priorisiertem Store-and-Forward.
 
 ## Architektur
 
@@ -61,6 +64,7 @@ lokale MITM-Zertifizierungsstelle.
 | Private-Desktop-UI, Tray und Quarantäne | Implementiert; RC13-Pilotstand |
 | WFP-, Minifilter- und ProcessGuard-Treiber | WDK-Prototyp, lokal testsignierbar |
 | Edge-/Chrome-Sensor | Lokal ladbar; Store-/HTTPS-Verteilung ausstehend |
+| Enterprise Agent/Control-Plane-Vertrag | Core und Windows-Enrollment implementiert; reale PKI, Collector und SOC deployment-spezifisch |
 | Microsoft-Produktionstreibersignierung | Ausstehender externer Meilenstein |
 | HLK, Langzeit-, Last- und Kompatibilitätsnachweise | Ausstehend beziehungsweise teilweise lokal vorbereitet |
 | Unabhängiger Kernel-Review und Penetrationstest | Ausstehend |

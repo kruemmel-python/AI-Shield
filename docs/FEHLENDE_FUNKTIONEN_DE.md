@@ -1,6 +1,6 @@
 # AI Shield: Noch auszuführende Produktnachweise
 
-Stand: 15. Juli 2026, nach Abschluss der RC13-Quarantänefreigabe
+Stand: 27. Juli 2026, nach Implementierung des Enterprise-Agent-Vertrags
 
 ## Noch auszuführende Produktnachweise
 
@@ -18,6 +18,18 @@ TLS-gepinnte WEF-Quelle, WDAC-Auditpolicy mit Event-3076-Auswertung, PowerShell-
 ohne Scripttext, transaktionale Firewallbaseline, nicht schreibender UAC-Assistent und rein
 evidenzbasierte ASR-Empfehlungen. Externe Collector-, Extension-Store- und SOC-Endpunkte bleiben
 deployment-spezifische Konfiguration und kein offener Produktcode.
+
+Der Enterprise-Agent-Vertrag ist ebenfalls als getesteter Core-Code vorhanden: TPM-bindbare
+Geräteidentität mit Rotation, Widerruf und Clone Detection; signierte Policyhierarchie mit
+Anti-Rollback, Ablaufzeiten, Rollout-Ringen und Dual-Control-Break-Glass; feste Response-Aktionen
+ohne Remote-Shell mit Lease, Nonce und Anti-Replay; Rollen-Trennung; sowie signierte,
+hashverkettete Fleet-Batches mit priorisiertem Store-and-Forward. Das Windows-Enrollment validiert
+HTTPS, Client-Auth-Zertifikat und SPKI-Pin und schützt den Zustand per DPAPI LocalMachine.
+
+Nicht als lokaler Beispielcode vortäuschbar bleiben eine hochverfügbare Control Plane,
+Unternehmens-PKI/HSM, reale Identitäts- und Rollenquelle, manipulationsferner Fleet-Speicher,
+Collector-Failover und deren Betriebsnachweise. Diese Infrastruktur muss ein Betreiber bereitstellen
+und gegen den dokumentierten Vertrag integrieren.
 
 Auch die lokalen Consumer-Betriebsfunktionen sind implementiert: MSI-Installation und vollständiger
 Treiber-/Dienst-Rückbau, versteckter UI-Host nach UAC, Neustartfortsetzung, Edge-/Chrome-Sensor,

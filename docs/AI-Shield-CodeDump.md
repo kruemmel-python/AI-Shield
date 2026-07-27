@@ -1,6 +1,6 @@
-# CodeDump for Project: `AI_Shield_Developer_Full.zip`
+# CodeDump for Project: `AI-Shield-main.zip`
 
-_Generated on 2026-07-14T05:15:20.157Z_
+_Generated on 2026-07-14T17:41:37.978Z_
 
 No LLM call was made. Token/cost values are offline estimates only.
 
@@ -10,7 +10,7 @@ LLM Code Review Mode is enabled: generated/vendor/report/lockfile noise is filte
 
 ```text
 .
-└── AI_Shield_Developer_Full/
+└── AI-Shield-main/
     ├── docs/
     │   ├── adr/
     │   │   └── 0001-shared-core-boundary.md
@@ -18,11 +18,12 @@ LLM Code Review Mode is enabled: generated/vendor/report/lockfile noise is filte
     │   │   └── overview.md
     │   ├── ABI_2_0_DE.md
     │   ├── ABI_FREEZE_UND_HLK_DE.md
-    │   ├── AI_Shield_Developer_Full.md
+    │   ├── AI_Shield.md
     │   ├── AKTUELLER_INSTALLATIONSSTAND_DE.md
     │   ├── ARCHITEKTUR_WHITEBOARD_DE.md
     │   ├── AUDIT_VIEWER_DE.md
     │   ├── DEVELOPER_FULL_HANDBUCH_DE.md
+    │   ├── DOWNLOADSCHUTZ_UND_FREIGABE_DE.md
     │   ├── DRIVER_SECURITY_LAB_DE.md
     │   ├── EDITIONEN_UND_VERSIONEN_DE.md
     │   ├── ENTERPRISE_EDITION_HANDBUCH_DE.md
@@ -38,7 +39,10 @@ LLM Code Review Mode is enabled: generated/vendor/report/lockfile noise is filte
     │   ├── PRODUKTQUALIFIKATION_DE.md
     │   ├── PROTOTYP_HANDBUCH_DE.md
     │   ├── RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md
+    │   ├── RC10_RELEASE_NACHWEIS_DE.md
+    │   ├── RC11_RELEASE_NACHWEIS_DE.md
     │   ├── RC8_RELEASE_NACHWEIS_DE.md
+    │   ├── RC9_RELEASE_NACHWEIS_DE.md
     │   ├── README.md
     │   ├── SCHUTZABDECKUNG_2_0_DE.md
     │   ├── SICHERHEITSABSCHLUSS_DE.md
@@ -53,6 +57,9 @@ LLM Code Review Mode is enabled: generated/vendor/report/lockfile noise is filte
     │       │   ├── Install_Precompiled_Desktop.cmd
     │       │   ├── Install_Precompiled_Desktop.ps1
     │       │   └── README_DE.md
+    │       ├── tray/
+    │       │   ├── manage_tray_agent.ps1
+    │       │   └── start_tray_agent.ps1
     │       ├── ui/
     │       │   ├── AIShield.AuditViewer.xaml
     │       │   ├── AIShield.PrivateDesktop.UI.xaml
@@ -104,6 +111,7 @@ LLM Code Review Mode is enabled: generated/vendor/report/lockfile noise is filte
     │       ├── egress_gate.hpp
     │       ├── fail_policy.hpp
     │       ├── features.hpp
+    │       ├── file_preflight.hpp
     │       ├── flow_baseline.hpp
     │       ├── flow_control.hpp
     │       ├── flow_state.hpp
@@ -158,6 +166,7 @@ LLM Code Review Mode is enabled: generated/vendor/report/lockfile noise is filte
     │       ├── tls_service_policy.hpp
     │       ├── tlsmeta.hpp
     │       ├── update_manager.hpp
+    │       ├── wav_preflight.hpp
     │       ├── worker_supervisor.hpp
     │       ├── xml_preflight.hpp
     │       └── zip_preflight.hpp
@@ -306,6 +315,7 @@ LLM Code Review Mode is enabled: generated/vendor/report/lockfile noise is filte
     │   ├── egress_gate.cpp
     │   ├── fail_policy.cpp
     │   ├── features.cpp
+    │   ├── file_preflight.cpp
     │   ├── flow_baseline.cpp
     │   ├── flow_control.cpp
     │   ├── fuzz_plan.cpp
@@ -356,9 +366,15 @@ LLM Code Review Mode is enabled: generated/vendor/report/lockfile noise is filte
     │   ├── tls_service_policy.cpp
     │   ├── tlsmeta.cpp
     │   ├── update_manager.cpp
+    │   ├── wav_preflight.cpp
     │   ├── worker_supervisor.cpp
     │   ├── xml_preflight.cpp
     │   └── zip_preflight.cpp
+    ├── submission/
+    │   └── microsoft/
+    │       ├── ABI_MANIFEST.json
+    │       ├── AIShieldDrivers.ddf
+    │       └── SUBMISSION_README.md
     ├── tests/
     │   ├── unit/
     │   │   └── main.cpp
@@ -368,7 +384,8 @@ LLM Code Review Mode is enabled: generated/vendor/report/lockfile noise is filte
     │   ├── windows_private_desktop_qualification.ps1
     │   ├── windows_process_guard_rules.ps1
     │   ├── windows_product_qualification.ps1
-    │   └── windows_ransomware_recovery.ps1
+    │   ├── windows_ransomware_recovery.ps1
+    │   └── windows_tray_agent_contract.ps1
     ├── tools/
     │   ├── ai_shield_broker/
     │   │   └── main.cpp
@@ -377,6 +394,8 @@ LLM Code Review Mode is enabled: generated/vendor/report/lockfile noise is filte
     │   ├── ai_shield_diag/
     │   │   └── main.cpp
     │   ├── ai_shield_driverctl/
+    │   │   └── main.cpp
+    │   ├── ai_shield_file_scanner/
     │   │   └── main.cpp
     │   ├── ai_shield_handle_probe/
     │   │   └── main.cpp
@@ -395,9 +414,14 @@ LLM Code Review Mode is enabled: generated/vendor/report/lockfile noise is filte
     │   ├── complete_private_rc_admin.ps1
     │   ├── deploy_download_content_protection.ps1
     │   ├── deploy_private_rc5_patch.ps1
+    │   ├── deploy_private_tray.ps1
+    │   ├── deploy_scanner_network_isolation.ps1
+    │   ├── diagnose_private_ui.ps1
     │   ├── package_developer_full.ps1
     │   ├── package_developer_release.ps1
     │   └── package_private_desktop.ps1
+    ├── .gitignore
+    ├── AI_Shield_Dateibasierte_Angriffe_und_Scananforderungen_DE.md
     ├── AI_Shield_Defender_Auditmodus.cmd
     ├── AI_Shield_Defender_Rollback.cmd
     ├── AI_Shield_Protect_System_Strict.cmd
@@ -409,27 +433,24 @@ LLM Code Review Mode is enabled: generated/vendor/report/lockfile noise is filte
     ├── AI_Shield_Update_Drivers.cmd
     ├── AI_Shield_Vollstaendiger_Entwicklungsplan.extracted.txt
     ├── AI_Shield_Vollstaendiger_Entwicklungsplan.md
-    ├── Build_All_Release.cmd
-    ├── Build_All_Release.ps1
     ├── CMakeLists.txt
-    ├── FULL_PACKAGE_MANIFEST.json
-    ├── Install_Precompiled_Desktop.cmd
-    ├── Install_Precompiled_Desktop.ps1
+    ├── LICENSE
+    ├── NOTICE
     ├── planfortsetzung.txt
-    ├── README_DE.md
     ├── README.md
+    ├── SHA256SUMS.txt
     └── Softwarebewertung.md
 ```
 
-## File: `AI_Shield_Developer_Full/docs/architecture/overview.md`  
-- Path: `AI_Shield_Developer_Full/docs/architecture/overview.md`  
+## File: `AI-Shield-main/docs/architecture/overview.md`  
+- Path: `AI-Shield-main/docs/architecture/overview.md`  
 - Size: 9195 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield Architecture Foundation
 
-Stand: 13. Juli 2026. Diese Datei beschreibt die Shared-Core-Grenze. Editions-, Betriebs- und
+Stand: 14. Juli 2026. Diese Datei beschreibt die Shared-Core-Grenze. Editions-, Betriebs- und
 UI-Dokumentation beginnt eine Ebene höher in [`../README.md`](../README.md).
 
 Der aktuelle Windows-Stand ergänzt den Shared Core um Private-Desktop-UI, Browser-Sensor,
@@ -530,15 +551,20 @@ Windows milestone artifacts now live under `platform/windows`:
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/overview.md`  
-- Path: `AI_Shield_Developer_Full/docs/overview.md`  
-- Size: 9580 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/docs/overview.md`  
+- Path: `AI-Shield-main/docs/overview.md`  
+- Size: 9975 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield Architecture Foundation
 
-Stand: 13. Juli 2026. Der zentrale Dokumentationseinstieg und die Abgrenzung von Private Desktop,
+Der RC11-Dateipfad führt jedes neue oder veränderte Downloadobjekt zunächst über einen universellen
+Magic-/Extension-/Namens-Preflight. Anschließend erhält der isolierte Minimalworker ausschließlich
+das bereits gesperrte Datei-Handle. SHA-256 und Dateiidentität binden Analyse, Provenienz und
+Quarantäneentscheidung; der WFP-Treiber sperrt den Worker vollständig vom IPv4-/IPv6-Netz.
+
+Stand: 14. Juli 2026. Der zentrale Dokumentationseinstieg und die Abgrenzung von Private Desktop,
 Enterprise-Betriebsprofil, Developer Full und Gateway-Prototyp stehen in
 [`README.md`](README.md) und [`EDITIONEN_UND_VERSIONEN_DE.md`](EDITIONEN_UND_VERSIONEN_DE.md).
 
@@ -643,15 +669,15 @@ Windows milestone artifacts now live under `platform/windows`:
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/README.md`  
-- Path: `AI_Shield_Developer_Full/docs/README.md`  
-- Size: 3327 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/docs/README.md`  
+- Path: `AI-Shield-main/docs/README.md`  
+- Size: 3856 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield Dokumentation
 
-Stand: 13. Juli 2026, Release Candidate `2.0.0-rc.8`
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.11`
 
 Dieser Ordner ist der zentrale Einstieg in die Projekt-, Betriebs- und Entwicklungsdokumentation.
 Der aktuelle Vertrag verwendet Kernel-Transport ABI `1.2` (Freeze-Revision `2`) und intern ABI
@@ -666,8 +692,9 @@ Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
 | Verwaltete Umgebung | [Enterprise-Betriebsprofil](ENTERPRISE_EDITION_HANDBUCH_DE.md) | WEF, SIEM, WDAC, Browserverwaltung, Policy- und Rolloutprozesse |
 | Entwicklerteam | [Developer Full Handbuch](DEVELOPER_FULL_HANDBUCH_DE.md) | Vollständiger Build, Tests, Treiberpaket und Referenzinstallation |
 | Sicherheitsanalyse | [Audit Viewer](AUDIT_VIEWER_DE.md) | AISHAD02 prüfen, anzeigen, filtern und als JSON dekodieren |
+| Downloadkontrolle | [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md) | Policy v4, universeller Preflight, Quarantäne und Freigabe |
 | Wiederherstellung | [Ransomware-Schutz und Recovery](RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md) | Versionsspeicher, Erkennung, externe Sicherung und bestätigte Rücksicherung |
-| RC8-Systemnachweis | [RC8 Release- und Installationsnachweis](RC8_RELEASE_NACHWEIS_DE.md) | Verifizierte Tests, reale Baseline, Installation und Artefaktstatus vom 13. Juli 2026 |
+| RC11-Systemnachweis | [RC11 Release- und Installationsnachweis](RC11_RELEASE_NACHWEIS_DE.md) | Datei-Preflight, Scannerisolation, Tests und veröffentlichte Artefakte |
 | Architekturentscheidung | [Editionen und Versionen](EDITIONEN_UND_VERSIONEN_DE.md) | Gemeinsamer Core, Unterschiede und Freigabestatus |
 
 ## Technische Referenz
@@ -679,7 +706,12 @@ Secure Boot setzt weiterhin Microsoft-signierte Treiber voraus.
 - [Netzwerkschutz](NETZWERKSCHUTZ_DE.md), [Schutzabdeckung](SCHUTZABDECKUNG_2_0_DE.md) und
   [Kernel-/Hardware-Schutz](KERNEL_HARDWARE_SCHUTZ_DE.md)
 - [Ransomware-Schutz und Wiederherstellung](RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md)
-- [RC8 Release- und Installationsnachweis](RC8_RELEASE_NACHWEIS_DE.md)
+- [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md)
+- [Dateibasierte Angriffe und RC11-Implementierungszuordnung](../AI_Shield_Dateibasierte_Angriffe_und_Scananforderungen_DE.md)
+- [RC11 Release- und Installationsnachweis](RC11_RELEASE_NACHWEIS_DE.md)
+- [Historischer RC10-Nachweis](RC10_RELEASE_NACHWEIS_DE.md)
+- [Historischer RC9-Nachweis](RC9_RELEASE_NACHWEIS_DE.md)
+- [Historischer RC8-Nachweis](RC8_RELEASE_NACHWEIS_DE.md)
 - [Windows-Hardening](WINDOWS_HARDENING_DE.md) und
   [Enterprise-Sicherheitsintegrationen](ENTERPRISE_SECURITY_INTEGRATIONS_DE.md)
 
@@ -703,10 +735,10 @@ Testsigning darf nur in einer kontrollierten Entwicklungs- oder Pilotumgebung ei
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/developer_full/README_DE.md`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/developer_full/README_DE.md`  
+## File: `AI-Shield-main/editions/private_desktop/developer_full/README_DE.md`  
+- Path: `AI-Shield-main/editions/private_desktop/developer_full/README_DE.md`  
 - Size: 3339 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield Developer Full
@@ -790,15 +822,15 @@ Maschinenzustände werden nicht ausgeliefert.
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/README.md`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/README.md`  
-- Size: 8253 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/editions/private_desktop/README.md`  
+- Path: `AI-Shield-main/editions/private_desktop/README.md`  
+- Size: 10385 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield Private Desktop
 
-Release Candidate: `2.0.0-rc.8`. ABI-, Policy- und Funktionsumfang sind durch
+Release Candidate: `2.0.0-rc.11`. ABI-, Policy- und Funktionsumfang sind durch
 [`RELEASE_CONTRACT.json`](RELEASE_CONTRACT.json) eingefroren. Änderungen an sicherheitsrelevanten
 Verträgen werden von `validate_release_freeze.ps1` abgelehnt, bis ein bewusst neuer Vertrag erstellt
 wird.
@@ -855,6 +887,7 @@ automatisch.
 2. `Installieren.cmd` doppelt anklicken und die UAC-Abfrage bestätigen.
    Nach der Installation startet die grafische Oberfläche automatisch und ist danach im Startmenü
    unter **AI Shield Private Desktop** erreichbar. Alternativ öffnet `AI_Shield_UI.cmd` die UI.
+   Zusätzlich wird der Tray-Agent für jede Windows-Anmeldung eingerichtet.
 3. Nach erfolgreicher Installation mit `Status_anzeigen.cmd` prüfen, dass drei Treiber sowie Broker
    und Core laufen.
 4. `Schutz_starten.cmd` aktiviert den Schutz nach einem manuellen Stopp erneut.
@@ -875,6 +908,15 @@ Rücksicherung sind bewusste Benutzeraktionen. Nach Bestätigung startet Windows
 einmalige erhöhte Aufgabe die UI wieder und liest den wirksamen Zustand ein. Details stehen in
 [`ui\README.md`](ui/README.md).
 
+Die drei Kernel-Treiber sowie Broker und Core laufen als automatisch gestartete Windows-Dienste
+bereits vor einer Benutzeranmeldung und unabhängig von UI oder Tray. Der Tray-Agent zeigt diesen
+Zustand im Windows-Infobereich an. Doppelklick öffnet die UI; das Kontextmenü kann den Status
+aktualisieren, die Schutzdienste erhöht neu starten oder die Windows-Diensteverwaltung öffnen.
+**Tray-Agent beenden** entfernt nur das Symbol der aktuellen Anmeldung und beendet keinen Schutz.
+Der Schalter **AI Shield im Infobereich** verwaltet den automatischen Start bei der Anmeldung.
+Minimieren oder `X` verbergen die UI vollständig aus der Taskleiste. Der Tray-Doppelklick stellt
+dieselbe laufende Einzelinstanz ohne erneute UAC-Abfrage wieder her.
+
 Der signierte Native-Messaging-Host für Edge und Chrome wird standardmäßig installiert. Die
 Erweiterung benötigt ohne veröffentlichte HTTPS-Updatequelle je Browser einmalig den von der UI
 geführten Schritt **Entpackte Erweiterung laden**. Übertragen werden nur Schema, Hostname, Port,
@@ -894,20 +936,35 @@ privaten Alltags-PC wichtig.
 
 Die Private-Desktop-Standardkonfiguration blockiert direkte Programmstarts aus `Downloads` sowie
 Interpreterstarts, deren Befehlszeile ein Skript aus `Downloads` referenziert. Erfasst werden unter
-anderem PowerShell, CMD, WSH, MSHTA, Bash, WSL, Python, Node, Perl und Ruby. Alle nach dem Brokerstart
-neu angelegten Downloads mit Mark-of-the-Web werden zusätzlich unter festgehaltener Dateiidentität
+anderem PowerShell, CMD, WSH, MSHTA, Bash, WSL, Python, Node, Perl, Ruby, PHP, Java, .NET,
+MSIExec, Rundll32, Regsvr32 und weitere Windows-Systemlauncher. Alle nach dem Brokerstart
+neu angelegten oder geänderten Downloads werden unabhängig vom Vorhandensein eines
+Mark-of-the-Web unter festgehaltener Dateiidentität
 in einem zeitlich begrenzten, isolierten Inhaltscanner mit Microsoft Defender/AMSI geprüft. PDF- und
-ZIP-Inhalte erhalten dort eine lokale Strukturprüfung; aktive oder fehlerhafte PDFs,
+ZIP- und RIFF/WAV-Inhalte erhalten dort eine lokale Strukturprüfung; aktive oder fehlerhafte PDFs,
 gefährliche/verschlüsselte Archive, Malwarefunde und
 nicht prüfbare risikoreiche Parserformate werden in die AI-Shield-Quarantäne verschoben. Saubere
-Bilder, Medien und Dokumente bleiben benutzbar. Die Download-Härtung und weitere Optionen sind in der
-UI einzeln schaltbar und zusätzlich per PowerShell verfügbar:
+Bilder, Medien und Dokumente werden bei aktiver Freigabeschranke ebenfalls gesichert und bleiben
+nach einer begründeten Freigabe benutzbar. Die Download-Härtung und weitere Optionen sind in der UI
+einzeln schaltbar und zusätzlich per PowerShell verfügbar:
 
-Unter **Schutzfunktionen > Dateityp-Schutz** lassen sich Dokumente, Archive, Bilder, Audio, Video
-und Webdateien separat ein- oder ausschalten. Ein aktiver Schalter bedeutet Inhaltsprüfung; ein
-deaktivierter Schalter gibt diese Gruppe ohne AI-Shield-Inhaltsprüfung frei. Die Option
+Unter **Schutzfunktionen > Dateityp-Schutz** lassen sich Dokumente, Archive, Bilder, Audio, Video,
+Webdateien, Programme/Installer, Windows-Skripte, Entwickler-/Shell-Skripte sowie Verknüpfungen und
+Systemaktionen separat ein- oder ausschalten. Policy v4 ergänzt **Unbekannte und Spezialformate**,
+damit unbekannte Endungen, Modelle, Firmware-, CAD/GIS-, Plugin- und Mod-Container nicht ungeprüft
+durchfallen. Die Ausführungsgruppen umfassen unter anderem
+`EXE`, `MSI`, `MSIX`, `APPX`, `BAT`, `CMD`, `PS1`, `PSM1`, `VBS`, `JS`, `WSF`, `HTA`, `SH`, `PY`,
+`JAR`, `LNK`, `URL`, `REG`, `INF` und `CHM`. Ein aktiver Schalter bedeutet Inhaltsprüfung. Mit der
+standardmäßig aktiven Option **Freigabe vor dem Öffnen erzwingen** werden auch sauber gescannte
+Dateien dieser Gruppe zunächst in die Quarantäne verschoben. Die UI meldet neue Downloads sichtbar;
+erst eine begründete Freigabe stellt die Datei wieder bereit. Ein deaktivierter Dateitypschalter
+gibt diese Gruppe ohne AI-Shield-Inhaltsprüfung frei. Die Option
 **Bei Scanfehler sicher quarantänisieren** bestimmt das Fail-closed-Verhalten. Diese Richtlinie wird
 atomar und mit DPAPI-Machine-Schutz gespeichert und vom Broker ohne Neustart neu geladen.
+Bestehende Policy-v1-/v2-/v3-Dateien werden auf Policy v4 migriert. Die Ausführungsgruppen,
+**Unbekannte und Spezialformate** und die Freigabeschranke sind beim Upgrade zunächst
+eingeschaltet. Der globale Schalter **Downloads härten** bleibt die
+zusätzliche ProcessGuard-Sperre für direkte und interpretergestützte Starts aus `Downloads`.
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\start_private_desktop.ps1 -HardenDownloads
@@ -939,10 +996,10 @@ Der aktuelle Release-Candidate-Nachweis und seine noch offenen Gates stehen in
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/ui/README.md`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/ui/README.md`  
-- Size: 3124 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/editions/private_desktop/ui/README.md`  
+- Path: `AI-Shield-main/editions/private_desktop/ui/README.md`  
+- Size: 4007 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # Grafische Oberfläche
@@ -961,6 +1018,16 @@ Die Oberfläche enthält sechs Ansichten:
 - **Wiederherstellung:** Baseline-Snapshots, Ransomware-Prüfung, Vorfallplan, bestätigte
   Rücksicherung und externe hashmanifestierte Sicherung;
 - **Windows-Sicherheit:** HVCI, Credential Guard, Firewall- und Defender-Auditbaseline.
+
+Der separate Tray-Agent unter `tray\start_tray_agent.ps1` läuft ohne Administratorrechte in der
+interaktiven Benutzersitzung. Er überwacht die fünf Windows-Komponenten, zeigt Zustandsänderungen im
+Infobereich und öffnet die erhöhte UI auf Doppelklick. Der Schutzkern läuft davon unabhängig als
+Windows-Dienst beziehungsweise Kernel-Treiber. Installation und UI verwalten den maschinenweiten
+Anmeldeautostart über `tray\manage_tray_agent.ps1`; die Deinstallation entfernt ihn wieder.
+Minimieren und das Schließen über `X` verbergen die UI und entfernen sie aus der Taskleiste. Die
+bereits laufende UI bleibt als Einzelinstanz erhalten. Ein Doppelklick auf das Tray-Symbol signalisiert
+dieser Instanz, wieder sichtbar zu werden; dadurch entsteht weder ein zweites Fenster noch eine neue
+UAC-Abfrage. Tray-Agent, UI und privilegierter Schutzkern bleiben getrennte Prozesse.
 
 HVCI, Credential Guard und die Kernel-/Hardware-Baseline werden transaktional verwaltet. Die UI sichert den vorherigen Registry-
 Zustand und deaktiviert keine Einstellung, die sie nicht selbst aktiviert hat. Wenn Windows einen
@@ -995,10 +1062,10 @@ powershell -NoProfile -STA -File .\ui\verify_ui_contract.ps1
 
 ```
 
-## File: `AI_Shield_Developer_Full/kernel/filesystem/README.md`  
-- Path: `AI_Shield_Developer_Full/kernel/filesystem/README.md`  
+## File: `AI-Shield-main/kernel/filesystem/README.md`  
+- Path: `AI-Shield-main/kernel/filesystem/README.md`  
 - Size: 206 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # ai_shield_fs.sys
@@ -1008,10 +1075,10 @@ provenance store models the required execution-pending and verdict-invalidation 
 
 ```
 
-## File: `AI_Shield_Developer_Full/kernel/guard/README.md`  
-- Path: `AI_Shield_Developer_Full/kernel/guard/README.md`  
+## File: `AI-Shield-main/kernel/guard/README.md`  
+- Path: `AI-Shield-main/kernel/guard/README.md`  
 - Size: 220 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # ai_shield_guard.sys
@@ -1021,10 +1088,10 @@ shared core provides platform-neutral decision and provenance contracts for the 
 
 ```
 
-## File: `AI_Shield_Developer_Full/kernel/wfp/README.md`  
-- Path: `AI_Shield_Developer_Full/kernel/wfp/README.md`  
+## File: `AI-Shield-main/kernel/wfp/README.md`  
+- Path: `AI-Shield-main/kernel/wfp/README.md`  
 - Size: 548 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # ai_shield_wfp.sys
@@ -1042,10 +1109,10 @@ The driver must remain a deterministic adapter:
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/common/README.md`  
-- Path: `AI_Shield_Developer_Full/platform/windows/common/README.md`  
+## File: `AI-Shield-main/platform/windows/common/README.md`  
+- Path: `AI-Shield-main/platform/windows/common/README.md`  
 - Size: 134 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # Common Windows Adapter
@@ -1054,10 +1121,10 @@ Shared helpers for Windows status mapping, Unicode normalization, security descr
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/README.md`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/README.md`  
+## File: `AI-Shield-main/platform/windows/installer/README.md`  
+- Path: `AI-Shield-main/platform/windows/installer/README.md`  
 - Size: 2335 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # Windows Installer
@@ -1121,10 +1188,10 @@ powershell -ExecutionPolicy Bypass -File platform\windows\installer\uninstall_dr
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/minifilter/README.md`  
-- Path: `AI_Shield_Developer_Full/platform/windows/minifilter/README.md`  
+## File: `AI-Shield-main/platform/windows/minifilter/README.md`  
+- Path: `AI-Shield-main/platform/windows/minifilter/README.md`  
 - Size: 302 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # Minifilter Adapter
@@ -1138,10 +1205,10 @@ Current contents:
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/msi/README_DE.md`  
-- Path: `AI_Shield_Developer_Full/platform/windows/msi/README_DE.md`  
-- Size: 2306 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/platform/windows/msi/README_DE.md`  
+- Path: `AI-Shield-main/platform/windows/msi/README_DE.md`  
+- Size: 2307 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # MSI-Installer fuer AI Shield Private Desktop
@@ -1167,7 +1234,7 @@ powershell -ExecutionPolicy Bypass -File platform\windows\msi\build_msi.ps1
 ```
 
 Nur für einen internen, nicht verteilbaren Build kann `-SkipSigning` verwendet werden. Ausgabe:
-`dist\msi\AI_Shield_Private_Desktop_2.0.0-rc.8_x64.msi` plus SHA-256-Datei.
+`dist\msi\AI_Shield_Private_Desktop_2.0.0-rc.11_x64.msi` plus SHA-256-Datei.
 
 ## Installieren und deinstallieren
 
@@ -1191,10 +1258,10 @@ Treibern und einem vertrauenswürdigen Publisher-Zertifikat erzeugt werden.
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/process_guard/README.md`  
-- Path: `AI_Shield_Developer_Full/platform/windows/process_guard/README.md`  
+## File: `AI-Shield-main/platform/windows/process_guard/README.md`  
+- Path: `AI-Shield-main/platform/windows/process_guard/README.md`  
 - Size: 140 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # Process Guard Adapter
@@ -1204,10 +1271,10 @@ Reserved for Windows process sensors and enforcement. Shared Core process decisi
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/README.md`  
-- Path: `AI_Shield_Developer_Full/platform/windows/README.md`  
+## File: `AI-Shield-main/platform/windows/README.md`  
+- Path: `AI-Shield-main/platform/windows/README.md`  
 - Size: 328 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # Windows Platform Boundary
@@ -1220,10 +1287,10 @@ ABI records.
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/sandbox/README.md`  
-- Path: `AI_Shield_Developer_Full/platform/windows/sandbox/README.md`  
+## File: `AI-Shield-main/platform/windows/sandbox/README.md`  
+- Path: `AI-Shield-main/platform/windows/sandbox/README.md`  
 - Size: 269 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # Windows Sandbox Adapters
@@ -1236,10 +1303,10 @@ Current contents:
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/service/README.md`  
-- Path: `AI_Shield_Developer_Full/platform/windows/service/README.md`  
+## File: `AI-Shield-main/platform/windows/service/README.md`  
+- Path: `AI-Shield-main/platform/windows/service/README.md`  
 - Size: 175 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # Windows Service
@@ -1249,10 +1316,10 @@ Shared Core ABI records across the core boundary.
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/wfp/README.md`  
-- Path: `AI_Shield_Developer_Full/platform/windows/wfp/README.md`  
+## File: `AI-Shield-main/platform/windows/wfp/README.md`  
+- Path: `AI-Shield-main/platform/windows/wfp/README.md`  
 - Size: 1091 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # WFP Adapter
@@ -1282,369 +1349,249 @@ proxy port. Global redirection is not supported by this prototype.
 
 ```
 
-## File: `AI_Shield_Developer_Full/README_DE.md`  
-- Path: `AI_Shield_Developer_Full/README_DE.md`  
-- Size: 3339 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
-
-```markdown
-# AI Shield Developer Full
-
-Dieses Paket kombiniert zwei getrennte Arbeitsabläufe:
-
-1. **Quellcode bauen und testen:** `Build_All_Release.cmd` erzeugt den x64-Release-Build, führt alle
-   CTest-Ziele aus und baut anschließend die drei Windows-Treiber mit dem WDK.
-2. **Geprüfte Referenzversion installieren:** `Install_Precompiled_Desktop.cmd` entpackt das
-   enthaltene Consumer-Paket nach `C:\Program Files\AI_Shield_Private_Desktop` und startet dessen
-   Installer.
-
-Die Desktop-Referenz enthält außerdem den signierten Native-Messaging-Host und die lokal ladbare
-Manifest-V3-Erweiterung für Microsoft Edge und Google Chrome.
-
-## Buildvoraussetzungen
-
-- Windows 10/11 x64;
-- Visual Studio 2022 mit C++-Desktopworkload;
-- CMake unter `C:\Program Files\CMake\bin`;
-- Windows SDK und Windows Driver Kit (WDK);
-- PowerShell 5.1 oder neuer.
-
-Der Build benötigt kein deaktiviertes Secure Boot. Das Laden lokal testsignierter Treiber dagegen
-schon. Die vorkompilierte Referenzversion kann nur als Administrator und nur mit deaktiviertem
-Secure Boot sowie aktiviertem `TESTSIGNING` installiert werden. Diese Einschränkung endet erst mit
-einer Microsoft-Produktionssignatur.
-
-## Neu bauen
-
-```powershell
-.\Build_All_Release.cmd
-```
-
-Der Ablauf entspricht:
-
-```powershell
-$cmake = "C:\Program Files\CMake\bin\cmake.exe"
-$ctest = "C:\Program Files\CMake\bin\ctest.exe"
-& $cmake -S . -B build_vs -G "Visual Studio 17 2022" -A x64
-& $cmake --build build_vs --config Release --parallel
-& $ctest --test-dir build_vs -C Release --output-on-failure
-powershell -File platform\windows\build_drivers.ps1 -Configuration Release `
-  -PackageDirectory driver_package\Release -Rebuild
-```
-
-Selbst gebaute Treiber sind zunächst nicht produktionssigniert. Für Laborzwecke müssen sie mit dem
-lokalen Testzertifikat signiert werden. Das enthaltene vorkompilierte Consumer-Paket besitzt bereits
-die für den Prototyp notwendigen Testsignaturen; ein privater Signierschlüssel ist nicht enthalten.
-
-## Vorkompilierte Version installieren
-
-Bevorzugt die signierte MSI per Doppelklick und UAC-Bestätigung installieren:
-
-```powershell
-msiexec.exe /i .\prebuilt\AI_Shield_Private_Desktop.msi /l*v .\msi-install.log
-```
-
-Sie erscheint anschließend unter **Installierte Apps** und entfernt bei der Deinstallation auch
-Broker, Core und alle drei Treiber. Audit- und Quarantänedaten bleiben standardmäßig erhalten.
-Der bisherige ZIP-Referenzpfad bleibt für Entwicklungstests verfügbar:
-
-```powershell
-.\Install_Precompiled_Desktop.cmd
-```
-
-Der Installer prüft den Hash des eingebetteten Consumer-ZIP gegen `FULL_PACKAGE_MANIFEST.json`,
-entpackt es in einen stabilen Program-Files-Ordner und installiert Treiber, Broker, Core, Policy,
-Windows-Baselines, Startmenüeintrag und WPF-Oberfläche.
-
-## Paketstruktur
-
-- `include`, `src`, `kernel`, `platform`, `tools`, `tests`: vollständiger Entwicklungsstand;
-- `docs`, `editions`: Dokumentation und Private-Desktop-Edition;
-- `prebuilt\AI_Shield_Private_Desktop.zip`: installierbare Referenzversion;
-- `prebuilt\AI_Shield_Private_Desktop.msi`: per-machine x64-Installer mit vollständigem Rückbau;
-- `FULL_PACKAGE_MANIFEST.json`: SHA-256 aller ausgelieferten Dateien.
-
-Lokale Zertifikat-Private-Keys, PFX/PVK-Dateien, Buildverzeichnisse, Laufzeitprotokolle und
-Maschinenzustände werden nicht ausgeliefert.
-
-```
-
-## File: `AI_Shield_Developer_Full/README.md`  
-- Path: `AI_Shield_Developer_Full/README.md`  
-- Size: 14131 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/README.md`  
+- Path: `AI-Shield-main/README.md`  
+- Size: 10282 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
+- Condensed: comments and repeated blank lines reduced
 
 ```markdown
 # AI Shield
 
-Die getrennte Ausgabe für private Windows-Einzelplatzrechner liegt unter
-[`editions/private_desktop`](editions/private_desktop). Sie besitzt eigene Installations-, Start-,
-Status-, Stopp- und Deinstallationspfade sowie eine ausschließlich auf private Endanwender bezogene
-Softwarebewertung. Das Binärpaket wird mit `tools/package_private_desktop.ps1` erzeugt.
+AI Shield ist eine modulare Windows-Sicherheitsplattform in C++23. Sie erfasst Netzwerk-, Datei-
+und Prozessereignisse an systemnahen Kontrollpunkten, übersetzt sie in einen authentisierten
+ABI-2.0-Vertrag und bewertet sie anhand lokaler Richtlinien. Der aktuelle Stand verbindet drei
+Windows-Kerneltreiber, LocalSystem-Dienste, isolierte Parser, Downloadquarantäne, Audit-Ketten,
+Recovery-Funktionen und eine grafische Private-Desktop-Oberfläche.
 
-Die vollständige deutschsprachige Anleitung für Architektur, Build, Secure Boot, Testsigning,
-Treiberinstallation und den End-to-End-Prototypstart steht in
-[`docs/PROTOTYP_HANDBUCH_DE.md`](docs/PROTOTYP_HANDBUCH_DE.md).
+> **Projektstatus:** `2.0.0-rc.11` ist ein funktionsfähiger Entwicklungs- und Pilotprototyp. Die
+> Private-Desktop-Ausgabe kann auf einem einzelnen Windows-PC installiert und getestet werden. Die
+> enthaltenen Treiber sind lokal testsigniert. Eine öffentliche Produktionsverteilung unter
+> aktiviertem Secure Boot erfordert weiterhin Microsoft-Treibersignierung, HLK/WHCP-Qualifikation,
+> Kompatibilitätsmessungen und eine unabhängige Sicherheitsprüfung.
 
-Das deutschsprachige Whitepaper zu Zweck, Schutzmodell, aktueller Windows-Bedrohungslage und
-Produktvision steht in [`docs/WHITEPAPER_DE.md`](docs/WHITEPAPER_DE.md).
+## Kernfunktionen
 
-Eine evidenzbasierte Einordnung von Funktionsumfang, Schutzwirkung und Produktreife steht in
-[`Softwarebewertung.md`](Softwarebewertung.md).
+- Dual-Stack-WFP-Sensorik für IPv4/IPv6, TCP/UDP und konfigurierbare Enforcement-Regeln.
+- Minifilter-Telemetrie mit Datei-/Volume-Identität und TOCTOU-resistenter Quarantäne.
+- ProcessGuard-Regeln für Downloads, Skriptinterpreter, LOLBins, Office-Kindprozesse,
+  Credential Access und Persistenzmuster.
+- Signierte, monotone Policies sowie authentisierte ABI-2.0-Korrelation über Broker, Audit,
+  Kausalgraph, Incident-Paket und Replay.
+- Universeller Magic-/Extension-/Namens-Preflight plus gehärtete WAV-, ZIP-, PDF-, PE-, Bild-,
+  Web-, Defender- und AMSI-Prüfung mit Zeit- und Ressourcenlimits.
+- Download-Freigabeschranke für Programme, Skripte, Dokumente, Archive, Bilder, Audio, Video,
+  Webdateien und Windows-Systemaktionen.
+- Manipulationssichtbare `AISHAD02`-Audit-Kette mit integriertem Viewer und JSON-Export.
+- Ransomware-Erkennung, versionierter Recovery-Vault, externe Sicherung und bestätigte
+  hashverifizierte Wiederherstellung.
+- Private-Desktop-UI für Schutzfunktionen, Quarantäne, Audits, Recovery und Windows-Härtung.
+- Automatischer Tray-Agent mit Komponentenstatus, Einzelinstanz und Close-to-Tray ohne erneute UAC-Abfrage.
+- Handle-gebundener Minimalworker mit SHA-256-Provenienz und WFP-erzwungener IPv4-/IPv6-
+  Netzwerksperre für den Parserprozess.
 
-Der Einstieg für neue Entwicklungsteams steht in
-[`docs/ENTWICKLER_SCHNELLSTART_DE.md`](docs/ENTWICKLER_SCHNELLSTART_DE.md). Offen gebliebene
-Produktfunktionen und externe Release-Gates werden in
-[`docs/FEHLENDE_FUNKTIONEN_DE.md`](docs/FEHLENDE_FUNKTIONEN_DE.md) geführt.
+## Architektur
 
-Ausführbare Last-, Missbrauchs-, Installations-, Neustart- und Recovery-Gates sowie die Vorbereitung
-der Microsoft-Treibersignierung beschreibt
-[`docs/PRODUKTQUALIFIKATION_DE.md`](docs/PRODUKTQUALIFIKATION_DE.md).
-
-Der eingefrorene Treiber-ABI-Vertrag und die Übergabe an ein separates HLK-Labor stehen in
-[`docs/ABI_FREEZE_UND_HLK_DE.md`](docs/ABI_FREEZE_UND_HLK_DE.md).
-Der interne ABI-2.0-Vertrag, seine HMAC-Prüfung und die kompatible Übersetzung vom
-Treiber-ABI 1.2 sind in [`docs/ABI_2_0_DE.md`](docs/ABI_2_0_DE.md) dokumentiert. Der systemweite
-IPv4-/IPv6-Netzwerkschutz und seine Grenzen sind in [`docs/NETZWERKSCHUTZ_DE.md`](docs/NETZWERKSCHUTZ_DE.md) beschrieben.
-Die automatische, nicht-invasive Windows-Sicherheitspruefung ist in
-[`docs/WINDOWS_HARDENING_DE.md`](docs/WINDOWS_HARDENING_DE.md) beschrieben.
-Browser-Sensor, WEF-Zielpin, WDAC-Audit, datensparsames PowerShell-Logging, Firewall-Transaktion,
-UAC-Assistent und ASR-Evidenz sind in
-[`docs/ENTERPRISE_SECURITY_INTEGRATIONS_DE.md`](docs/ENTERPRISE_SECURITY_INTEGRATIONS_DE.md) dokumentiert.
-Eine schrittweise Anleitung fuer Juniorentwickler steht in
-[`docs/JUNIOR_ENTERPRISE_INTEGRATION_SCHNELLSTART_DE.md`](docs/JUNIOR_ENTERPRISE_INTEGRATION_SCHNELLSTART_DE.md).
-Der aktuelle Aktivierungsstand und die noch benoetigten externen Werte stehen in
-[`docs/SICHERHEITSABSCHLUSS_DE.md`](docs/SICHERHEITSABSCHLUSS_DE.md).
-Der zuletzt verifizierte Build-, Signatur- und Installationsstand steht in
-[`docs/AKTUELLER_INSTALLATIONSSTAND_DE.md`](docs/AKTUELLER_INSTALLATIONSSTAND_DE.md).
-Eine kompakte Systemdarstellung steht in
-[`docs/ARCHITEKTUR_WHITEBOARD_DE.md`](docs/ARCHITEKTUR_WHITEBOARD_DE.md).
-ETW/AMSI, IPv6/QUIC, Parserpool, TPM, SIEM und SOC-Konsole beschreibt
-[`docs/SCHUTZABDECKUNG_2_0_DE.md`](docs/SCHUTZABDECKUNG_2_0_DE.md).
-
-Ein-Klick-Prototypstart unter Windows:
-
-- `AI_Shield_Start.cmd` startet Treiber und Gateway für ein Backend auf `127.0.0.1:18081`.
-- `AI_Shield_Start_Demo.cmd` startet Treiber und den integrierten Demo-Modus.
-- `AI_Shield_Stop.cmd` beendet Gateway und Treiber.
-
-Der Start richtet bei Bedarf eine lokal RSA-signierte Policy ein, aktiviert sie mit monotoner
-Security-Version und startet den `LocalSystem`-Dienst `AIShieldBroker`. Der Broker persistiert
-sequenzierte Kernelereignisse unter `C:\ProgramData\AIShield\audit`. Policyzustand und Rollback-
-Slots liegen unter `C:\ProgramData\AIShield\policy`.
-
-Der Ein-Klick-Backendmodus aktiviert eine portgebundene, transparente IPv4-/IPv6-WFP-Umleitung von
-Backend-Port 18081 zum geschützten Listener 18080. Andere Ports und Protokolle werden nicht
-automatisch umgeleitet.
-
-This repository is the C++23 implementation foundation for the AI Shield development plan in
-`AI_Shield_Vollstaendiger_Entwicklungsplan.docx`.
-
-Implemented in this foundation:
-
-- Standard-layout ABI records for flow events and policy decisions.
-- Checked arithmetic and explicit result/status handling.
-- Flow state machine with invalid-transition rejection.
-- HTTP/1, DNS and JSON preflight for malformed, ambiguous and over-budget inputs.
-- TLS metadata, XML, PDF, ZIP and PE preflight for downgrade, entity, active-content, archive and executable risks.
-- Deterministic detection evidence and policy decisions.
-- SHA-256 backed evidence hashes and append-only audit hash chain.
-- Deterministic audit export/import plus offline `ai_shield_diag audit-verify` validation.
-- File provenance store semantics for external execution pending and verdict invalidation.
-- Bounded adapter queue primitive and sensor health degradation assessment.
-- Service registry admission control, sandbox result handling and process consequence guard.
-- Package manifest trust gate for ABI compatibility, monotone security versions and signer fingerprint checks.
-- Archive provenance propagation and A/B update activation with rollback on failed boot health.
-- Campaign and adaptive mutation correlation for distributed probing patterns.
-- UDP/session limiting, token bucket rate control and proxy redirect loop detection.
-- Parser worker crash isolation and privacy-preserving export sanitization.
-- Immutable production model registry with online-learning rejection.
-- Transactional policy store with rollback and privacy-preserving incident package generation.
-- IPC flow event validation with ABI, sequence, time-window and keyed MAC checks.
-- Pending decision timeout handling for asynchronous enforcement paths.
-- Platform-neutral file URI normalization, retention decisions and external response normalization.
-- Plan-aligned risk score bands, service fail-policy matrix, health aggregation and causal chain graph.
-- Diagnostics snapshot degradation checks for operations/UI surfaces.
-- Signature detection, robust flow baselines, N-gram sequence novelty and feature extraction.
-- HTTP request canonicalization for stable parser/detection input.
-- SimHash mutation detection, deterministic isolation-forest scoring, shadow-target routing and sandbox budgets.
-- Service certificate pinning metadata for managed endpoints.
-- Service discovery proposals with explicit confirmation before admission.
-- Policy change authorization for admin and high-risk local confirmation gates.
-- Quarantine and execute-gate semantics for external file provenance.
-- Installer-facing system preflight and maintenance-mode uninstall/audit guards.
-- Learning-mode enforcement with a 14-day cap and active hard-rule handling.
-- Cloud transfer opt-in gates, support manifest hashing and recovery action plans.
-- Release-gate checks for soak, corpus, false-block, campaign, performance and recovery metrics.
-- Broker worker sizing, multi-level backpressure and managed TLS endpoint gates.
-- Dataset governance, canary promotion checks and reproducible build attestation.
-- HTTP/2 frame preflight, egress gating and runtime consequence detection.
-- Parser corpus readiness and compatibility lab gate evaluation.
-- Integrated Core replay path through parser, features, signatures, policy, audit and causal graph.
-- Shared Core ABI validation, audit checkpoints, provenance copy/rename chains and bounded pending decisions.
-- Windows platform adapter tree and Shared Core boundary scan.
-- Windows platform adapters for WFP telemetry/enforcement, driver-channel validation,
-  AppContainer shadow parser launch validation and Minifilter provenance events.
-- WDK driver entry sources for telemetry-only WFP, Minifilter provenance observation and process sensor wiring.
-- Dual-stack WFP callouts and transparent IPv4/IPv6 redirect enforcement.
-- Bounded sequenced WFP, Minifilter and ProcessGuard event queues with a persistent LocalSystem broker.
-- RSA-signed monotone Windows policies with staged activation, replay rejection and verified rollback.
-- Automatic MOTW provenance classification, Authenticode trust checks and transactional SHA-256 quarantine.
-- Configurable ProcessGuard gates for user-temp execution, downloads, risky script/LOLBin commands and Office child processes.
-- HVCI state collection plus explicitly armed Driver Verifier and reboot laboratory workflows.
-- Driver installation manager and INF package metadata for prototype driver services.
-- Usable HTTP gateway prototype for local end-to-end request protection.
-- Diagnostic CLI and unit tests.
-- Internal ABI 2.0 sensor records with fixed layouts, deterministic HMAC-SHA-256 authentication and
-  validated translation from the frozen kernel transport ABI 1.2.
-- AppContainer parser launch with Job Object process-count, memory and lifecycle limits.
-- Correlated `AISHAD02` audit records preserving ABI 2.0 object identity through incident and replay.
-- DPAPI machine-protected runtime state with key rotation, legacy migration and recovery slot.
-- TOCTOU-resistant same-volume quarantine by locked file handle and stable file/volume identity.
-- `AIShieldCore` LocalSystem supervision with bounded restart backoff, audit-only Safe Mode and health state.
-- Elevated local administration for health, key rotation, quarantine release, audit export and recovery.
-- Detached-CMS and Authenticode verified A/B binary update activation with rollback.
-- Confirmation-gated uninstall and executable recovery-drill workflows.
-- ABI-2.0 ETW and AMSI sensor adapters with bounded AMSI scanning.
-- IPv6 extension-chain, fragmentation, ICMPv6 and QUIC long-header metadata validation.
-- Credential-access and persistence ProcessGuard rules with enforcement counters.
-- Bounded AppContainer parser pool with local result pipe and deadline termination.
-- Optional Microsoft Platform Crypto Provider TPM anchor and challenge signatures.
-- JSON Lines, CEF and LEEF formatting plus dual-stack UDP/TCP syslog transport.
-- Elevated loopback-only SOC console for health, Safe Mode and quarantine workflows.
-
-Create a clean source package for another development team:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File tools\package_developer_release.ps1
+```text
+Netzwerk ──► WFP-Treiber ─────────┐
+Dateien  ──► Minifilter ──────────┼─► AIShieldBroker ─► ABI 2.0 / Audit
+Prozesse ──► ProcessGuard ────────┘         │
+                                             ├─► Parser und Detektoren
+Browser  ──► Native-Messaging-Sensor ────────┤
+                                             ├─► Policy und Quarantäne
+                                             └─► AIShieldCore / Desktop-UI
 ```
 
-Build:
+Die WFP-Komponenten erfassen systemweite IPv4-/IPv6-Ereignisse. Transparente Umleitung und
+Blockierung werden nur für die explizit aktivierten Regeln und Zielports durchgesetzt. HTTPS- und
+QUIC-Nutzdaten werden ohne TLS-Interception nicht entschlüsselt; AI Shield installiert keine
+lokale MITM-Zertifizierungsstelle.
+
+## Reifestatus
+
+| Bereich | Status |
+|---|---|
+| Shared Core und internes ABI 2.0 | Implementiert und automatisiert getestet |
+| Broker, Core-Dienst, Audit und Replay | Implementiert und lokal betreibbar |
+| Private-Desktop-UI, Tray und Quarantäne | Implementiert; RC11-Pilotstand |
+| WFP-, Minifilter- und ProcessGuard-Treiber | WDK-Prototyp, lokal testsignierbar |
+| Edge-/Chrome-Sensor | Lokal ladbar; Store-/HTTPS-Verteilung ausstehend |
+| Microsoft-Produktionstreibersignierung | Ausstehender externer Meilenstein |
+| HLK, Langzeit-, Last- und Kompatibilitätsnachweise | Ausstehend beziehungsweise teilweise lokal vorbereitet |
+| Unabhängiger Kernel-Review und Penetrationstest | Ausstehend |
+
+## Desktop-Schnellstart
+
+Für einen bereits vorbereiteten Entwicklungsrechner:
+
+```powershell
+Set-Location <Pfad-zum-AI-Shield-Repository>
+.\AI_Shield_Start.cmd
+```
+
+Die Oberfläche startet über:
+
+```powershell
+.\editions\private_desktop\AI_Shield_UI.cmd
+```
+
+In **Schutzfunktionen > Dateityp-Schutz** sind alle elf Dateigruppen und die Option
+**Freigabe vor dem Öffnen erzwingen** standardmäßig aktiv. Neue Downloads mit Mark-of-the-Web
+werden geprüft, aus `Downloads` in die Quarantäne verschoben und in der UI gemeldet. Erst eine
+begründete Freigabe stellt die Datei wieder bereit.
+
+Die aktuelle Desktop-Ausgabe steht zusätzlich als MSI- und ZIP-Artefakt im
+[GitHub-Release](https:
+
+## Voraussetzungen
+
+- Windows 11 x64; Windows 10 x64 nur nach separater Kompatibilitätsprüfung.
+- Visual Studio 2022 mit MSVC-C++-Desktopentwicklung.
+- CMake und Windows SDK; WDK für den Treiberbuild.
+- Windows PowerShell 5.1 für Installationsskripte, PowerShell 7 optional für Entwicklung.
+- Administratorrechte für Dienste, Treiber, Firewall- und Security-Einstellungen.
+- Genügend freier Speicher für Build, Audit, Quarantäne und Recovery-Vault.
+
+### Wichtiger Secure-Boot-Hinweis
+
+Die veröffentlichten RC11-Treiber sind **nicht Microsoft-produktionssigniert**. Für lokale
+Testsignierung muss Secure Boot in der UEFI-Firmware deaktiviert und Windows `TESTSIGNING`
+aktiviert werden. Das schwächt die Windows-Startvertrauenskette und ist nur für kontrollierte
+Entwicklungs- oder Pilotgeräte vorgesehen. Vor UEFI-Änderungen muss ein BitLocker-
+Wiederherstellungsschlüssel extern gesichert und geprüft werden.
+
+Fehler `577` beim Treiberstart bedeutet, dass Windows die Signatur unter der aktuellen
+Bootrichtlinie abgelehnt hat.
+
+## Quellcode bauen
 
 ```powershell
 $CMAKE_EXE = "C:\Program Files\CMake\bin\cmake.exe"
 $CTEST_EXE = "C:\Program Files\CMake\bin\ctest.exe"
+
 & $CMAKE_EXE -S . -B build_vs -G "Visual Studio 17 2022" -A x64
 & $CMAKE_EXE --build build_vs --config Release --parallel
 & $CTEST_EXE --test-dir build_vs -C Release --output-on-failure
 ```
 
-Optional cloud export connector:
+Ein Debug-Lauf ist zusätzlich erforderlich, weil Release-Builds klassische `assert`-Ausdrücke
+entfernen können:
 
 ```powershell
-& $CMAKE_EXE -S . -B build_vs_cloud -G "Visual Studio 17 2022" -A x64 -DAI_SHIELD_ENABLE_CLOUD=ON
+& $CMAKE_EXE -S . -B build_vs_debug -G "Visual Studio 17 2022" -A x64
+& $CMAKE_EXE --build build_vs_debug --config Debug --parallel
+& $CTEST_EXE --test-dir build_vs_debug -C Debug --output-on-failure
 ```
 
-Windows platform adapters are enabled by default on Windows:
+## Windows-Treiber
+
+Treiber bauen:
 
 ```powershell
-& $CMAKE_EXE -S . -B build_vs -G "Visual Studio 17 2022" -A x64 -DAI_SHIELD_ENABLE_WINDOWS_PLATFORM=ON
+powershell.exe -NoProfile -ExecutionPolicy Bypass `
+  -File .\platform\windows\build_drivers.ps1 -Configuration Release
 ```
 
-WDK driver sources live under `platform/windows/*/driver`. They are intentionally separate from the
-normal CMake build because signing, INF packaging and driver verifier/HLK configuration belong to the
-WDK pipeline.
-
-Build prototype drivers:
+Lokales Testpaket signieren und aktualisieren, aus einer administrativen PowerShell:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File platform\windows\build_drivers.ps1 -Configuration Release
+powershell.exe -NoProfile -ExecutionPolicy Bypass `
+  -File .\platform\windows\installer\update_and_install_drivers.ps1 `
+  -Configuration Release
+
+.\build_vs\Release\ai_shield_driverctl.exe status
 ```
 
-Vollständiger administrativer Neuaufbau und Austausch des lokalen Prototyps:
+Die WDK-Pipeline erzeugt `AIShieldWfp.sys`, `AIShieldMiniFilter.sys` und
+`AIShieldProcessGuard.sys` sowie die zugehörigen INF-Dateien. Öffentliche Installation unter
+Secure Boot setzt von Microsoft signierte Kataloge und den externen Submission-Prozess voraus.
+
+## Diagnose und Tests
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File platform\windows\installer\deploy_current_prototype.ps1
+.\build_vs\Release\ai_shield_broker.exe self-test
+.\build_vs\Release\ai_shield_diag.exe audit-verify <audit.bin>
+.\build_vs\Release\ai_shield_replay.exe <scenario.bin>
+powershell.exe -NoProfile -ExecutionPolicy Bypass `
+  -File .\editions\private_desktop\ui\verify_ui_contract.ps1
 ```
 
-Test-sign the prototype drivers. Run these commands from an elevated PowerShell; reboot after enabling
-Windows test-signing mode:
+Der reale Downloadtest benötigt Administratorrechte und einen laufenden Broker:
 
 ```powershell
-Set-Location D:\AI_Shield
-powershell -ExecutionPolicy Bypass -File platform\windows\installer\enable_testsigning.ps1 -State on
-powershell -ExecutionPolicy Bypass -File platform\windows\installer\sign_driver_package.ps1 -PackageDir driver_package\Release
-Restart-Computer
+powershell.exe -NoProfile -ExecutionPolicy Bypass `
+  -File .\tests\windows_download_content_protection.ps1
 ```
 
-If `bcdedit` reports that the value is protected by Secure Boot, local test-signed kernel drivers cannot
-be loaded on that boot configuration. Disable Secure Boot in UEFI firmware for prototype testing, run
-`enable_testsigning.ps1 -State on` again, reboot, then install the drivers. `StartService failed error=577`
-means Windows rejected the kernel driver signature under the current boot policy.
+## Dokumentation
 
-Driver control prototype:
+### Erste Schritte
+
+- [Dokumentationsübersicht](docs/README.md)
+- [Entwickler-Schnellstart](docs/ENTWICKLER_SCHNELLSTART_DE.md)
+- [Private-Desktop-Handbuch](docs/PRIVATE_DESKTOP_HANDBUCH_DE.md)
+- [Developer-Full-Handbuch](docs/DEVELOPER_FULL_HANDBUCH_DE.md)
+
+### Architektur und Sicherheitsmodell
+
+- [Architekturübersicht](docs/overview.md)
+- [Architektur-Whiteboard](docs/ARCHITEKTUR_WHITEBOARD_DE.md)
+- [Whitepaper](docs/WHITEPAPER_DE.md)
+- [Schutzabdeckung](docs/SCHUTZABDECKUNG_2_0_DE.md)
+- [Netzwerkschutz](docs/NETZWERKSCHUTZ_DE.md)
+- [ABI 2.0](docs/ABI_2_0_DE.md)
+
+### Installation und Betrieb
+
+- [Aktueller Installationsstand](docs/AKTUELLER_INSTALLATIONSSTAND_DE.md)
+- [Windows-Prototyphandbuch](docs/PROTOTYP_HANDBUCH_DE.md)
+- [Windows-Hardening](docs/WINDOWS_HARDENING_DE.md)
+- [Ransomware-Schutz und Recovery](docs/RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md)
+- [Enterprise-Betriebsprofil](docs/ENTERPRISE_EDITION_HANDBUCH_DE.md)
+
+### Qualifikation und externe Prüfungen
+
+- [RC11-Release-Nachweis](docs/RC11_RELEASE_NACHWEIS_DE.md)
+- [Dateibasierte Angriffe und Scananforderungen](AI_Shield_Dateibasierte_Angriffe_und_Scananforderungen_DE.md)
+- [Historischer RC9-Nachweis](docs/RC9_RELEASE_NACHWEIS_DE.md)
+- [Produktqualifikation](docs/PRODUKTQUALIFIKATION_DE.md)
+- [Noch auszuführende Produktnachweise](docs/FEHLENDE_FUNKTIONEN_DE.md)
+- [Auftrag für unabhängiges Security Review](docs/EXTERNER_SECURITY_REVIEW_AUFTRAG_DE.md)
+- [Softwarebewertung](docs/Softwarebewertung.md)
+
+## Schutzgrenzen
+
+AI Shield ergänzt Microsoft Defender, Windows-Firewall, Secure Boot, HVCI, BitLocker, Updates und
+externe Backups. Es ersetzt diese Kontrollen nicht. Parser und Verhaltensregeln garantieren keinen
+Schutz vor allen Zero-Days. Ein bereits privilegierter Angreifer, kompromittierte Firmware oder
+Hardware und manipulierte Windows-Vertrauensanker liegen teilweise außerhalb der lokalen
+Vertrauensgrenze. Audit-Verkettung macht Manipulationen sichtbar, ist ohne externes unveränderliches
+Ziel aber nicht gegen jeden vollständig privilegierten Angreifer unveränderbar.
+
+## Pakete
 
 ```powershell
-build_vs\Release\ai_shield_driverctl.exe status
-build_vs\Release\ai_shield_driverctl.exe install --wfp D:\AI_Shield\driver_package\Release\AIShieldWfp.sys --minifilter D:\AI_Shield\driver_package\Release\AIShieldMiniFilter.sys --process D:\AI_Shield\driver_package\Release\AIShieldProcessGuard.sys
-build_vs\Release\ai_shield_driverctl.exe start
-build_vs\Release\ai_shield_driverctl.exe stop
-build_vs\Release\ai_shield_driverctl.exe uninstall
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\package_private_desktop.ps1
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\package_developer_release.ps1
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\package_developer_full.ps1
 ```
 
-`install`, `start`, `stop` and `uninstall` require an elevated PowerShell. The INF package metadata lives in
-`platform/windows/installer`.
+Jedes Paket enthält ein SHA-256-Manifest. Release-Hashes werden zusätzlich als GitHub-Assets
+veröffentlicht.
 
-The three WDK projects produce installable `.sys` files. The package includes `.inf` metadata and
-local test-signing automation. Production distribution still requires catalog generation,
-Microsoft-compatible signing and the corresponding release qualification.
+## Lizenz
 
-Signed policy status from an elevated PowerShell:
+Copyright © 2026 Ralf Krümmel.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File platform\windows\policy\ai_shield_policy.ps1 -Action status
-Get-Service AIShieldBroker
-```
-
-Example:
-
-```powershell
-"GET /../../boot.ini HTTP/1.1`r`nHost: local`r`n`r`n" | build\ai_shield_diag.exe
-```
-
-Audit verification:
-
-```powershell
-build_vs\Release\ai_shield_diag.exe audit-verify path\to\audit.bin
-```
-
-Replay:
-
-```powershell
-build_vs\Release\ai_shield_replay.exe path\to\scenario.bin
-```
-
-Replay scenario formats:
-
-- `AISHRPLY`: legacy single-payload scenario.
-- `AISHRP02`: event-stream scenario with `FlowOpen`, `FlowData`, `ServiceIdentity`,
-  `ProtocolHint`, `ProcessEvidence`, `FileEvidence` and `FlowClose` records.
-
-Prototype gateway:
-
-```powershell
-build_vs\Release\ai_shield_prototype.exe --listen 127.0.0.1:18080 --demo
-```
-
-Try it from another shell:
-
-```powershell
-curl.exe http://127.0.0.1:18080/safe
-curl.exe --path-as-is http://127.0.0.1:18080/../../secret
-```
-
-To protect a local backend:
-
-```powershell
-build_vs\Release\ai_shield_prototype.exe --listen 127.0.0.1:18080 --backend 127.0.0.1:8080
-```
+AI Shield wird unter der [Apache License 2.0](LICENSE) bereitgestellt. Hinweise zu Drittkomponenten
+und Namensnennung stehen in [NOTICE](NOTICE).
 
 ```
 
-## File: `AI_Shield_Developer_Full/CMakeLists.txt`  
-- Path: `AI_Shield_Developer_Full/CMakeLists.txt`  
-- Size: 8857 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/CMakeLists.txt`  
+- Path: `AI-Shield-main/CMakeLists.txt`  
+- Size: 9981 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 cmake_minimum_required(VERSION 3.24)
@@ -1653,6 +1600,9 @@ project(ai_shield LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+if(MSVC)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
 
 option(AI_SHIELD_STRICT "Treat warnings as errors" ON)
 option(AI_SHIELD_ENABLE_CLOUD "Build optional cloud export connector" OFF)
@@ -1674,6 +1624,7 @@ add_library(ai_shield_core
     src/dns.cpp
     src/fail_policy.cpp
     src/features.cpp
+    src/file_preflight.cpp
     src/flow_baseline.cpp
     src/flow_control.cpp
     src/egress_gate.cpp
@@ -1721,6 +1672,7 @@ add_library(ai_shield_core
     src/update_manager.cpp
     src/worker_supervisor.cpp
     src/xml_preflight.cpp
+    src/wav_preflight.cpp
     src/zip_preflight.cpp
     src/pdf_preflight.cpp
     src/policy_authorization.cpp
@@ -1845,6 +1797,17 @@ if(WIN32 AND AI_SHIELD_ENABLE_WINDOWS_PLATFORM)
     if(MSVC)
         target_compile_options(ai_shield_integrations PRIVATE /W4 /permissive- /sdl /GS)
     endif()
+
+    add_executable(ai_shield_file_scanner tools/ai_shield_file_scanner/main.cpp)
+    target_link_libraries(ai_shield_file_scanner PRIVATE ai_shield_core)
+    target_compile_definitions(ai_shield_file_scanner PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX)
+    if(MSVC)
+        target_compile_options(ai_shield_file_scanner PRIVATE /W4 /permissive- /sdl /GS)
+        if(AI_SHIELD_STRICT)
+            target_compile_options(ai_shield_file_scanner PRIVATE /WX)
+        endif()
+    endif()
+    add_test(NAME ai_shield_file_scanner_self_test COMMAND ai_shield_file_scanner self-test)
 endif()
 
 if(WIN32)
@@ -1866,14 +1829,20 @@ if(WIN32)
         COMMAND powershell.exe -NoProfile -ExecutionPolicy Bypass -File
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/windows_ransomware_recovery.ps1
         -RepositoryRoot ${CMAKE_CURRENT_SOURCE_DIR})
+    add_test(NAME ai_shield_tray_agent_contract
+        COMMAND powershell.exe -NoProfile -ExecutionPolicy Bypass -File
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/windows_tray_agent_contract.ps1)
+    add_test(NAME ai_shield_private_ui_contract
+        COMMAND powershell.exe -NoProfile -ExecutionPolicy Bypass -STA -File
+        ${CMAKE_CURRENT_SOURCE_DIR}/editions/private_desktop/ui/verify_ui_contract.ps1)
 endif()
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/security/complete_local_security.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/security/complete_local_security.ps1`  
+## File: `AI-Shield-main/platform/windows/security/complete_local_security.ps1`  
+- Path: `AI-Shield-main/platform/windows/security/complete_local_security.ps1`  
 - Size: 4483 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -1952,10 +1921,10 @@ $after=Snapshot
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/security/defender_audit_baseline.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/security/defender_audit_baseline.ps1`  
+## File: `AI-Shield-main/platform/windows/security/defender_audit_baseline.ps1`  
+- Path: `AI-Shield-main/platform/windows/security/defender_audit_baseline.ps1`  
 - Size: 4423 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -2051,10 +2020,10 @@ Remove-Item -LiteralPath $backupPath -Force
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/security/kernel_hardware_hardening.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/security/kernel_hardware_hardening.ps1`  
+## File: `AI-Shield-main/platform/windows/security/kernel_hardware_hardening.ps1`  
+- Path: `AI-Shield-main/platform/windows/security/kernel_hardware_hardening.ps1`  
 - Size: 7487 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -2180,10 +2149,10 @@ Get-Status | ConvertTo-Json -Depth 6 -Compress
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/security/prepare_bitlocker.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/security/prepare_bitlocker.ps1`  
+## File: `AI-Shield-main/platform/windows/security/prepare_bitlocker.ps1`  
+- Path: `AI-Shield-main/platform/windows/security/prepare_bitlocker.ps1`  
 - Size: 2652 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -2228,10 +2197,10 @@ Write-Output "recovery_file=$file"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/security/secure_runtime_state.cpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/security/secure_runtime_state.cpp`  
+## File: `AI-Shield-main/platform/windows/security/secure_runtime_state.cpp`  
+- Path: `AI-Shield-main/platform/windows/security/secure_runtime_state.cpp`  
 - Size: 8751 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -2421,10 +2390,10 @@ Result<RuntimeState> SecureRuntimeStore::rotate_key() const {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/security/secure_runtime_state.hpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/security/secure_runtime_state.hpp`  
+## File: `AI-Shield-main/platform/windows/security/secure_runtime_state.hpp`  
+- Path: `AI-Shield-main/platform/windows/security/secure_runtime_state.hpp`  
 - Size: 1081 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -2465,10 +2434,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/security/system_security_posture.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/security/system_security_posture.ps1`  
+## File: `AI-Shield-main/platform/windows/security/system_security_posture.ps1`  
+- Path: `AI-Shield-main/platform/windows/security/system_security_posture.ps1`  
 - Size: 15637 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -2703,10 +2672,10 @@ if ($FailOnCritical -and $criticalFailures -gt 0) { exit 3 }
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/security/tpm_trust_anchor.cpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/security/tpm_trust_anchor.cpp`  
+## File: `AI-Shield-main/platform/windows/security/tpm_trust_anchor.cpp`  
+- Path: `AI-Shield-main/platform/windows/security/tpm_trust_anchor.cpp`  
 - Size: 3479 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -2798,10 +2767,10 @@ Result<std::vector<std::byte>> sign_tpm_challenge(std::span<const std::byte> cha
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/security/tpm_trust_anchor.hpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/security/tpm_trust_anchor.hpp`  
+## File: `AI-Shield-main/platform/windows/security/tpm_trust_anchor.hpp`  
+- Path: `AI-Shield-main/platform/windows/security/tpm_trust_anchor.hpp`  
 - Size: 562 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -2829,10 +2798,10 @@ struct TpmStatus final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/service/driver_channel.cpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/service/driver_channel.cpp`  
+## File: `AI-Shield-main/platform/windows/service/driver_channel.cpp`  
+- Path: `AI-Shield-main/platform/windows/service/driver_channel.cpp`  
 - Size: 1478 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -2869,10 +2838,10 @@ ai_shield::Result<ai_shield::pending::Completion> complete_pending(ai_shield::pe
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/service/driver_channel.hpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/service/driver_channel.hpp`  
+## File: `AI-Shield-main/platform/windows/service/driver_channel.hpp`  
+- Path: `AI-Shield-main/platform/windows/service/driver_channel.hpp`  
 - Size: 997 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 #pragma once
@@ -2909,10 +2878,10 @@ struct DriverChannelState final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/abi_validation.cpp`  
-- Path: `AI_Shield_Developer_Full/src/abi_validation.cpp`  
+## File: `AI-Shield-main/src/abi_validation.cpp`  
+- Path: `AI-Shield-main/src/abi_validation.cpp`  
 - Size: 3073 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3005,10 +2974,10 @@ Result<void> validate_shield_decision(const abi::ShieldDecision& decision, Valid
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/abi2.cpp`  
-- Path: `AI_Shield_Developer_Full/src/abi2.cpp`  
+## File: `AI-Shield-main/src/abi2.cpp`  
+- Path: `AI-Shield-main/src/abi2.cpp`  
 - Size: 4651 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3108,10 +3077,10 @@ Result<void> validate(const SensorEvent& event, const ValidationContext& context
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/audit.cpp`  
-- Path: `AI_Shield_Developer_Full/src/audit.cpp`  
+## File: `AI-Shield-main/src/audit.cpp`  
+- Path: `AI-Shield-main/src/audit.cpp`  
 - Size: 12156 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3388,10 +3357,10 @@ Result<AuditChain> deserialize(std::span<const std::byte> bytes) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/backpressure.cpp`  
-- Path: `AI_Shield_Developer_Full/src/backpressure.cpp`  
+## File: `AI-Shield-main/src/backpressure.cpp`  
+- Path: `AI-Shield-main/src/backpressure.cpp`  
 - Size: 911 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3415,10 +3384,10 @@ Decision decide(Limits limits, Usage usage) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/broker_runtime.cpp`  
-- Path: `AI_Shield_Developer_Full/src/broker_runtime.cpp`  
+## File: `AI-Shield-main/src/broker_runtime.cpp`  
+- Path: `AI-Shield-main/src/broker_runtime.cpp`  
 - Size: 533 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3443,10 +3412,10 @@ RuntimePlan plan_workers(HostCapacity capacity) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/build_attestation.cpp`  
-- Path: `AI_Shield_Developer_Full/src/build_attestation.cpp`  
+## File: `AI-Shield-main/src/build_attestation.cpp`  
+- Path: `AI-Shield-main/src/build_attestation.cpp`  
 - Size: 1328 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3497,10 +3466,10 @@ Result<crypto::Sha256Digest> attest(BuildManifest manifest, std::span<const Arti
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/campaign.cpp`  
-- Path: `AI_Shield_Developer_Full/src/campaign.cpp`  
+## File: `AI-Shield-main/src/campaign.cpp`  
+- Path: `AI-Shield-main/src/campaign.cpp`  
 - Size: 1487 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3548,10 +3517,10 @@ detection::Evidence Tracker::observe(const Observation& observation) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/causal_graph.cpp`  
-- Path: `AI_Shield_Developer_Full/src/causal_graph.cpp`  
+## File: `AI-Shield-main/src/causal_graph.cpp`  
+- Path: `AI-Shield-main/src/causal_graph.cpp`  
 - Size: 1652 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3621,10 +3590,10 @@ Result<std::vector<Node>> Graph::chain_to(std::uint64_t node_id) const {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/cloud_optin.cpp`  
-- Path: `AI_Shield_Developer_Full/src/cloud_optin.cpp`  
+## File: `AI-Shield-main/src/cloud_optin.cpp`  
+- Path: `AI-Shield-main/src/cloud_optin.cpp`  
 - Size: 526 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3649,10 +3618,10 @@ Result<void> authorize_transfer(TransferRequest request) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/compatibility_lab.cpp`  
-- Path: `AI_Shield_Developer_Full/src/compatibility_lab.cpp`  
+## File: `AI-Shield-main/src/compatibility_lab.cpp`  
+- Path: `AI-Shield-main/src/compatibility_lab.cpp`  
 - Size: 647 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3677,10 +3646,10 @@ Gate evaluate(LabResult result) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/consequence_detector.cpp`  
-- Path: `AI_Shield_Developer_Full/src/consequence_detector.cpp`  
+## File: `AI-Shield-main/src/consequence_detector.cpp`  
+- Path: `AI-Shield-main/src/consequence_detector.cpp`  
 - Size: 929 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3713,10 +3682,10 @@ detection::Evidence evaluate(RuntimeEvent event) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/dataset_governance.cpp`  
-- Path: `AI_Shield_Developer_Full/src/dataset_governance.cpp`  
+## File: `AI-Shield-main/src/dataset_governance.cpp`  
+- Path: `AI-Shield-main/src/dataset_governance.cpp`  
 - Size: 898 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3751,10 +3720,10 @@ Result<void> approve_canary_promotion(CanaryEvaluation evaluation) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/detection.cpp`  
-- Path: `AI_Shield_Developer_Full/src/detection.cpp`  
+## File: `AI-Shield-main/src/detection.cpp`  
+- Path: `AI-Shield-main/src/detection.cpp`  
 - Size: 2087 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3821,10 +3790,10 @@ Evidence inspect_payload(std::span<const std::byte> payload) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/diagnostics.cpp`  
-- Path: `AI_Shield_Developer_Full/src/diagnostics.cpp`  
+## File: `AI-Shield-main/src/diagnostics.cpp`  
+- Path: `AI-Shield-main/src/diagnostics.cpp`  
 - Size: 320 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3841,10 +3810,10 @@ bool protection_degraded(const Snapshot& snapshot) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/dns.cpp`  
-- Path: `AI_Shield_Developer_Full/src/dns.cpp`  
+## File: `AI-Shield-main/src/dns.cpp`  
+- Path: `AI-Shield-main/src/dns.cpp`  
 - Size: 4844 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -3993,10 +3962,10 @@ detection::Evidence evidence_from(const ParseSummary& summary) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/egress_gate.cpp`  
-- Path: `AI_Shield_Developer_Full/src/egress_gate.cpp`  
+## File: `AI-Shield-main/src/egress_gate.cpp`  
+- Path: `AI-Shield-main/src/egress_gate.cpp`  
 - Size: 822 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -4023,10 +3992,10 @@ Decision decide(Request request, std::span<const Rule> rules) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/fail_policy.cpp`  
-- Path: `AI_Shield_Developer_Full/src/fail_policy.cpp`  
+## File: `AI-Shield-main/src/fail_policy.cpp`  
+- Path: `AI-Shield-main/src/fail_policy.cpp`  
 - Size: 1337 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -4063,10 +4032,10 @@ FailureDecision decide(ServiceClass service_class, FailureKind failure, std::uin
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/features.cpp`  
-- Path: `AI_Shield_Developer_Full/src/features.cpp`  
+## File: `AI-Shield-main/src/features.cpp`  
+- Path: `AI-Shield-main/src/features.cpp`  
 - Size: 1067 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -4102,10 +4071,226 @@ ProtocolFeatures extract_http(const protocols::http1::ParseSummary& summary) noe
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/flow_baseline.cpp`  
-- Path: `AI_Shield_Developer_Full/src/flow_baseline.cpp`  
+## File: `AI-Shield-main/src/file_preflight.cpp`  
+- Path: `AI-Shield-main/src/file_preflight.cpp`  
+- Size: 11081 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
+- Condensed: comments and repeated blank lines reduced
+
+```cpp
+#include "ai_shield/file_preflight.hpp"
+
+#include <algorithm>
+#include <array>
+#include <bit>
+#include <cmath>
+#include <filesystem>
+#include <string>
+
+namespace ai_shield::file_preflight {
+namespace {
+
+constexpr std::uint32_t bit(Format format) noexcept { return static_cast<std::uint32_t>(format); }
+
+bool starts_with(std::span<const std::byte> data, std::initializer_list<unsigned int> bytes) noexcept {
+    if (data.size() < bytes.size()) return false;
+    std::size_t index = 0U;
+    for (const auto expected : bytes) {
+        if (std::to_integer<unsigned int>(data[index++]) != expected) return false;
+    }
+    return true;
+}
+
+bool ascii_at(std::span<const std::byte> data, std::size_t offset, std::string_view value) noexcept {
+    if (offset > data.size() || value.size() > data.size() - offset) return false;
+    for (std::size_t i = 0U; i < value.size(); ++i)
+        if (std::to_integer<unsigned char>(data[offset + i]) != static_cast<unsigned char>(value[i])) return false;
+    return true;
+}
+
+std::size_t find_bytes(std::span<const std::byte> data, std::string_view value, std::size_t begin = 0U) noexcept {
+    if (value.empty() || begin > data.size() || value.size() > data.size() - begin) return std::string_view::npos;
+    for (std::size_t offset = begin; offset + value.size() <= data.size(); ++offset)
+        if (ascii_at(data, offset, value)) return offset;
+    return std::string_view::npos;
+}
+
+std::wstring lower_extension(std::wstring_view filename) {
+    auto extension = std::filesystem::path(filename).extension().wstring();
+    std::ranges::transform(extension, extension.begin(), [](wchar_t value) {
+        return value >= L'A' && value <= L'Z' ? static_cast<wchar_t>(value + (L'a' - L'A')) : value;
+    });
+    return extension;
+}
+
+bool is_one_of(std::wstring_view value, std::initializer_list<std::wstring_view> values) noexcept {
+    return std::ranges::find(values, value) != values.end();
+}
+
+std::uint32_t expected_formats(std::wstring_view extension) noexcept {
+    if (is_one_of(extension, {L".exe", L".dll", L".sys", L".scr", L".cpl", L".ocx", L".drv", L".efi"}))
+        return bit(Format::pe);
+    if (is_one_of(extension, {L".pdf", L".fdf"})) return bit(Format::pdf);
+    if (is_one_of(extension, {L".zip", L".docx", L".docm", L".xlsx", L".xlsm", L".pptx", L".pptm",
+                              L".odt", L".ods", L".odp", L".epub", L".jar", L".apk", L".nupkg",
+                              L".vsix", L".crx", L".xpi", L".kmz", L".3mf"})) return bit(Format::zip);
+    if (extension == L".wav") return bit(Format::wave);
+    if (extension == L".png") return bit(Format::png);
+    if (is_one_of(extension, {L".jpg", L".jpeg", L".jpe"})) return bit(Format::jpeg);
+    if (extension == L".gif") return bit(Format::gif);
+    if (is_one_of(extension, {L".tif", L".tiff"})) return bit(Format::tiff);
+    if (extension == L".webp") return bit(Format::webp);
+    if (is_one_of(extension, {L".mp4", L".m4a", L".m4v", L".mov", L".heif", L".heic", L".avif"}))
+        return bit(Format::mp4);
+    if (is_one_of(extension, {L".doc", L".dot", L".xls", L".xlt", L".ppt", L".pot", L".msi", L".msp", L".msg"}))
+        return bit(Format::ole);
+    if (extension == L".rtf") return bit(Format::rtf);
+    if (is_one_of(extension, {L".html", L".htm", L".svg", L".xml", L".xsl", L".xslt", L".xhtml"}))
+        return bit(Format::markup);
+    return 0U;
+}
+
+std::string searchable_text(std::span<const std::byte> data) {
+    constexpr std::size_t maximum = 8U * 1024U * 1024U;
+    const auto bounded = data.first((std::min)(data.size(), maximum));
+    std::string text;
+    text.reserve(bounded.size());
+    for (const auto byte : bounded) {
+        auto value = std::to_integer<unsigned char>(byte);
+        if (value >= 'A' && value <= 'Z') value = static_cast<unsigned char>(value + ('a' - 'A'));
+        text.push_back(value >= 0x20U && value <= 0x7eU ? static_cast<char>(value) : ' ');
+    }
+    return text;
+}
+
+std::uint32_t count_tokens(std::string_view text, std::initializer_list<std::string_view> tokens) noexcept {
+    std::uint32_t count = 0U;
+    for (const auto token : tokens) if (text.find(token) != std::string_view::npos) ++count;
+    return count;
+}
+
+std::uint32_t entropy_milli(std::span<const std::byte> data) noexcept {
+    if (data.empty()) return 0U;
+    constexpr std::size_t maximum = 4U * 1024U * 1024U;
+    const auto sample = data.first((std::min)(data.size(), maximum));
+    std::array<std::uint32_t, 256> counts{};
+    for (const auto byte : sample) ++counts[std::to_integer<unsigned char>(byte)];
+    double entropy = 0.0;
+    for (const auto count : counts) {
+        if (count == 0U) continue;
+        const double probability = static_cast<double>(count) / static_cast<double>(sample.size());
+        entropy -= probability * std::log2(probability);
+    }
+    return static_cast<std::uint32_t>(entropy * 1000.0 + 0.5);
+}
+
+bool deceptive_name(std::wstring_view filename) noexcept {
+    if (filename.size() > 240U || filename.empty() || filename.back() == L'.' || filename.back() == L' ') return true;
+    for (const wchar_t value : filename) {
+        if (value < 0x20 || value == 0x202a || value == 0x202b || value == 0x202d || value == 0x202e ||
+            value == 0x202c || value == 0x2066 || value == 0x2067 || value == 0x2068 || value == 0x2069)
+            return true;
+    }
+    const auto name = std::filesystem::path(filename).filename().wstring();
+    const auto final_extension = lower_extension(name);
+    const auto first_dot = name.find(L'.');
+    const auto last_dot = name.rfind(L'.');
+    const bool multiple_extensions = first_dot != std::wstring::npos && last_dot != first_dot;
+    return multiple_extensions && is_one_of(final_extension,
+        {L".exe", L".com", L".scr", L".cpl", L".bat", L".cmd", L".ps1", L".vbs", L".js", L".hta", L".lnk"});
+}
+
+}
+
+bool Summary::high_risk() const noexcept {
+    return extension_mismatch || polyglot || trailing_data || embedded_executable || active_content ||
+           automatic_action || unsafe_deserialization || suspicious_filename || resource_risk;
+}
+
+Summary inspect(std::span<const std::byte> data, std::wstring_view filename) noexcept {
+    Summary summary{};
+    const auto extension = lower_extension(filename);
+    summary.suspicious_filename = deceptive_name(filename);
+    summary.resource_risk = data.empty() || data.size() > 256U * 1024U * 1024U;
+    if (data.empty()) return summary;
+
+    if (starts_with(data, {'M', 'Z'})) summary.formats |= bit(Format::pe);
+    if (ascii_at(data, 0U, "%PDF-")) summary.formats |= bit(Format::pdf);
+    if (starts_with(data, {'P', 'K', 3U, 4U}) || starts_with(data, {'P', 'K', 5U, 6U}) ||
+        starts_with(data, {'P', 'K', 7U, 8U})) summary.formats |= bit(Format::zip);
+    if (ascii_at(data, 0U, "RIFF") && ascii_at(data, 8U, "WAVE")) summary.formats |= bit(Format::wave);
+    if (starts_with(data, {0x89U, 'P', 'N', 'G', 0x0dU, 0x0aU, 0x1aU, 0x0aU})) summary.formats |= bit(Format::png);
+    if (starts_with(data, {0xffU, 0xd8U, 0xffU})) summary.formats |= bit(Format::jpeg);
+    if (ascii_at(data, 0U, "GIF87a") || ascii_at(data, 0U, "GIF89a")) summary.formats |= bit(Format::gif);
+    if (starts_with(data, {'I', 'I', 42U, 0U}) || starts_with(data, {'M', 'M', 0U, 42U})) summary.formats |= bit(Format::tiff);
+    if (ascii_at(data, 0U, "RIFF") && ascii_at(data, 8U, "WEBP")) summary.formats |= bit(Format::webp);
+    if (data.size() >= 12U && ascii_at(data, 4U, "ftyp")) summary.formats |= bit(Format::mp4);
+    if (starts_with(data, {0xd0U, 0xcfU, 0x11U, 0xe0U, 0xa1U, 0xb1U, 0x1aU, 0xe1U})) summary.formats |= bit(Format::ole);
+    if (ascii_at(data, 0U, "{\\rtf")) summary.formats |= bit(Format::rtf);
+
+    const auto text = searchable_text(data);
+    if (text.starts_with("<!doctype html") || text.starts_with("<html") || text.starts_with("<?xml") ||
+        text.starts_with("<svg")) summary.formats |= bit(Format::markup);
+
+    const auto expected = expected_formats(extension);
+    summary.extension_mismatch = expected != 0U && (summary.formats & expected) == 0U;
+    summary.strong_header_count = static_cast<std::uint32_t>(std::popcount(summary.formats));
+
+    const bool embedded_pe = find_bytes(data, "MZ", 1U) != std::string_view::npos;
+    summary.embedded_executable = embedded_pe;
+    const bool embedded_pdf = find_bytes(data, "%PDF-", 1U) != std::string_view::npos;
+    const bool embedded_zip = find_bytes(data, "PK\x03\x04", 1U) != std::string_view::npos;
+    const bool embedded_riff = find_bytes(data, "RIFF", 1U) != std::string_view::npos;
+    const std::uint32_t embedded_types = static_cast<std::uint32_t>(embedded_pe) +
+        static_cast<std::uint32_t>(embedded_pdf) + static_cast<std::uint32_t>(embedded_zip) +
+        static_cast<std::uint32_t>(embedded_riff);
+    summary.polyglot = summary.strong_header_count > 1U ||
+        ((summary.formats & (bit(Format::zip) | bit(Format::ole))) == 0U && embedded_types > 0U);
+
+    if ((summary.formats & bit(Format::pdf)) != 0U) {
+        const auto eof = text.rfind("%%eof");
+        if (eof != std::string::npos) {
+            const auto tail = text.substr(eof + 5U);
+            summary.trailing_data = tail.find_first_not_of(" \t\r\n") != std::string_view::npos;
+        }
+    }
+    if ((summary.formats & bit(Format::png)) != 0U) {
+        const auto iend = find_bytes(data, "IEND", 8U);
+        summary.trailing_data = iend != std::string_view::npos && iend + 8U < data.size();
+    }
+
+    summary.external_reference_count = count_tokens(text,
+        {"http://", "https://", "file://", "ftp://", "webdav", "\\\\", "targetmode=\"external\""});
+    summary.command_indicator_count = count_tokens(text,
+        {"cmd.exe", "powershell", "pwsh", "mshta", "rundll32", "regsvr32", "wscript", "cscript",
+         "certutil", "bitsadmin", "curl.exe", "wget.exe", "invoke-expression", "downloadstring"});
+
+    const bool script_type = is_one_of(extension,
+        {L".bat", L".cmd", L".ps1", L".psm1", L".vbs", L".vbe", L".js", L".jse", L".wsf", L".hta",
+         L".sct", L".py", L".pyw", L".sh", L".pl", L".rb", L".php", L".lua", L".tcl"});
+    const bool office_active = count_tokens(text,
+        {"vbaproject.bin", "ddeauto", "oleobject", "attachedtemplate", "xl/macrosheets", "activex"}) > 0U;
+    const bool web_active = count_tokens(text,
+        {"<script", "javascript:", "onload=", "onerror=", "<foreignobject", "data:text/html"}) > 0U;
+    summary.active_content = office_active || web_active || (script_type && summary.command_indicator_count > 0U);
+    summary.automatic_action = count_tokens(text,
+        {"openaction", "ddeauto", "autoopen", "document_open", "workbook_open", "onload=", "autorun"}) > 0U;
+    summary.unsafe_deserialization = is_one_of(extension,
+        {L".pkl", L".pickle", L".joblib", L".dill", L".pt", L".pth", L".ckpt"});
+    summary.entropy_milli = entropy_milli(data);
+    if ((summary.formats & bit(Format::pe)) != 0U && data.size() >= 4096U && summary.entropy_milli >= 7800U)
+        summary.resource_risk = true;
+    return summary;
+}
+
+}
+
+```
+
+## File: `AI-Shield-main/src/flow_baseline.cpp`  
+- Path: `AI-Shield-main/src/flow_baseline.cpp`  
 - Size: 2310 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -4177,10 +4362,10 @@ detection::Evidence FlowBaseline::score(const FlowSample& sample) const {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/flow_control.cpp`  
-- Path: `AI_Shield_Developer_Full/src/flow_control.cpp`  
+## File: `AI-Shield-main/src/flow_control.cpp`  
+- Path: `AI-Shield-main/src/flow_control.cpp`  
 - Size: 2768 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -4263,10 +4448,10 @@ FlowAdmission RedirectTracker::record_redirect(std::uint64_t flow_id) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/fuzz_plan.cpp`  
-- Path: `AI_Shield_Developer_Full/src/fuzz_plan.cpp`  
+## File: `AI-Shield-main/src/fuzz_plan.cpp`  
+- Path: `AI-Shield-main/src/fuzz_plan.cpp`  
 - Size: 624 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```cpp
 #include "ai_shield/fuzz_plan.hpp"
@@ -4288,10 +4473,10 @@ Readiness assess(CorpusStatus status) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/health.cpp`  
-- Path: `AI_Shield_Developer_Full/src/health.cpp`  
+## File: `AI-Shield-main/src/health.cpp`  
+- Path: `AI-Shield-main/src/health.cpp`  
 - Size: 1670 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -4340,10 +4525,10 @@ Degradation aggregate(std::span<const SensorReport> reports) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/http_canonicalizer.cpp`  
-- Path: `AI_Shield_Developer_Full/src/http_canonicalizer.cpp`  
+## File: `AI-Shield-main/src/http_canonicalizer.cpp`  
+- Path: `AI-Shield-main/src/http_canonicalizer.cpp`  
 - Size: 2494 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -4431,10 +4616,10 @@ Result<std::string> canonicalize_request(std::string_view request) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/http1.cpp`  
-- Path: `AI_Shield_Developer_Full/src/http1.cpp`  
+## File: `AI-Shield-main/src/http1.cpp`  
+- Path: `AI-Shield-main/src/http1.cpp`  
 - Size: 4345 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -4569,10 +4754,10 @@ detection::Evidence evidence_from(const ParseSummary& summary) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/http2_preflight.cpp`  
-- Path: `AI_Shield_Developer_Full/src/http2_preflight.cpp`  
+## File: `AI-Shield-main/src/http2_preflight.cpp`  
+- Path: `AI-Shield-main/src/http2_preflight.cpp`  
 - Size: 2811 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -4651,10 +4836,10 @@ detection::Evidence evidence_from(const FrameSummary& summary) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/incident_package.cpp`  
-- Path: `AI_Shield_Developer_Full/src/incident_package.cpp`  
+## File: `AI-Shield-main/src/incident_package.cpp`  
+- Path: `AI-Shield-main/src/incident_package.cpp`  
 - Size: 3794 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -4744,10 +4929,10 @@ Result<Package> build_correlated(std::uint64_t incident_id,
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/ipc_validator.cpp`  
-- Path: `AI_Shield_Developer_Full/src/ipc_validator.cpp`  
+## File: `AI-Shield-main/src/ipc_validator.cpp`  
+- Path: `AI-Shield-main/src/ipc_validator.cpp`  
 - Size: 2302 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -4816,10 +5001,10 @@ Result<void> validate_flow_event(const abi::FlowEvent& event, const ValidationCo
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/ipv6_security.cpp`  
-- Path: `AI_Shield_Developer_Full/src/ipv6_security.cpp`  
+## File: `AI-Shield-main/src/ipv6_security.cpp`  
+- Path: `AI-Shield-main/src/ipv6_security.cpp`  
 - Size: 4905 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -4923,10 +5108,10 @@ Result<QuicMetadata> inspect_quic(std::span<const std::byte> datagram) noexcept 
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/isolation_forest.cpp`  
-- Path: `AI_Shield_Developer_Full/src/isolation_forest.cpp`  
+## File: `AI-Shield-main/src/isolation_forest.cpp`  
+- Path: `AI-Shield-main/src/isolation_forest.cpp`  
 - Size: 1569 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -4986,10 +5171,10 @@ detection::Evidence Forest::score(std::span<const float> features) const noexcep
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/json_preflight.cpp`  
-- Path: `AI_Shield_Developer_Full/src/json_preflight.cpp`  
+## File: `AI-Shield-main/src/json_preflight.cpp`  
+- Path: `AI-Shield-main/src/json_preflight.cpp`  
 - Size: 3355 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -5112,10 +5297,10 @@ detection::Evidence evidence_from(const ParseSummary& summary) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/learning_mode.cpp`  
-- Path: `AI_Shield_Developer_Full/src/learning_mode.cpp`  
+## File: `AI-Shield-main/src/learning_mode.cpp`  
+- Path: `AI-Shield-main/src/learning_mode.cpp`  
 - Size: 1736 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -5151,10 +5336,10 @@ DecisionOverride apply(LearningWindow window, std::uint32_t reason_mask, std::ui
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/maintenance_mode.cpp`  
-- Path: `AI_Shield_Developer_Full/src/maintenance_mode.cpp`  
+## File: `AI-Shield-main/src/maintenance_mode.cpp`  
+- Path: `AI-Shield-main/src/maintenance_mode.cpp`  
 - Size: 356 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -5174,10 +5359,10 @@ bool can_delete_audit(MaintenanceGuard guard) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/model_registry.cpp`  
-- Path: `AI_Shield_Developer_Full/src/model_registry.cpp`  
+## File: `AI-Shield-main/src/model_registry.cpp`  
+- Path: `AI-Shield-main/src/model_registry.cpp`  
 - Size: 902 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -5212,10 +5397,10 @@ Result<void> Registry::observe_live_sample() const noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/mutation_detector.cpp`  
-- Path: `AI_Shield_Developer_Full/src/mutation_detector.cpp`  
+## File: `AI-Shield-main/src/mutation_detector.cpp`  
+- Path: `AI-Shield-main/src/mutation_detector.cpp`  
 - Size: 1565 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -5270,10 +5455,10 @@ detection::Evidence compare_payloads(std::span<const std::byte> previous, std::s
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/package_manifest.cpp`  
-- Path: `AI_Shield_Developer_Full/src/package_manifest.cpp`  
+## File: `AI-Shield-main/src/package_manifest.cpp`  
+- Path: `AI-Shield-main/src/package_manifest.cpp`  
 - Size: 2865 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -5351,10 +5536,10 @@ Result<VerificationReport> verify_manifest(const Manifest& manifest, const Trust
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/pdf_preflight.cpp`  
-- Path: `AI_Shield_Developer_Full/src/pdf_preflight.cpp`  
+## File: `AI-Shield-main/src/pdf_preflight.cpp`  
+- Path: `AI-Shield-main/src/pdf_preflight.cpp`  
 - Size: 1978 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -5412,10 +5597,10 @@ detection::Evidence evidence_from(const ParseSummary& summary) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/pe_preflight.cpp`  
-- Path: `AI_Shield_Developer_Full/src/pe_preflight.cpp`  
+## File: `AI-Shield-main/src/pe_preflight.cpp`  
+- Path: `AI-Shield-main/src/pe_preflight.cpp`  
 - Size: 4008 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -5515,10 +5700,10 @@ detection::Evidence evidence_from(const ImageSummary& summary) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/pending_decision.cpp`  
-- Path: `AI_Shield_Developer_Full/src/pending_decision.cpp`  
+## File: `AI-Shield-main/src/pending_decision.cpp`  
+- Path: `AI-Shield-main/src/pending_decision.cpp`  
 - Size: 2502 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -5593,10 +5778,10 @@ std::vector<Completion> Manager::expire(std::uint64_t now_ns) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/platform_uri.cpp`  
-- Path: `AI_Shield_Developer_Full/src/platform_uri.cpp`  
+## File: `AI-Shield-main/src/platform_uri.cpp`  
+- Path: `AI-Shield-main/src/platform_uri.cpp`  
 - Size: 1561 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -5657,10 +5842,10 @@ Result<std::string> normalize_path_uri(std::string_view platform_path) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/policy_authorization.cpp`  
-- Path: `AI_Shield_Developer_Full/src/policy_authorization.cpp`  
+## File: `AI-Shield-main/src/policy_authorization.cpp`  
+- Path: `AI-Shield-main/src/policy_authorization.cpp`  
 - Size: 424 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -5682,10 +5867,10 @@ Result<void> authorize(PolicyChange change) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/policy_store.cpp`  
-- Path: `AI_Shield_Developer_Full/src/policy_store.cpp`  
+## File: `AI-Shield-main/src/policy_store.cpp`  
+- Path: `AI-Shield-main/src/policy_store.cpp`  
 - Size: 1412 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -5734,10 +5919,10 @@ Result<void> Store::rollback() noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/policy.cpp`  
-- Path: `AI_Shield_Developer_Full/src/policy.cpp`  
+## File: `AI-Shield-main/src/policy.cpp`  
+- Path: `AI-Shield-main/src/policy.cpp`  
 - Size: 3254 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```cpp
 #include "ai_shield/policy.hpp"
@@ -5823,10 +6008,10 @@ abi::ShieldDecision decide(const PolicyContext& context,
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/privacy.cpp`  
-- Path: `AI_Shield_Developer_Full/src/privacy.cpp`  
+## File: `AI-Shield-main/src/privacy.cpp`  
+- Path: `AI-Shield-main/src/privacy.cpp`  
 - Size: 1273 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -5864,10 +6049,10 @@ SanitizedPayload sanitize_payload(std::span<const std::byte> payload, const Expo
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/process_consequence.cpp`  
-- Path: `AI_Shield_Developer_Full/src/process_consequence.cpp`  
+## File: `AI-Shield-main/src/process_consequence.cpp`  
+- Path: `AI-Shield-main/src/process_consequence.cpp`  
 - Size: 1790 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -5921,10 +6106,10 @@ detection::Evidence evaluate_create_process(const ProcessEvidence& event) noexce
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/provenance.cpp`  
-- Path: `AI_Shield_Developer_Full/src/provenance.cpp`  
+## File: `AI-Shield-main/src/provenance.cpp`  
+- Path: `AI-Shield-main/src/provenance.cpp`  
 - Size: 3646 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -6028,10 +6213,10 @@ Result<FileVerdict> Store::lookup(const FileIdentity& identity) const noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/ransomware.cpp`  
-- Path: `AI_Shield_Developer_Full/src/ransomware.cpp`  
+## File: `AI-Shield-main/src/ransomware.cpp`  
+- Path: `AI-Shield-main/src/ransomware.cpp`  
 - Size: 3805 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -6118,10 +6303,10 @@ void Detector::reset(std::uint64_t process_id) { windows_.erase(process_id); }
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/recovery_plan.cpp`  
-- Path: `AI_Shield_Developer_Full/src/recovery_plan.cpp`  
+## File: `AI-Shield-main/src/recovery_plan.cpp`  
+- Path: `AI-Shield-main/src/recovery_plan.cpp`  
 - Size: 1056 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -6154,10 +6339,10 @@ ActionPlan plan_for(Severity severity) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/recovery_vault.cpp`  
-- Path: `AI_Shield_Developer_Full/src/recovery_vault.cpp`  
+## File: `AI-Shield-main/src/recovery_vault.cpp`  
+- Path: `AI-Shield-main/src/recovery_vault.cpp`  
 - Size: 1824 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -6208,10 +6393,10 @@ RestorePlan Catalog::plan(std::span<const std::string> paths, std::uint64_t cuto
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/release_gate.cpp`  
-- Path: `AI_Shield_Developer_Full/src/release_gate.cpp`  
+## File: `AI-Shield-main/src/release_gate.cpp`  
+- Path: `AI-Shield-main/src/release_gate.cpp`  
 - Size: 911 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -6239,10 +6424,10 @@ GateReport evaluate(Metrics metrics) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/replay.cpp`  
-- Path: `AI_Shield_Developer_Full/src/replay.cpp`  
+## File: `AI-Shield-main/src/replay.cpp`  
+- Path: `AI-Shield-main/src/replay.cpp`  
 - Size: 20073 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -6662,10 +6847,10 @@ Result<ReplayResult> parse_and_execute(std::span<const std::byte> bytes) noexcep
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/response_normalizer.cpp`  
-- Path: `AI_Shield_Developer_Full/src/response_normalizer.cpp`  
+## File: `AI-Shield-main/src/response_normalizer.cpp`  
+- Path: `AI-Shield-main/src/response_normalizer.cpp`  
 - Size: 729 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -6694,10 +6879,10 @@ std::string external_response_for(abi::ShieldAction action) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/retention.cpp`  
-- Path: `AI_Shield_Developer_Full/src/retention.cpp`  
+## File: `AI-Shield-main/src/retention.cpp`  
+- Path: `AI-Shield-main/src/retention.cpp`  
 - Size: 1176 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```cpp
 #include "ai_shield/retention.hpp"
@@ -6740,10 +6925,10 @@ Decision decide(DataClass data_class, std::uint64_t age_ns, bool incident_contex
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/risk.cpp`  
-- Path: `AI_Shield_Developer_Full/src/risk.cpp`  
+## File: `AI-Shield-main/src/risk.cpp`  
+- Path: `AI-Shield-main/src/risk.cpp`  
 - Size: 680 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -6763,10 +6948,10 @@ RiskScore score(const detection::Evidence& evidence) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/sandbox_budget.cpp`  
-- Path: `AI_Shield_Developer_Full/src/sandbox_budget.cpp`  
+## File: `AI-Shield-main/src/sandbox_budget.cpp`  
+- Path: `AI-Shield-main/src/sandbox_budget.cpp`  
 - Size: 804 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```cpp
 #include "ai_shield/sandbox_budget.hpp"
@@ -6791,10 +6976,10 @@ bool exceeded(const Budget& budget, std::uint64_t elapsed_ns, std::uint64_t memo
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/sandbox.cpp`  
-- Path: `AI_Shield_Developer_Full/src/sandbox.cpp`  
+## File: `AI-Shield-main/src/sandbox.cpp`  
+- Path: `AI-Shield-main/src/sandbox.cpp`  
 - Size: 1321 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```cpp
 #include "ai_shield/sandbox.hpp"
@@ -6836,10 +7021,10 @@ detection::Evidence evidence_from(const ResultSummary& summary) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/sequence_model.cpp`  
-- Path: `AI_Shield_Developer_Full/src/sequence_model.cpp`  
+## File: `AI-Shield-main/src/sequence_model.cpp`  
+- Path: `AI-Shield-main/src/sequence_model.cpp`  
 - Size: 1885 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -6905,10 +7090,10 @@ detection::Evidence NGramModel::score(std::span<const std::uint32_t> tokens) con
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/service_discovery.cpp`  
-- Path: `AI_Shield_Developer_Full/src/service_discovery.cpp`  
+## File: `AI-Shield-main/src/service_discovery.cpp`  
+- Path: `AI-Shield-main/src/service_discovery.cpp`  
 - Size: 1065 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -6938,10 +7123,10 @@ Result<void> confirm(service_registry::Registry& registry, service_registry::Ser
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/service_identity.cpp`  
-- Path: `AI_Shield_Developer_Full/src/service_identity.cpp`  
+## File: `AI-Shield-main/src/service_identity.cpp`  
+- Path: `AI-Shield-main/src/service_identity.cpp`  
 - Size: 607 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -6970,10 +7155,10 @@ bool PinStore::verify(std::uint64_t service_id, const crypto::Sha256Digest& pres
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/service_registry.cpp`  
-- Path: `AI_Shield_Developer_Full/src/service_registry.cpp`  
+## File: `AI-Shield-main/src/service_registry.cpp`  
+- Path: `AI-Shield-main/src/service_registry.cpp`  
 - Size: 997 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -7008,10 +7193,10 @@ Admission Registry::admit(Transport transport, std::uint16_t port_be) const noex
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/sha256.cpp`  
-- Path: `AI_Shield_Developer_Full/src/sha256.cpp`  
+## File: `AI-Shield-main/src/sha256.cpp`  
+- Path: `AI-Shield-main/src/sha256.cpp`  
 - Size: 4586 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -7142,10 +7327,10 @@ bool constant_time_equal(const Sha256Digest& a, const Sha256Digest& b) noexcept 
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/shadow_catalog.cpp`  
-- Path: `AI_Shield_Developer_Full/src/shadow_catalog.cpp`  
+## File: `AI-Shield-main/src/shadow_catalog.cpp`  
+- Path: `AI-Shield-main/src/shadow_catalog.cpp`  
 - Size: 857 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -7179,10 +7364,10 @@ Result<Target> Catalog::select(std::uint64_t service_id, std::uint16_t risk_scor
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/siem.cpp`  
-- Path: `AI_Shield_Developer_Full/src/siem.cpp`  
+## File: `AI-Shield-main/src/siem.cpp`  
+- Path: `AI-Shield-main/src/siem.cpp`  
 - Size: 2416 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -7238,10 +7423,10 @@ std::string format(const Event& event, Format output_format) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/signature_detector.cpp`  
-- Path: `AI_Shield_Developer_Full/src/signature_detector.cpp`  
+## File: `AI-Shield-main/src/signature_detector.cpp`  
+- Path: `AI-Shield-main/src/signature_detector.cpp`  
 - Size: 1396 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -7292,10 +7477,10 @@ detection::Evidence Detector::inspect(std::span<const std::byte> payload) const 
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/support_package.cpp`  
-- Path: `AI_Shield_Developer_Full/src/support_package.cpp`  
+## File: `AI-Shield-main/src/support_package.cpp`  
+- Path: `AI-Shield-main/src/support_package.cpp`  
 - Size: 2084 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -7355,10 +7540,10 @@ SupportManifest build_manifest(std::uint64_t package_id,
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/system_preflight.cpp`  
-- Path: `AI_Shield_Developer_Full/src/system_preflight.cpp`  
+## File: `AI-Shield-main/src/system_preflight.cpp`  
+- Path: `AI-Shield-main/src/system_preflight.cpp`  
 - Size: 636 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -7382,10 +7567,10 @@ PreflightReport evaluate(SystemFacts facts) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/tls_service_policy.cpp`  
-- Path: `AI_Shield_Developer_Full/src/tls_service_policy.cpp`  
+## File: `AI-Shield-main/src/tls_service_policy.cpp`  
+- Path: `AI-Shield-main/src/tls_service_policy.cpp`  
 - Size: 679 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -7411,10 +7596,10 @@ Result<void> authorize_managed_endpoint(const ManagedEndpoint& endpoint,
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/tlsmeta.cpp`  
-- Path: `AI_Shield_Developer_Full/src/tlsmeta.cpp`  
+## File: `AI-Shield-main/src/tlsmeta.cpp`  
+- Path: `AI-Shield-main/src/tlsmeta.cpp`  
 - Size: 3767 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -7527,10 +7712,10 @@ detection::Evidence evidence_from(const ClientHelloSummary& summary) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/update_manager.cpp`  
-- Path: `AI_Shield_Developer_Full/src/update_manager.cpp`  
+## File: `AI-Shield-main/src/update_manager.cpp`  
+- Path: `AI-Shield-main/src/update_manager.cpp`  
 - Size: 1738 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -7595,10 +7780,118 @@ SlotInfo Manager::slot_info(Slot slot) const noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/worker_supervisor.cpp`  
-- Path: `AI_Shield_Developer_Full/src/worker_supervisor.cpp`  
+## File: `AI-Shield-main/src/wav_preflight.cpp`  
+- Path: `AI-Shield-main/src/wav_preflight.cpp`  
+- Size: 4390 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
+- Condensed: comments and repeated blank lines reduced
+
+```cpp
+#include "ai_shield/wav_preflight.hpp"
+
+#include <algorithm>
+#include <array>
+#include <limits>
+#include <string>
+#include <string_view>
+
+namespace ai_shield::protocols::wav {
+namespace {
+
+constexpr std::uint32_t read_u32(std::span<const std::byte> data, std::size_t offset) noexcept {
+    return std::to_integer<std::uint32_t>(data[offset]) |
+           (std::to_integer<std::uint32_t>(data[offset + 1U]) << 8U) |
+           (std::to_integer<std::uint32_t>(data[offset + 2U]) << 16U) |
+           (std::to_integer<std::uint32_t>(data[offset + 3U]) << 24U);
+}
+
+bool tag_is(std::span<const std::byte> data, std::size_t offset, std::string_view tag) noexcept {
+    if (offset > data.size() || tag.size() > data.size() - offset) return false;
+    for (std::size_t i = 0; i < tag.size(); ++i) {
+        if (std::to_integer<unsigned char>(data[offset + i]) != static_cast<unsigned char>(tag[i])) return false;
+    }
+    return true;
+}
+
+bool command_bearing_metadata(std::span<const std::byte> payload) {
+    constexpr std::size_t maximum_metadata_scan = 1024U * 1024U;
+    const auto bounded = payload.first((std::min)(payload.size(), maximum_metadata_scan));
+    std::string text;
+    text.reserve(bounded.size());
+    for (const auto value : bounded) {
+        const auto character = std::to_integer<unsigned char>(value);
+        text.push_back(character >= 0x20U && character <= 0x7eU
+                           ? static_cast<char>(character >= 'A' && character <= 'Z' ? character + 0x20U : character)
+                           : ' ');
+    }
+    constexpr auto launch_tokens = std::to_array<std::string_view>({
+        "cmd.exe", "powershell", "pwsh", "curl.exe", "wget.exe", "mshta", "rundll32",
+        "regsvr32", "wscript", "cscript", "certutil", "bitsadmin"});
+    return std::ranges::any_of(launch_tokens, [&text](std::string_view token) {
+        return text.find(token) != std::string::npos;
+    });
+}
+
+}
+
+bool has_wave_signature(std::span<const std::byte> data) noexcept {
+    return data.size() >= 12U && tag_is(data, 0U, "RIFF") && tag_is(data, 8U, "WAVE");
+}
+
+Result<ParseSummary> preflight(std::span<const std::byte> data) noexcept {
+    constexpr std::size_t maximum_size = 256U * 1024U * 1024U;
+    if (!has_wave_signature(data) || data.size() > maximum_size) return Status::malformed_input;
+
+    ParseSummary summary{};
+    const std::uint64_t declared_end = static_cast<std::uint64_t>(read_u32(data, 4U)) + 8ULL;
+    if (declared_end != data.size() || declared_end < 12U) summary.malformed = true;
+    const std::size_t parse_end = static_cast<std::size_t>((std::min<std::uint64_t>)(declared_end, data.size()));
+
+    std::size_t offset = 12U;
+    while (offset < parse_end) {
+        if (parse_end - offset < 8U) {
+            summary.malformed = true;
+            break;
+        }
+        const std::uint32_t chunk_size = read_u32(data, offset + 4U);
+        const std::size_t payload_offset = offset + 8U;
+        if (chunk_size > parse_end - payload_offset) {
+            summary.malformed = true;
+            break;
+        }
+        const auto payload = data.subspan(payload_offset, chunk_size);
+        ++summary.chunk_count;
+        if (tag_is(data, offset, "fmt ")) {
+            summary.format_present = chunk_size >= 16U;
+            if (!summary.format_present) summary.malformed = true;
+        } else if (tag_is(data, offset, "data")) {
+            summary.audio_data_present = true;
+        } else if (tag_is(data, offset, "LIST") || tag_is(data, offset, "INFO") ||
+                   tag_is(data, offset, "ICMT") || tag_is(data, offset, "IART") ||
+                   tag_is(data, offset, "INAM") || tag_is(data, offset, "ISFT")) {
+            summary.suspicious_metadata = summary.suspicious_metadata || command_bearing_metadata(payload);
+        }
+
+        const std::uint64_t padded_size = static_cast<std::uint64_t>(chunk_size) + (chunk_size & 1U);
+        if (padded_size > std::numeric_limits<std::size_t>::max() - payload_offset ||
+            payload_offset + static_cast<std::size_t>(padded_size) > parse_end) {
+            summary.malformed = true;
+            break;
+        }
+        offset = payload_offset + static_cast<std::size_t>(padded_size);
+    }
+    if (!summary.format_present || !summary.audio_data_present || offset != parse_end) summary.malformed = true;
+    return summary;
+}
+
+}
+
+```
+
+## File: `AI-Shield-main/src/worker_supervisor.cpp`  
+- Path: `AI-Shield-main/src/worker_supervisor.cpp`  
 - Size: 1685 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -7660,10 +7953,10 @@ bool Supervisor::circuit_open(WorkerKind kind) const noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/xml_preflight.cpp`  
-- Path: `AI_Shield_Developer_Full/src/xml_preflight.cpp`  
+## File: `AI-Shield-main/src/xml_preflight.cpp`  
+- Path: `AI-Shield-main/src/xml_preflight.cpp`  
 - Size: 2917 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -7766,10 +8059,10 @@ detection::Evidence evidence_from(const ParseSummary& summary) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/src/zip_preflight.cpp`  
-- Path: `AI_Shield_Developer_Full/src/zip_preflight.cpp`  
-- Size: 3631 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+## File: `AI-Shield-main/src/zip_preflight.cpp`  
+- Path: `AI-Shield-main/src/zip_preflight.cpp`  
+- Size: 5414 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -7778,6 +8071,7 @@ detection::Evidence evidence_from(const ParseSummary& summary) noexcept {
 #include "ai_shield/abi.hpp"
 
 #include <algorithm>
+#include <set>
 #include <string>
 
 namespace ai_shield::protocols::zip {
@@ -7805,6 +8099,7 @@ namespace {
 
 Result<EntrySummary> preflight(std::span<const std::byte> data) noexcept {
     EntrySummary summary{};
+    std::set<std::string> names;
     if (data.size() < 30U || data.size() > 128U * 1024U * 1024U) {
         return Status::malformed_input;
     }
@@ -7814,6 +8109,7 @@ Result<EntrySummary> preflight(std::span<const std::byte> data) noexcept {
             break;
         }
         const auto flags = read_le16(data, offset + 6U);
+        const auto method = read_le16(data, offset + 8U);
         const auto compressed = read_le32(data, offset + 18U);
         const auto uncompressed = read_le32(data, offset + 22U);
         const auto name_len = read_le16(data, offset + 26U);
@@ -7831,6 +8127,23 @@ Result<EntrySummary> preflight(std::span<const std::byte> data) noexcept {
         }
         summary.path_escape = summary.path_escape || unsafe_name(name);
         summary.encrypted_entry = summary.encrypted_entry || ((flags & 0x0001U) != 0U);
+
+        summary.unsupported_compression = summary.unsupported_compression || method != 0U;
+        std::ranges::transform(name, name.begin(), [](char value) {
+            return value >= 'A' && value <= 'Z' ? static_cast<char>(value + ('a' - 'A')) : value;
+        });
+        summary.duplicate_name = summary.duplicate_name || !names.insert(name).second;
+        const auto dot = name.rfind('.');
+        const std::string_view extension = dot == std::string::npos ? std::string_view{} : std::string_view(name).substr(dot);
+        const auto is_extension = [extension](std::initializer_list<std::string_view> values) {
+            return std::ranges::find(values, extension) != values.end();
+        };
+        summary.executable_entry = summary.executable_entry || is_extension(
+            {".exe", ".dll", ".sys", ".scr", ".cpl", ".com", ".msi", ".bat", ".cmd", ".ps1", ".vbs", ".js", ".hta", ".lnk"});
+        summary.active_content_entry = summary.active_content_entry || is_extension(
+            {".docm", ".xlsm", ".pptm", ".xlam", ".ppam", ".sct", ".chm", ".jar"});
+        summary.nested_container = summary.nested_container || is_extension(
+            {".zip", ".7z", ".rar", ".cab", ".iso", ".vhd", ".vhdx", ".img"});
         summary.compressed_bytes += compressed;
         summary.uncompressed_bytes += uncompressed;
         ++summary.entry_count;
@@ -7863,6 +8176,11 @@ detection::Evidence evidence_from(const EntrySummary& summary) noexcept {
     if (summary.encrypted_entry) {
         evidence.novelty = detection::clipped_score(evidence.novelty + 30U);
     }
+    if (summary.unsupported_compression || summary.executable_entry || summary.active_content_entry ||
+        summary.nested_container || summary.duplicate_name) {
+        evidence.consequence = detection::clipped_score(evidence.consequence + 70U);
+        evidence.reason_mask |= abi::ReasonCode::consequence_detected;
+    }
     return evidence;
 }
 
@@ -7870,10 +8188,11 @@ detection::Evidence evidence_from(const EntrySummary& summary) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tests/unit/main.cpp`  
-- Path: `AI_Shield_Developer_Full/tests/unit/main.cpp`  
-- Size: 90664 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/tests/unit/main.cpp`  
+- Path: `AI-Shield-main/tests/unit/main.cpp`  
+- Size: 93545 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
+- Condensed: comments and repeated blank lines reduced
 
 ```cpp
 #include <cstddef>
@@ -7903,6 +8222,7 @@ detection::Evidence evidence_from(const EntrySummary& summary) noexcept {
 #include "ai_shield/egress_gate.hpp"
 #include "ai_shield/fail_policy.hpp"
 #include "ai_shield/features.hpp"
+#include "ai_shield/file_preflight.hpp"
 #include "ai_shield/flow_baseline.hpp"
 #include "ai_shield/flow_control.hpp"
 #include "ai_shield/flow_state.hpp"
@@ -7957,6 +8277,7 @@ detection::Evidence evidence_from(const EntrySummary& summary) noexcept {
 #include "ai_shield/update_manager.hpp"
 #include "ai_shield/worker_supervisor.hpp"
 #include "ai_shield/xml_preflight.hpp"
+#include "ai_shield/wav_preflight.hpp"
 #include "ai_shield/zip_preflight.hpp"
 
 namespace {
@@ -9260,6 +9581,95 @@ void test_replay_path_is_deterministic_and_bounded() {
     AI_SHIELD_CHECK(first.value().correlation.model_version == 4U);
 }
 
+void test_wav_command_metadata_and_malformed_audio() {
+    const std::string payload = "curl.exe example.com";
+    std::vector<std::byte> wav;
+    const auto append = [&wav](std::string_view text) {
+        for (const unsigned char character : text) wav.push_back(static_cast<std::byte>(character));
+    };
+    const auto append_u32 = [&wav](std::uint32_t value) {
+        for (unsigned int shift = 0U; shift < 32U; shift += 8U)
+            wav.push_back(static_cast<std::byte>((value >> shift) & 0xffU));
+    };
+    append("RIFF");
+    append_u32(static_cast<std::uint32_t>(36U + payload.size()));
+    append("WAVEfmt ");
+    append_u32(16U);
+    const std::array<std::byte, 16> format{};
+    wav.insert(wav.end(), format.begin(), format.end());
+    append("LIST");
+    append_u32(static_cast<std::uint32_t>(payload.size()));
+    append(payload);
+
+    const auto parsed = ai_shield::protocols::wav::preflight(wav);
+    AI_SHIELD_CHECK(parsed.ok());
+    AI_SHIELD_CHECK(parsed.value().suspicious_metadata);
+    AI_SHIELD_CHECK(parsed.value().malformed);
+
+    std::vector<std::byte> benign;
+    const auto append_benign = [&benign](std::string_view text) {
+        for (const unsigned char character : text) benign.push_back(static_cast<std::byte>(character));
+    };
+    const auto append_benign_u32 = [&benign](std::uint32_t value) {
+        for (unsigned int shift = 0U; shift < 32U; shift += 8U)
+            benign.push_back(static_cast<std::byte>((value >> shift) & 0xffU));
+    };
+    append_benign("RIFF");
+    append_benign_u32(38U);
+    append_benign("WAVEfmt ");
+    append_benign_u32(16U);
+    const std::array<std::byte, 16> pcm_format{
+        std::byte{1}, std::byte{0}, std::byte{1}, std::byte{0}, std::byte{0x44}, std::byte{0xac},
+        std::byte{0}, std::byte{0}, std::byte{0x44}, std::byte{0xac}, std::byte{0}, std::byte{0},
+        std::byte{1}, std::byte{0}, std::byte{8}, std::byte{0}};
+    benign.insert(benign.end(), pcm_format.begin(), pcm_format.end());
+    append_benign("data");
+    append_benign_u32(2U);
+    benign.push_back(std::byte{0x80});
+    benign.push_back(std::byte{0x80});
+    const auto benign_parsed = ai_shield::protocols::wav::preflight(benign);
+    AI_SHIELD_CHECK(benign_parsed.ok());
+    AI_SHIELD_CHECK(!benign_parsed.value().malformed);
+    AI_SHIELD_CHECK(!benign_parsed.value().suspicious_metadata);
+}
+
+void test_universal_file_preflight_attack_classes() {
+    const auto to_bytes = [](std::string_view text) {
+        std::vector<std::byte> result;
+        result.reserve(text.size());
+        for (const unsigned char value : text) result.push_back(static_cast<std::byte>(value));
+        return result;
+    };
+
+    auto disguised_pe = to_bytes("MZ");
+    disguised_pe.resize(512U);
+    const auto disguised = ai_shield::file_preflight::inspect(disguised_pe, L"holiday.jpg");
+    AI_SHIELD_CHECK(disguised.extension_mismatch);
+    AI_SHIELD_CHECK(disguised.high_risk());
+
+    const auto polyglot_bytes = to_bytes("%PDF-1.7\n1 0 obj <<>> endobj\nxref\n%%EOF\nPK\x03\x04payload");
+    const auto polyglot = ai_shield::file_preflight::inspect(polyglot_bytes, L"report.pdf");
+    AI_SHIELD_CHECK(polyglot.polyglot);
+    AI_SHIELD_CHECK(polyglot.trailing_data);
+
+    const auto svg_bytes = to_bytes(
+        "<svg xmlns=\"http://www.w3.org/2000/svg\" onload=\"fetch('https:
+    const auto svg = ai_shield::file_preflight::inspect(svg_bytes, L"logo.svg");
+    AI_SHIELD_CHECK(svg.active_content);
+    AI_SHIELD_CHECK(svg.automatic_action);
+    AI_SHIELD_CHECK(svg.external_reference_count > 0U);
+
+    const auto deceptive = ai_shield::file_preflight::inspect(to_bytes("echo harmless"), L"invoice.pdf.cmd");
+    AI_SHIELD_CHECK(deceptive.suspicious_filename);
+
+    const auto serialized = ai_shield::file_preflight::inspect(to_bytes("model-state"), L"weights.pkl");
+    AI_SHIELD_CHECK(serialized.unsafe_deserialization);
+
+    const auto benign = ai_shield::file_preflight::inspect(
+        to_bytes("plain notes without active content or remote references"), L"notes.txt");
+    AI_SHIELD_CHECK(!benign.high_risk());
+}
+
 void test_abi2_hmac_and_validation() {
     const auto key = ai_shield::crypto::sha256("abi2-channel-key");
     ai_shield::abi2::SensorEvent event{};
@@ -9442,7 +9852,7 @@ void test_recovery_vault_builds_cutoff_restore_plan() {
         .path = "C:/Users/test/Documents/large.bin", .content_hash = second_hash}).ok());
 }
 
-}  // namespace
+}
 
 int main() {
     test_abi();
@@ -9467,6 +9877,8 @@ int main() {
     test_tlsmeta_detects_downgrade();
     test_xml_external_entity_risk();
     test_pdf_active_content();
+    test_wav_command_metadata_and_malformed_audio();
+    test_universal_file_preflight_attack_classes();
     test_campaign_adaptive_correlation();
     test_flow_control_rate_and_redirect_limits();
     test_worker_supervisor_crash_isolation();
@@ -9523,10 +9935,10 @@ int main() {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tests/windows_download_content_protection.ps1`  
-- Path: `AI_Shield_Developer_Full/tests/windows_download_content_protection.ps1`  
-- Size: 2821 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/tests/windows_download_content_protection.ps1`  
+- Path: `AI-Shield-main/tests/windows_download_content_protection.ps1`  
+- Size: 7572 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([int]$TimeoutSeconds=150)
@@ -9537,46 +9949,93 @@ if((Get-Service AIShieldBroker -ErrorAction Stop).Status-ne'Running'){throw 'AIS
 $downloads=Join-Path ([Environment]::GetFolderPath('UserProfile')) 'Downloads'
 $run=[Guid]::NewGuid().ToString('N')
 $safe=Join-Path $downloads "ai-shield-safe-$run.png"
-$dangerous=Join-Path $downloads "ai-shield-active-$run.pdf"
+    $dangerous=Join-Path $downloads "ai-shield-active-$run.pdf"
+    $suspiciousWav=Join-Path $downloads "ai-shield-command-metadata-$run.wav"
+    $disguisedPe=Join-Path $downloads "ai-shield-disguised-$run.jpg"
+    $activeSvg=Join-Path $downloads "ai-shield-active-$run.svg"
+    $unknown=Join-Path $downloads "ai-shield-unknown-$run.specialblob"
 $journal=Join-Path $env:ProgramData 'AIShield\quarantine\journal.jsonl'
 $provenance=Join-Path $env:ProgramData 'AIShield\quarantine\provenance.jsonl'
 $cleanupDestination=Join-Path $env:TEMP "ai-shield-content-test-$run.pdf"
-$quarantineId=$null
+    $safeCleanupDestination=Join-Path $env:TEMP "ai-shield-content-test-$run.png"
+    $wavCleanupDestination=Join-Path $env:TEMP "ai-shield-content-test-$run.wav"
+    $peCleanupDestination=Join-Path $env:TEMP "ai-shield-content-test-$run.jpg"
+    $svgCleanupDestination=Join-Path $env:TEMP "ai-shield-content-test-$run.svg"
+    $unknownCleanupDestination=Join-Path $env:TEMP "ai-shield-content-test-$run.specialblob"
+$quarantineIds=@()
 try {
     [IO.File]::WriteAllBytes($safe,[byte[]](137,80,78,71,13,10,26,10,0,0,0,0))
     [IO.File]::WriteAllText($dangerous,"%PDF-1.7`n1 0 obj`n<</OpenAction<</S/JavaScript/JS(alert(1))>>>>`nendobj`nxref`n%%EOF",[Text.UTF8Encoding]::new($false))
+    $payload=[Text.Encoding]::ASCII.GetBytes('curl.exe example.com')
+    $wav=[Collections.Generic.List[byte]]::new()
+    $wav.AddRange([Text.Encoding]::ASCII.GetBytes('RIFF'))
+    $wav.AddRange([BitConverter]::GetBytes([uint32](36+$payload.Length)))
+    $wav.AddRange([Text.Encoding]::ASCII.GetBytes('WAVEfmt '))
+    $wav.AddRange([BitConverter]::GetBytes([uint32]16))
+    $wav.AddRange([byte[]](1,0,1,0,68,172,0,0,68,172,0,0,1,0,8,0))
+    $wav.AddRange([Text.Encoding]::ASCII.GetBytes('LIST'))
+    $wav.AddRange([BitConverter]::GetBytes([uint32]$payload.Length))
+    $wav.AddRange($payload)
+    [IO.File]::WriteAllBytes($suspiciousWav,$wav.ToArray())
+    $pe=[byte[]]::new(512);$pe[0]=[byte][char]'M';$pe[1]=[byte][char]'Z';[IO.File]::WriteAllBytes($disguisedPe,$pe)
+    [IO.File]::WriteAllText($activeSvg,'<svg xmlns="http://www.w3.org/2000/svg" onload="fetch(''https://example.invalid/x'')"><script/></svg>',[Text.UTF8Encoding]::new($false))
+    [IO.File]::WriteAllText($unknown,'unknown format must enter the release gate',[Text.UTF8Encoding]::new($false))
     foreach($path in @($safe,$dangerous)){Set-Content -LiteralPath ($path+':Zone.Identifier') -Value "[ZoneTransfer]`r`nZoneId=3" -Encoding ASCII}
     $deadline=[DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
     do {
         Start-Sleep -Seconds 2
         $dangerousMoved=-not(Test-Path -LiteralPath $dangerous)
-        $safeRecorded=(Test-Path $provenance) -and [bool](Get-Content $provenance -ErrorAction SilentlyContinue|Where-Object{$_-like"*$run*external_content_scanned_safe*"})
-    } until(($dangerousMoved-and$safeRecorded)-or[DateTime]::UtcNow-ge$deadline)
-    $quarantineRecord=Get-Content $journal -ErrorAction SilentlyContinue|Where-Object{$_-like"*$run*suspicious_file_structure*committed*"}|Select-Object -Last 1
+        $safeMoved=-not(Test-Path -LiteralPath $safe)
+        $wavMoved=-not(Test-Path -LiteralPath $suspiciousWav)
+        $peMoved=-not(Test-Path -LiteralPath $disguisedPe)
+        $svgMoved=-not(Test-Path -LiteralPath $activeSvg)
+        $unknownMoved=-not(Test-Path -LiteralPath $unknown)
+        $safeRecorded=(Test-Path $provenance) -and [bool](Get-Content $provenance -ErrorAction SilentlyContinue|Where-Object{$_-like"*$run*pending_user_release*"})
+    } until(($dangerousMoved-and$safeMoved-and$wavMoved-and$peMoved-and$svgMoved-and$unknownMoved-and$safeRecorded)-or[DateTime]::UtcNow-ge$deadline)
+    $quarantineRecord=Get-Content $journal -ErrorAction SilentlyContinue|Where-Object{$_-like"*ai-shield-active-$run.pdf*suspicious_file_structure*committed*"}|Select-Object -Last 1
+    $safeQuarantineRecord=Get-Content $journal -ErrorAction SilentlyContinue|Where-Object{$_-like"*$run*pending_user_release*committed*"}|Select-Object -Last 1
+    $wavQuarantineRecord=Get-Content $journal -ErrorAction SilentlyContinue|Where-Object{$_-like"*ai-shield-command-metadata-$run.wav*suspicious_file_structure*committed*"}|Select-Object -Last 1
+    $peQuarantineRecord=Get-Content $journal -ErrorAction SilentlyContinue|Where-Object{$_-like"*ai-shield-disguised-$run.jpg*suspicious_file_structure*committed*"}|Select-Object -Last 1
+    $svgQuarantineRecord=Get-Content $journal -ErrorAction SilentlyContinue|Where-Object{$_-like"*ai-shield-active-$run.svg*suspicious_file_structure*committed*"}|Select-Object -Last 1
+    $unknownQuarantineRecord=Get-Content $journal -ErrorAction SilentlyContinue|Where-Object{$_-like"*ai-shield-unknown-$run.specialblob*pending_user_release*committed*"}|Select-Object -Last 1
+    $unknownRecordObject=$(if($unknownQuarantineRecord){$unknownQuarantineRecord|ConvertFrom-Json}else{$null})
+    $contentHashRecorded=$null -ne $unknownRecordObject -and [string]$unknownRecordObject.sha256 -match '^[0-9a-f]{64}$'
     $quarantined=[bool]$quarantineRecord
-    if($quarantined){$quarantineId=($quarantineRecord|ConvertFrom-Json).id}
-    if(-not(Test-Path -LiteralPath $safe)){throw 'Safe image was not retained.'}
-    if(-not$dangerousMoved-or-not$quarantined-or-not$safeRecorded){
-        throw "Content protection failed: dangerous_moved=$dangerousMoved quarantined=$quarantined safe_recorded=$safeRecorded"
+    $safeQuarantined=[bool]$safeQuarantineRecord
+    if($quarantined){$quarantineIds+=@([pscustomobject]@{Id=($quarantineRecord|ConvertFrom-Json).id;Destination=$cleanupDestination})}
+    if($safeQuarantined){$quarantineIds+=@([pscustomobject]@{Id=($safeQuarantineRecord|ConvertFrom-Json).id;Destination=$safeCleanupDestination})}
+    if($wavQuarantineRecord){$quarantineIds+=@([pscustomobject]@{Id=($wavQuarantineRecord|ConvertFrom-Json).id;Destination=$wavCleanupDestination})}
+    if($peQuarantineRecord){$quarantineIds+=@([pscustomobject]@{Id=($peQuarantineRecord|ConvertFrom-Json).id;Destination=$peCleanupDestination})}
+    if($svgQuarantineRecord){$quarantineIds+=@([pscustomobject]@{Id=($svgQuarantineRecord|ConvertFrom-Json).id;Destination=$svgCleanupDestination})}
+    if($unknownQuarantineRecord){$quarantineIds+=@([pscustomobject]@{Id=($unknownQuarantineRecord|ConvertFrom-Json).id;Destination=$unknownCleanupDestination})}
+    if(-not$dangerousMoved-or-not$safeMoved-or-not$wavMoved-or-not$peMoved-or-not$svgMoved-or-not$unknownMoved-or-not$quarantined-or-not$safeQuarantined-or-not$wavQuarantineRecord-or-not$peQuarantineRecord-or-not$svgQuarantineRecord-or-not$unknownQuarantineRecord-or-not$contentHashRecorded-or-not$safeRecorded){
+        throw "Content protection failed: dangerous_moved=$dangerousMoved safe_moved=$safeMoved dangerous_quarantined=$quarantined safe_quarantined=$safeQuarantined safe_recorded=$safeRecorded"
     }
-    Write-Output 'safe_image_retained=true'
+    Write-Output 'safe_image_requires_release=true'
     Write-Output 'active_pdf_quarantined=true'
+    Write-Output 'wav_without_motw_quarantined=true'
+    Write-Output 'disguised_pe_quarantined=true'
+    Write-Output 'active_svg_quarantined=true'
+    Write-Output 'unknown_extension_release_gated=true'
+    Write-Output 'content_sha256_recorded=true'
     Write-Output 'provenance_recorded=true'
 } finally {
-    Remove-Item -LiteralPath $safe,$dangerous -Force -ErrorAction SilentlyContinue
-    if($quarantineId){
+    Remove-Item -LiteralPath $safe,$dangerous,$suspiciousWav,$disguisedPe,$activeSvg,$unknown -Force -ErrorAction SilentlyContinue
+    if($quarantineIds.Count){
         $broker=(Get-CimInstance Win32_Service -Filter "Name='AIShieldBroker'").PathName.Trim('"')
-        & $broker quarantine-restore $quarantineId $cleanupDestination 'Automated content-protection qualification cleanup'|Out-Null
-        Remove-Item -LiteralPath $cleanupDestination -Force -ErrorAction SilentlyContinue
+        foreach($entry in $quarantineIds){
+            & $broker quarantine-restore $entry.Id $entry.Destination 'Automated content-protection qualification cleanup'|Out-Null
+            Remove-Item -LiteralPath $entry.Destination -Force -ErrorAction SilentlyContinue
+        }
     }
 }
 
 ```
 
-## File: `AI_Shield_Developer_Full/tests/windows_platform/main.cpp`  
-- Path: `AI_Shield_Developer_Full/tests/windows_platform/main.cpp`  
+## File: `AI-Shield-main/tests/windows_platform/main.cpp`  
+- Path: `AI-Shield-main/tests/windows_platform/main.cpp`  
 - Size: 12962 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```cpp
 #include <cstdlib>
@@ -9830,10 +10289,10 @@ int main() {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tests/windows_private_desktop_qualification.ps1`  
-- Path: `AI_Shield_Developer_Full/tests/windows_private_desktop_qualification.ps1`  
+## File: `AI-Shield-main/tests/windows_private_desktop_qualification.ps1`  
+- Path: `AI-Shield-main/tests/windows_private_desktop_qualification.ps1`  
 - Size: 10488 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -10017,10 +10476,10 @@ if($failed){exit 2}
 
 ```
 
-## File: `AI_Shield_Developer_Full/tests/windows_process_guard_rules.ps1`  
-- Path: `AI_Shield_Developer_Full/tests/windows_process_guard_rules.ps1`  
-- Size: 1348 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/tests/windows_process_guard_rules.ps1`  
+- Path: `AI-Shield-main/tests/windows_process_guard_rules.ps1`  
+- Size: 1810 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 $ErrorActionPreference="Continue"
@@ -10040,17 +10499,23 @@ $downloadInterpreterBlocked=$false
 try { & powershell.exe -NoProfile -File $downloadScript | Out-Null; $downloadInterpreterBlocked=-not $? } catch { $downloadInterpreterBlocked=$true }
 Remove-Item $downloadScript -Force -ErrorAction SilentlyContinue
 
-$result="temp_execution_blocked=$tempBlocked`r`nrisky_script_blocked=$scriptBlocked`r`ndownload_interpreter_blocked=$downloadInterpreterBlocked"
+$downloadBatch=Join-Path $env:USERPROFILE "Downloads\ai-shield-interpreter-test.bat"
+Set-Content -LiteralPath $downloadBatch -Value "@echo ai-shield-download-batch-test"
+$downloadBatchBlocked=$false
+try { & cmd.exe /d /c $downloadBatch | Out-Null; $downloadBatchBlocked=-not $? } catch { $downloadBatchBlocked=$true }
+Remove-Item $downloadBatch -Force -ErrorAction SilentlyContinue
+
+$result="temp_execution_blocked=$tempBlocked`r`nrisky_script_blocked=$scriptBlocked`r`ndownload_interpreter_blocked=$downloadInterpreterBlocked`r`ndownload_batch_blocked=$downloadBatchBlocked"
 $result|Set-Content "D:\AI_Shield\runtime\process_guard_rules.log"
 Write-Output $result
-if(-not $tempBlocked -or -not $scriptBlocked -or -not $downloadInterpreterBlocked){exit 2}
+if(-not $tempBlocked -or -not $scriptBlocked -or -not $downloadInterpreterBlocked -or -not $downloadBatchBlocked){exit 2}
 
 ```
 
-## File: `AI_Shield_Developer_Full/tests/windows_product_qualification.ps1`  
-- Path: `AI_Shield_Developer_Full/tests/windows_product_qualification.ps1`  
+## File: `AI-Shield-main/tests/windows_product_qualification.ps1`  
+- Path: `AI-Shield-main/tests/windows_product_qualification.ps1`  
 - Size: 10168 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -10248,10 +10713,10 @@ Complete-Run
 
 ```
 
-## File: `AI_Shield_Developer_Full/tests/windows_ransomware_recovery.ps1`  
-- Path: `AI_Shield_Developer_Full/tests/windows_ransomware_recovery.ps1`  
+## File: `AI-Shield-main/tests/windows_ransomware_recovery.ps1`  
+- Path: `AI-Shield-main/tests/windows_ransomware_recovery.ps1`  
 - Size: 3243 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([string]$RepositoryRoot = '')
@@ -10300,10 +10765,2399 @@ try {
 
 ```
 
-## File: `AI_Shield_Developer_Full/AI_Shield_Defender_Auditmodus.cmd`  
-- Path: `AI_Shield_Developer_Full/AI_Shield_Defender_Auditmodus.cmd`  
+## File: `AI-Shield-main/tests/windows_tray_agent_contract.ps1`  
+- Path: `AI-Shield-main/tests/windows_tray_agent_contract.ps1`  
+- Size: 2117 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
+
+```powershell
+$ErrorActionPreference = "Stop"
+$repo = Split-Path $PSScriptRoot -Parent
+$agent = Join-Path $repo "editions\private_desktop\tray\start_tray_agent.ps1"
+$manager = Join-Path $repo "editions\private_desktop\tray\manage_tray_agent.ps1"
+
+foreach ($path in @($agent, $manager)) {
+    $tokens = $null
+    $errors = $null
+    [Management.Automation.Language.Parser]::ParseFile($path, [ref]$tokens, [ref]$errors) | Out-Null
+    if ($errors.Count) { throw "PowerShell parser errors in $path`: $($errors.Message -join '; ')" }
+}
+$agentText = Get-Content -LiteralPath $agent -Raw
+$managerText = Get-Content -LiteralPath $manager -Raw
+foreach ($service in @("AIShieldCore", "AIShieldBroker", "AIShieldWfp", "AIShieldMiniFilter", "AIShieldProcessGuard")) {
+    if ($agentText -notmatch [regex]::Escape($service)) { throw "Tray agent does not monitor $service." }
+}
+foreach ($required in @("NotifyIcon", "Local\AIShieldPrivateTray", "AI Shield öffnen", "Tray-Agent beenden")) {
+    if ($agentText -notmatch [regex]::Escape($required)) { throw "Tray contract is missing: $required" }
+}
+if ($managerText -notmatch 'CurrentVersion\\Run' -or $managerText -notmatch 'AIShieldPrivateTray') {
+    throw "Tray manager does not register the machine-wide logon autostart."
+}
+$security = [Security.AccessControl.EventWaitHandleSecurity]::new()
+$sid = [Security.Principal.SecurityIdentifier]::new([Security.Principal.WellKnownSidType]::WorldSid, $null)
+$rights = [Security.AccessControl.EventWaitHandleRights]::Modify -bor
+    [Security.AccessControl.EventWaitHandleRights]::Synchronize
+$rule = [Security.AccessControl.EventWaitHandleAccessRule]::new(
+    $sid, $rights, [Security.AccessControl.AccessControlType]::Allow)
+$security.AddAccessRule($rule)
+$created = $false
+$event = [Threading.EventWaitHandle]::new($false, [Threading.EventResetMode]::AutoReset,
+    "Local\AIShieldPrivateUiContract-$PID", [ref]$created, $security)
+try {
+    $event.Set() | Out-Null
+    if (-not $event.WaitOne(0)) { throw "The UI activation event did not preserve its signal." }
+} finally { $event.Dispose() }
+Write-Output "AI Shield tray agent contract: PASS"
+
+```
+
+## File: `AI-Shield-main/.gitignore`  
+- Path: `AI-Shield-main/.gitignore`  
+- Size: 727 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
+- Condensed: comments and repeated blank lines reduced
+
+```
+# Local build trees and IDE state
+/build*/
+/.vs/
+/.vscode/
+/.idea/
+x64/
+Debug/
+Release/
+*.user
+*.suo
+*.VC.db
+*.VC.VC.opendb
+
+# Runtime state, qualification output and local test data
+/runtime/
+/dist/
+/test_backend/
+*.log
+*.tmp
+*.bak
+
+# Generated driver and Microsoft-submission packages
+/driver_package/
+/submission/microsoft/packages/
+/submission/microsoft/AIShieldDrivers-x64.cab
+/submission/microsoft/SHA256SUMS.json
+*.sys
+*.cat
+*.cer
+*.cab
+*.msi
+*.wixpdb
+*.obj
+*.pdb
+*.ilk
+*.tlog
+
+# Generated distribution archives
+*.zip
+/AI_Shield_ZIP_SHA256SUMS.txt
+/setup.inf
+/setup.rpt
+*.preview.png
+
+# Never publish private signing or authentication material
+*.pfx
+*.pvk
+*.p12
+*.pem
+*.key
+id_rsa*
+.env
+.env.*
+!.env.example
+
+```
+
+## File: `AI-Shield-main/AI_Shield_Dateibasierte_Angriffe_und_Scananforderungen_DE.md`  
+- Path: `AI-Shield-main/AI_Shield_Dateibasierte_Angriffe_und_Scananforderungen_DE.md`  
+- Size: 70268 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
+- Condensed: comments and repeated blank lines reduced
+
+```markdown
+# AI Shield – Bedrohungskatalog für dateibasierte Angriffe
+
+## Implementierungsstand in AI Shield
+
+Stand: 14. Juli 2026, `AIShieldContentPolicy/4`
+
+Der Katalog ist zugleich Zielbild und Negativtestvertrag. Der produktive Downloadpfad behandelt
+inzwischen jede nach Brokerstart neu angelegte oder geänderte Datei, einschließlich unbekannter
+Endungen und Spezialformate. Nicht vollständig verstandene Inhalte werden nicht als sauber
+behauptet: Bei aktiver Standardpolicy gelangen sie in die Freigabeschranke; Scanfehler,
+Strukturanomalien, aktive Fähigkeiten und nicht prüfbare risikoreiche Container werden fail-closed
+quarantänisiert.
+
+Implementiert und im lokalen Systemtest nachgewiesen sind:
+
+- vollständiger Streaming-SHA-256 sowie Volume-/File-ID-gebundene Quarantäneidentität,
+- Prüfung unabhängig von Mark-of-the-Web und erneute Prüfung geänderter bekannter Pfade,
+- Magic-/Extension-Abgleich, Tarnnamen, Polyglot- und Trailing-Data-Indikatoren,
+- eingebettete PE-Signaturen, aktive Web-/Office-/Skriptfähigkeiten, automatische Aktionen,
+  externe URI-/UNC-Indikatoren, unsichere Deserialisierungsformate und PE-Entropiesignale,
+- strikte PDF-, ZIP- und RIFF/WAV-Vorprüfung; verschlüsselte, verschachtelte, ausführbare,
+  duplizierte oder nicht tief extrahierbare ZIP-Kinder werden nicht automatisch freigegeben,
+- dedizierter Minimalworker mit nur `Kernel32` als statischer Systemabhängigkeit, exakt einem
+  vererbten Datei-Handle, Einprozess-Job, 512-MiB-Grenze, Deadline und ohne Netzwerkfreigabe,
+- AppContainer als primärer Startmodus; auf dem aktuell qualifizierten Windows-Build führt dessen
+  Loader bei eigenen Binärdateien zu `0xC0000142`, weshalb kontrolliert ein privilegienloser
+  Low-Integrity-Token im identischen Job verwendet und der Degradationsgrund auditiert wird,
+- WFP-erzwungene vollständige IPv4-/IPv6-Netzwerksperre für `ai_shield_file_scanner.exe`, die
+  unabhängig vom normalen Policy-Modus auch den Low-Integrity-Fallback einschließt,
+- Policy-v3-zu-v4-Migration und UI-Schalter **Unbekannte und Spezialformate**.
+
+Nicht als vollständig implementiert gelten formatspezifische CDR-Rekonstruktion, Detonation in
+jedem realen Zielprogramm, Cloud-/Publisher-Reputation, Passwortentschlüsselung, semantische
+Steganografieerkennung, Modell-Backdoor-Evaluation sowie hersteller- und gerätespezifische
+Firmware-, CAD-, CNC- oder Maschinenvalidierung. Diese Inhalte werden konservativ gesperrt oder
+freigabepflichtig behandelt; das ersetzt keine vollständige semantische Validierung.
+
+## Zweck
+
+Dieses Dokument definiert die Angriffsflächen, Dateifamilien, Aktivierungsmechanismen und Prüfanforderungen, die AI Shield bei eingehenden, gespeicherten, geöffneten, dargestellten, entpackten, eingebundenen oder ausgeführten Dateien berücksichtigen muss.
+
+Der Katalog ist absichtlich **format- und verhaltensorientiert**. Eine reine Liste von Dateiendungen ist unzureichend, weil Angreifer:
+
+- Dateiendungen fälschen oder mehrfach verwenden,
+- MIME-Typen manipulieren,
+- mehrere gültige Formate in einer Polyglot-Datei kombinieren,
+- ausführbare Inhalte in Container- und Dokumentformaten verschachteln,
+- Parserfehler statt offiziell vorgesehener Skriptfunktionen ausnutzen,
+- Inhalte verschlüsseln oder stark verschleiern,
+- harmlose Dateien nur als Träger für Konfiguration, Schlüssel oder zweite Angriffsstufen verwenden,
+- erst beim Vorschau-, Thumbnail-, Indexierungs-, Import-, Druck- oder Konvertierungsvorgang auslösen.
+
+**Grundregel:** Nicht die Dateiendung entscheidet über das Risiko, sondern die Gesamtheit aus tatsächlichem Binärformat, Herkunft, enthaltenen Objekten, referenzierten Ressourcen, Parserpfad, Benutzeraktion und beobachtetem Laufzeitverhalten.
+
+---
+
+## 1. Wichtige Klarstellung zum WAV-Beispiel
+
+Eine standardkonforme WAV-Datei besitzt keine allgemeine Betriebssystemfunktion, mit der sie selbstständig im Hintergrund eine Internetadresse aufrufen kann.
+
+Ein Netzwerkzugriff im Zusammenhang mit einer WAV-Datei kann jedoch durch folgende Mechanismen entstehen:
+
+1. **Verwundbarer Audio-Parser oder Codec**
+   Manipulierte RIFF-Blöcke, Längenfelder oder Codec-Daten lösen Speicherfehler im Player, Explorer-Preview-Handler, Indexer oder Konverter aus. Nach erfolgreicher Ausnutzung kann der kompromittierte Prozess Netzwerkzugriffe durchführen.
+
+2. **Missbrauch von Metadaten**
+   URL-artige Werte, Cover-Art, ID3-kompatible Zusatzdaten oder anwendungsspezifische RIFF-Chunks werden von einer bestimmten Software als externe Ressource interpretiert.
+
+3. **Playlist oder Begleitdatei**
+   M3U, PLS, ASX, CUE oder eine Projektdatei verweist auf eine lokale Audiodatei und gleichzeitig auf entfernte Ressourcen, UNC-Pfade oder Web-Adressen.
+
+4. **Polyglot-Datei**
+   Dieselben Bytes werden von einem Programm als Audio und von einem anderen Parser als Archiv, Skript, HTML oder ausführbares Format interpretiert.
+
+5. **Versteckte zweite Stufe**
+   Audio-Nutzdaten oder Metadaten enthalten verschlüsselte beziehungsweise steganografische Nutzdaten, die erst durch bereits vorhandene Schadsoftware extrahiert werden. Die WAV-Datei selbst führt dabei nichts aus.
+
+6. **Dateinamen- oder Shell-Missbrauch**
+   Der Dateiname, ein Begleit-Link, ein Shortcut oder eine Shell-Erweiterung führt nicht den Audiostream, sondern einen anderen Befehl aus.
+
+AI Shield muss deshalb nicht nach einem abstrakten „Link in WAV“ suchen, sondern nach **Parseranomalien, externen Referenzen, Polyglot-Merkmalen, eingebetteten Objekten, ungewöhnlichen Metadaten und anschließendem Prozess-/Netzwerkverhalten**.
+
+---
+
+# 2. Universelle Angriffsklassen
+
+Diese Angriffsklassen gelten formatübergreifend.
+
+## 2.1 Direkte Programmausführung
+
+Die Datei ist selbst ausführbar oder wird von einem Interpreter ausgeführt.
+
+**Beispiele für Trägerklassen:**
+
+- native Programme und Bibliotheken,
+- Kernel-Treiber,
+- Installer,
+- Skripte,
+- Java-, .NET- oder WebAssembly-Module,
+- IDE-, Build- und Paketmanagerdateien.
+
+**Prüfungen:**
+
+- tatsächliche Formatkennung statt Dateiendung,
+- Signatur, Zertifikatskette, Zeitstempel und Widerrufsstatus,
+- Importtabellen, Exporte, Entry Points und TLS Callbacks,
+- ausführbare Speichersegmente,
+- eingebettete Ressourcen und Overlay-Daten,
+- verdächtige Interpreter- oder Systemwerkzeugaufrufe,
+- Side-Loading- und Suchpfadrisiken,
+- Herkunft, Reputation und MOTW,
+- bekannte verwundbare signierte Treiber,
+- erwartete Publisher- und Produktidentität.
+
+## 2.2 Aktive Inhalte
+
+Das Format enthält offiziell vorgesehene aktive Elemente.
+
+**Beispiele:**
+
+- VBA- und XLM-Makros,
+- JavaScript in PDF oder HTML,
+- ActiveX,
+- OLE-Automation,
+- Formularaktionen,
+- DDE,
+- eingebettete Skripte,
+- PostScript,
+- Datenbankmakros,
+- Build- und Installationsaktionen.
+
+**Prüfungen:**
+
+- vollständige Extraktion aktiver Komponenten,
+- automatische Start- und Open-Aktionen,
+- Child-Process-Fähigkeit,
+- Dateisystem-, Registry- und Netzwerkzugriffe,
+- verschleierte Strings und dynamisch erzeugte Befehle,
+- Missbrauch legitimer Systemprogramme,
+- Signatur und Vertrauensstellung des aktiven Inhalts,
+- blockierende Laufzeitregeln unabhängig vom statischen Urteil.
+
+## 2.3 Externe Ressourcen und Remote-Referenzen
+
+Eine Datei verweist auf Inhalte außerhalb der Datei.
+
+**Mögliche Ziele:**
+
+- HTTP/HTTPS,
+- SMB/UNC,
+- WebDAV,
+- FTP und andere URI-Schemata,
+- lokale oder entfernte Dateien,
+- Vorlagen,
+- Bilder,
+- Stylesheets,
+- Fonts,
+- Datenquellen,
+- Medien,
+- Add-ins,
+- Schemas,
+- Pakete,
+- Update- und Downloadendpunkte.
+
+**Risiken:**
+
+- Credential-Leak über automatische Authentifizierung,
+- Tracking,
+- Nachladen einer zweiten Stufe,
+- Phishing,
+- Umgehung der Anhangprüfung,
+- Manipulation nach dem ursprünglichen Scan,
+- interne Netzwerkabfragen und SSRF-artige Effekte.
+
+**Prüfungen:**
+
+- alle URI- und Pfadfelder normalisieren,
+- IP-Literale, IDN/Punycode und Unicode-Homografen erkennen,
+- UNC-, WebDAV- und lokale Pfade gesondert bewerten,
+- automatische von klickabhängigen Referenzen unterscheiden,
+- Redirect-Ketten und DNS-Auflösung kontrollieren,
+- Zielreputation und Zertifikatsidentität prüfen,
+- Remote-Inhalte standardmäßig nicht beim Preview laden.
+
+## 2.4 Eingebettete Objekte und Container
+
+Eine Datei enthält weitere Dateien oder Objektströme.
+
+**Beispiele:**
+
+- ZIP in Office-Dokumenten,
+- OLE Package,
+- PDF-Portfolios und Attachments,
+- E-Mail-Anhänge,
+- Matroska-Attachments,
+- eingebettete Fonts, Bilder und Skripte,
+- App- und Installationspakete,
+- Disk-Images.
+
+**Prüfungen:**
+
+- rekursive Extraktion mit festen Budgets,
+- jede Kinddatei erneut vollständig klassifizieren,
+- Parent-Child-Provenienz erhalten,
+- keine Vertrauensübernahme allein vom Container,
+- verschlüsselte oder nicht extrahierbare Kinder als eigenes Risiko behandeln.
+
+## 2.5 Parser- und Codec-Ausnutzung
+
+Die Datei missbraucht einen Fehler in einem Parser, Decoder, Preview-Handler, Thumbnailer, Indexer, Drucker, Konverter oder Importfilter.
+
+**Typische Fehlerklassen:**
+
+- Integer Overflow und Underflow,
+- Out-of-Bounds Read/Write,
+- Use-after-free,
+- Double Free,
+- Type Confusion,
+- Stack- oder Heap-Überlauf,
+- Endlosschleifen,
+- Rekursionsüberlauf,
+- fehlerhafte Offsets und Längen,
+- überlappende Datenbereiche,
+- zyklische Objektgraphen,
+- inkonsistente Tabellen und Indizes.
+
+**Prüfungen:**
+
+- strikte Strukturvalidierung vor tiefer Dekodierung,
+- alle Additionen und Multiplikationen größenbegrenzt,
+- Parser in isolierten, nicht privilegierten Prozessen,
+- harte Zeit-, Speicher-, Objekt- und Ausgabelimits,
+- Parserabsturz als Sicherheitsereignis werten,
+- keine komplexe Dateidekodierung im Kernel durchführen.
+
+## 2.6 Polyglot- und Formatverwechslungsangriffe
+
+Eine Datei ist für mehrere Parser gültig oder täuscht ein anderes Format vor.
+
+**Beispiele:**
+
+- Bild plus Archiv,
+- PDF plus ZIP,
+- Skript mit gültigem Bildheader,
+- PE-Datei mit harmloser Endung,
+- HTML als Office- oder Textdatei,
+- SVG als vermeintlich passives Bild.
+
+**Prüfungen:**
+
+- Magic Bytes, Dateiendung, MIME und Parserergebnis vergleichen,
+- zusätzliche gültige Header an ungewöhnlichen Offsets suchen,
+- Trailing Data und Overlay analysieren,
+- alle plausiblen Parserpfade bewerten,
+- widersprüchliche Klassifikation als hohes Risiko behandeln.
+
+## 2.7 Verschleierung, Packing und Verschlüsselung
+
+**Techniken:**
+
+- komprimierte oder gepackte Programme,
+- Base64/Hex/Unicode-Escapes,
+- verschachtelte Skriptkodierung,
+- dynamische Stringzusammensetzung,
+- verschlüsselte Archive,
+- passwortgeschützte Dokumente,
+- verschlüsselte PDF-Objekte,
+- stark entropische Blöcke,
+- getrennte Schlüssel- und Nutzdatendateien.
+
+**Prüfungen:**
+
+- Entropie- und Packing-Indikatoren,
+- sichere Dekodierung häufiger Kodierungen,
+- Schichtenzahl begrenzen,
+- verschlüsselte Inhalte nicht als sauber einstufen,
+- nicht prüfbare aktive Inhalte blockieren oder isolieren,
+- Passwortübergabe niemals automatisch aus Mailtext oder Dateiname übernehmen.
+
+## 2.8 Ressourcenerschöpfung
+
+**Beispiele:**
+
+- ZIP-/Dekompressionsbomben,
+- XML Entity Expansion,
+- extrem große Bilddimensionen,
+- sehr viele Frames, Seiten, Tabellen, Objekte oder Archiveinträge,
+- künstlich lange Audiodauer bei kleiner Datei,
+- zyklische Referenzen,
+- verschachtelte Container,
+- Sparse Files,
+- Milliarden kleiner Dateien,
+- Hashing- oder Parserkomplexitätsangriffe.
+
+**Prüfungen:**
+
+- komprimierte und erwartete entpackte Größe,
+- Expansionsverhältnis,
+- Rekursionstiefe,
+- Objektanzahl,
+- maximale Dimensionen, Dauer und Seitenzahl,
+- CPU-, RAM-, Handle-, Thread- und Zeitbudget,
+- Abbruch muss fail-closed oder mindestens isolation-required ergeben.
+
+## 2.9 Pfad- und Dateisystemangriffe
+
+**Techniken:**
+
+- `..`-Traversal,
+- absolute Pfade,
+- UNC- und WebDAV-Pfade,
+- symbolische Links und Hardlinks,
+- Reparse Points,
+- NTFS Alternate Data Streams,
+- reservierte Windows-Gerätenamen,
+- nachgestellte Punkte oder Leerzeichen,
+- Groß-/Kleinschreibungs- und Unicode-Kollisionen,
+- sehr lange Pfade,
+- Überschreiben bestehender Dateien,
+- DLL-Suchpfadpräparation.
+
+**Prüfungen:**
+
+- kanonische Pfadbildung vor jeder Policyentscheidung,
+- Extraktion ausschließlich in neuem, nicht gemeinsam genutztem Verzeichnis,
+- keine Linkverfolgung,
+- keine absoluten oder außerhalb des Zielroots liegenden Ziele,
+- stabile File-ID und Volume-ID kontrollieren,
+- sichere Erstellung mit exklusiven Handles,
+- ADS und Reparse Points explizit erfassen.
+
+## 2.10 Metadatenmissbrauch
+
+Metadaten sind nicht grundsätzlich passiv.
+
+**Risiken:**
+
+- externe URLs,
+- sehr große oder rekursive Metadaten,
+- Parserfehler,
+- Shell- oder Kommandoinjektion in nachgelagerte Tools,
+- versteckte Nutzdaten,
+- Tracking-IDs,
+- Täuschung von Benutzeroberflächen,
+- manipulierte Zeitstempel und Autorenfelder.
+
+**Prüfungen:**
+
+- Metadaten wie untrusted input behandeln,
+- Längen und Zeichensätze begrenzen,
+- keine direkte Übergabe an Shell oder Kommandozeile,
+- URLs, Pfade und Steuerzeichen extrahieren,
+- eingebettete Vorschaubilder separat prüfen.
+
+## 2.11 Vorschau-, Thumbnail- und Indexierungsangriffe
+
+Eine Datei kann verarbeitet werden, ohne dass der Benutzer sie ausdrücklich öffnet.
+
+**Trigger:**
+
+- Windows Explorer Preview Pane,
+- Thumbnail-Generator,
+- Suchindex,
+- Metadatenhandler,
+- Medienbibliothek,
+- E-Mail-Vorschau,
+- Cloud-Synchronisationsclient,
+- DLP- oder AV-Scanner,
+- Druckvorschau.
+
+**Prüfungen:**
+
+- Download-/Create-Gate vor Shell- und Preview-Verarbeitung,
+- MOTW und Herkunft beibehalten,
+- Preview in isoliertem Prozess,
+- keine externen Ressourcen in Vorschau,
+- Parsercrash und unerwartete Netzwerkaktivität erfassen.
+
+## 2.12 Social Engineering und UI-Täuschung
+
+**Techniken:**
+
+- doppelte Dateiendungen,
+- versteckte bekannte Endungen,
+- Right-to-Left Override,
+- Icon-Spoofing,
+- falsche Dokumenttitel,
+- Linktext ungleich Ziel,
+- gefälschte Sicherheitswarnungen,
+- „Enable Content“-Köder,
+- Dateien, die wie Ordner oder PDFs aussehen.
+
+**Prüfungen:**
+
+- tatsächlichen Typ sichtbar machen,
+- Unicode-Steuerzeichen markieren,
+- Icon und Dateityp nicht als Vertrauenssignal verwenden,
+- sichtbare und tatsächliche Linkziele vergleichen,
+- riskante Endungen und Interpreter deutlich kennzeichnen.
+
+## 2.13 Provenienz- und MOTW-Umgehung
+
+**Techniken:**
+
+- Download über Dateisysteme ohne NTFS-Zoneninformation,
+- Extraktion, die MOTW nicht vererbt,
+- Kopieren über Archive, Images oder Freigaben,
+- Umbenennen oder Neuverpacken,
+- Browser-/Clientpfade ohne korrekte Herkunftsmarkierung.
+
+**Prüfungen:**
+
+- eigene unveränderliche Provenienz unabhängig vom ADS führen,
+- Herkunft über Extraktion, Kopie und Umbenennung vererben,
+- Downloadprozess, URL, Zeit, Parent und Hash speichern,
+- Verlust der MOTW-Markierung nicht als Vertrauensgewinn behandeln.
+
+## 2.14 Signatur- und Vertrauensmissbrauch
+
+**Techniken:**
+
+- gestohlene Zertifikate,
+- abgelaufene, widerrufene oder falsch validierte Signaturen,
+- signierte, aber verwundbare Treiber,
+- Signatur nur über einen Teil des Containers,
+- manipulierte Katalog- oder Manifestbeziehungen,
+- vertrauenswürdiger Publisher mit unerwartetem Produkt.
+
+**Prüfungen:**
+
+- vollständige Kette, EKU, Zeitstempel und Revocation,
+- Hashbindung jedes relevanten Artefakts,
+- Publisher-, Produkt- und Pfadkonsistenz,
+- Allowlist nicht nur auf Zertifikatsnamen stützen,
+- bekannte verwundbare signierte Komponenten blockieren.
+
+## 2.15 Steganografie und tote Datenbereiche
+
+**Möglichkeiten:**
+
+- Nutzdaten in Bildpixeln, Audio-Samples oder Videoframes,
+- Daten hinter logischem Dateiende,
+- unreferenzierte PDF-Objekte,
+- unbenutzte PE-Sektionen,
+- Archiveinträge mit versteckten Namen,
+- Metadatenfelder oder Padding.
+
+**Bewertung:**
+
+Steganografische Daten führen nicht automatisch Code aus. Sie können jedoch Konfiguration, Schlüssel, C2-Daten oder eine zweite Stufe für bereits laufende Malware transportieren.
+
+**Prüfungen:**
+
+- unerwartete Entropie und große tote Bereiche,
+- Daten hinter formalem Ende,
+- unreferenzierte Objekte,
+- ungewöhnliches Verhältnis zwischen sichtbarem Inhalt und Dateigröße,
+- Korrelation mit Prozessen, die dieselbe Datei lesen und danach Speicher oder Netzwerk verändern.
+
+## 2.16 Cross-Parser-Differenzen
+
+Zwei Komponenten interpretieren dieselbe Datei unterschiedlich.
+
+**Beispiele:**
+
+- Scanner sieht nur den ersten ZIP-Eintrag, Extraktor den letzten,
+- doppelte Dateinamen mit unterschiedlichen Schreibweisen,
+- Browser und Server bestimmen unterschiedliche MIME-Typen,
+- PDF-Reader wählt eine andere Cross-Reference-Tabelle als der Scanner,
+- Office repariert eine Struktur, die der statische Parser verwirft.
+
+**Prüfungen:**
+
+- kanonische Interpretation definieren,
+- Duplikate und Mehrdeutigkeiten blockieren,
+- Parser-Reparaturen protokollieren,
+- Ergebnis mindestens eines echten Zielparsers in isolierter Umgebung beobachten,
+- bei Abweichung keine automatische Freigabe.
+
+---
+
+# 3. Dateifamilien und konkrete Prüfanforderungen
+
+## 3.1 Native Windows-Programme und Bibliotheken
+
+**Endungen und Formen:**
+
+- `.exe`, `.dll`, `.sys`, `.scr`, `.cpl`, `.ocx`, `.com`, `.drv`, `.efi`
+- PE-Dateien mit beliebiger oder fehlender Endung
+- ausführbare Inhalte in Ressourcen, Overlays oder Containern
+
+**Mögliche Angriffe:**
+
+- Trojaner, Wurm, Ransomware, Spyware, Loader und Dropper,
+- DLL Side-Loading,
+- Process Injection,
+- Reflective Loading,
+- persistente Dienste oder Treiber,
+- Credential Theft,
+- Netzwerkbeaconing,
+- signierte verwundbare Treiber,
+- Ressourcen mit zweiter Nutzlast,
+- Packers und polymorphe Varianten.
+
+**Zu prüfen:**
+
+- DOS-/PE-Header und alle Offsets,
+- Machine Type, Subsystem und Characteristics,
+- Abschnittsgrenzen, Rechte und Entropie,
+- Import-/Exporttabellen,
+- Delay Imports,
+- TLS Callbacks,
+- Relocations,
+- Ressourcen,
+- Manifest,
+- Debug- und PDB-Pfade,
+- Overlay und Daten hinter Zertifikatstabelle,
+- Authenticode und Katalogsignatur,
+- ungewöhnliche oder fehlende Imports,
+- API-Kombinationen für Speicherallokation, Prozessmanipulation, Persistenz, Credential Access und Netzwerk,
+- bekannte anfällige Treiber-Hashes,
+- Parent-Prozess und Startkontext.
+
+**Enforcement:**
+
+- externe unbekannte Programme niemals allein aufgrund „sauberer“ Signatur freigeben,
+- Ausführung über Provenance Execute Gate,
+- Child Process, Injection, Treiberladen und Persistenz zur Laufzeit kontrollieren.
+
+## 3.2 Installer und Windows-Pakete
+
+**Endungen:**
+
+- `.msi`, `.msp`, `.mst`, `.msix`, `.appx`, `.appxbundle`, `.msixbundle`
+- `.cab`, `.inf`, `.cat`, `.appinstaller`, `.application`, `.appref-ms`
+
+**Mögliche Angriffe:**
+
+- Custom Actions führen Programme oder Skripte aus,
+- Installation von Diensten, Treibern, Scheduled Tasks oder Browser-Erweiterungen,
+- Repair-/Rollback-Missbrauch,
+- Download externer Pakete,
+- Pfad- und Rechtefehler,
+- Side-Loading,
+- manipulierte Paketidentität,
+- Downgrade auf verwundbare Versionen.
+
+**Zu prüfen:**
+
+- Paketmanifest und Publisher,
+- alle eingebetteten Dateien,
+- Custom Actions und Befehlszeilen,
+- Zielpfade und Berechtigungen,
+- Dienste, Treiber, Tasks, COM-Registrierungen und Autostarts,
+- externe Downloadquellen,
+- Versionsmonotonie und Downgrade-Schutz,
+- Hashbindung zwischen Manifest, Katalog und Payload,
+- Installationskontext Benutzer/System.
+
+## 3.3 Skripte und Interpreterdateien
+
+**Endungen:**
+
+- PowerShell: `.ps1`, `.psm1`, `.psd1`
+- Windows Script Host: `.vbs`, `.vbe`, `.js`, `.jse`, `.wsf`, `.wsh`
+- Shell: `.bat`, `.cmd`
+- HTML Application und Scriptlet: `.hta`, `.sct`
+- weitere Interpreter: `.py`, `.pyw`, `.pl`, `.rb`, `.php`, `.lua`, `.tcl`, `.sh`
+- Konfigurationsdateien, die von Anwendungen als Skript interpretiert werden
+
+**Mögliche Angriffe:**
+
+- Download und Start weiterer Nutzlasten,
+- dateilose Ausführung,
+- verschleierte Befehle,
+- Living-off-the-Land,
+- Registry-, WMI-, Task- oder Dienstpersistenz,
+- Credential Theft,
+- Defender-/Logging-Manipulation,
+- lateral movement,
+- Interpreter-Chaining.
+
+**Zu prüfen:**
+
+- Encoding und versteckte Unicode-Zeichen,
+- Base64, Hex, komprimierte oder dynamische Strings,
+- `eval`-/`exec`-ähnliche Konstrukte,
+- Prozessstart und Shell-Aufrufe,
+- Netzwerk- und Downloadfunktionen,
+- Speicherinjektion und Reflection,
+- Registry, WMI, Scheduled Tasks und Dienste,
+- Sicherheitsprodukt- und Logging-Manipulation,
+- Aufrufe typischer Systemwerkzeuge,
+- Signatur und Ausführungsrichtlinie,
+- MOTW und Herkunft.
+
+**Enforcement:**
+
+- unbekannte externe Skripte blockieren oder isolieren,
+- Script Engine Telemetrie mit AMSI/ETW ergänzen,
+- obfuskierte Skripte und heruntergeladene Child Payloads blockieren.
+
+## 3.4 Microsoft Word
+
+**Endungen:**
+
+- `.doc`, `.docx`, `.docm`, `.dot`, `.dotx`, `.dotm`
+- Word-kompatible RTF- und XML-Formate
+
+**Mögliche Angriffe:**
+
+- VBA-Makros,
+- OLE-Objekte und eingebettete Pakete,
+- ActiveX,
+- externe Templates,
+- DDE/DDEAUTO,
+- Remote-Bilder und Tracking,
+- Hyperlinks und UNC-Pfade,
+- eingebettete ausführbare Dateien,
+- Parser-/Equation-/Font-Exploits,
+- manipulierte OOXML-Relationships,
+- Social Engineering zum Aktivieren von Inhalten.
+
+**Zu prüfen:**
+
+- ZIP-Struktur und `[Content_Types].xml`,
+- alle Relationship-Dateien,
+- `vbaProject.bin`,
+- OLE Compound File Streams,
+- AutoOpen-/Document_Open-ähnliche Trigger,
+- ActiveX-Definitionen,
+- DDE-Felder,
+- externe Template- und Datenreferenzen,
+- OLE Package und Embedded Objects,
+- Hyperlinks, UNC/WebDAV und Remote-Bilder,
+- Signatur der Makros,
+- reparierte oder inkonsistente OOXML-Strukturen,
+- eingebettete Fonts und Medien,
+- MOTW und Trusted-Location-Kontext.
+
+## 3.5 Microsoft Excel
+
+**Endungen:**
+
+- `.xls`, `.xlsx`, `.xlsm`, `.xlsb`, `.xlt`, `.xltm`, `.xlam`
+- `.xll`, `.slk`, `.dif`, `.iqy`, `.odc`, `.udl`
+- CSV und tabellarische Importformate
+
+**Mögliche Angriffe:**
+
+- VBA,
+- XLM-/Excel-4.0-Makros,
+- DDE,
+- externe Workbook-Links,
+- Power Query und Datenverbindungen,
+- OLE/ActiveX,
+- Add-ins und native XLL-Dateien,
+- Formula Injection,
+- Remote-Abfragen,
+- sehr große oder komplexe Formeln als DoS,
+- Parserfehler in Binär- oder BIFF-Strukturen.
+
+**Zu prüfen:**
+
+- VBA und XLM-Makroblätter,
+- definierte Namen und versteckte Blätter,
+- Formeln mit externen oder ausführungsrelevanten Funktionen,
+- Workbook- und Datenverbindungen,
+- Power Query/M-Code,
+- DDE und OLE,
+- XLL- und Add-in-Referenzen,
+- externe Links und UNC-Pfade,
+- CSV-Zellen, die bei Export/Öffnen als Formel interpretiert werden,
+- Makrosignatur,
+- Objektanzahl, Formelkomplexität und Rekursion.
+
+## 3.6 Microsoft PowerPoint
+
+**Endungen:**
+
+- `.ppt`, `.pptx`, `.pptm`, `.potm`, `.ppsm`, `.pps`, `.ppsx`
+- Add-ins und eingebettete Medien
+
+**Mögliche Angriffe:**
+
+- VBA,
+- OLE/ActiveX,
+- automatische Aktionen beim Öffnen oder bei Folienwechsel,
+- Hyperlinks und Remote-Medien,
+- eingebettete Programme,
+- manipulierte Medien-, Font- oder Grafikparser,
+- Social Engineering in Präsentationsansicht.
+
+**Zu prüfen:**
+
+- Makros und Signaturen,
+- Aktionen an Folien, Formen und Animationen,
+- externe Medien und Links,
+- OLE Packages,
+- eingebettete Dateien und Fonts,
+- automatische Präsentationsstarts,
+- Child-Process- und Netzwerkverhalten.
+
+## 3.7 OneNote und Notizcontainer
+
+**Endungen:**
+
+- `.one`, `.onepkg` und exportierte OneNote-Pakete
+
+**Mögliche Angriffe:**
+
+- eingebettete ausführbare Dateien, Skripte oder Shortcuts,
+- visuell überdeckte Anhänge,
+- Hyperlinks,
+- Social Engineering zum Start eingebetteter Objekte,
+- Container- und Parserfehler.
+
+**Zu prüfen:**
+
+- alle eingebetteten Dateien rekursiv,
+- sichtbarer Dateiname gegen tatsächlichen Typ,
+- überlagerte oder versteckte Objekte,
+- Linkziele,
+- Herkunft jedes extrahierten Objekts,
+- Ausführung eingebetteter Inhalte blockieren oder bestätigen lassen.
+
+## 3.8 RTF und ältere Office-Binärformate
+
+**Endungen:**
+
+- `.rtf`, `.doc`, `.xls`, `.ppt`, `.pps`, `.dot`, `.xlt`
+
+**Mögliche Angriffe:**
+
+- OLE-Objekte,
+- eingebettete Equation-/Package-Objekte,
+- Parserfehler,
+- verschleierte Hex-Blöcke,
+- externe Referenzen,
+- Makros in Compound File Streams.
+
+**Zu prüfen:**
+
+- vollständige RTF-Control-Word- und Gruppentiefe,
+- Binär- und Hexdaten,
+- OLE Streams,
+- Objektklassen und CLSIDs,
+- ungewöhnliche Verschachtelung,
+- Größen- und Rekursionsbudgets,
+- jedes eingebettete Objekt separat.
+
+## 3.9 OpenDocument und weitere Office-Formate
+
+**Endungen:**
+
+- `.odt`, `.ods`, `.odp`, `.ott`, `.ots`, `.otp`
+- weitere ZIP/XML-basierte Dokumente
+
+**Mögliche Angriffe:**
+
+- Makros und Skripte,
+- externe Links, Bilder und Datenquellen,
+- eingebettete Objekte,
+- XML-/ZIP-Bomben,
+- XXE oder XSLT in fehlerhaften Importern,
+- Parserfehler.
+
+**Zu prüfen:**
+
+- `META-INF/manifest.xml`,
+- Skript- und Macro-Verzeichnisse,
+- externe Referenzen,
+- eingebettete OLE- oder Binärobjekte,
+- XML-Entitäten und externe Schemas,
+- Archivbudgets und Pfade.
+
+## 3.10 PDF, FDF und PDF-Portfolios
+
+**Endungen:**
+
+- `.pdf`, `.fdf`, `.xfdf`
+
+**Mögliche Angriffe:**
+
+- Dokument-, Seiten-, Formular- und Annotations-JavaScript,
+- `/OpenAction` und `/AA`,
+- `/Launch`,
+- `/URI`, `/GoToR` und Remote-Aktionen,
+- eingebettete Dateien und PDF-Portfolios,
+- XFA-Formulare,
+- RichMedia und Legacy-Multimedia,
+- externe Fonts, Bilder oder Inhalte,
+- manipulierte Object Streams und Cross-Reference-Tabellen,
+- inkrementelle Updates, die frühere Inhalte verdecken,
+- verschlüsselte Objekte,
+- Parser- und Font-Exploits,
+- Phishing-Formulare.
+
+**Zu prüfen:**
+
+- alle Cross-Reference-Varianten und Revisionen,
+- inkrementelle Updates und vorherige Revisionen,
+- `/JavaScript`, `/JS`, `/OpenAction`, `/AA`,
+- `/Launch`, `/URI`, `/GoToR`, `/SubmitForm`, `/ImportData`,
+- EmbeddedFiles Name Tree,
+- File Specifications und Attachments,
+- XFA und AcroForm,
+- RichMedia, Sound, Movie und 3D-Objekte,
+- Fonts, Bilder und ICC-Profile,
+- Objektstrom- und Dekompressionsbudgets,
+- unreferenzierte Objekte und Daten hinter EOF,
+- Verschlüsselungsstatus,
+- sichtbares Linkziel gegen tatsächliches Ziel.
+
+**Enforcement:**
+
+- JavaScript, Launch und automatische Remote-Aktionen standardmäßig deaktivieren,
+- unbekannte PDFs in isoliertem Reader öffnen,
+- aktive Inhalte entfernen oder eine rekonstruierte passive Version erzeugen.
+
+## 3.11 XPS, OXPS und Druckdokumente
+
+**Endungen:**
+
+- `.xps`, `.oxps`, `.prn`, `.spl`
+- Drucksprachen wie PostScript und PCL
+
+**Mögliche Angriffe:**
+
+- ZIP/XML- und Parserfehler,
+- eingebettete Fonts und Bilder,
+- externe Ressourcen,
+- Druckertreiber- oder Spooler-Angriffsflächen,
+- PostScript- oder gerätespezifische Befehle,
+- Ressourcenerschöpfung.
+
+**Zu prüfen:**
+
+- Containerstruktur,
+- FixedDocument-Relationships,
+- Fonts, Bilder und Farbprofile,
+- externe Referenzen,
+- Druckbefehle und Gerätesteuerung,
+- Seiten-, Objekt- und Dekompressionslimits,
+- Verarbeitung nur in isoliertem Print-/Renderpfad.
+
+## 3.12 Archive und Kompressionsformate
+
+**Endungen:**
+
+- `.zip`, `.7z`, `.rar`, `.tar`, `.gz`, `.bz2`, `.xz`, `.zst`
+- `.cab`, `.arj`, `.ace`, `.lha`, `.lzh`, `.cpio`, `.rpm`
+- selbstentpackende Archive und mehrfach verschachtelte Formate
+
+**Mögliche Angriffe:**
+
+- versteckte Malware,
+- verschlüsselte Einträge,
+- Dekompressionsbomben,
+- Zip Slip und absolute Pfade,
+- Symlink-/Hardlink-Angriffe,
+- NTFS-ADS-Namen,
+- doppelte oder kollidierende Dateinamen,
+- Parserdifferenzen,
+- CRC-/Header-Manipulation,
+- selbstentpackender ausführbarer Stub,
+- MotW-/Provenienzverlust.
+
+**Zu prüfen:**
+
+- tatsächliches Archivformat,
+- alle Einträge und Header,
+- komprimierte/entpackte Gesamtgröße,
+- Expansionsverhältnis,
+- Eintragsanzahl und Rekursionstiefe,
+- Pfadnormalisierung,
+- Symlinks, Hardlinks und Reparse-Informationen,
+- doppelte Namen, Case- und Unicode-Kollisionen,
+- verschlüsselte Einträge,
+- ausführbare oder aktive Kinder,
+- SFX-Stub und Overlay,
+- Provenienzvererbung auf jedes Kind.
+
+## 3.13 Disk-Images und virtuelle Datenträger
+
+**Endungen:**
+
+- `.iso`, `.img`, `.vhd`, `.vhdx`, `.wim`, `.esd`, `.udf`
+- plattformübergreifend auch `.dmg`
+
+**Mögliche Angriffe:**
+
+- Umgehung von Mark-of-the-Web- oder Anhangsprüfungen,
+- darin enthaltene LNK-, Skript-, Installer- oder EXE-Dateien,
+- Autorun-/Setup-Köder,
+- Dateisystemparserfehler,
+- verschachtelte Partitionen,
+- manipulierte Bootloader,
+- Symlinks und spezielle Dateisystemobjekte.
+
+**Zu prüfen:**
+
+- Partitionstabellen und Dateisysteme,
+- Bootsektoren und EFI-Inhalte,
+- alle Dateien rekursiv,
+- Links und Reparse-ähnliche Objekte,
+- Autorun- und Setup-Dateien,
+- Volume Labels und UI-Täuschung,
+- Provenienz auf gemountete Dateien übertragen,
+- Mounten nur read-only und isoliert.
+
+## 3.14 Bilddateien
+
+**Endungen:**
+
+- Raster: `.jpg`, `.jpeg`, `.png`, `.gif`, `.bmp`, `.tif`, `.tiff`, `.webp`
+- moderne Container: `.heic`, `.heif`, `.avif`, `.jxl`
+- Icons: `.ico`, `.cur`
+- Projekte/RAW: `.psd`, `.xcf`, `.raw`, herstellerspezifische RAW-Formate
+- Vektor: `.svg`, `.eps`, `.ai`, `.wmf`, `.emf`
+
+**Mögliche Angriffe:**
+
+- Decoder- und Farbprofil-Exploits,
+- manipulierte EXIF/IPTC/XMP-Metadaten,
+- extrem große Dimensionen oder Framezahlen,
+- eingebettete Vorschaubilder,
+- Polyglot mit Archiv oder Skript,
+- SVG-Skripte, Eventhandler und externe Ressourcen,
+- SVG ForeignObject/HTML,
+- PostScript in EPS,
+- WMF/EMF-Befehle und Parserfehler,
+- Steganografie oder angehängte Daten.
+
+**Zu prüfen:**
+
+- Dateisignatur und Chunk-/Segmentstruktur,
+- Breite, Höhe, Bittiefe, Framezahl und erwartete Dekodiergröße,
+- EXIF/IPTC/XMP und eingebettete Thumbnails,
+- ICC-Farbprofile,
+- trailing data und zusätzliche Header,
+- SVG: Skripte, Eventhandler, externe Links, Data-URIs, ForeignObject,
+- EPS/AI: PostScript-Operatoren und externe Dateien,
+- Metadatenlängen und Unicode,
+- Dekodierung in streng begrenztem Sandboxprozess,
+- optional sichere Neuencodierung zur Inhaltsbereinigung.
+
+## 3.15 Audio und Musikdateien
+
+**Endungen:**
+
+- `.wav`, `.wave`, `.mp3`, `.flac`, `.ogg`, `.oga`
+- `.aac`, `.m4a`, `.wma`, `.aiff`, `.ape`, `.opus`
+- Tracker/MIDI: `.mid`, `.midi`, `.mod`, `.xm`, `.s3m`, `.it`
+- Playlists/Begleitdateien: `.m3u`, `.m3u8`, `.pls`, `.asx`, `.wax`, `.wvx`, `.cue`
+
+**Mögliche Angriffe:**
+
+- Codec- oder Containerparser-Exploits,
+- manipulierte RIFF-/ID3-/Vorbis-/APE-Metadaten,
+- Cover-Art als schädliche Bilddatei,
+- extrem große oder inkonsistente Längen,
+- Playlist mit Remote-URLs, UNC oder lokalen Pfaden,
+- Polyglot-Datei,
+- Steganografische zweite Stufe,
+- Tracker-/MIDI-Parserfehler,
+- Anwendungsaktionen aufgrund proprietärer Metadaten.
+
+**Zu prüfen:**
+
+- RIFF/FORM/MP4/ASF/Ogg-Struktur,
+- Chunk- und Frame-Längen,
+- Codec-ID gegen tatsächliche Daten,
+- ID3, APEv2, Vorbis Comments und proprietäre Tags,
+- eingebettete Bilder separat,
+- Dauer, Samplezahl, Kanäle und erwartete Dekodiergröße,
+- Playlists: jedes Ziel, URI-Schema, UNC und Pfadnormalisierung,
+- externe Ressourcen nicht automatisch laden,
+- Daten hinter logischem Streamende,
+- Sandbox-Dekodierung ohne Netzwerkzugriff.
+
+## 3.16 Video und Mediencontainer
+
+**Endungen:**
+
+- `.mp4`, `.mov`, `.m4v`, `.avi`, `.mkv`, `.webm`
+- `.mpeg`, `.mpg`, `.ts`, `.m2ts`, `.wmv`, `.asf`, `.flv`
+- Projekt- und Streaming-Manifeste
+
+**Mögliche Angriffe:**
+
+- Container-, Codec-, Untertitel- oder Font-Exploits,
+- manipulierte Atom-/Box-/Chunk-Längen,
+- eingebettete Attachments in Matroska,
+- externe Tracks, Playlists oder Streaming-URLs,
+- Cover-Art und Thumbnails,
+- extrem viele Tracks, Frames oder Kapitel,
+- Polyglot und trailing payload,
+- Steganografische Daten.
+
+**Zu prüfen:**
+
+- Containerhierarchie und Offsets,
+- Track- und Codecdeklarationen,
+- Dauer, Framerate, Auflösung und erwartete Dekodierlast,
+- eingebettete Untertitel, Fonts, Bilder und Attachments,
+- Kapitel- und Metadaten-URLs,
+- HLS/DASH-Manifestziele,
+- externe Referenzen,
+- sichere, budgetierte Sandbox-Dekodierung.
+
+## 3.17 Untertitel und Medienbegleitdateien
+
+**Endungen:**
+
+- `.srt`, `.vtt`, `.ass`, `.ssa`, `.sub`, `.idx`, `.ttml`
+
+**Mögliche Angriffe:**
+
+- Parserfehler,
+- sehr große oder komplexe Stylingdaten,
+- eingebettete Fonts oder Attachments über Container,
+- HTML-/Markup-Missbrauch,
+- externe Referenzen,
+- Social Engineering über eingeblendete Links.
+
+**Zu prüfen:**
+
+- Encoding und Längen,
+- Zeitstempelreihenfolge,
+- Tags, Styles und Skriptähnliches,
+- externe Ressourcen,
+- Dateigröße und Ereignisanzahl,
+- Renderer in isoliertem Prozess.
+
+## 3.18 Fonts
+
+**Endungen:**
+
+- `.ttf`, `.otf`, `.ttc`, `.woff`, `.woff2`, `.eot`
+- Type1: `.pfb`, `.pfa`
+- eingebettete Fonts in Dokumenten, PDFs, Bildern und Videos
+
+**Mögliche Angriffe:**
+
+- Fehler in Fontparsern und Rasterizern,
+- manipulierte Tabellen und Glyphprogramme,
+- Dekompressions- und Rekursionsangriffe,
+- extrem komplexe Konturen,
+- externe Fontreferenzen,
+- Font-Spoofing.
+
+**Zu prüfen:**
+
+- Tabellenverzeichnis, Offsets und Checksummen,
+- Glyphanzahl und Konturkomplexität,
+- Hinting-/Glyphprogramme,
+- WOFF-Kompressionsbudgets,
+- Namens- und Unicode-Tabellen,
+- Signatur beziehungsweise Herkunft,
+- Parsing ausschließlich isoliert.
+
+## 3.19 HTML, MHTML und Webdokumente
+
+**Endungen:**
+
+- `.html`, `.htm`, `.xhtml`, `.mht`, `.mhtml`
+- `.svg` bei Browserdarstellung
+- Webarchive und gespeicherte Webseiten
+
+**Mögliche Angriffe:**
+
+- JavaScript und WebAssembly,
+- Browser-Exploits,
+- HTML Smuggling,
+- Base64-/Blob-/Data-URI-Nutzlasten,
+- Iframes und Redirects,
+- Phishing-Formulare,
+- Credential Harvesting,
+- Downloads und Custom URI Handler,
+- Service Worker oder persistenter Webspeicher im passenden Kontext,
+- externe Ressourcen und Tracking,
+- eingebettete Dateien in MHTML.
+
+**Zu prüfen:**
+
+- Skripte, Module und WebAssembly,
+- Eventhandler und dynamische Codeausführung,
+- Iframes, Forms, Meta Refresh und Redirects,
+- Download-Attribute und erzeugte Blobs,
+- Data-URIs und große kodierte Blöcke,
+- externe Hosts, IP-Literale und IDN,
+- Custom-Schemes,
+- MHTML-MIME-Teile,
+- Sandboxbrowser ohne Zugriff auf interne Netze oder Benutzerprofile,
+- Content Security Policy für rekonstruierte Darstellung.
+
+## 3.20 XML, XSLT und Schemaformate
+
+**Endungen:**
+
+- `.xml`, `.xsl`, `.xslt`, `.xsd`, `.svg`, `.config`
+- anwendungsspezifische XML-Container
+
+**Mögliche Angriffe:**
+
+- externe Entitäten und XXE,
+- Billion-Laughs-/Entity-Expansion,
+- externe DTDs und Schemas,
+- XSLT-Skript- oder Erweiterungsfunktionen,
+- XPath-/Parserkomplexität,
+- SSRF-artige Netzwerkzugriffe,
+- lokale Dateioffenlegung,
+- Parserdifferenzen.
+
+**Zu prüfen:**
+
+- DTD und externe Entitäten standardmäßig deaktivieren,
+- externe Schema-/XInclude-Referenzen,
+- Entity-, Knoten-, Attribut- und Tiefenlimits,
+- XSLT-Erweiterungen und Skriptfunktionen,
+- Namespace- und Encoding-Konsistenz,
+- keine Netzwerknutzung im Parser.
+
+## 3.21 JSON, YAML, TOML und Konfigurationen
+
+**Endungen:**
+
+- `.json`, `.jsonl`, `.yaml`, `.yml`, `.toml`, `.ini`, `.conf`
+- Anwendungskonfigurationen und Manifeste
+
+**Mögliche Angriffe:**
+
+- unsichere Deserialisierung,
+- YAML-Tags mit Objektkonstruktion,
+- Prototype Pollution in nachgelagerten JavaScript-Systemen,
+- sehr tiefe oder große Objektstrukturen,
+- doppelte Schlüssel mit Parserdifferenzen,
+- Pfad-, Kommando- oder Template-Injektion,
+- externe Referenzen in anwendungsspezifischen Feldern.
+
+**Zu prüfen:**
+
+- Schema und erlaubte Schlüssel,
+- doppelte Schlüssel,
+- maximale Tiefe, Größe und Zahl der Elemente,
+- YAML-Tags/Typkonstruktoren,
+- URLs, Pfade und Befehlsfelder,
+- kanonische Serialisierung vor Signaturprüfung,
+- Konfigurationswerte nie direkt an Shell weitergeben.
+
+## 3.22 Serialisierte Objekte und Sprachartefakte
+
+**Endungen/Formate:**
+
+- Python Pickle: `.pkl`, `.pickle`, `.joblib`
+- Java Serialization, `.ser`
+- .NET BinaryFormatter-artige Daten
+- PHP-Serialisierung
+- Ruby Marshal
+- framework- und anwendungsspezifische Objektstreams
+
+**Mögliche Angriffe:**
+
+- Codeausführung während Deserialisierung,
+- Gadget Chains,
+- Objektgraph- und Speicherbomben,
+- unerwartete Klasseninstanziierung,
+- Dateisystem- und Netzwerkaktionen beim Laden.
+
+**Zu prüfen:**
+
+- unsichere generische Deserialisierung grundsätzlich vermeiden,
+- Format nur in isoliertem Prozess untersuchen,
+- Klassen-/Typ-Allowlist,
+- keine Konstruktoren, Hooks oder Callbacks ausführen,
+- Objektanzahl, Tiefe und Größe begrenzen,
+- Herkunft und Signatur verlangen.
+
+## 3.23 CSV, TSV und tabellarische Textdaten
+
+**Endungen:**
+
+- `.csv`, `.tsv`, `.txt` mit Tabellenstruktur
+
+**Mögliche Angriffe:**
+
+- Formula Injection bei Öffnung in Tabellenkalkulation,
+- DDE- oder Hyperlinkformeln,
+- Encoding-/Delimiter-Täuschung,
+- sehr große Zeilen oder Spalten,
+- Injektion in Importpipelines,
+- Steuerzeichen und unsichtbare Unicode-Zeichen.
+
+**Zu prüfen:**
+
+- Zellen, die mit Formelpräfixen beginnen,
+- Hyperlinks und externe Referenzen,
+- maximale Zeilen-/Spalten-/Feldgröße,
+- Encoding und Steuerzeichen,
+- Zielanwendung berücksichtigen,
+- sichere Escape-/Neutralisierungsstrategie bei Export.
+
+## 3.24 Datenbanken und Datencontainer
+
+**Endungen:**
+
+- `.mdb`, `.accdb`, `.sqlite`, `.db`, `.db3`
+- Datenbankdumps und Backupformate
+
+**Mögliche Angriffe:**
+
+- Access-Makros, VBA und Action Queries,
+- verknüpfte Tabellen und externe Datenquellen,
+- Parserfehler,
+- schädliche Trigger oder Views für Importwerkzeuge,
+- Erweiterungs- oder Plugin-Laden,
+- Ressourcenerschöpfung durch manipulierte Indizes,
+- SQL-Injektion in unsicheren Importpfaden.
+
+**Zu prüfen:**
+
+- Makros, Module und Startobjekte,
+- externe Verbindungen,
+- Trigger, Views und benutzerdefinierte Funktionen,
+- Extension-Loading deaktivieren,
+- Seiten-/Indexstruktur und Größenbudgets,
+- Import nur in isolierte temporäre Datenbank.
+
+## 3.25 E-Mail- und Nachrichtencontainer
+
+**Endungen:**
+
+- `.eml`, `.msg`, `.mbox`, `.pst`, `.ost`, `.dbx`, `.mbx`
+- `.dat`/TNEF wie `winmail.dat`
+- MIME-Nachrichten ohne Endung
+
+**Mögliche Angriffe:**
+
+- verschachtelte Anhänge,
+- HTML-Phishing,
+- Remote-Trackingpixel,
+- MIME-Smuggling und Parserdifferenzen,
+- eingebettete Archive,
+- verschlüsselte oder passwortgeschützte Anhänge,
+- Kalender-, Kontakt- und Formularobjekte,
+- Header-Injektion,
+- Vorschau-Exploits.
+
+**Zu prüfen:**
+
+- MIME-Boundaries und Content-Transfer-Encoding,
+- Diskrepanz zwischen Content-Type, Name und tatsächlichem Format,
+- alle Attachments rekursiv,
+- HTML, Links, Formulare und externe Bilder,
+- TNEF-Inhalte,
+- verschachtelte Nachrichten,
+- Unicode-/IDN-Absender und Reply-To-Differenzen,
+- Authentifizierungsresultate als Kontext, nicht als Dateivertrauen,
+- Preview in Isolation.
+
+## 3.26 Kalender und Kontakte
+
+**Endungen:**
+
+- `.ics`, `.vcs`, `.vcf`
+
+**Mögliche Angriffe:**
+
+- Phishing-Links,
+- Remote-Meeting- oder Attachment-URLs,
+- automatische Kalenderverarbeitung,
+- sehr große oder rekursive Wiederholungsregeln,
+- Parserfehler,
+- Unicode-Täuschung,
+- Custom URI Handler.
+
+**Zu prüfen:**
+
+- Organizer, Attendee, URL und Attach-Felder,
+- Wiederholungs- und Zeitzonenkomplexität,
+- eingebettete oder externe Attachments,
+- sichtbarer Name gegen tatsächliche Domain,
+- automatische Annahme und externe Ressourcen deaktivieren.
+
+## 3.27 Windows-Shortcuts und Shell-Dateien
+
+**Endungen:**
+
+- `.lnk`, `.url`, `.website`, `.scf`
+- `.library-ms`, `.search-ms`, `.settingcontent-ms`
+- `.contact`, `.desklink` und shellbezogene Spezialformate
+
+**Mögliche Angriffe:**
+
+- Start beliebiger Programme mit Argumenten,
+- verschleierte Befehlszeilen,
+- Remote-Icons oder UNC/WebDAV-Zugriffe,
+- Credential-Leak,
+- DLL Side-Loading über Working Directory,
+- Ausführung von Systemwerkzeugen,
+- Icon-Spoofing,
+- Tracking und zweite Stufen.
+
+**Zu prüfen:**
+
+- Zielpfad, Argumente, Arbeitsverzeichnis und Iconpfad,
+- relative, UNC-, WebDAV- und Netzwerkziele,
+- Environment Expansion,
+- eingebettete Tracker- und Shell-Items,
+- tatsächlicher Zieltyp,
+- Zielsignatur und Provenienz,
+- externe Shortcuts standardmäßig blockieren oder bestätigen lassen.
+
+## 3.28 Hilfe-, Dokumentations- und Legacy-Container
+
+**Endungen:**
+
+- `.chm`, `.hlp`, `.hta`, `.mht`
+- Microsoft Compiled HTML Help und verwandte Formate
+
+**Mögliche Angriffe:**
+
+- HTML/JavaScript,
+- ActiveX und Script Bridges,
+- Start lokaler Programme,
+- eingebettete Dateien,
+- Remote-Links,
+- Parserfehler und Zonenmissbrauch.
+
+**Zu prüfen:**
+
+- dekompilierte HTML-/Scriptinhalte,
+- ActiveX- und Objektaufrufe,
+- Befehls-/Prozessstart,
+- externe Ressourcen,
+- alle eingebetteten Dateien,
+- Herkunft und MOTW,
+- Öffnen nur in isolierter Umgebung.
+
+## 3.29 Registry-, Richtlinien- und Systemkonfigurationsdateien
+
+**Endungen:**
+
+- `.reg`, `.pol`, `.inf`, `.adm`, `.admx`, `.adml`
+- Dienst-, Task-, Firewall-, VPN- oder Security-Konfigurationen
+
+**Mögliche Angriffe:**
+
+- Autostart und Persistenz,
+- Sicherheitsabsenkung,
+- Dateizuordnungs- und Shell-Hijacking,
+- COM-Hijacking,
+- Treiber- oder Dienstinstallation,
+- Firewall-/Proxy-/DNS-Manipulation,
+- Defender-/Logging-Ausnahmen,
+- Credential- oder Zertifikatimport.
+
+**Zu prüfen:**
+
+- alle Zielschlüssel und Werte,
+- sicherheitsrelevante Policies,
+- Autostart-, IFEO-, COM-, Service- und Shell-Pfade,
+- Dateipfade und Befehlszeilen,
+- Privilegbedarf,
+- transaktionale Anwendung mit Rollback,
+- niemals stille Anwendung externer Konfigurationen.
+
+## 3.30 Zertifikate, Schlüssel und Verbindungsprofile
+
+**Endungen:**
+
+- `.pfx`, `.p12`, `.pem`, `.key`, `.cer`, `.crt`, `.der`
+- `.rdp`, VPN-Profile, WLAN-Profile, SSH-Konfigurationen
+
+**Mögliche Angriffe:**
+
+- Installation eines schädlichen Root-Zertifikats,
+- Import privater Schlüssel,
+- Verbindung zu Angreifersystemen,
+- schwache oder manipulierte Profile,
+- Credential-Weitergabe,
+- unerwartete Smartcard-/Provider-Konfiguration,
+- Trust-Store-Manipulation.
+
+**Zu prüfen:**
+
+- Zertifikatstyp, Basic Constraints, EKU und Chain,
+- ob private Schlüssel enthalten sind,
+- Ziel-Trust-Store und Installationskontext,
+- RDP-/VPN-/SSH-Ziel, Gateway und Redirect-Einstellungen,
+- Credential- und Laufwerksweiterleitung,
+- Signatur des Profils,
+- Import nur mit ausdrücklicher administrativer Bestätigung.
+
+## 3.31 Java-Archive und JVM-Artefakte
+
+**Endungen:**
+
+- `.jar`, `.war`, `.ear`, `.class`, `.jnlp`
+
+**Mögliche Angriffe:**
+
+- direkte Codeausführung,
+- statische Initializer,
+- manipulierte Manifeste,
+- eingebettete native Bibliotheken,
+- unsichere Deserialisierung,
+- Dependency Confusion,
+- signierte, aber unerwartete Klassen,
+- ZIP-basierte Containerangriffe.
+
+**Zu prüfen:**
+
+- Manifest und Main-Class,
+- alle Klassen und Ressourcen,
+- native Libraries,
+- Signaturen aller Einträge,
+- doppelte Namen und Multi-Release-Inhalte,
+- Deserialisierungsnutzung,
+- Netzwerk-, Prozess- und Dateisystem-APIs,
+- Archivbudgets.
+
+## 3.32 .NET-Assemblies und NuGet-Pakete
+
+**Endungen:**
+
+- `.dll`, `.exe`, `.nupkg`, `.snupkg`
+- `.deps.json`, `.runtimeconfig.json`
+
+**Mögliche Angriffe:**
+
+- Managed Malware,
+- Module Initializers,
+- Reflection und dynamisches Laden,
+- P/Invoke und native Payloads,
+- Build-/Installationsskripte in Paketen,
+- Dependency Confusion,
+- Typosquatting,
+- manipulierte Signaturen.
+
+**Zu prüfen:**
+
+- CLR-Metadaten und Entry Points,
+- Module Initializers,
+- P/Invoke,
+- Reflection.Emit und dynamische Assemblyloads,
+- eingebettete Ressourcen,
+- Paketmanifest, Autoren, Repository und Signaturen,
+- Build-/Install-/PowerShell-Inhalte,
+- Abhängigkeitsquellen und Versionsbindung.
+
+## 3.33 Entwickler-, Build- und Projektdateien
+
+**Formate:**
+
+- Visual Studio: `.sln`, `.vcxproj`, `.csproj`, `.props`, `.targets`
+- CMake, Make, Ninja und Buildskripte
+- VS Code Workspaces, Tasks und Extensions
+- Git-Konfiguration und Hooks
+- Dockerfiles, Compose und Devcontainer
+- CI/CD-Pipelines
+- IDE-Projekte anderer Hersteller
+
+**Mögliche Angriffe:**
+
+- automatische Build-Schritte,
+- Pre-/Post-Build-Commands,
+- Import externer Targets,
+- Task-Ausführung beim Öffnen oder Bauen,
+- schädliche IDE-Erweiterungen,
+- Credential Theft aus Buildumgebung,
+- Dependency Confusion,
+- Container- oder CI-Secrets-Exfiltration.
+
+**Zu prüfen:**
+
+- alle Befehle und Script Hooks,
+- externe Imports und Paketquellen,
+- Toolchain-Dateien,
+- Pre-/Post-Build und Custom Targets,
+- IDE-Tasks und Launch-Konfigurationen,
+- Git-Hooks und Submodule,
+- Container-Entrypoints und Mounts,
+- Netzwerkziele,
+- Öffnen eines fremden Projekts nicht als passive Aktion behandeln.
+
+## 3.34 Paketmanager- und Softwarelieferkettenartefakte
+
+**Formate:**
+
+- npm-Pakete und `package.json`,
+- Python Wheels und Source Distributions,
+- NuGet,
+- Maven/Gradle,
+- Ruby Gems,
+- Rust Crates,
+- native Paketformate,
+- Plugin- und Extension-Pakete.
+
+**Mögliche Angriffe:**
+
+- Install-, Postinstall- oder Buildskripte,
+- Dependency Confusion,
+- Typosquatting,
+- kompromittierte Maintainer,
+- manipulierte Lockfiles,
+- native Add-ons,
+- Download weiterer Binärdateien,
+- exfiltrierende Build Hooks.
+
+**Zu prüfen:**
+
+- Paketname, Namespace, Registry und Publisher,
+- Signatur, Provenance und Reproducibility,
+- Lifecycle Scripts,
+- native Binärdateien,
+- externe Downloads,
+- Lockfile-Integrität,
+- unerwartete neue Abhängigkeiten,
+- Berechtigungen und Netzwerkzugriff während Build/Install.
+
+## 3.35 KI-/ML-Modell- und Gewichtsdateien
+
+**Formate:**
+
+- unsichere Objektformate: Pickle, Joblib, manche Framework-Checkpoints
+- Container: `.pt`, `.pth`, `.ckpt`, `.onnx`, `.safetensors`, `.gguf`
+- Tensor-, Tokenizer-, Konfigurations- und Custom-Operator-Dateien
+
+**Mögliche Angriffe:**
+
+- Codeausführung beim Deserialisieren,
+- Custom Operators oder Plugins,
+- externe Datenreferenzen,
+- ZIP-/Containerangriffe,
+- extrem große Tensoren als Speicherangriff,
+- manipulierte Tokenizer oder Konfigurationen,
+- Model Poisoning und Backdoors,
+- versteckte Instruktionen oder Daten,
+- Loader-Parserfehler.
+
+**Zu prüfen:**
+
+- tatsächliches Containerformat,
+- keine generische unsichere Deserialisierung,
+- Tensorzahl, Shapes, Datentypen und Gesamtspeicher,
+- externe Datenpfade,
+- Custom Ops und dynamische Libraries,
+- Tokenizer-Skripte und Templates,
+- Signatur und Modellmanifest,
+- reproduzierbare Herkunft,
+- Modellverhalten zusätzlich in isolierten Tests evaluieren.
+
+## 3.36 CAD-, 3D-, BIM- und Konstruktionsdateien
+
+**Endungen:**
+
+- `.dwg`, `.dxf`, `.dwf`, `.step`, `.stp`, `.iges`, `.igs`
+- `.stl`, `.obj`, `.fbx`, `.gltf`, `.glb`, `.3mf`
+- `.blend` und anwendungsspezifische Projektdateien
+
+**Mögliche Angriffe:**
+
+- Parserfehler,
+- eingebettete Skripte oder Makros,
+- externe Referenzen, Texturen, Fonts und Bibliotheken,
+- ZIP-basierte 3MF-Angriffe,
+- extrem komplexe Geometrie als DoS,
+- Plugin-/Renderer-Angriffe,
+- manipulierte Projekt-Startaktionen.
+
+**Zu prüfen:**
+
+- Geometrie-, Objekt- und Polygonbudgets,
+- externe Referenzen,
+- eingebettete Skripte und Plugins,
+- Materialien, Texturen, Bilder und Fonts separat,
+- Containerpfade,
+- Sandbox-Import ohne Netzwerk und ohne Projekt-Startup-Code.
+
+## 3.37 G-Code, CNC- und Maschinensteuerdateien
+
+**Endungen:**
+
+- `.gcode`, `.nc`, `.tap` und herstellerspezifische Formate
+
+**Mögliche Angriffe:**
+
+- physische Fehlbewegungen,
+- Temperatur-, Geschwindigkeits- oder Grenzwertüberschreitung,
+- Deaktivierung von Sicherheitsfunktionen,
+- unerwartete Firmwarebefehle,
+- versteckte Befehle in Kommentaren oder Makros,
+- Ressourcenverbrauch und Geräteschäden.
+
+**Zu prüfen:**
+
+- Befehls-Allowlist,
+- Maschinenprofil und harte Grenzwerte,
+- Bewegungs-, Temperatur-, Spindel- und Leistungsgrenzen,
+- Firmware-/Herstellerkommandos,
+- Simulation vor Ausführung,
+- kryptografische Jobfreigabe für kritische Anlagen.
+
+## 3.38 GIS-, Karten- und Geodaten
+
+**Endungen/Formate:**
+
+- Shapefile-Komponenten, GeoJSON, KML/KMZ, GeoTIFF
+- Projektdateien und Styles
+
+**Mögliche Angriffe:**
+
+- ZIP/XML-/JSON-Parserangriffe,
+- externe Bilder, Tiles und Netzwerkquellen,
+- Projekt-Plugins oder Ausdrücke,
+- extrem große Geometrien,
+- Pfadmanipulation über Begleitdateien,
+- eingebettete Skripte in anwendungsspezifischen Projekten.
+
+**Zu prüfen:**
+
+- alle zusammengehörigen Sidecar-Dateien,
+- externe Datenquellen,
+- Styles und Expressions,
+- Geometriekomplexität,
+- KMZ als Archiv,
+- Projektstart-Plugins und Skripte.
+
+## 3.39 E-Books und Publikationscontainer
+
+**Endungen:**
+
+- `.epub`, `.mobi`, `.azw`, `.azw3`, `.fb2`
+
+**Mögliche Angriffe:**
+
+- HTML, CSS, JavaScript je nach Reader,
+- externe Links und Tracking,
+- eingebettete Fonts, Bilder und Medien,
+- ZIP-/XML-Angriffe,
+- Reader-Parserfehler,
+- Social Engineering.
+
+**Zu prüfen:**
+
+- Container und Manifest,
+- HTML/SVG/Skripte,
+- externe Ressourcen,
+- Fonts und Bilder,
+- Rekursions- und Größenbudgets,
+- Reader-Isolation.
+
+## 3.40 Torrent-, Playlist- und Linkcontainer
+
+**Endungen:**
+
+- `.torrent`, `.m3u`, `.pls`, `.asx`
+- Link- und Feeddateien
+
+**Mögliche Angriffe:**
+
+- automatische Netzwerkverbindungen,
+- Tracker- und Peer-Kontakte,
+- UNC-/WebDAV-/HTTP-Ziele,
+- lokale Pfadreferenzen,
+- Parserfehler,
+- Phishing oder Download zweiter Stufen.
+
+**Zu prüfen:**
+
+- alle Netzwerkziele,
+- Protokolle und Ports,
+- lokale/remote Pfade,
+- automatische Aktion versus Benutzerbestätigung,
+- keine Netzwerkverbindung allein durch Vorschau.
+
+## 3.41 Firmware-, BIOS- und Geräteupdate-Dateien
+
+**Formate:**
+
+- UEFI Capsules,
+- BIOS-/EC-/SSD-/GPU-/Router-Firmware,
+- Option ROMs,
+- Geräteherstellerpakete
+
+**Mögliche Angriffe:**
+
+- persistente Firmwaremanipulation,
+- Downgrade,
+- falsches Gerätemodell,
+- schädliche signierte Updates,
+- manipulierte Updater,
+- Bootkits,
+- physische Funktionsbeeinträchtigung.
+
+**Zu prüfen:**
+
+- Hersteller- und Plattformidentität,
+- kryptografische Signatur,
+- Anti-Rollback-Version,
+- Hardwaremodell und Board-ID,
+- Hash gegen Herstellerkanal,
+- Updateprogramm separat,
+- Offline-/Recovery-Plan,
+- niemals generisch automatisch flashen.
+
+## 3.42 Browsererweiterungen, IDE-Plugins und Add-ins
+
+**Endungen/Formate:**
+
+- `.crx`, `.xpi`, `.vsix`
+- Office Add-ins, COM Add-ins und anwendungsspezifische Plugins
+
+**Mögliche Angriffe:**
+
+- Zugriff auf Webseiten, Tokens, Dateien und Zwischenablage,
+- Native Messaging,
+- Updatekanalübernahme,
+- Credential Theft,
+- Codeausführung im Host,
+- persistente Erweiterung,
+- Supply-Chain-Angriff.
+
+**Zu prüfen:**
+
+- Manifest und Berechtigungen,
+- Host Permissions,
+- Content Scripts,
+- Native Messaging Hosts,
+- externe Update-URLs,
+- Signatur und Store-Herkunft,
+- eingebettete native Binärdateien,
+- minimale Berechtigungen erzwingen.
+
+## 3.43 Speicherstände, Mods und Spieldateien
+
+**Formate:**
+
+- Mods, Plugins, Maps, Savegames, Workshop-Pakete
+
+**Mögliche Angriffe:**
+
+- native oder verwaltete Plugins,
+- Skripte,
+- Parserfehler in Savegames und Maps,
+- eingebettete Assets,
+- Archive und externe Downloads,
+- Supply-Chain-Angriffe über Mod-Plattformen.
+
+**Zu prüfen:**
+
+- Code-/Pluginanteile,
+- Skripte,
+- Container und Assets,
+- Engine-spezifische Startup Hooks,
+- Signatur und Publisher,
+- Sandbox oder eingeschränkter Spielprozess.
+
+---
+
+# 4. Dateinamen, Erweiterungen und Tarnung
+
+AI Shield muss vor jeder Formatprüfung folgende Tarnindikatoren auswerten:
+
+- doppelte Erweiterung wie `rechnung.pdf.exe`,
+- viele Leerzeichen vor der tatsächlichen Erweiterung,
+- Right-to-Left-Override und andere bidirektionale Steuerzeichen,
+- ähnlich aussehende Unicode-Zeichen,
+- nachgestellte Punkte oder Leerzeichen,
+- fehlende Erweiterung,
+- falsche MIME-Angabe,
+- Icon, das nicht zum tatsächlichen Typ passt,
+- ausführbare Dateien mit Dokumentendung,
+- ADS wie `harmlos.txt:payload.exe`,
+- reservierte Gerätenamen,
+- sehr lange Namen zur UI-Abschneidung,
+- Case- und Normalisierungskollisionen,
+- Nullbyte- oder Trennzeichenprobleme in nachgelagerten APIs,
+- versteckte/systemgeschützte Attribute,
+- Shortcut, dessen sichtbarer Name das Ziel verschleiert.
+
+**Entscheidungsregel:** Eine Diskrepanz zwischen sichtbarem Namen, Erweiterung, MIME, Magic Bytes und Parserklassifikation erhöht den Risikowert erheblich und verhindert eine automatische Freigabe.
+
+---
+
+# 5. Verbindliche Scan-Pipeline für AI Shield
+
+## Stufe 0 – Aufnahme und Provenienz
+
+Erfassen:
+
+- vollständiger SHA-256-Hash,
+- Dateigröße,
+- File-ID und Volume-ID,
+- Erstellungs- und Downloadzeit,
+- Quellprozess,
+- Parent-Prozess,
+- Download-URL und Referrer, soweit vorhanden,
+- E-Mail-/Browser-/USB-/Netzwerk-/Cloud-Herkunft,
+- MOTW/Zone Identifier,
+- Signaturzustand,
+- Container-Parent und Extraktionspfad.
+
+Die Provenienz muss unabhängig von NTFS Alternate Data Streams im AI-Shield-Store fortbestehen.
+
+## Stufe 1 – Identitäts- und Polyglot-Prüfung
+
+- Dateiendung,
+- deklarierter MIME-Typ,
+- Magic Bytes,
+- interne Formatkennung,
+- zusätzliche Header an anderen Offsets,
+- trailing data,
+- Overlay,
+- mehrere plausible Parser,
+- widersprüchliche Größen- oder Endmarken.
+
+Ergebnis darf nicht nur „PDF“ lauten, sondern beispielsweise:
+
+`PDF + ZIP-Trailer + JavaScript + eingebettete PE-Datei + externe URI`.
+
+## Stufe 2 – Sichere Containerzerlegung
+
+- rekursiv, aber budgetiert,
+- kein Schreiben außerhalb eines isolierten Roots,
+- keine Linkverfolgung,
+- keine Ausführung,
+- keine Netzwerknutzung,
+- keine automatische Passwortübernahme,
+- jedes Kind erhält eigene Identität, Hash und Provenienz,
+- Parent-Child-Graph in Audit und Causal Chain speichern.
+
+## Stufe 3 – Strikte Strukturvalidierung
+
+Für jedes Format:
+
+- Header,
+- Version,
+- Offsets,
+- Längen,
+- Tabellen,
+- Checksummen,
+- Objektgraph,
+- Referenzen,
+- Kompressionsdaten,
+- Zeichensätze,
+- doppelte oder überlappende Strukturen,
+- Reparaturbedarf.
+
+Ein Parser, der eine Datei „repariert“, darf diese Reparatur nicht stillschweigend als sauber einstufen.
+
+## Stufe 4 – Extraktion aktiver Fähigkeiten
+
+AI Shield muss nicht nur Zeichenketten suchen, sondern Fähigkeiten extrahieren:
+
+- Script vorhanden,
+- Script startet automatisch,
+- Child Process möglich,
+- Netzwerkzugriff möglich,
+- externer Inhalt vorhanden,
+- Dateiablage möglich,
+- Registry-/Policyänderung möglich,
+- eingebettete ausführbare Datei vorhanden,
+- Interpreter oder LOLBin referenziert,
+- Credential-/Authentifizierungsfluss möglich,
+- Drucker-/Geräteaktion möglich,
+- Installation oder Persistenz möglich.
+
+## Stufe 5 – Statische Erkennung
+
+- bekannte Hashes und Signaturen,
+- YARA-/Signatur-ähnliche Byte- und Strukturregeln,
+- Import-/API- und Befehlsindikatoren,
+- Entropie,
+- Packing,
+- N-Gramme und Sequenznovelty,
+- SimHash/Ähnlichkeit,
+- bekannte Kampagnenmuster,
+- URL-/Domain-/Zertifikatsreputation,
+- anomalieorientierte Merkmale.
+
+Statische Erkennung allein darf keine vollständige Sicherheitsgarantie darstellen.
+
+## Stufe 6 – Isolierte Zielparser- und Verhaltensanalyse
+
+Für risikoreiche oder unbekannte Dateien:
+
+- echter Zielparser oder kompatibler Viewer im AppContainer,
+- kein Zugriff auf Benutzerprofil oder produktive Daten,
+- standardmäßig kein Netzwerk,
+- Job Object mit Prozess-, Speicher- und Zeitlimit,
+- Child Processes blockieren oder vollständig instrumentieren,
+- Dateisystem-/Registry-/Prozess-/Netzwerk-/IPC-Ereignisse erfassen,
+- Parserabsturz als verdächtig markieren,
+- mehrere Trigger testen: Öffnen, Vorschau, Seitenwechsel, Drucken, Speichern, Export, Entpacken und Schließen.
+
+## Stufe 7 – Content Disarm and Reconstruction
+
+Für unterstützte Formate kann AI Shield eine passive Version erzeugen:
+
+- Bilder dekodieren und neu encodieren,
+- PDF ohne JavaScript, Launch, Attachments und externe Aktionen rekonstruieren,
+- Office-Dokument ohne Makros, OLE, ActiveX und externe Relationships erzeugen,
+- Archive neu packen, nur nach vollständiger Prüfung,
+- Metadaten minimieren,
+- Original niemals überschreiben,
+- Hash und Transformationsbericht speichern.
+
+## Stufe 8 – Laufzeit-Consequence-Gates
+
+Auch eine freigegebene Datei bleibt unter Beobachtung.
+
+Blockierbare Konsequenzen:
+
+- Viewer startet Shell, Script Engine oder Systemwerkzeug,
+- Office/PDF/Browser erzeugt Child Process,
+- unbekannter Prozess lädt ausführbaren Inhalt aus Temp/Downloads,
+- Prozess schreibt in Autostart-, Service-, Treiber- oder Systempfade,
+- Prozess injiziert in andere Prozesse,
+- Datei löst unerwartete Netzwerkverbindung aus,
+- Dokument greift auf UNC/WebDAV zu,
+- Parser öffnet weitere lokale vertrauliche Dateien,
+- Prozess deaktiviert Sicherheitsfunktionen,
+- unbekannter Treiber soll geladen werden.
+
+## Stufe 9 – Entscheidung
+
+Empfohlene Ergebniszustände:
+
+1. **ALLOW**
+   Strukturell valide, keine aktiven Fähigkeiten, vertrauenswürdige Provenienz, keine Anomalien.
+
+2. **ALLOW_WITH_MONITORING**
+   Geringes Restrisiko; Laufzeitüberwachung bleibt aktiv.
+
+3. **SANITIZE_AND_ALLOW**
+   Aktive oder unnötige Bestandteile werden entfernt; nur rekonstruierte Version wird geöffnet.
+
+4. **OPEN_IN_ISOLATION**
+   Unbekannt, verschlüsselt, komplex oder mit legitimen aktiven Bestandteilen.
+
+5. **USER_CONFIRM_HIGH_RISK**
+   Geschäftlich erforderlich, aber mit klar erklärter Fähigkeit und Folge.
+
+6. **QUARANTINE**
+   Nicht ausreichend prüfbar, verdächtig, verschlüsselt oder mit nicht erlaubter Nutzlast.
+
+7. **BLOCK**
+   bestätigte Schadfunktion, Policyverstoß, Exploitindikator oder verbotene Konsequenz.
+
+---
+
+# 6. Globale Scan-Grenzwerte
+
+Die Werte müssen konfigurierbar und je Format anpassbar sein. Mindestkategorien:
+
+- maximale Eingabedateigröße,
+- maximale entpackte Gesamtgröße,
+- maximales Expansionsverhältnis,
+- maximale Archivtiefe,
+- maximale Zahl extrahierter Objekte,
+- maximale XML-/JSON-/Objekttiefe,
+- maximale Bilddimension und Pixelzahl,
+- maximale Audio-/Videodauer,
+- maximale Frame-, Track- und Seitenzahl,
+- maximale Font-/Glyphkomplexität,
+- maximale Formel- und Workbook-Komplexität,
+- maximale CPU-Zeit,
+- maximales Working Set,
+- maximale Handle-, Thread- und Child-Process-Zahl,
+- maximale Netzwerkziele in Sandbox,
+- maximale Zahl externer Referenzen,
+- maximale String- und Metadatenlänge,
+- maximale Zahl parserbedingter Reparaturen,
+- maximale Zahl widersprüchlicher Formatindikatoren.
+
+Ein Budgetabbruch ist kein „sauber“-Ergebnis.
+
+---
+
+# 7. Risikoindikatoren mit hoher Priorität
+
+Unabhängig vom Format sollten folgende Merkmale den Risikowert stark erhöhen:
+
+- ausführbarer Inhalt in einem Dokument- oder Mediencontainer,
+- automatische Open-/Launch-/Script-Aktion,
+- Child Process aus Office, PDF-Reader, Browser, Archivprogramm oder Medienplayer,
+- externe UNC-/WebDAV-Referenz,
+- verschlüsselte aktive Inhalte,
+- Polyglot oder widersprüchliche Formatklassifikation,
+- Daten hinter formalem Dateiende,
+- eingebettete LNK-, HTA-, CHM-, Skript-, MSI-, DLL-, EXE- oder Treiberdatei,
+- nicht signierter oder unerwarteter Treiber,
+- signierter bekannter verwundbarer Treiber,
+- Makro plus Download-/Prozessstartfähigkeit,
+- DDE, XLM-Makros oder externe Templates,
+- PDF JavaScript plus OpenAction oder Launch,
+- Archiv mit Traversal, Links oder extremer Expansion,
+- SVG mit Skript oder externer Ressource,
+- Playlist mit UNC/WebDAV oder unerwartetem Remoteziel,
+- Shortcut mit Remote-Icon oder verschleierter Befehlszeile,
+- unbekannte Datei aus E-Mail/Browser ohne belastbare Provenienz,
+- Parsercrash oder Timeout,
+- Versuch, Sicherheits-, Logging- oder Policyeinstellungen zu ändern,
+- unerwartete Persistenz,
+- Ausführung aus Temp, Downloads, Cache oder extrahiertem Container.
+
+---
+
+# 8. Was ein reiner Dateiscan nicht erkennen kann
+
+Dateibasierte Analyse muss mit Laufzeitkontrollen kombiniert werden. Nicht zuverlässig allein statisch erkennbar sind:
+
+- ein bisher unbekannter Parser-Zero-Day ohne sichtbare Signatur,
+- schädliches Verhalten, das nur unter bestimmten Uhrzeiten, Benutzern, Domains oder Hardwaremerkmalen startet,
+- eine legitime Datei, deren externe Ressource später ausgetauscht wird,
+- gestohlene, aber formal gültige Signaturen,
+- serverseitige zweite Stufen,
+- rein soziale Täuschung,
+- Model Backdoors ohne geeignete Verhaltenstests,
+- Daten, die erst durch einen vorhandenen kompromittierten Prozess interpretiert werden,
+- Missbrauch legitimer Funktionen nach Benutzerbestätigung,
+- Angriffe durch fehlerhafte Zielanwendung trotz formal valider Datei.
+
+Daraus folgt: **AI Shield braucht statische Analyse, isolierte Detonation, Provenienz und Laufzeit-Consequence-Gates als zusammenhängendes System.**
+
+---
+
+# 9. Architekturvorgabe für AI Shield
+
+## Im Kernel beziehungsweise in treibernahen Komponenten
+
+Nur:
+
+- Create/Open/Execute/Mount/Map/Load beobachten oder blockieren,
+- stabile Dateiidentität und Provenienz erfassen,
+- Hashing und Gate-Zustand koordinieren,
+- Ausführung bis zur Entscheidung verzögern,
+- Process-/Image-Load- und Netzwerkfolgen kontrollieren,
+- keine komplexen PDF-, Office-, Bild-, Audio-, Video- oder Archivparser.
+
+## Im LocalSystem-Broker
+
+- Policy,
+- Orchestrierung,
+- Hash-/Provenienzstore,
+- Parserpool,
+- Quarantäne,
+- Audit,
+- Entscheidung,
+- AppContainer- und Job-Object-Steuerung,
+- Signatur- und Trustprüfung.
+
+## In isolierten Parser-Workern
+
+- Formatparser,
+- Dekompression,
+- Rendering,
+- Metadatenextraktion,
+- CDR,
+- Zielparser-Tests,
+- kein dauerhafter privilegierter Zustand,
+- kein freier Netzwerkzugriff,
+- harte Budgets und Deadline-Termination.
+
+Diese Trennung verhindert, dass gerade die Schutzkomponente durch eine manipulierte Datei zum privilegierten Angriffsziel wird.
+
+---
+
+# 10. Testkorpus und Qualitätssicherung
+
+Für jede Dateifamilie benötigt AI Shield mindestens folgende Testklassen:
+
+1. valide Minimaldatei,
+2. valide große Datei,
+3. abgeschnittene Datei,
+4. falsche Endung,
+5. falscher MIME-Typ,
+6. Polyglot,
+7. trailing data,
+8. doppelte Header oder Objekte,
+9. ungültige Offsets und Längen,
+10. extreme Objektzahl,
+11. extreme Rekursion,
+12. Kompressionsbombe,
+13. verschlüsselter Inhalt,
+14. eingebettete ausführbare Datei,
+15. externe HTTP-Referenz,
+16. UNC-/WebDAV-Referenz,
+17. Unicode-/Dateinamenspoofing,
+18. Parsercrash-Regression,
+19. Timeout-Regression,
+20. CDR-Sollvergleich,
+21. Signatur gültig/ungültig/abgelaufen/widerrufen,
+22. MOTW vorhanden/verloren/vererbt,
+23. erlaubtes aktives Dokument,
+24. blockiertes aktives Dokument,
+25. Laufzeitversuch eines Child Processes,
+26. Laufzeitversuch eines Netzwerkzugriffs,
+27. Laufzeitversuch einer Persistenzänderung,
+28. Quarantäne- und Recovery-Test,
+29. Audit- und Causal-Chain-Vollständigkeit,
+30. deterministische Wiederholbarkeit.
+
+Für Parser dürfen nur ungefährliche, synthetische Regressionstests und rechtmäßig verfügbare Testkorpora verwendet werden. Produktionssysteme dürfen keine echten Schadproben außerhalb einer isolierten Laborumgebung verarbeiten.
+
+---
+
+# 11. Priorisierte Implementierungsreihenfolge
+
+## Priorität 0 – zwingend vor breitem Dateisupport
+
+- Magic-/MIME-/Extension-Abgleich,
+- Provenienz und MOTW-Vererbung,
+- rekursive Containeranalyse mit Budgets,
+- Polyglot-/Trailing-Data-Erkennung,
+- Quarantäne,
+- Execute Gate,
+- Parserpool im AppContainer,
+- Runtime Child-Process-/Network-/Persistence-Gates.
+
+## Priorität 1 – häufigste Angriffswege
+
+- PE und Windows-Installer,
+- PowerShell/JS/VBS/BAT/CMD/HTA,
+- Office einschließlich VBA, XLM, DDE, OLE, ActiveX und Relationships,
+- PDF einschließlich JavaScript, OpenAction, Launch und Attachments,
+- ZIP/7z/RAR/CAB/ISO,
+- LNK/URL/CHM/OneNote,
+- EML/MSG/MIME,
+- HTML/MHTML/SVG.
+
+## Priorität 2 – häufig automatisch geparste Inhalte
+
+- JPEG/PNG/GIF/TIFF/WebP/HEIF/AVIF,
+- WAV/MP3/FLAC/Ogg/M4A/WMA,
+- MP4/MOV/AVI/MKV/WebM,
+- Fonts,
+- XPS und Druckformate,
+- Playlists und Untertitel.
+
+## Priorität 3 – Enterprise- und Entwicklerkontext
+
+- Paketmanager,
+- IDE-/Buildprojekte,
+- Java/.NET-Pakete,
+- Datenbanken,
+- Zertifikate und Verbindungsprofile,
+- Browser-/IDE-/Office-Plugins,
+- KI-/ML-Modellformate.
+
+## Priorität 4 – Spezialdomänen
+
+- CAD/3D/BIM,
+- GIS,
+- G-Code und Maschinensteuerung,
+- Firmware und Geräteupdates,
+- Spielemods und anwendungsspezifische Container.
+
+---
+
+# 12. Abschließende Sicherheitsanforderung
+
+AI Shield darf eine Datei niemals allein deshalb als sicher einstufen, weil:
+
+- die Endung bekannt ist,
+- der MIME-Typ harmlos aussieht,
+- kein klassischer Virensignaturtreffer vorliegt,
+- die Datei signiert ist,
+- sie sich ohne Absturz öffnen lässt,
+- sie aus einem Archiv extrahiert wurde,
+- sie von einem bekannten Absender stammt,
+- sie keine direkt sichtbare ausführbare Datei enthält,
+- ein einzelner Parser sie akzeptiert,
+- die Sandbox während eines einzigen kurzen Laufs nichts beobachtet hat.
+
+Die Freigabe muss aus **Identität, Struktur, enthaltenen Fähigkeiten, Provenienz, Vertrauensprüfung, statischer Evidenz, isoliertem Verhalten und Laufzeitfolgen** abgeleitet werden.
+
+---
+
+# Implementiert
+
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.11`
+
+Dieser Abschnitt ordnet die in diesem Dokument geforderten Kontrollen dem tatsächlich
+implementierten RC11-Stand zu. **Implementiert** bedeutet entweder eine positive technische
+Analyse oder eine konservative Fail-closed-Behandlung. Es bedeutet nicht, dass AI Shield jeden
+zukünftigen Parserfehler oder jede semantische Manipulation zweifelsfrei erkennen kann.
+
+## 1. Universeller Eingangsfilter
+
+- `include/ai_shield/file_preflight.hpp` und `src/file_preflight.cpp` erkennen PE, PDF, ZIP, WAV,
+  PNG, JPEG, GIF, TIFF, WebP, MP4, OLE, RTF und Markup anhand des Inhalts.
+- Dateiendung, erkannter Typ und Dateiname werden gegeneinander geprüft. Doppelendungen,
+  ausführbare Tarnungen, Bidi-Steuerzeichen, abschließende Punkte/Leerzeichen und überlange Namen
+  erzeugen Risikoevidenz.
+- Zusätzliche PE-, PDF-, ZIP- und RIFF-Signaturen, PDF-/PNG-Trailing-Data und widersprüchliche
+  Containermerkmale werden als Polyglot- oder Einbettungsrisiko behandelt.
+- Externe Referenzen, Befehlsindikatoren, automatische Aktionen, aktive Office-/Webinhalte und
+  unsichere Serialisierungsformate wie Pickle-, Joblib- und Modell-Checkpoints werden erkannt.
+- Unbekannte oder nicht vollständig analysierbare Formate fallen in die eigene Policy-Kategorie
+  `unknown` und dürfen die Schutzkette nicht mehr allein wegen einer unbekannten Endung umgehen.
+
+## 2. Formatspezifische Strukturkontrollen
+
+- `src/wav_preflight.cpp` validiert RIFF-/WAVE-Grenzen, Chunkgrößen, `fmt`-/`data`-Konsistenz und
+  verdächtige Befehle in Metadaten. Die im Projekt dokumentierte synthetische Trigger-WAV wird
+  strukturell blockiert; eine harmlose PCM-WAV bleibt zulässig.
+- `src/zip_preflight.cpp` prüft Pfadtraversal, Bombenbudget, Verschlüsselung, nicht unterstützte
+  Kompression, ausführbare oder aktive Kinder, verschachtelte Container und doppelte Namen.
+- PDF-, Bild-, Web-, Dokument-, Archiv-, Audio-, Video-, Programm-, Skript-, Launcher-, Paket- und
+  Modellfamilien werden über Content-Policy v4 klassifiziert. Wo kein tiefer Spezialparser besteht,
+  greift die Freigabeschranke statt einer stillen Positivfreigabe.
+
+## 3. TOCTOU-feste Analyse und Provenienz
+
+- Der Broker öffnet die Datei einmal, sperrt sie gegen konkurrierendes Umbenennen/Löschen und gibt
+  dem Scanner ausschließlich dieses vererbte Handle. Der Scanner öffnet keinen Pfad erneut.
+- Größe, Änderungszeit, Volume-/File-ID und ein über dasselbe Handle gestreamter SHA-256-Hash
+  binden Klassifizierung, Provenienz und Quarantäneentscheidung an dasselbe Dateiobjekt.
+- Bereits bekannte Pfade werden bei Inhaltsänderung erneut geprüft. Vorhandene Dateien werden beim
+  Brokerstart als Baseline erfasst; neue oder veränderte Dateien im Downloadordner werden auch ohne
+  erhaltenes Mark-of-the-Web verarbeitet.
+
+## 4. Isolierter Scanner und Laufzeitgrenzen
+
+- `ai_shield_file_scanner.exe` ist ein dedizierter Minimalworker mit nur `Kernel32` als statischer
+  Systemabhängigkeit. Er verarbeitet genau ein Handle mit Einprozess-, 512-MiB- und Zeitlimit.
+- Der Start erfolgt primär in einem festen AppContainer. Auf dem qualifizierten Windows-Build, auf
+  dem der Loader eigene Minimalprogramme vor `main` mit `0xC0000142` beendet, wird ausschließlich
+  auf ein privilegienloses Low-Integrity-Token im identischen Job zurückgefallen. Ein unbeschränkter
+  LocalSystem-Parserfallback existiert nicht.
+- Der WFP-Treiber blockiert für den Scanner alle ein- und ausgehenden IPv4-/IPv6-Verbindungen
+  unabhängig vom normalen Policy-Modus. Ein analysierter Inhalt erhält keinen Netzwerkkanal.
+- AMSI wird dynamisch im Worker aufgerufen. Timeout, Startfehler und nicht interpretierbare
+  Ergebnisse werden an den Broker zurückgegeben und bei aktivem Fail-closed nicht als sauber
+  umgedeutet.
+
+## 5. Policy, UI, Quarantäne und Freigabe
+
+- `AIShieldContentPolicy/4` besitzt elf Kategorien beziehungsweise die Bitmaske `2047`, darunter
+  **Unbekannte und Spezialformate**. Versionen 1 bis 3 werden monoton auf v4 migriert.
+- `fail_closed=true` und `release_required=true` sind die Referenzkonfiguration. Risiko oder fehlende
+  tiefe Analysierbarkeit führen zur Quarantäne beziehungsweise begründungspflichtigen Freigabe.
+- Die Private-Desktop-UI stellt die unbekannte Kategorie als eigenen Schalter dar. Provenienz,
+  Quarantäne, Audit und kontrollierte Wiederherstellung bleiben über die bestehenden Oberflächen
+  und Verwaltungsbefehle nachvollziehbar.
+
+## 6. Nachgewiesene Regressionen
+
+- Release- und Debug-Konfiguration bestehen jeweils 15 von 15 CTest-Zielen.
+- Unit-Tests decken die synthetische Trigger-WAV, harmlose PCM-WAV, als JPEG getarnte PE-Datei,
+  PDF-/ZIP-Polyglots, Trailing-Data, aktives SVG, externe Referenz, irreführende Dateinamen,
+  unsichere Modellserialisierung und harmlosen Text ab.
+- Der erhöhte Windows-Downloadtest bestätigt Quarantäne für aktive PDF, WAV ohne MOTW, getarnte PE
+  und aktives SVG, die Freigabeschranke für unbekannte Endungen sowie SHA-256-Provenienz.
+- WFP, Minifilter und ProcessGuard wurden neu gebaut, testsigniert, installiert und im Zustand
+  `RUNNING` geprüft. Broker und Core laufen als automatische Windows-Dienste.
+
+## 7. Bewusst konservativ behandelte Restgrenzen
+
+Noch nicht als semantischer Vollparser implementiert sind unter anderem formatspezifische
+CDR-Rekonstruktion für jede Familie, Detonation in jeder realen Zielanwendung, Entschlüsselung
+passwortgeschützter Container, Cloud-/Publisher-Reputation, Steganografiebeweis,
+ML-Modell-Backdoorbewertung sowie gerätespezifische Firmware-, CAD-, GIS- und CNC-Validierung.
+Diese Inhalte werden im RC11 nicht automatisch als sicher behauptet, sondern über die Kategorie
+für unbekannte oder spezialisierte Formate blockiert beziehungsweise freigabepflichtig behandelt.
+
+```
+
+## File: `AI-Shield-main/AI_Shield_Defender_Auditmodus.cmd`  
+- Path: `AI-Shield-main/AI_Shield_Defender_Auditmodus.cmd`  
 - Size: 315 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -10315,10 +13169,10 @@ if errorlevel 1 pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/AI_Shield_Defender_Rollback.cmd`  
-- Path: `AI_Shield_Developer_Full/AI_Shield_Defender_Rollback.cmd`  
+## File: `AI-Shield-main/AI_Shield_Defender_Rollback.cmd`  
+- Path: `AI-Shield-main/AI_Shield_Defender_Rollback.cmd`  
 - Size: 312 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -10330,10 +13184,10 @@ if errorlevel 1 pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/AI_Shield_Protect_System_Strict.cmd`  
-- Path: `AI_Shield_Developer_Full/AI_Shield_Protect_System_Strict.cmd`  
+## File: `AI-Shield-main/AI_Shield_Protect_System_Strict.cmd`  
+- Path: `AI-Shield-main/AI_Shield_Protect_System_Strict.cmd`  
 - Size: 219 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 @echo off
@@ -10343,10 +13197,10 @@ if errorlevel 1 pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/AI_Shield_Protect_System.cmd`  
-- Path: `AI_Shield_Developer_Full/AI_Shield_Protect_System.cmd`  
+## File: `AI-Shield-main/AI_Shield_Protect_System.cmd`  
+- Path: `AI-Shield-main/AI_Shield_Protect_System.cmd`  
 - Size: 140 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 @echo off
@@ -10356,10 +13210,10 @@ if errorlevel 1 pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/AI_Shield_Sicherheitsstatus.cmd`  
-- Path: `AI_Shield_Developer_Full/AI_Shield_Sicherheitsstatus.cmd`  
+## File: `AI-Shield-main/AI_Shield_Sicherheitsstatus.cmd`  
+- Path: `AI-Shield-main/AI_Shield_Sicherheitsstatus.cmd`  
 - Size: 159 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -10370,10 +13224,10 @@ if errorlevel 1 pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/AI_Shield_Start_Demo.cmd`  
-- Path: `AI_Shield_Developer_Full/AI_Shield_Start_Demo.cmd`  
+## File: `AI-Shield-main/AI_Shield_Start_Demo.cmd`  
+- Path: `AI-Shield-main/AI_Shield_Start_Demo.cmd`  
 - Size: 171 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -10384,10 +13238,10 @@ if errorlevel 1 pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/AI_Shield_Start.cmd`  
-- Path: `AI_Shield_Developer_Full/AI_Shield_Start.cmd`  
+## File: `AI-Shield-main/AI_Shield_Start.cmd`  
+- Path: `AI-Shield-main/AI_Shield_Start.cmd`  
 - Size: 140 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 @echo off
@@ -10397,10 +13251,10 @@ if errorlevel 1 pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/AI_Shield_Stop.cmd`  
-- Path: `AI_Shield_Developer_Full/AI_Shield_Stop.cmd`  
+## File: `AI-Shield-main/AI_Shield_Stop.cmd`  
+- Path: `AI-Shield-main/AI_Shield_Stop.cmd`  
 - Size: 141 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -10411,10 +13265,10 @@ if errorlevel 1 pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/AI_Shield_Update_Drivers.cmd`  
-- Path: `AI_Shield_Developer_Full/AI_Shield_Update_Drivers.cmd`  
+## File: `AI-Shield-main/AI_Shield_Update_Drivers.cmd`  
+- Path: `AI-Shield-main/AI_Shield_Update_Drivers.cmd`  
 - Size: 272 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 @echo off
@@ -10424,20 +13278,20 @@ if errorlevel 1 pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/AI_Shield_Vollstaendiger_Entwicklungsplan.docx`  
-- Path: `AI_Shield_Developer_Full/AI_Shield_Vollstaendiger_Entwicklungsplan.docx`  
+## File: `AI-Shield-main/AI_Shield_Vollstaendiger_Entwicklungsplan.docx`  
+- Path: `AI-Shield-main/AI_Shield_Vollstaendiger_Entwicklungsplan.docx`  
 - Size: 77678 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Nested ZIP/archive payload skipped; recursive archive scanning is disabled by policy.
 
 ```
 
 ```
 
-## File: `AI_Shield_Developer_Full/AI_Shield_Vollstaendiger_Entwicklungsplan.extracted.txt`  
-- Path: `AI_Shield_Developer_Full/AI_Shield_Vollstaendiger_Entwicklungsplan.extracted.txt`  
-- Size: 67944 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+## File: `AI-Shield-main/AI_Shield_Vollstaendiger_Entwicklungsplan.extracted.txt`  
+- Path: `AI-Shield-main/AI_Shield_Vollstaendiger_Entwicklungsplan.extracted.txt`  
+- Size: 67017 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -11372,10 +14226,10 @@ H5 Virtual Test || Nested virtualization für Funktions-, nicht Performance-Abna
 
 ```
 
-## File: `AI_Shield_Developer_Full/AI_Shield_Vollstaendiger_Entwicklungsplan.md`  
-- Path: `AI_Shield_Developer_Full/AI_Shield_Vollstaendiger_Entwicklungsplan.md`  
+## File: `AI-Shield-main/AI_Shield_Vollstaendiger_Entwicklungsplan.md`  
+- Path: `AI-Shield-main/AI_Shield_Vollstaendiger_Entwicklungsplan.md`  
 - Size: 1644 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield – Vollständiger Entwicklungsplan
@@ -11428,61 +14282,15 @@ Die maßgebliche, formatierte Fassung befindet sich in der beigefügten DOCX-Dat
 
 ```
 
-## File: `AI_Shield_Developer_Full/Build_All_Release.cmd`  
-- Path: `AI_Shield_Developer_Full/Build_All_Release.cmd`  
-- Size: 178 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
-
-```
-@echo off
-setlocal
-cd /d "%~dp0"
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0Build_All_Release.ps1"
-set "RC=%ERRORLEVEL%"
-if not "%RC%"=="0" pause
-exit /b %RC%
-
-```
-
-## File: `AI_Shield_Developer_Full/Build_All_Release.ps1`  
-- Path: `AI_Shield_Developer_Full/Build_All_Release.ps1`  
-- Size: 1142 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
-
-```powershell
-param(
-    [string]$CMakeExe = "C:\Program Files\CMake\bin\cmake.exe",
-    [string]$CTestExe = "C:\Program Files\CMake\bin\ctest.exe"
-)
-
-$ErrorActionPreference = "Stop"
-$root = $PSScriptRoot
-foreach ($tool in @($CMakeExe, $CTestExe)) {
-    if (-not (Test-Path -LiteralPath $tool -PathType Leaf)) { throw "Required build tool is missing: $tool" }
-}
-& $CMakeExe -S $root -B (Join-Path $root "build_vs") -G "Visual Studio 17 2022" -A x64
-if ($LASTEXITCODE -ne 0) { throw "CMake configuration failed." }
-& $CMakeExe --build (Join-Path $root "build_vs") --config Release --parallel
-if ($LASTEXITCODE -ne 0) { throw "Release build failed." }
-& $CTestExe --test-dir (Join-Path $root "build_vs") -C Release --output-on-failure
-if ($LASTEXITCODE -ne 0) { throw "Release tests failed." }
-& powershell.exe -NoProfile -ExecutionPolicy Bypass -File `
-    (Join-Path $root "platform\windows\build_drivers.ps1") -Configuration Release `
-    -PackageDirectory (Join-Path $root "driver_package\Release") -Rebuild
-if ($LASTEXITCODE -ne 0) { throw "WDK driver build failed." }
-Write-Output "AI Shield user-mode binaries and Windows drivers built successfully."
-
-```
-
-## File: `AI_Shield_Developer_Full/docs/ABI_2_0_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/ABI_2_0_DE.md`  
-- Size: 3106 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/docs/ABI_2_0_DE.md`  
+- Path: `AI-Shield-main/docs/ABI_2_0_DE.md`  
+- Size: 3102 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield ABI 2.0
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Geltungsbereich
 
@@ -11530,7 +14338,7 @@ Fehlern. Netzwerk- und Kindprozessfreigaben werden in Tier 1 abgelehnt. Erst
 ## Verifikation
 
 Der saubere Release-Build `build_vs_abi2` kompiliert Core, Windows-Adapter, Broker und
-Werkzeuge. Die zwölf CTest-Ziele prüfen unter anderem ABI-HMAC-Manipulation, ABI-1.2-zu-2.0-
+Werkzeuge. Die 15 CTest-Ziele prüfen unter anderem ABI-HMAC-Manipulation, ABI-1.2-zu-2.0-
 Übersetzung, Plattformadapter und die ausführbaren Self-Tests.
 
 Nicht Teil dieses Meilensteins sind Hyper-V-Tier-2, Sovereign Mode, Microsoft-HLK-Ausführung,
@@ -11539,15 +14347,15 @@ können nicht durch lokalen Quellcode ersetzt werden und bleiben externe Release
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/ABI_FREEZE_UND_HLK_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/ABI_FREEZE_UND_HLK_DE.md`  
+## File: `AI-Shield-main/docs/ABI_FREEZE_UND_HLK_DE.md`  
+- Path: `AI-Shield-main/docs/ABI_FREEZE_UND_HLK_DE.md`  
 - Size: 2356 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield: ABI Freeze und HLK-Übergabe
 
-Stand: 13. Juli 2026, Kernel-Transport ABI `1.2`, Freeze-Revision `2`
+Stand: 14. Juli 2026, Kernel-Transport ABI `1.2`, Freeze-Revision `2`
 
 ## Eingefrorenes ABI
 
@@ -11601,10 +14409,10 @@ Reboot-, HVCI-, Last- und Recovery-Gates geführt werden.
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/adr/0001-shared-core-boundary.md`  
-- Path: `AI_Shield_Developer_Full/docs/adr/0001-shared-core-boundary.md`  
+## File: `AI-Shield-main/docs/adr/0001-shared-core-boundary.md`  
+- Path: `AI-Shield-main/docs/adr/0001-shared-core-boundary.md`  
 - Size: 643 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # ADR 0001: Shared Core Boundary
@@ -11629,29 +14437,29 @@ calling policy, audit, detection or provenance code.
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/AI_Shield_Developer_Full.md`  
-- Path: `AI_Shield_Developer_Full/docs/AI_Shield_Developer_Full.md`  
-- Size: 1280141 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
-- Warning: 80 secret-like value(s) redacted  
+## File: `AI-Shield-main/docs/AI_Shield.md`  
+- Path: `AI-Shield-main/docs/AI_Shield.md`  
+- Size: 1354280 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
+- Warning: 84 secret-like value(s) redacted  
 - Condensed: comments and repeated blank lines reduced
 
 > Condensed: comments and repeated blank lines reduced
 
-## File: `AI_Shield_Developer_Full/docs/AKTUELLER_INSTALLATIONSSTAND_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/AKTUELLER_INSTALLATIONSSTAND_DE.md`  
-- Size: 6509 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/docs/AKTUELLER_INSTALLATIONSSTAND_DE.md`  
+- Path: `AI-Shield-main/docs/AKTUELLER_INSTALLATIONSSTAND_DE.md`  
+- Size: 8194 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield: Aktueller Build- und Installationsstand
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Build
 
 Der aktuelle Quellstand wurde mit Visual Studio 2022, Windows SDK/WDK 10.0.26100.0 und CMake als
-x64-Release gebaut. Alle zwölf CTest-Ziele bestanden. Anschließend wurden WFP-, Minifilter- und
+x64-Release gebaut. Alle 15 CTest-Ziele bestanden in Release und Debug. Anschließend wurden WFP-, Minifilter- und
 ProcessGuard-Treiber mit `/W4 /WX` neu gebaut, lokal test-signiert und installiert.
 
 Reproduzierbarer administrativer Ablauf:
@@ -11669,13 +14477,13 @@ aktiviert abschließend eine neue signierte Audit-Policy. Das Transkript liegt u
 ## Signierte Treiber
 
 Alle drei Paketdateien besitzen eine gültige Signatur des lokalen Testzertifikats
-`125D756E7666534CDF4558A2B9E96E96907B3FFC`.
+`A46C01AB4A59310C660FCDC28A4CDE7518C701D2`.
 
 | Datei | SHA-256 der vollständigen signierten Datei |
 |---|---|
-| `AIShieldMiniFilter.sys` | `A2D57DF519C6BB46AC4CC130CB0255D97115D52CC85BF4DC1D6EFA06C46D01E7` |
-| `AIShieldProcessGuard.sys` | `0E8C643B1CAF96CA3ECD5D344A2057961E28E264AEBE0F8B5E994125A3A93B58` |
-| `AIShieldWfp.sys` | `96BB3CBD64E1ACEFF9A402D7C5D06FAC74465C1B1F8F03FE4F6E58141BC27A9E` |
+| `AIShieldMiniFilter.sys` | `2FA9CACE0241FC12C4FBABBD4848A1A8885687EB6B811324CF3718B85D33077D` |
+| `AIShieldProcessGuard.sys` | `29E2C8E017410BB54B47C19119997EA446BC29AF9FC31C8AE5C06A5D9716B3C8` |
+| `AIShieldWfp.sys` | `424A0EE534231FC583EDC53CE693D7C8B7FAF90438FE0F09B7A631D281AD7F5E` |
 
 Lokales Testsigning ersetzt keine Microsoft-Produktionssignatur.
 
@@ -11694,6 +14502,30 @@ AIShieldMiniFilter   Running System
 AIShieldProcessGuard Running System
 AIShieldWfp          Running System
 ```
+
+## RC11-Datei- und Downloadnachweis
+
+Der installierte Broker verwendet `AIShieldContentPolicy/4` mit allen elf Gruppen,
+`fail_closed=true` und `release_required=true`. Der reale Test auf dem Referenzrechner meldete:
+
+```text
+safe_image_requires_release=true
+active_pdf_quarantined=true
+wav_without_motw_quarantined=true
+disguised_pe_quarantined=true
+active_svg_quarantined=true
+unknown_extension_release_gated=true
+content_sha256_recorded=true
+provenance_recorded=true
+```
+
+Die installierte Desktop-UI zeigt neue Quarantäneobjekte innerhalb weniger Sekunden und
+unterscheidet Freigabewarteschlange, Malware, Strukturbefund, Scanfehler und nicht vertrauenswürdige
+Ausführung. Details stehen in [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md).
+
+Der Tray-Agent ist maschinenweit für jede Benutzeranmeldung registriert. Minimieren und `X`
+verbergen die UI aus der Taskleiste; der reale Laufzeittest bestätigte einen weiterlaufenden Prozess
+und die Wiederherstellung derselben PID. Alle fünf Schutzkomponenten laufen unabhängig davon.
 
 Ein früherer Installationslauf meldete folgenden geschützten Runtime-State; Policy- und
 Generationsnummern können sich bei jeder Aktivierung erhöhen:
@@ -11747,8 +14579,15 @@ Zertifikatpins korrekt unkonfiguriert. Die Firewalltransaktion ist implementiert
 konkreten VPN- und Entwicklungsallowlists des Zielsystems abgestimmt werden.
 
 Die Private-Desktop-UI besitzt jetzt einen DPAPI-geschützten Dateityp-Schutz für Dokumente,
-Archive, Bilder, Audio, Video und Webdateien. Neue Mark-of-the-Web-Downloads werden abhängig von
-dieser Policy durch einen isolierten, zeitbegrenzten Defender-/AMSI- und Struktur-Scanner geprüft.
+Archive, Bilder, Audio, Video, Webdateien sowie vier zusätzliche Ausführungsgruppen: Programme und
+Installer, Windows-Skripte, Entwickler-/Shell-Skripte sowie Verknüpfungen/Systemaktionen. Neue
+Mark-of-the-Web-Downloads werden abhängig von dieser Policy durch einen isolierten,
+zeitbegrenzten Defender-/AMSI- und Struktur-Scanner geprüft. ProcessGuard blockiert direkte Starts
+aus `Downloads` und erweitert die indirekte Sperre auf Sprachinterpreter, MSIExec, Java/.NET und
+relevante Windows-Systemlauncher. Die Content-Policy v4 aktiviert standardmäßig eine zusätzliche
+Freigabeschranke: Auch sauber geprüfte Downloads aktiver Gruppen werden quarantänisiert, in der UI
+gemeldet und erst nach begründeter Freigabe wieder bereitgestellt. Bestehende Policy-v1-/v2-Daten
+werden sicher migriert.
 Der integrierte Audit Viewer validiert und dekodiert lokale oder exportierte AISHAD02-Dateien.
 
 Credential Guard ohne UEFI-Lock ist fuer den naechsten kontrollierten Neustart vorbereitet. Defender
@@ -11776,15 +14615,15 @@ bewusst notwendige I/O-Arbeit.
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/ARCHITEKTUR_WHITEBOARD_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/ARCHITEKTUR_WHITEBOARD_DE.md`  
+## File: `AI-Shield-main/docs/ARCHITEKTUR_WHITEBOARD_DE.md`  
+- Path: `AI-Shield-main/docs/ARCHITEKTUR_WHITEBOARD_DE.md`  
 - Size: 2517 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield Architektur-Whiteboard
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ```mermaid
 flowchart LR
@@ -11851,15 +14690,15 @@ Auditformat:  ausschließlich AISHAD02
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/AUDIT_VIEWER_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/AUDIT_VIEWER_DE.md`  
+## File: `AI-Shield-main/docs/AUDIT_VIEWER_DE.md`  
+- Path: `AI-Shield-main/docs/AUDIT_VIEWER_DE.md`  
 - Size: 2943 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield Audit Viewer
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Warum die Exportdateien binär sind
 
@@ -11926,15 +14765,15 @@ Wiederverwendung nicht als historischer Beweis interpretiert werden.
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/DEVELOPER_FULL_HANDBUCH_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/DEVELOPER_FULL_HANDBUCH_DE.md`  
-- Size: 2985 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/docs/DEVELOPER_FULL_HANDBUCH_DE.md`  
+- Path: `AI-Shield-main/docs/DEVELOPER_FULL_HANDBUCH_DE.md`  
+- Size: 3275 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield Developer Full Handbuch
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Paketinhalt
 
@@ -11965,7 +14804,9 @@ powershell -ExecutionPolicy Bypass -File platform\windows\build_drivers.ps1 `
   -Configuration Release -PackageDirectory driver_package\Release -Rebuild
 ```
 
-Der aktuelle Stand besitzt zwölf CTest-Ziele. Das zwölfte Gate prüft den Recovery-Vault einschließlich
+Der aktuelle Stand besitzt 15 CTest-Ziele. Die zusätzlichen Gates prüfen Datei-Preflight, den
+isolierten Handle-Scanner, Tray-Autostart,
+UI-Einzelinstanz und Close-to-Tray. Das Recovery-Gate prüft den Vault einschließlich
 Snapshot, Erkennung, Restore, externem Backup und einem nicht auflösbaren Junction-Ziel. Release-Tests verwenden eine eigene wirksame
 Testprüfung und dürfen sich nicht auf durch `NDEBUG` entfernte C-Assertions verlassen.
 
@@ -11996,19 +14837,153 @@ selbst ist keine Microsoft-signierte Produktionsdistribution.
 Weitere Details: [Entwickler-Schnellstart](ENTWICKLER_SCHNELLSTART_DE.md),
 [ABI Freeze/HLK](ABI_FREEZE_UND_HLK_DE.md) und
 [Produktqualifikation](PRODUKTQUALIFIKATION_DE.md). Der zuletzt verifizierte Referenzlauf ist im
-[RC8 Release- und Installationsnachweis](RC8_RELEASE_NACHWEIS_DE.md) dokumentiert.
+[RC11 Release- und Installationsnachweis](RC11_RELEASE_NACHWEIS_DE.md) dokumentiert. Die
+[RC10-](RC10_RELEASE_NACHWEIS_DE.md), [RC9-](RC9_RELEASE_NACHWEIS_DE.md) und
+[RC8-Nachweise](RC8_RELEASE_NACHWEIS_DE.md) bleiben als
+historische Baselines erhalten.
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/DRIVER_SECURITY_LAB_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/DRIVER_SECURITY_LAB_DE.md`  
+## File: `AI-Shield-main/docs/DOWNLOADSCHUTZ_UND_FREIGABE_DE.md`  
+- Path: `AI-Shield-main/docs/DOWNLOADSCHUTZ_UND_FREIGABE_DE.md`  
+- Size: 6274 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
+- Condensed: comments and repeated blank lines reduced
+
+```markdown
+# Downloadschutz und Freigabeschranke
+
+Stand: 14. Juli 2026, Content-Policy `AIShieldContentPolicy/4`
+
+## Ziel
+
+AI Shield behandelt einen erfolgreichen Download nicht automatisch als vertrauenswürdig. Neue
+Dateien im Downloadordner werden nach Abschluss des Schreibvorgangs anhand einer
+DPAPI-Machine-geschützten Dateityp-Policy geprüft. Mark-of-the-Web bleibt ein zusätzliches
+Provenienzsignal, ist aber seit der WAV-Härtung keine Voraussetzung mehr: Auch Browser-Downloads
+über „Speichern unter“, bei denen Windows keinen `Zone.Identifier` anlegt, werden erfasst. Bei
+aktiver Freigabeschranke werden auch saubere
+Dateien zunächst aus `Downloads` in die geschützte Quarantäne verschoben. Erst eine bewusste,
+begründete Freigabe stellt sie wieder bereit.
+
+Damit wird insbesondere die Lücke geschlossen, bei der ein Benutzer eine MP3-, WAV-, Bild-, PDF-
+oder Skriptdatei unmittelbar nach dem Download öffnet, obwohl der Dateityp Parser- oder
+Ausführungsrisiken besitzt.
+
+## Dateigruppen
+
+Die Desktop-UI bietet getrennte Schalter für:
+
+1. Dokumente, einschließlich PDF, Office, OpenDocument, RTF und OneNote.
+2. Archive und Datenträgerabbilder.
+3. Bilder, Audio, Video und Webdateien.
+4. Programme und Installer, etwa EXE, DLL, MSI, MSIX, APPX, CPL und SCR.
+5. Windows-Skripte, etwa BAT, CMD, PS1, PSM1, VBS, JS, WSF und HTA.
+6. Entwickler- und Shell-Skripte, etwa SH, Python, Node, Perl, Ruby, PHP und JAR.
+7. Verknüpfungen und Systemaktionen, etwa LNK, URL, REG, INF, CHM und ClickOnce.
+8. Unbekannte und Spezialformate, einschließlich Dateien ohne bekannte Endung, Modellgewichte,
+   Firmware, CAD/GIS, Plugins, Mods und proprietäre Container.
+
+Ein deaktivierter Gruppenschalter bedeutet ausdrücklich, dass AI Shield für diese Gruppe weder die
+Inhaltsprüfung noch die Freigabeschranke durchsetzt. Der zusätzliche ProcessGuard-Schutz kann
+direkte oder interpretergestützte Ausführung aus `Downloads` unabhängig davon weiterhin sperren.
+
+## Entscheidungsablauf
+
+```text
+Browserdownload
+      │
+      ├─► neue/geänderte Datei und stabile Größe prüfen
+      ├─► Mark-of-the-Web auswerten, falls vorhanden
+      ├─► Reparse Point, Hardlink, ADS und Dateiidentität prüfen
+      ├─► universeller Magic-/Polyglot-/Fähigkeiten-Preflight
+      ├─► isolierter Minimalworker: AMSI sowie PDF-/ZIP-/RIFF-WAV-Strukturprüfung
+      │
+      ├─► Schadsoftware/Strukturrisiko ─► Quarantäne: Sicherheitsbefund
+      └─► sauber + Freigabeschranke ────► Quarantäne: wartet auf Freigabe
+                                              │
+                                              └─► UI-Freigabe mit Ziel und Begründung
+```
+
+Der Broker wiederholt die Downloadsuche im Ein-Sekunden-Takt und verlangt zwei identische
+Größenbeobachtungen, damit eine noch geschriebene Datei nicht vorzeitig verarbeitet wird. Die UI
+prüft alle zwei Sekunden auf neue Quarantäneobjekte und zeigt ein Warnfenster. Dieser asynchrone
+Ablauf reduziert das Zeitfenster erheblich, ist aber kein synchroner Kernel-Dialog beim Öffnen.
+
+Der Edge-/Chrome-Sensor liefert Navigations- und Downloadmetadaten. Er ist nicht der lokale
+Byte-Scanner und erzeugt deshalb nicht zwingend die integrierte Browsermeldung „gefährlicher
+Download“. Inhaltsentscheidung, Quarantäne und UI-Warnung erfolgen durch Broker und Scanner nach
+dem Speichern. Vorhandene Dateien werden beim Brokerstart baseliniert; neue Dateien und spätere
+Änderungen an bekannten Pfaden werden anhand von Größe und Änderungszeit erneut geprüft.
+
+Der WAV-Preflight validiert RIFF-Größe, Chunk-Grenzen, `fmt `- und `data`-Chunk. Befehlsähnliche
+Launcher-Tokens in Metadaten-Chunks werden als Strukturrisiko behandelt. Text in Metadaten wird
+nicht ausgeführt; dieses Signal schützt gegen missbräuchliche Container und dient zusammen mit
+Containerfehlern und AMSI/Defender der Klassifizierung.
+
+## Quarantäne und Freigabe
+
+Die Quarantäneansicht unterscheidet mindestens:
+
+- `Wartet auf Freigabe`
+- `Schadsoftware erkannt`
+- `Verdächtige Dateistruktur`
+- `Prüfung nicht möglich`
+- `Nicht vertrauenswürdige Ausführung`
+
+Eine Freigabe benötigt einen Zielpfad und eine Begründung. Der Broker validiert Objekt-ID,
+Dateiidentität und Zielzustand und protokolliert die Freigabe. Sicherheitsbefunde sollten nur nach
+fachlicher Analyse freigegeben werden.
+
+## Migration
+
+Policy-v1- bis Policy-v3-Daten werden beim Lesen auf Policy v4 migriert. Neue Ausführungsgruppen,
+die Gruppe für unbekannte Formate und `release_required=true` werden sicher voreingestellt. Die persistente Datei bleibt mit Windows
+DPAPI im Maschinenkontext geschützt.
+
+Status prüfen:
+
+```powershell
+.\build_vs\Release\ai_shield_broker.exe content-policy-status
+```
+
+Aktueller Standard:
+
+```json
+{"schema":"AIShieldContentPolicy/4","enabled_categories":2047,"fail_closed":true,"release_required":true}
+```
+
+## Qualifikation
+
+Der automatisierte Test `tests/windows_download_content_protection.ps1` erzeugt ein sauberes Bild,
+eine aktive PDF mit Mark-of-the-Web, eine absichtlich auffällige WAV ohne Mark-of-the-Web, ein PE
+unter Bildendung, ein aktives SVG und eine unbekannte Endung. Er
+weist nach, dass das Bild eine Benutzerfreigabe benötigt und PDF sowie WAV als Strukturfund
+quarantänisiert werden. Ein zusätzlicher Unit-Test stellt sicher, dass eine korrekt aufgebaute
+harmlose PCM-WAV keinen strukturellen Alarm auslöst. Der Test bereinigt seine Quarantäneobjekte
+anschließend über den kontrollierten Restore-Pfad.
+
+Der Scanner wird über dasselbe gesperrte Datei-Handle versorgt, das der Broker für Identitäts- und
+Hashprüfung verwendet. Er erhält keinen Dateipfad zum erneuten Öffnen. Ein AppContainer ist der
+primäre Startmodus. Falls der Windows-Loader eigene Binärdateien mit `0xC0000142` ablehnt, wird
+explizit auf einen privilegienlosen Low-Integrity-Token im gleichen Einprozess-/Speicher-/Zeit-Job
+zurückgefallen; ein LocalSystem-Parserfallback existiert nicht.
+
+Der WFP-Treiber sperrt für `ai_shield_file_scanner.exe` zusätzlich sämtliche ein- und ausgehenden
+IPv4-/IPv6-Verbindungen. Die Sperre gilt unabhängig vom normalen Policy-Modus und verhindert auch
+im Low-Integrity-Fallback einen Netzwerkkanal aus dem Parserprozess.
+
+```
+
+## File: `AI-Shield-main/docs/DRIVER_SECURITY_LAB_DE.md`  
+- Path: `AI-Shield-main/docs/DRIVER_SECURITY_LAB_DE.md`  
 - Size: 1467 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield: HVCI- und Driver-Verifier-Labor
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 Diese Prüfungen können einen Testrechner unbootbar machen oder absichtlich einen Bugcheck auslösen.
 Sie dürfen nur auf einem wiederherstellbaren Laborrechner oder VM-Snapshot ausgeführt werden.
@@ -12053,15 +15028,15 @@ dem später von Microsoft signierten Rückpaket und aktiviertem Secure Boot wied
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/EDITIONEN_UND_VERSIONEN_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/EDITIONEN_UND_VERSIONEN_DE.md`  
-- Size: 2707 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/docs/EDITIONEN_UND_VERSIONEN_DE.md`  
+- Path: `AI-Shield-main/docs/EDITIONEN_UND_VERSIONEN_DE.md`  
+- Size: 2708 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield Editionen und Versionen
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Gemeinsame technische Basis
 
@@ -12108,7 +15083,7 @@ nicht erforderlich.
 
 | Vertrag | Aktueller Stand |
 |---|---|
-| Release Candidate | `2.0.0-rc.8` |
+| Release Candidate | `2.0.0-rc.11` |
 | Kernel-Transport | `1.2` |
 | ABI-Freeze | Revision `2` |
 | Interne Ereignis-ABI | `2.0` |
@@ -12120,16 +15095,16 @@ bewusst aktualisierten Releasevertrag und erneute Qualifikation der betroffenen 
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/ENTERPRISE_EDITION_HANDBUCH_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/ENTERPRISE_EDITION_HANDBUCH_DE.md`  
+## File: `AI-Shield-main/docs/ENTERPRISE_EDITION_HANDBUCH_DE.md`  
+- Path: `AI-Shield-main/docs/ENTERPRISE_EDITION_HANDBUCH_DE.md`  
 - Size: 2562 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```markdown
 # AI Shield Enterprise-Betriebsprofil
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Einordnung
 
@@ -12175,24 +15150,24 @@ Identitätsschutz, Patchmanagement, Firmwarevertrauen, Backup noch Incident Resp
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/ENTERPRISE_SECURITY_INTEGRATIONS_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/ENTERPRISE_SECURITY_INTEGRATIONS_DE.md`  
+## File: `AI-Shield-main/docs/ENTERPRISE_SECURITY_INTEGRATIONS_DE.md`  
+- Path: `AI-Shield-main/docs/ENTERPRISE_SECURITY_INTEGRATIONS_DE.md`  
 - Size: 5704 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Warning: 1 secret-like value(s) redacted
 
 > Warning: 1 secret-like value(s) redacted
 
-## File: `AI_Shield_Developer_Full/docs/ENTWICKLER_SCHNELLSTART_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/ENTWICKLER_SCHNELLSTART_DE.md`  
-- Size: 4779 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+## File: `AI-Shield-main/docs/ENTWICKLER_SCHNELLSTART_DE.md`  
+- Path: `AI-Shield-main/docs/ENTWICKLER_SCHNELLSTART_DE.md`  
+- Size: 4775 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```markdown
 # AI Shield Entwickler-Schnellstart
 
-Stand: 13. Juli 2026, interner ABI-Stand 2.0, Kernel-Transport ABI 1.2
+Stand: 14. Juli 2026, interner ABI-Stand 2.0, Kernel-Transport ABI 1.2
 
 ## 1. Inhalt des Entwicklerpakets
 
@@ -12227,7 +15202,7 @@ $CTEST_EXE = "C:\Program Files\CMake\bin\ctest.exe"
 & $CTEST_EXE --test-dir build_vs -C Release --output-on-failure
 ```
 
-Der aktuelle Stand besitzt zwölf CTest-Ziele. Danach kann der gefahrlose Demo-Modus ohne Treiber
+Der aktuelle Stand besitzt 15 CTest-Ziele. Danach kann der gefahrlose Demo-Modus ohne Treiber
 gestartet werden:
 
 ```powershell
@@ -12308,19 +15283,19 @@ Die getrennten Paket- und Bedienpfade sind in
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/EXTERNER_SECURITY_REVIEW_AUFTRAG_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/EXTERNER_SECURITY_REVIEW_AUFTRAG_DE.md`  
-- Size: 2104 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/docs/EXTERNER_SECURITY_REVIEW_AUFTRAG_DE.md`  
+- Path: `AI-Shield-main/docs/EXTERNER_SECURITY_REVIEW_AUFTRAG_DE.md`  
+- Size: 2105 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # Prüfauftrag für unabhängiges Security Review
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Prüfgegenstand
 
-AI Shield Private Desktop `2.0.0-rc.8`, insbesondere:
+AI Shield Private Desktop `2.0.0-rc.11`, insbesondere:
 
 - WFP-, Minifilter- und ProcessGuard-Kernelcode;
 - IOCTL-Verträge, Puffer-, Größen-, Sequenz- und Zugriffsprüfung;
@@ -12361,15 +15336,15 @@ der geprüften Komponenten beteiligt waren. AI Shield selbst kann diesen Nachwei
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/FEHLENDE_FUNKTIONEN_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/FEHLENDE_FUNKTIONEN_DE.md`  
-- Size: 4167 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/docs/FEHLENDE_FUNKTIONEN_DE.md`  
+- Path: `AI-Shield-main/docs/FEHLENDE_FUNKTIONEN_DE.md`  
+- Size: 5712 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield: Noch auszuführende Produktnachweise
 
-Stand: 13. Juli 2026, nach Abschluss des RC8-Recovery- und Ransomware-Schutzpfads
+Stand: 14. Juli 2026, nach Abschluss des RC11-Datei-, Desktop-, Download-, Recovery- und Ransomware-Schutzpfads
 
 ## Noch auszuführende Produktnachweise
 
@@ -12395,13 +15370,32 @@ Quarantäneworkflow sowie ein integrierter Viewer für lokale und exportierte AI
 Damit enthält diese Liste keine bekannte, nur durch weiteren lokalen Produktcode schließbare
 Schutzlücke; offen sind Nachweise, externe Vertrauensanker und deployment-spezifische Parameter.
 
-RC8 ergänzt einen ACL-geschützten, inhaltsadressierten Recovery-Vault, Installationsbaseline,
+RC8 ergänzte einen ACL-geschützten, inhaltsadressierten Recovery-Vault, Installationsbaseline,
 Canary- und Änderungsserienerkennung, einen pro Prozess korrelierenden C++-Detektor,
 Minifilter-/Broker-Echtzeitsignale, bestätigungspflichtige hashverifizierte Rücksicherung mit
 Konfliktspeicher sowie externe Backups mit prüfbarem SHA-256-Manifest. Der automatisierte Test deckt
 Snapshot, Erkennung, Plan, Restore und externe Backupprüfung ab. Eine echte WinRE-/Offline-
 Systemdateiwiederherstellung und ein unveränderliches externes Ziel bleiben Produktnachweise und
 deployment-spezifische Infrastruktur, keine gefahrlos automatisch aktivierbare lokale Funktion.
+
+RC9 ergänzt Content-Policy v3, zehn einzeln steuerbare Dateigruppen, die standardmäßig aktive
+Freigabeschranke, sichtbare UI-Benachrichtigungen und lokalisierte Quarantänegründe. Der reale
+Integrationstest weist nach, dass auch eine sauber geprüfte Bilddatei vor dem Öffnen freigegeben
+werden muss. Damit ist die zuvor beobachtete automatische Freigabe von Medien im lokalen
+Produktcode geschlossen; synchrones Kernel-Pending für jeden Dateizugriff bleibt ein gesondertes
+Kompatibilitäts- und Qualifikationsthema, keine ungeprüft aktivierbare RC9-Funktion.
+
+RC10 ergänzt den automatisch gestarteten Tray-Agenten, die UI-Einzelinstanz und Close-to-Tray.
+Minimieren und `X` beenden weder UI-Prozess noch Schutzkern; der Tray-Doppelklick stellt dieselbe
+PID ohne weitere UAC-Abfrage wieder her. Damit ist der lokale Hintergrundbetrieb als Produktcode
+geschlossen und verbleibt nur als Kompatibilitäts- und Dauertestgegenstand.
+
+RC11 ergänzt Content-Policy v4, die Kategorie für unbekannte und spezialisierte Formate, einen
+universellen Magic-/Namens-/Polyglot-Preflight, WAV-/ZIP-Härtung, SHA-256-Provenienz über dasselbe
+gesperrte Datei-Handle und einen isolierten Minimalworker. Der WFP-Treiber blockiert dessen gesamte
+IPv4-/IPv6-Kommunikation. Nicht vorhandene Spezialparser führen damit nicht mehr zur automatischen
+Positivfreigabe, sondern zur konservativen Freigabeschranke. Formatspezifische Vollparser und CDR
+für jede Spezialdomäne bleiben Qualitätsausbau, nicht still offene Umgehung.
 
 Der lokale Dateisystempfad wurde zusätzlich gegen nicht auflösbare Junctions und andere Reparse
 Points gehärtet. Der automatisierte Test enthält dafür ein negatives Junction-Szenario. Auf dem
@@ -12428,23 +15422,23 @@ bestanden markiert werden.
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/JUNIOR_ENTERPRISE_INTEGRATION_SCHNELLSTART_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/JUNIOR_ENTERPRISE_INTEGRATION_SCHNELLSTART_DE.md`  
-- Size: 11695 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+## File: `AI-Shield-main/docs/JUNIOR_ENTERPRISE_INTEGRATION_SCHNELLSTART_DE.md`  
+- Path: `AI-Shield-main/docs/JUNIOR_ENTERPRISE_INTEGRATION_SCHNELLSTART_DE.md`  
+- Size: 11691 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Warning: 1 secret-like value(s) redacted
 
 > Warning: 1 secret-like value(s) redacted
 
-## File: `AI_Shield_Developer_Full/docs/KERNEL_HARDWARE_SCHUTZ_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/KERNEL_HARDWARE_SCHUTZ_DE.md`  
+## File: `AI-Shield-main/docs/KERNEL_HARDWARE_SCHUTZ_DE.md`  
+- Path: `AI-Shield-main/docs/KERNEL_HARDWARE_SCHUTZ_DE.md`  
 - Size: 2052 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # Kernel- und Hardware-Schutz
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 AI Shield behandelt Kernel- und Hardwareangriffe als mehrschichtiges Risiko. Ein eigener Treiber
 kann keinen unbekannten Fehler im Windows-Kernel reparieren und keine bereits manipulierte CPU oder
@@ -12478,15 +15472,15 @@ verfügbare Hardwareeigenschaften werden sichtbar als fehlend ausgewiesen.
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/NETZWERKSCHUTZ_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/NETZWERKSCHUTZ_DE.md`  
+## File: `AI-Shield-main/docs/NETZWERKSCHUTZ_DE.md`  
+- Path: `AI-Shield-main/docs/NETZWERKSCHUTZ_DE.md`  
 - Size: 2551 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield: Systemweiter Netzwerkschutz
 
-Stand: 13. Juli 2026, Kernel-Transport ABI 1.2
+Stand: 14. Juli 2026, Kernel-Transport ABI 1.2
 
 ## Schutzumfang
 
@@ -12537,15 +15531,15 @@ Anwendungsallowlisting und sichere Backups bleiben erforderlich.
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/PRIVATE_DESKTOP_HANDBUCH_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/PRIVATE_DESKTOP_HANDBUCH_DE.md`  
-- Size: 6826 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/docs/PRIVATE_DESKTOP_HANDBUCH_DE.md`  
+- Path: `AI-Shield-main/docs/PRIVATE_DESKTOP_HANDBUCH_DE.md`  
+- Size: 8845 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield Private Desktop Handbuch
 
-Stand: 13. Juli 2026, Release Candidate `2.0.0-rc.8`
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.11`
 
 ## Zweck und Voraussetzungen
 
@@ -12561,13 +15555,25 @@ mit aktivem Secure Boot und deaktiviertem Testsigning erfolgen.
 ## Installation und Start
 
 Bevorzugt wird `AI_Shield_Private_Desktop.msi` mit UAC-Bestätigung installiert. Die Installation
-richtet drei Treiber, `AIShieldBroker`, `AIShieldCore`, lokale Policy, Browser-Host, Startmenüeintrag
-und UI ein. Der Eintrag unter **Installierte Apps** führt den vollständigen Rückbau aus.
+richtet drei Treiber, `AIShieldBroker`, `AIShieldCore`, lokale Policy, Browser-Host, Startmenüeintrag,
+UI und den Tray-Autostart ein. Der Eintrag unter **Installierte Apps** führt den vollständigen
+Rückbau aus.
 
 Nach der Installation startet **AI Shield Private Desktop** über das Startmenü. Die notwendige
 Administratorbestätigung bleibt sichtbar; die PowerShell-Konsole läuft anschließend verborgen im
 Hintergrund. Ein erforderlicher Neustart wird in der UI angeboten. Nach Zustimmung öffnet eine
 einmalige erhöhte Anmeldeaufgabe die UI nach der Anmeldung erneut und liest den wirksamen Zustand.
+
+Die fünf Schutzkomponenten starten als Windows-Dienste beziehungsweise Systemtreiber bereits beim
+Booten. Die UI muss dafür nicht geöffnet bleiben. Nach jeder Benutzeranmeldung erscheint zusätzlich
+der AI-Shield-Tray-Agent im Windows-Infobereich. Ein Doppelklick öffnet die UI. Das Kontextmenü zeigt
+den Komponentenstatus, kann die Dienste nach UAC-Bestätigung neu starten und öffnet bei Bedarf
+`services.msc`. Das Beenden des Tray-Agenten beendet ausdrücklich nicht den Schutzkern. Der Schalter
+**AI Shield im Infobereich** aktiviert oder entfernt nur diesen Anmeldeautostart.
+
+Wird das UI-Fenster minimiert oder über `X` geschlossen, verschwindet es aus der Taskleiste und
+bleibt ausschließlich über das Tray-Symbol erreichbar. Ein Doppelklick stellt dieselbe UI-Instanz
+wieder her; die Schutzdienste laufen währenddessen unverändert weiter.
 
 ## Übersicht
 
@@ -12590,16 +15596,29 @@ und geprüft werden.
 
 ![Dateityp-Schutz](../editions/private_desktop/schutzfunktionen_2.png)
 
-Dokumente, Archive, Bilder, Audio, Video und Webdateien können separat geprüft oder freigegeben
-werden. Die Einstellung wird atomar und DPAPI-Machine-geschützt gespeichert und vom Broker ohne
-Neustart neu geladen.
+Dokumente, Archive, Bilder, Audio, Video, Webdateien, Programme/Installer, Windows-Skripte,
+Entwickler-/Shell-Skripte sowie Verknüpfungen/Systemaktionen können separat geprüft oder
+freigegeben werden. Die Ausführungsgruppen erfassen insbesondere `EXE`, `MSI`, `MSIX`, `APPX`,
+`BAT`, `CMD`, `PS1`, `PSM1`, `VBS`, `JS`, `WSF`, `HTA`, `SH`, `PY`, `JAR`, `LNK`, `URL`, `REG`,
+`INF` und `CHM`. Die Einstellung wird atomar und DPAPI-Machine-geschützt gespeichert und vom
+Broker ohne Neustart neu geladen. Alte Policy-v1-/v2-Daten werden automatisch nach v3 migriert und
+aktivieren beim Upgrade die neuen Ausführungsgruppen sowie die Freigabeschranke.
 
 Neu angelegte Downloads mit Mark-of-the-Web werden an eine festgehaltene Dateiidentität gebunden
 und in einem zeitlich begrenzten isolierten Scanner geprüft. Microsoft Defender/AMSI sowie lokale
 PDF- und ZIP-Strukturprüfungen liefern die Entscheidung. Malware, aktive oder fehlerhafte PDFs,
 gefährliche beziehungsweise verschlüsselte Archive und nicht prüfbare risikoreiche Formate werden
-abhängig von der Policy quarantänisiert. Ein deaktivierter Dateitypschalter bedeutet ausdrücklich:
-keine AI-Shield-Inhaltsprüfung für diese Gruppe.
+abhängig von der Policy quarantänisiert. **Freigabe vor dem Öffnen erzwingen** verschiebt auch
+sauber geprüfte Dateien aktiver Gruppen in die Quarantäne. Die laufende UI meldet neue Downloads
+innerhalb weniger Sekunden; auf der Seite **Quarantäne** kann der Benutzer sie mit Zielpfad und
+Begründung freigeben. Ein deaktivierter Dateitypschalter bedeutet ausdrücklich: keine AI-Shield-
+Inhaltsprüfung und keine Freigabeschranke für diese Gruppe.
+
+Der eigenständige Schalter **Downloads härten** aktiviert zusätzlich die Kernel-Sperre. Sie
+blockiert direkte Prozessstarts aus `Downloads` und Aufrufe heruntergeladener Dateien über
+PowerShell, CMD, WSH, MSHTA, Shell-/Sprachinterpreter, Java/.NET sowie relevante Windows-
+Systemlauncher. Die Dateitypschalter ersetzen diese Sperre nicht, sondern steuern die vorgelagerte
+Prüfung und Quarantäne.
 
 ## Browser-Sensor
 
@@ -12676,16 +15695,16 @@ wird.
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/PRODUKTQUALIFIKATION_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/PRODUKTQUALIFIKATION_DE.md`  
-- Size: 8695 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+## File: `AI-Shield-main/docs/PRODUKTQUALIFIKATION_DE.md`  
+- Path: `AI-Shield-main/docs/PRODUKTQUALIFIKATION_DE.md`  
+- Size: 8702 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```markdown
 # AI Shield: Produktqualifikation und Microsoft-Treibersignierung
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Ausgefuehrte Hardening- und Recovery-Nachweise
 
@@ -12697,7 +15716,7 @@ Stand: 13. Juli 2026
   validierten Program-Files-Pfade zurueck.
 - Service-DACL und geschuetzter Installationspfad sind aktiv; normale Benutzer koennen Status lesen,
   Dienste aber nicht steuern oder rekonfigurieren.
-- Zwölf von zwölf CTest-Zielen bestanden, einschließlich des Windows-Recovery-Integrationstests.
+- 15 von 15 CTest-Zielen bestanden, einschließlich Datei-Scanner-, Recovery-, Tray- und UI-Vertragstests.
 - Der Recovery-Test deckt Snapshot, Vorfallerkennung, Wiederherstellungsplan, bestätigten Restore,
   externe Backupprüfung und eine absichtlich defekte Junction ab.
 - Eine reale Erstbaseline auf dem Referenzrechner erfasste 13.353 Dateien ohne übersprungene
@@ -12887,16 +15906,16 @@ Offizielle Referenzen:
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/PROTOTYP_HANDBUCH_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/PROTOTYP_HANDBUCH_DE.md`  
+## File: `AI-Shield-main/docs/PROTOTYP_HANDBUCH_DE.md`  
+- Path: `AI-Shield-main/docs/PROTOTYP_HANDBUCH_DE.md`  
 - Size: 32499 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```markdown
 # AI Shield: Entwickler- und Betriebshandbuch des Windows-Prototyps
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## 1. Ziel und Status
 
@@ -13634,15 +16653,15 @@ kurze lokale Läufe ersetzen keine protokollierten 24-Stunden-/30-Tage- und Neus
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md`  
-- Size: 6210 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/docs/RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md`  
+- Path: `AI-Shield-main/docs/RANSOMWARE_SCHUTZ_UND_RECOVERY_DE.md`  
+- Size: 6211 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # Ransomware-Schutz und Wiederherstellung
 
-Stand: 13. Juli 2026, Release Candidate `2.0.0-rc.8`
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.11`
 
 ## Ziel und Sicherheitsmodell
 
@@ -13750,10 +16769,144 @@ Recovery-Labor.
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/RC8_RELEASE_NACHWEIS_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/RC8_RELEASE_NACHWEIS_DE.md`  
+## File: `AI-Shield-main/docs/RC10_RELEASE_NACHWEIS_DE.md`  
+- Path: `AI-Shield-main/docs/RC10_RELEASE_NACHWEIS_DE.md`  
+- Size: 2606 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
+
+```markdown
+# AI Shield RC10 Release- und Installationsnachweis
+
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.10`
+
+## Umfang
+
+RC10 erweitert den verifizierten RC9-Downloadschutz um einen dauerhaft angemeldeten Desktop-
+Tray-Agenten. Die drei Kernel-Treiber, `AIShieldBroker` und `AIShieldCore` starten weiterhin
+unabhängig von UI und Tray als Windows-Systemkomponenten. Der Tray-Agent zeigt ihren Zustand im
+Windows-Infobereich, startet bei jeder Benutzeranmeldung und öffnet die administrative UI.
+
+Die UI ist eine benutzerspezifische Einzelinstanz. Minimieren oder `X` entfernt das Fenster aus der
+Taskleiste, ohne UI-Prozess oder Schutzkern zu beenden. Ein Tray-Doppelklick aktiviert dieselbe PID
+über einen atomaren, gegen PID-Reuse abgesicherten Instanzvertrag unter `%LOCALAPPDATA%`; eine
+weitere UAC-Abfrage und parallele UI-Fenster entfallen.
+
+## Verifizierte lokale Prüfungen
+
+| Prüfung | Ergebnis |
+|---|---|
+| Release-CTest | 14 von 14 bestanden |
+| Debug-CTest | 14 von 14 bestanden |
+| UI-Vertrag | 61 Controls, 6 Ansichten, persistenter WPF-Dispatcher |
+| Tray-Vertrag | Einzelinstanz, Autostart und Fünf-Komponenten-Status bestanden |
+| Realer Minimierungstest | Fenster verborgen, Prozess aktiv, gleiche PID wiederhergestellt |
+| Installierter Schutzstatus | WFP, Minifilter, ProcessGuard, Broker und Core aktiv |
+| Release-Freeze | gültig für `2.0.0-rc.10` |
+| Desktop-Paket | Manifest und sichere ZIP-Pfade geprüft |
+| MSI | WiX-Build und lokale Authenticode-Testsignatur gültig |
+
+Beobachtete Kernausgabe des UI-Laufzeittests:
+
+```text
+hidden=True
+process_alive=True
+same_pid=True
+restored=True
+```
+
+## Release-Artefakte
+
+Der GitHub-Release `v2.0.0-rc.10` enthält:
+
+- `AI_Shield_Private_Desktop.zip`
+- `AI_Shield_Private_Desktop_2.0.0-rc.10_x64.msi`
+- `AI_Shield_Developer_ABI2.zip`
+- `AI_Shield_Developer_Full.zip`
+- `SHA256SUMS.txt`
+
+Die konkreten äußeren SHA-256-Werte stehen in `SHA256SUMS.txt`. Desktop- und Developer-Full-Paket
+enthalten zusätzlich Dateimanifeste. Der Releasevertrag friert ABI, Policy und sicherheitsrelevante
+RC10-Dateien mit SHA-256 ein.
+
+## Signierungs- und Freigabegrenze
+
+MSI und Treiber sind mit `CN=AI Shield Prototype Test Signing` lokal testsigniert. Das ist keine
+Microsoft-Produktionstreibersignatur. Die Treiberinstallation erfordert deshalb weiterhin ein
+kontrolliertes Testsystem mit deaktiviertem Secure Boot und aktiviertem Windows-`TESTSIGNING`.
+Microsoft-Submission, HLK/WHCP, rebootpflichtige HVCI-/Driver-Verifier-Läufe, Langzeit- und
+Kompatibilitätsmessungen sowie ein unabhängiger Security Review bleiben externe Produktnachweise.
+
+```
+
+## File: `AI-Shield-main/docs/RC11_RELEASE_NACHWEIS_DE.md`  
+- Path: `AI-Shield-main/docs/RC11_RELEASE_NACHWEIS_DE.md`  
+- Size: 2497 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
+
+```markdown
+# AI Shield RC11 Release- und Installationsnachweis
+
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.11`
+
+## Umfang
+
+RC11 erweitert RC10 um eine universelle, TOCTOU-feste Datei-Preflight-Kette. Der Broker bindet
+Dateiidentität, SHA-256, Klassifizierung, isolierte Analyse und Quarantäne an dasselbe geöffnete
+Dateiobjekt. Unbekannte und nicht tief analysierbare Formate werden nicht mehr still freigegeben.
+
+Neu sind insbesondere:
+
+- Content-Policy v4 mit elf Kategorien und der Bitmaske `2047`;
+- Magic-/Extension-/Namensabgleich und Polyglot-/Trailing-Data-Erkennung;
+- gehärtete WAV- und ZIP-Strukturprüfung;
+- dedizierter Handle-Scanner mit AppContainer und kontrolliertem Low-Integrity-Fallback;
+- WFP-erzwungene IPv4-/IPv6-Netzwerksperre des Scannerprozesses;
+- erneute Prüfung veränderter Dateien und Downloadprüfung auch ohne MOTW;
+- SHA-256-Provenienz und neue UI-Kategorie **Unbekannte und Spezialformate**.
+
+Die vollständige Anforderungszuordnung steht im Abschnitt **Implementiert** von
+`AI_Shield_Dateibasierte_Angriffe_und_Scananforderungen_DE.md`.
+
+## Verifizierte lokale Prüfungen
+
+| Prüfung | Ergebnis |
+|---|---|
+| Release-CTest | 15 von 15 bestanden |
+| Debug-CTest | 15 von 15 bestanden |
+| Download-Missbrauchstest | PDF, WAV, getarnte PE und SVG blockiert |
+| Unbekannte Endung | Freigabeschranke bestätigt |
+| Provenienz | SHA-256 im Datensatz bestätigt |
+| Installierter Schutzstatus | WFP, Minifilter, ProcessGuard, Broker und Core aktiv |
+| Content-Policy | `AIShieldContentPolicy/4`, `2047`, Fail-closed |
+| Scannerisolation | Handle-only, Job-Limits und WFP-Netzwerksperre |
+
+Die endgültigen äußeren Hashwerte stehen ausschließlich in `SHA256SUMS.txt`. Desktop- und
+Developer-Full-Paket enthalten zusätzlich interne Dateimanifeste. Dadurch enthält kein Paket den
+eigenen rekursiv instabilen Hash.
+
+## Release-Artefakte
+
+Der GitHub-Release `v2.0.0-rc.11` enthält:
+
+- `AI_Shield_Private_Desktop.zip`
+- `AI_Shield_Private_Desktop_2.0.0-rc.11_x64.msi`
+- `AI_Shield_Developer_ABI2.zip`
+- `AI_Shield_Developer_Full.zip`
+- `SHA256SUMS.txt`
+
+## Signierungs- und Freigabegrenze
+
+MSI und Treiber sind weiterhin lokal testsigniert. Für eine öffentliche Installation bei aktivem
+Secure Boot sind Microsoft-Produktionstreibersignierung, HLK/WHCP, rebootpflichtige HVCI-/Driver-
+Verifier-Läufe, Langzeit- und Kompatibilitätsmessungen sowie ein unabhängiger Security Review nötig.
+Die neue Datei-Schutzabdeckung ändert diese externe Freigabegrenze nicht.
+
+```
+
+## File: `AI-Shield-main/docs/RC8_RELEASE_NACHWEIS_DE.md`  
+- Path: `AI-Shield-main/docs/RC8_RELEASE_NACHWEIS_DE.md`  
 - Size: 2321 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield RC8 Release- und Installationsnachweis
@@ -13810,15 +16963,89 @@ Freigaben.
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/SCHUTZABDECKUNG_2_0_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/SCHUTZABDECKUNG_2_0_DE.md`  
-- Size: 3724 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/docs/RC9_RELEASE_NACHWEIS_DE.md`  
+- Path: `AI-Shield-main/docs/RC9_RELEASE_NACHWEIS_DE.md`  
+- Size: 2614 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
+- Condensed: comments and repeated blank lines reduced
+
+```markdown
+# AI Shield RC9 Release- und Installationsnachweis
+
+Stand: 14. Juli 2026, Release Candidate `2.0.0-rc.9`
+
+## Umfang
+
+RC9 erweitert den verifizierten RC8-Stand um Content-Policy v3 und eine standardmäßig aktive
+Download-Freigabeschranke. Programme, Skripte, Systemlauncher, Dokumente, Archive, Bilder, Audio,
+Video und Webdateien können getrennt gesteuert werden. Saubere Downloads aktiver Gruppen werden
+nach der Prüfung bis zur begründeten Benutzerfreigabe quarantänisiert.
+
+Weitere RC9-Änderungen:
+
+- ProcessGuard erkennt zusätzliche Sprachinterpreter und Windows-Systemlauncher.
+- Die Desktop-UI besitzt 59 vertraglich geprüfte Controls.
+- Neue Quarantäneobjekte erzeugen eine sichtbare UI-Warnung.
+- Die Quarantäneansicht zeigt einen lokalisierten Entscheidungsgrund.
+- Policy-v1-/v2-Daten migrieren sicher auf Policy v3.
+- Der Scanzyklus wurde auf eine Sekunde verkürzt; stabile Dateigröße bleibt Voraussetzung.
+- Der Download-Integrationstest verlangt nun auch für eine saubere Bilddatei eine Freigabe.
+
+## Verifizierte lokale Prüfungen
+
+| Prüfung | Ergebnis |
+|---|---|
+| CMake Release-Build | bestanden |
+| Release-CTest | 12 von 12 bestanden |
+| Debug-Build und Debug-CTest | 12 von 12 bestanden |
+| Broker-Selbsttest | bestanden |
+| UI-Vertrag | 59 Controls, 6 Ansichten |
+| Release-Freeze | gültig für `2.0.0-rc.9` |
+| ProcessGuard `.ps1`-/`.bat`-Laufzeittest | bestanden |
+| Realer Downloadtest | sauberes Bild freigabepflichtig, aktive PDF quarantänisiert |
+
+Der reale Downloadtest wurde auf dem Referenzrechner gegen den installierten LocalSystem-Broker
+ausgeführt. Beobachtete Kernausgabe:
+
+```text
+safe_image_requires_release=true
+active_pdf_quarantined=true
+provenance_recorded=true
+download_content_protection=installed
+```
+
+## Release-Artefakte
+
+Der GitHub-Release `v2.0.0-rc.9` enthält:
+
+- `AI_Shield_Private_Desktop.zip`
+- `AI_Shield_Private_Desktop_2.0.0-rc.9_x64.msi`
+- `AI_Shield_Developer_ABI2.zip`
+- `AI_Shield_Developer_Full.zip`
+- `SHA256SUMS.txt`
+
+Die konkreten SHA-256-Werte stehen in `SHA256SUMS.txt` des Releases. ZIP-Pakete enthalten zusätzlich
+eigene Dateimanifeste.
+
+## Signierungs- und Freigabegrenze
+
+MSI und Treiber sind mit dem lokalen AI-Shield-Testzertifikat signiert. Das ist kein öffentliches
+Microsoft-Vertrauen. Die Installation der Kernelmodule auf dem Entwicklungsstand erfordert
+deaktivierten Secure Boot und aktiviertes Windows-Testsigning. Vor einer öffentlichen
+Produktionsfreigabe bleiben Microsoft-Treibersignierung, HLK/WHCP, HVCI-/Driver-Verifier-Läufe,
+Kompatibilitätsmessungen und ein unabhängiger Security Review erforderlich.
+
+```
+
+## File: `AI-Shield-main/docs/SCHUTZABDECKUNG_2_0_DE.md`  
+- Path: `AI-Shield-main/docs/SCHUTZABDECKUNG_2_0_DE.md`  
+- Size: 4271 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield Schutzabdeckung 2.0
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Browser- und Download-Inhaltsprüfung
 
@@ -13827,7 +17054,13 @@ signierten Native-Messaging-Host. Neu angelegte Mark-of-the-Web-Dateien werden a
 DPAPI-Machine-geschützten Dateityp-Policy an eine feste Dateiidentität gebunden und in einem
 zeitbegrenzten isolierten Scanner geprüft. Defender/AMSI deckt bekannte Schadsoftware ab; PDF- und
 ZIP-Preflight prüfen zusätzlich aktive, fehlerhafte, verschlüsselte und strukturell riskante
-Inhalte. Nicht prüfbare risikoreiche Formate können fail-closed quarantänisiert werden.
+Inhalte. Nicht prüfbare risikoreiche Formate können fail-closed quarantänisiert werden. Content-
+Policy v3 ergänzt eine standardmäßig aktive Freigabeschranke: Auch sauber geprüfte Downloads
+aktiver Gruppen werden bis zur begründeten Benutzerfreigabe quarantänisiert und in der UI gemeldet.
+RC11 erweitert diese Schranke mit Content-Policy v4 auf unbekannte und spezialisierte Formate,
+Magic-/Extension-Abgleich, Polyglot-/Trailing-Data-Erkennung, einen Handle-gebundenen Minimalworker
+und eine WFP-erzwungene Netzwerksperre des Scanners.
+Details enthält [Downloadschutz und Freigabeschranke](DOWNLOADSCHUTZ_UND_FREIGABE_DE.md).
 
 ## Audit Viewer
 
@@ -13898,15 +17131,15 @@ Danach: `http://127.0.0.1:18443/`.
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/SICHERHEITSABSCHLUSS_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/SICHERHEITSABSCHLUSS_DE.md`  
-- Size: 3480 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/docs/SICHERHEITSABSCHLUSS_DE.md`  
+- Path: `AI-Shield-main/docs/SICHERHEITSABSCHLUSS_DE.md`  
+- Size: 3478 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield: Abschluss der offenen Windows-Sicherheitsfunktionen
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Bereits lokal aktiviert
 
@@ -13982,21 +17215,34 @@ duerfen anschliessend einzeln von Audit auf Block umgestellt werden.
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/Softwarebewertung.md`  
-- Path: `AI_Shield_Developer_Full/docs/Softwarebewertung.md`  
-- Size: 17219 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/docs/Softwarebewertung.md`  
+- Path: `AI-Shield-main/docs/Softwarebewertung.md`  
+- Size: 18062 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # Softwarebewertung: AI Shield 2.0
 
-Stand: 13. Juli 2026, bewertet wird Release Candidate `2.0.0-rc.8`
+Stand: 14. Juli 2026, bewertet wird Release Candidate `2.0.0-rc.11`
 
 Nachtrag zum verifizierten RC8-Stand: Die Recovery-Erstbaseline wurde auf dem Referenzrechner mit
 13.353 Dateien und null Übersprüngen abgeschlossen. Nicht auflösbare Junctions und Reparse Points
 werden nicht verfolgt und sind durch einen negativen Integrationstest abgedeckt. Alle zwölf
 CTest-Ziele bestanden. Diese Evidenz verbessert die lokale Funktionsreife, ersetzt jedoch keine
 Langzeit-, Vollplatten-, Stromausfall- oder unabhängige Sicherheitsqualifikation.
+
+RC9 ergänzt die praktisch relevante Download-Freigabeschranke: Saubere Dateien aktiver Gruppen
+werden nicht mehr automatisch als vertrauenswürdig behandelt, sondern bis zur begründeten
+Freigabe quarantänisiert und in der UI gemeldet. Der reale Integrationstest für ein sauberes Bild
+und eine aktive PDF ist Bestandteil des Release-Nachweises.
+
+RC10 ergänzt den für Endanwender notwendigen Hintergrundbetrieb: Tray-Autostart, Status der fünf
+Schutzkomponenten, UI-Einzelinstanz und Close-to-Tray wurden implementiert und real geprüft.
+
+RC11 ergänzt die universelle Datei-Preflight-Kette, die unbekannte Formate nicht mehr umgeht,
+Dateiidentität und SHA-256 über dasselbe gesperrte Handle bindet und den isolierten Scanner durch
+Job-Limits sowie eine WFP-Netzwerksperre begrenzt. Die Regressionen umfassen 15 Release- und
+Debug-CTest-Ziele sowie reale erhöhte Downloadtests.
 
 ## Gegenstand und Bewertungsrahmen
 
@@ -14007,7 +17253,7 @@ Administrationskanal und mehreren Windows-Härtungsintegrationen.
 
 Diese Bewertung berichtigt die zuvor vorgelegte, stark werbliche Softwarebewertung. Sie stützt sich
 auf den Quellcode, die Projektdokumentation und die im Projekt festgehaltenen lokalen Build-, Test-
-und Installationsnachweise mit Stand 13. Juli 2026. Sie ist weder ein unabhängiger Penetrationstest
+und Installationsnachweise mit Stand 14. Juli 2026. Sie ist weder ein unabhängiger Penetrationstest
 noch eine Microsoft-Zertifizierung oder eine Freigabe für den Produktivbetrieb.
 
 | Merkmal | Bewerteter Stand |
@@ -14016,7 +17262,7 @@ noch eine Microsoft-Zertifizierung oder eine Freigabe für den Produktivbetrieb.
 | Kernel-Transport | Eingefrorener ABI 1.2 |
 | Interne Ereigniskorrelation | AISHAD02 / ABI 2.0 |
 | Lokale Plattform | Windows x64, Testsigning-Umgebung |
-| Automatisierte Tests | 12 CTest-Ziele, zuletzt in Release erfolgreich; Debug bleibt ein separates Qualifikationsgate |
+| Automatisierte Tests | 15 CTest-Ziele, in Release und Debug erfolgreich |
 | Treiber | WFP, Minifilter und ProcessGuard lokal testsigniert und lauffähig |
 | Produktfreigabe | Nicht erteilt |
 
@@ -14255,24 +17501,24 @@ den vorhandenen Nachweisstand nicht gedeckt. Die korrekte Einordnung lautet desh
 
 ```
 
-## File: `AI_Shield_Developer_Full/docs/WHITEPAPER_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/WHITEPAPER_DE.md`  
-- Size: 31146 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+## File: `AI-Shield-main/docs/WHITEPAPER_DE.md`  
+- Path: `AI-Shield-main/docs/WHITEPAPER_DE.md`  
+- Size: 33605 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Warning: 6 secret-like value(s) redacted  
 - Condensed: comments and repeated blank lines reduced
 
 > Condensed: comments and repeated blank lines reduced
 
-## File: `AI_Shield_Developer_Full/docs/WINDOWS_HARDENING_DE.md`  
-- Path: `AI_Shield_Developer_Full/docs/WINDOWS_HARDENING_DE.md`  
+## File: `AI-Shield-main/docs/WINDOWS_HARDENING_DE.md`  
+- Path: `AI-Shield-main/docs/WINDOWS_HARDENING_DE.md`  
 - Size: 3956 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # AI Shield: Sicheres Windows-Hardening
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Automatische Pruefung
 
@@ -14361,19 +17607,19 @@ bleiben ohne verwaltete Browserintegration oder expliziten TLS-Proxy unsichtbar.
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/AI_Shield_Private_Desktop.md`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/AI_Shield_Private_Desktop.md`  
+## File: `AI-Shield-main/editions/private_desktop/AI_Shield_Private_Desktop.md`  
+- Path: `AI-Shield-main/editions/private_desktop/AI_Shield_Private_Desktop.md`  
 - Size: 146840 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Warning: 10 secret-like value(s) redacted  
 - Condensed: comments and repeated blank lines reduced
 
 > Condensed: comments and repeated blank lines reduced
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/AI_Shield_UI.cmd`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/AI_Shield_UI.cmd`  
+## File: `AI-Shield-main/editions/private_desktop/AI_Shield_UI.cmd`  
+- Path: `AI-Shield-main/editions/private_desktop/AI_Shield_UI.cmd`  
 - Size: 153 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 @echo off
@@ -14383,10 +17629,10 @@ if errorlevel 1 pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/Deinstallieren.cmd`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/Deinstallieren.cmd`  
+## File: `AI-Shield-main/editions/private_desktop/Deinstallieren.cmd`  
+- Path: `AI-Shield-main/editions/private_desktop/Deinstallieren.cmd`  
 - Size: 134 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 @echo off
@@ -14396,10 +17642,10 @@ if errorlevel 1 pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/developer_full/Build_All_Release.cmd`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/developer_full/Build_All_Release.cmd`  
+## File: `AI-Shield-main/editions/private_desktop/developer_full/Build_All_Release.cmd`  
+- Path: `AI-Shield-main/editions/private_desktop/developer_full/Build_All_Release.cmd`  
 - Size: 178 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 @echo off
@@ -14412,10 +17658,10 @@ exit /b %RC%
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/developer_full/Build_All_Release.ps1`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/developer_full/Build_All_Release.ps1`  
+## File: `AI-Shield-main/editions/private_desktop/developer_full/Build_All_Release.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/developer_full/Build_All_Release.ps1`  
 - Size: 1142 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -14442,10 +17688,10 @@ Write-Output "AI Shield user-mode binaries and Windows drivers built successfull
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/developer_full/Install_Precompiled_Desktop.cmd`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/developer_full/Install_Precompiled_Desktop.cmd`  
+## File: `AI-Shield-main/editions/private_desktop/developer_full/Install_Precompiled_Desktop.cmd`  
+- Path: `AI-Shield-main/editions/private_desktop/developer_full/Install_Precompiled_Desktop.cmd`  
 - Size: 188 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 @echo off
@@ -14458,10 +17704,10 @@ exit /b %RC%
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/developer_full/Install_Precompiled_Desktop.ps1`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/developer_full/Install_Precompiled_Desktop.ps1`  
+## File: `AI-Shield-main/editions/private_desktop/developer_full/Install_Precompiled_Desktop.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/developer_full/Install_Precompiled_Desktop.ps1`  
 - Size: 2012 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 $ErrorActionPreference = "Stop"
@@ -14496,17 +17742,17 @@ if ($LASTEXITCODE -ne 0) { throw "Desktop installation failed with exit code $LA
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/edition.json`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/edition.json`  
-- Size: 729 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/editions/private_desktop/edition.json`  
+- Path: `AI-Shield-main/editions/private_desktop/edition.json`  
+- Size: 730 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```json
 {
   "schema": "AIShieldEdition/1",
   "id": "private-desktop",
   "display_name": "AI Shield Private Desktop",
-  "release": "2.0.0-rc.8",
+  "release": "2.0.0-rc.11",
   "target": "private Windows single-user workstation",
   "network_mode": "local dual-stack host protection",
   "gateway_enabled_by_default": false,
@@ -14527,10 +17773,10 @@ if ($LASTEXITCODE -ne 0) { throw "Desktop installation failed with exit code $LA
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/install_private_desktop.ps1`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/install_private_desktop.ps1`  
-- Size: 11813 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/editions/private_desktop/install_private_desktop.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/install_private_desktop.ps1`  
+- Size: 12451 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -14564,6 +17810,7 @@ $recoveryScript = Join-Path $root "platform\windows\ransomware\ransomware_recove
 $markerRoot = Join-Path $env:ProgramData "AIShield\private-desktop"
 $markerPath = Join-Path $markerRoot "install.json"
 $uiLauncher = Join-Path $PSScriptRoot "AI_Shield_UI.cmd"
+$trayManager = Join-Path $PSScriptRoot "tray\manage_tray_agent.ps1"
 
 function Install-AIShieldPrivateUiShortcut {
     Assert-AIShieldFile $uiLauncher "Private desktop UI launcher"
@@ -14575,6 +17822,13 @@ function Install-AIShieldPrivateUiShortcut {
     $shortcut.WorkingDirectory = $PSScriptRoot
     $shortcut.Description = "AI Shield Private Desktop öffnen"
     $shortcut.Save()
+}
+function Install-AIShieldPrivateTray {
+    Assert-AIShieldFile $trayManager "Private desktop tray manager"
+    $arguments = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $trayManager, "-Action", "install")
+    if ([Security.Principal.WindowsIdentity]::GetCurrent().IsSystem) { $arguments += "-NoImmediateStart" }
+    & powershell.exe @arguments
+    if ($LASTEXITCODE -ne 0) { throw "Tray autostart installation failed." }
 }
 function Install-AIShieldBrowserSensor {
     $browserCertificate = [Security.Cryptography.X509Certificates.X509Certificate2]::new($certificate)
@@ -14623,6 +17877,7 @@ if (Test-Path -LiteralPath $markerPath) {
     Install-AIShieldBrowserSensor
     Initialize-AIShieldRecoveryBaseline
     Install-AIShieldPrivateUiShortcut
+    Install-AIShieldPrivateTray
     if (-not $SuppressUiLaunch) { Start-Process -FilePath $uiLauncher }
     exit 0
 }
@@ -14632,6 +17887,7 @@ foreach ($required in @($driverctl, $kernelctl, $certificate, $installDrivers, $
         $policyScript, $browserScript, $recoveryScript, (Join-Path $root "build_vs\Release\ai_shield_browser_host.exe"),
         $uiLauncher, (Join-Path $PSScriptRoot "ui\start_private_ui.ps1"),
         (Join-Path $PSScriptRoot "ui\AIShield.PrivateDesktop.UI.xaml"),
+        $trayManager, (Join-Path $PSScriptRoot "tray\start_tray_agent.ps1"),
         (Join-Path $package "AIShieldWfp.sys"),
         (Join-Path $package "AIShieldMiniFilter.sys"), (Join-Path $package "AIShieldProcessGuard.sys"))) {
     Assert-AIShieldFile $required "Required package file"
@@ -14742,6 +17998,7 @@ $marker = [ordered]@{
     [Text.UTF8Encoding]::new($false))
 
 Install-AIShieldPrivateUiShortcut
+Install-AIShieldPrivateTray
 
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "start_private_desktop.ps1") `
     -HardenDownloads
@@ -14751,10 +18008,10 @@ if (-not $SuppressUiLaunch) { Start-Process -FilePath $uiLauncher }
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/Installieren.cmd`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/Installieren.cmd`  
+## File: `AI-Shield-main/editions/private_desktop/Installieren.cmd`  
+- Path: `AI-Shield-main/editions/private_desktop/Installieren.cmd`  
 - Size: 132 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 @echo off
@@ -14764,10 +18021,10 @@ if errorlevel 1 pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/msi_product_action.ps1`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/msi_product_action.ps1`  
+## File: `AI-Shield-main/editions/private_desktop/msi_product_action.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/msi_product_action.ps1`  
 - Size: 2593 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -14828,10 +18085,10 @@ try {
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/private_common.ps1`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/private_common.ps1`  
+## File: `AI-Shield-main/editions/private_desktop/private_common.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/private_common.ps1`  
 - Size: 1198 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 function Get-AIShieldPrivateRoot {
@@ -14864,10 +18121,10 @@ function Assert-AIShieldFile([string]$Path, [string]$Description) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/private_posture.ps1`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/private_posture.ps1`  
+## File: `AI-Shield-main/editions/private_desktop/private_posture.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/private_posture.ps1`  
 - Size: 2636 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([string]$OutputPath = "")
@@ -14922,102 +18179,81 @@ try {
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/QUALIFIKATIONSSTATUS.md`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/QUALIFIKATIONSSTATUS.md`  
-- Size: 4417 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/editions/private_desktop/QUALIFIKATIONSSTATUS.md`  
+- Path: `AI-Shield-main/editions/private_desktop/QUALIFIKATIONSSTATUS.md`  
+- Size: 3218 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
-# Qualifikationsstatus AI Shield Private Desktop 2.0.0-rc.8
+# Qualifikationsstatus AI Shield Private Desktop 2.0.0-rc.11
 
-Stand: 13. Juli 2026
+Stand: 14. Juli 2026
 
 ## Bestätigte lokale Gates
 
-- Kernel-ABI 1.2, Freeze-Revision 2 und internes ABI 2.0 entsprechen dem Releasevertrag.
-- Zwei vollständige, getrennte Release-Builds bestanden jeweils alle 11 CTest-Ziele.
-- Ein vollständiger Debug-Build bestand alle 11 CTest-Ziele.
-- Fünf auslieferungsrelevante User-Mode-Programme waren zwischen beiden Release-Builds hashgleich.
-- Alle drei Treiber wurden zweimal mit WDK `Rebuild` erzeugt und waren jeweils hashgleich.
-- Inf2Cat erzeugte für WFP, Minifilter und ProcessGuard Kataloge ohne Fehler und Warnungen.
-- Das Microsoft-Staging enthält INF, SYS, CAT, PDB, ABI- und SHA-256-Manifeste sowie CAB.
-- Zwei Consumer-Paketläufe aus identischen signierten Eingaben sind bytegenau reproduzierbar.
-- Der WPF-Vertrag des RC3-Interfaces enthält 34 gebundene Controls in fünf Ansichten. Der
-  Browsersensor besitzt eine stabile Chromium-ID, einen gültig signierten Native-Messaging-Host
-  und getrennte Edge-/Chrome-Registrierung; alle Consumer-Manifestdateien sind hashgedeckt.
-  Die manuelle lokale Erweiterungsaktivierung ersetzt keine spätere Store-/HTTPS-Verteilung.
-- RC4 ergänzt eine transaktionale Kernel-/Hardware-Baseline für VBS/HVCI, verwundbare
-  Treiberblockliste, TPM-Anker sowie bedingte Secure-Launch-/DMA-Konfiguration. Posture weist
-  Secure Boot, Testsigning, DMA, SMM-Messung, Kernel-Stackschutz und BitLocker separat aus.
-- Der lokale Consumer-Korpus bestand sichere Prozessstarts und harmlose Downloadtypen.
-- Ein fünfsekündiger Dual-Stack-Lauf übertrug 2.166.210.560 Byte in 528.860 Transfers über
-  dauerhafte IPv4-/IPv6-Flows ohne Transportfehler.
-- Broker und Core blieben im Messfenster unter 10 MiB Working Set und weit unter 1 Prozent
-  durchschnittlicher Gesamt-CPU.
-- Auf dem Testsystem wurden installierte Anwendungen in allen fünf Inventarkategorien Browser,
-  VPN, Spiele, Installer und Skript-/Entwicklungswerkzeuge gefunden.
+- Kernel-Transport ABI 1.2, Freeze-Revision 2 und internes ABI 2.0 entsprechen dem Releasevertrag.
+- Release- und Debug-Build bestehen jeweils alle 15 CTest-Ziele einschließlich Datei-Scanner-, Tray-,
+  Einzelinstanz- und Close-to-Tray-Vertrag.
+- Der WPF-Vertrag enthält 61 gebundene Controls in sechs Ansichten.
+- Der Tray-Vertrag und der reale Laufzeittest bestätigen Einzelinstanz, Fünf-Komponenten-Status,
+  maschinenweiten Anmeldeautostart und eine vom Schutzkern unabhängige Beendigung.
+- Content-Policy v4 migriert v1/v2/v3 und aktiviert elf Dateigruppen, Fail-closed und die
+  Freigabeschranke standardmäßig.
+- Der reale Downloadtest quarantänisierte eine aktive PDF und verlangte auch für eine saubere
+  Bilddatei eine begründete Freigabe.
+- Der ProcessGuard-Laufzeittest blockierte direkte Temp-Ausführung, riskante PowerShell-Kommandos
+  sowie heruntergeladene `.ps1`- und `.bat`-Dateien.
+- WFP, Minifilter und ProcessGuard wurden mit WDK `/W4 /WX` neu gebaut, testsigniert, installiert
+  und mit `state=4` geladen.
+- Broker und Core laufen als automatische LocalSystem-Dienste.
+- Das signierte RC11-MSI wurde erfolgreich mit Windows Installer/WiX erzeugt und seine lokale
+  Authenticode-Testsignatur verifiziert.
+- Desktop-, ABI2- und Developer-Full-ZIP besitzen sichere Pfade; Desktop- und Full-Manifeste wurden
+  vollständig gegen SHA-256 geprüft.
+- Der eingefrorene RC11-Quellvertrag ist gültig.
 
-Maschinenlesbare Nachweise:
+## Signierte Treiberhashes
 
-- `runtime/private-release/RC_REPORT.json`
-- `runtime/private-release/consumer-qualification.json`
-- `runtime/private-release/microsoft-submission/SHA256SUMS.json`
-- `runtime/verification/HLK_READINESS.json`
-
-Frische, reproduzierte Treiberhashes:
-
-| Datei | SHA-256 |
+| Datei | SHA-256 der vollständigen signierten Datei |
 |---|---|
-| `AIShieldWfp.sys` | `3F0CE985AF35B1CDB59AF5D7DC9066D11F6F92E05FCF656EADE0973C8EC99370` |
-| `AIShieldMiniFilter.sys` | `0B1D9540D8A9336F5F8AD78CFD6D2C8EDA91FF6D7FB1E6661F9E991EE2AA4620` |
-| `AIShieldProcessGuard.sys` | `7D6E3E6A2F0BB43CAA3C37C6E4499BCED1F4204623198912064C31658894CF0B` |
-| `AIShieldDrivers-x64.cab` | `FD25FEF7B622C6CF73CA535DE4F3AA8F0A8AC5308E3005946681DCA988F9A12F` |
+| `AIShieldWfp.sys` | `424A0EE534231FC583EDC53CE693D7C8B7FAF90438FE0F09B7A631D281AD7F5E` |
+| `AIShieldMiniFilter.sys` | `2FA9CACE0241FC12C4FBABBD4848A1A8885687EB6B811324CF3718B85D33077D` |
+| `AIShieldProcessGuard.sys` | `29E2C8E017410BB54B47C19119997EA446BC29AF9FC31C8AE5C06A5D9716B3C8` |
 
-## Noch nicht bestandene Gates
+Die Signatur stammt vom lokalen Zertifikat `AI Shield Prototype Test Signing`. Sie ersetzt keine
+Microsoft-Produktionstreibersignatur.
 
-Das installierbare RC-ZIP wurde absichtlich nicht freigegeben. Die frisch gebauten Treiber sind
-noch nicht testsigniert und noch nicht anstelle der laufenden älteren Prototyptreiber installiert.
-Der Packager verweigert unsignierte Consumer-Treiber.
+## Release-Artefakte
 
-Der erhöhte Abschlusslauf lautet:
+Desktop-ZIP, signiertes MSI, ABI2-Quellpaket und Developer-Full-Paket werden reproduzierbar aus
+diesem Freeze erzeugt. Die endgültigen äußeren Paket-Hashes stehen bewusst nur in der neben den
+Artefakten veröffentlichten Datei `SHA256SUMS.txt`; dadurch enthält kein Paket seinen eigenen,
+rekursiv instabilen Hash. Interne Dateien bleiben über die Paketmanifeste hashgedeckt.
 
-```powershell
-Set-Location D:\AI_Shield
-powershell -ExecutionPolicy Bypass -File tools\complete_private_rc_admin.ps1 `
-  -QualificationSeconds 60 -ConfirmInstallCycle
-```
+## Noch nicht bestandene externe oder rebootpflichtige Gates
 
-Dieser Lauf signiert exakt das geprüfte Staging, erstellt das reproduzierbare Consumer-ZIP,
-ersetzt die drei installierten Prototyptreiber kontrolliert, prüft deren Laufzustand und wiederholt
-Consumer-, Security- und Recovery-Inspektion. Bei fehlgeschlagener Treiberinstallation versucht er,
-das vorherige lokale Treiberpaket wiederherzustellen.
-
-Weiterhin extern oder rebootpflichtig:
-
-1. Driver Verifier für genau die drei RC-Treiber mit kontrolliertem Neustart und Notfallreset.
-2. Neustart-, Installations-, Update-, Rollback- und Recovery-Zyklen auf einem wiederherstellbaren
-   Testsystem; der aktuelle nicht erhöhte Lauf verändert diese Zustände nicht.
-3. Längerer interaktiver Fehlalarmtest, bei dem Browser, VPN, Spiele, Installer und Skripte wirklich
-   verwendet werden. Das vorhandene Inventar allein beweist keine Kompatibilität.
-4. HLK/WHCP. HVCI läuft und alle Submission-Artefakte sind vorhanden; auf diesem Rechner fehlen HLK
-   Studio/Controller und ein Controller-Endpunkt.
-5. Unabhängiges Kernelreview und Penetrationstest durch eine organisatorisch getrennte Stelle.
-6. Partner-Center-Upload und Microsoft-Produktionssignatur.
+1. Microsoft Partner Center, EV-Identität, HLK/WHCP und Microsoft-Produktionstreibersignierung.
+2. Driver Verifier und HVCI über kontrollierte Neustarts auf jeder unterstützten Windows-Version.
+3. Vollplatten-, Stromausfall-, Upgrade-, Rollback-, 24-Stunden- und 30-Tage-Dauertests.
+4. Repräsentative Fehlalarm- und Kompatibilitätsmessungen mit Browsern, VPNs, Spielen, Installern,
+   Entwicklertools und realen Nutzerdaten.
+5. Unabhängiges Threat Modeling, Kernel-Code-Review, Penetrationstest und Datenschutzprüfung.
+6. Öffentliche Browser-Store-/HTTPS-Verteilung statt lokaler Erweiterungsbestätigung.
 
 Keiner dieser Punkte darf ohne Ergebnisartefakt als bestanden markiert werden.
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/RELEASE_CONTRACT.json`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/RELEASE_CONTRACT.json`  
-- Size: 6686 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/editions/private_desktop/RELEASE_CONTRACT.json`  
+- Path: `AI-Shield-main/editions/private_desktop/RELEASE_CONTRACT.json`  
+- Size: 9801 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```json
 {
   "schema": "AIShieldPrivateReleaseContract/1",
-  "release": "2.0.0-rc.8",
-  "release_epoch_utc": "2026-07-13T16:30:00Z",
+  "release": "2.0.0-rc.11",
+  "release_epoch_utc": "2026-07-14T17:30:00Z",
   "kernel_abi": "1.2",
   "kernel_abi_freeze_revision": 2,
   "internal_abi": "2.0",
@@ -15037,11 +18273,11 @@ Keiner dieser Punkte darf ohne Ergebnisartefakt als bestanden markiert werden.
     },
     {
       "path": "editions/private_desktop/edition.json",
-      "sha256": "D4FBC422D2CFE82BBA1377129356A944B9E84E56814CF8208D2A626CD9651B73"
+      "sha256": "8A3672467AF7CE98DB942B7AC81ADBAB90920F19CD1E71DBDB8BA0A598B71076"
     },
     {
       "path": "CMakeLists.txt",
-      "sha256": "8E30CE8FB74558E7CF83AA23E71E3788EAF360368D641CBCAA05D01DDAF5BECA"
+      "sha256": "8F105208BDF10B03330C2D16BCAA2316F5447FEC3388D00668510EFD4482AF2B"
     },
     {
       "path": "platform/windows/drivers.props",
@@ -15053,11 +18289,11 @@ Keiner dieser Punkte darf ohne Ergebnisartefakt als bestanden markiert werden.
     },
     {
       "path": "tools/package_private_desktop.ps1",
-      "sha256": "ED076B061926B5323F74E6160134671B7685011D00585CE1B1F76F0E9780EF7A"
+      "sha256": "7A37E90AE37371A9401DB8685514218FC88ED20515DABD0BAA66768D2B151441"
     },
     {
       "path": "editions/private_desktop/install_private_desktop.ps1",
-      "sha256": "B6D0A163D3B1EA67773FB43DE1F11A5F165ADCD949B9ADB0AB1CE015B25D83DC"
+      "sha256": "15423D6E65E7A7AC2B665F522D5435A348B948D2B14F0B9DFD9D525728CB820F"
     },
     {
       "path": "editions/private_desktop/msi_product_action.ps1",
@@ -15065,11 +18301,11 @@ Keiner dieser Punkte darf ohne Ergebnisartefakt als bestanden markiert werden.
     },
     {
       "path": "platform/windows/msi/AIShieldPrivateDesktop.wxs",
-      "sha256": "8B55B7A73EBEEBDAB1CCBEDA193FC54A047B666AA7B1E10735BED4AB58D42BEE"
+      "sha256": "9FD53A3933A9A23D2B79E4A727224D880662C522ED685B583F00D73C3CB871CA"
     },
     {
       "path": "platform/windows/msi/build_msi.ps1",
-      "sha256": "DE51D1B4F1B0FBD8F58D4220598B4D51BA2B77F95F8DD247B0EC97365A495245"
+      "sha256": "A004A18721BCD6DDA60EABA0ECF211987C3C625138FC2C73960504295598270C"
     },
     {
       "path": "platform/windows/installer/install_drivers.ps1",
@@ -15077,7 +18313,7 @@ Keiner dieser Punkte darf ohne Ergebnisartefakt als bestanden markiert werden.
     },
     {
       "path": "editions/private_desktop/uninstall_private_desktop.ps1",
-      "sha256": "05C193183AC85CF8C6A9966EBE3000D38C471ED4B65177B3FA2D0DD2F23A23D1"
+      "sha256": "B2976E7B13E9227CEA3B8503643726127C926B3BF8AC188CB5867831E9247C56"
     },
     {
       "path": "editions/private_desktop/AI_Shield_UI.cmd",
@@ -15085,7 +18321,7 @@ Keiner dieser Punkte darf ohne Ergebnisartefakt als bestanden markiert werden.
     },
     {
       "path": "editions/private_desktop/ui/AIShield.PrivateDesktop.UI.xaml",
-      "sha256": "E58B76C68D572EACBDBB9CC065FB08284E5BFACC9F565C76AFCDC187B2A4C65A"
+      "sha256": "C10D5C2F1C4AF6994DD937526C4063DC4B3D072691E9E746DDE103819772947C"
     },
     {
       "path": "editions/private_desktop/ui/AIShield.AuditViewer.xaml",
@@ -15093,7 +18329,7 @@ Keiner dieser Punkte darf ohne Ergebnisartefakt als bestanden markiert werden.
     },
     {
       "path": "editions/private_desktop/ui/start_private_ui.ps1",
-      "sha256": "B30FD8519FD93EF92339A9C095E544EF3ACD9D6BD4D9B7EAAF2D2E0A14AD6757"
+      "sha256": "F69353CFFD415266383DCE2363D289AB8B5E01AC7966CF00B5C3754533793EDF"
     },
     {
       "path": "editions/private_desktop/ui/private_security_settings.ps1",
@@ -15101,7 +18337,27 @@ Keiner dieser Punkte darf ohne Ergebnisartefakt als bestanden markiert werden.
     },
     {
       "path": "editions/private_desktop/ui/verify_ui_contract.ps1",
-      "sha256": "93ACDE75622E7AC1BA855DD32CCF880D8ACA3539EAF2D8DF4A4D6528B2C70802"
+      "sha256": "1168EC8E1A5669061572603C0906CE6B4DF367E6EB2D4538F3DD2ACC0A3C1D97"
+    },
+    {
+      "path": "editions/private_desktop/tray/start_tray_agent.ps1",
+      "sha256": "8AC07146DA9D7F053AA195A25E1AE800D8D59BC251BB5BD5A3D553EAE4A7C403"
+    },
+    {
+      "path": "editions/private_desktop/tray/manage_tray_agent.ps1",
+      "sha256": "24FF33E2A40C9902E56C154C78EE49C212C88AD6087E913939ED8C9FC649D1AF"
+    },
+    {
+      "path": "tests/windows_tray_agent_contract.ps1",
+      "sha256": "41625F1F22EF40FAF5FB9622FC9DFCA4EC5D5B1CAE83BD8130BEF43233F6E86A"
+    },
+    {
+      "path": "tools/deploy_private_tray.ps1",
+      "sha256": "E4945CB8740B54C5DFA1FE3B2BB860C8D7760974A7346DCDA7DEC80F98987638"
+    },
+    {
+      "path": "tools/diagnose_private_ui.ps1",
+      "sha256": "7645E7D4D979E997DB968D33177950AFFA0D7B5DB25630F3CB980C069CB37A5B"
     },
     {
       "path": "platform/windows/browser_extension/manifest.json",
@@ -15117,7 +18373,7 @@ Keiner dieser Punkte darf ohne Ergebnisartefakt als bestanden markiert werden.
     },
     {
       "path": "platform/windows/process_guard/driver/ai_shield_process_guard.c",
-      "sha256": "84D458FA30EA2FB9A032352B0A7EF78CA24613416D5524CAEDC59A6F591C2801"
+      "sha256": "8252075E5B9C19CD067713FBE9427FE8BF79F2721BCFC9440C8CCE2CDD429CB4"
     },
     {
       "path": "platform/windows/security/kernel_hardware_hardening.ps1",
@@ -15148,8 +18404,16 @@ Keiner dieser Punkte darf ohne Ergebnisartefakt als bestanden markiert werden.
       "sha256": "C22F4366493AF87F55D2BB9CD44857A024AD3F40F8BE8133B3A50DD7C68B2AE2"
     },
     {
+      "path": "tests/windows_process_guard_rules.ps1",
+      "sha256": "D02592E9C61718733AB186EFA41CE21930788BB39A73A6701898CD5B937EA901"
+    },
+    {
+      "path": "tests/windows_download_content_protection.ps1",
+      "sha256": "2DD0CA445942249B7BF912DC86CC730B8FF56ED7124DE98EC864F74C72BF828D"
+    },
+    {
       "path": "tools/ai_shield_broker/main.cpp",
-      "sha256": "0491E433647604D093CCF4D2025C04D28C1B3B17DD2B7877F31BD04E9788CFFD"
+      "sha256": "5793C0EBFA59DE55A50D1B8282D1C165CCFE06AD9D82964C2DAC7C37960DC2C2"
     },
     {
       "path": "platform/windows/minifilter/driver/ai_shield_minifilter.c",
@@ -15158,6 +18422,58 @@ Keiner dieser Punkte darf ohne Ergebnisartefakt als bestanden markiert werden.
     {
       "path": "platform/windows/admin/ai_shield_admin.ps1",
       "sha256": "FF83353EBB592229C2BC0430C1A3EBCBABF4F461B0C2F39D7F537A1B8F99A47F"
+    },
+    {
+      "path": "include/ai_shield/file_preflight.hpp",
+      "sha256": "437C1168D370F75C7975EF75511D2288958CB1454A0419F6CAE3B6C917466049"
+    },
+    {
+      "path": "src/file_preflight.cpp",
+      "sha256": "6EF6F691A65B757AEF2E420CD6238C4859F29AEE0713C98D8B76E92F4B4F98D0"
+    },
+    {
+      "path": "include/ai_shield/wav_preflight.hpp",
+      "sha256": "A370997982E5D0AF86D6D487D188D76CAC194E171DC87C2C1101FFC2BAF8C44B"
+    },
+    {
+      "path": "src/wav_preflight.cpp",
+      "sha256": "08687AA5575A8AA7A691836FAFFED7824CDCC3CEBB174631FAFAC3E514F1EFAA"
+    },
+    {
+      "path": "include/ai_shield/zip_preflight.hpp",
+      "sha256": "7F35F374AFE101C01DA3F9C15FD99B54827851DB8E05C856F72485599B9797E1"
+    },
+    {
+      "path": "src/zip_preflight.cpp",
+      "sha256": "0BA51A6745AAC60DFF537A760B6327072593C62F81D88673D071AD6D98888411"
+    },
+    {
+      "path": "tools/ai_shield_file_scanner/main.cpp",
+      "sha256": "875A7D4BE890A78040E20CB30986D5B8908A0DC6D2BE83A09AC98FBF4B0EF633"
+    },
+    {
+      "path": "platform/windows/sandbox/appcontainer_launcher.hpp",
+      "sha256": "A480F58DEE28B3DA707CA7917A3241CDDB2A583F010CF18F4896AFBD5CED4211"
+    },
+    {
+      "path": "platform/windows/sandbox/appcontainer_launcher.cpp",
+      "sha256": "0E307E8D1D8CCB3F9A2BA87D9E9E08BBF93A8A1342842CC551FA4C6CCDE69A85"
+    },
+    {
+      "path": "platform/windows/wfp/driver/ai_shield_wfp.c",
+      "sha256": "90439EDE8E2734777BE47E36503C0F886CDF6225BBBE5178BA09A6A4E0019856"
+    },
+    {
+      "path": "platform/windows/installer/install_broker.ps1",
+      "sha256": "B292939ADD7083F0EAD636E235158FD54B035CE729CF8C01BEFDA6D79944852F"
+    },
+    {
+      "path": "tools/deploy_download_content_protection.ps1",
+      "sha256": "C7A1D2130D97862183C67112A9034175E1FBBF025E5EE58102B18618E1855DD6"
+    },
+    {
+      "path": "tools/deploy_scanner_network_isolation.ps1",
+      "sha256": "C4D5764E796779223979F7B52B647CAE1F62C979C6D671BB52A9E9FB1E10A8AD"
     }
   ],
   "drivers": [
@@ -15176,6 +18492,7 @@ Keiner dieser Punkte darf ohne Ergebnisartefakt als bestanden markiert werden.
     "signed local policy and rollback",
     "local audit and health posture",
     "graphical local administration with reboot resume and quarantine workflow",
+    "automatic boot protection with per-user tray status and UI launcher",
     "per-category download content policy with isolated AMSI and structural scanning",
     "integrated AISHAD02 integrity verification and audit viewer",
     "Edge and Chrome privacy-preserving navigation and download metadata sensor",
@@ -15193,10 +18510,10 @@ Keiner dieser Punkte darf ohne Ergebnisartefakt als bestanden markiert werden.
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/Schutz_beenden.cmd`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/Schutz_beenden.cmd`  
+## File: `AI-Shield-main/editions/private_desktop/Schutz_beenden.cmd`  
+- Path: `AI-Shield-main/editions/private_desktop/Schutz_beenden.cmd`  
 - Size: 129 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 @echo off
@@ -15206,10 +18523,10 @@ if errorlevel 1 pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/Schutz_starten.cmd`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/Schutz_starten.cmd`  
+## File: `AI-Shield-main/editions/private_desktop/Schutz_starten.cmd`  
+- Path: `AI-Shield-main/editions/private_desktop/Schutz_starten.cmd`  
 - Size: 130 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 @echo off
@@ -15219,10 +18536,10 @@ if errorlevel 1 pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/SOFTWAREBEWERTUNG_PRIVAT.md`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/SOFTWAREBEWERTUNG_PRIVAT.md`  
-- Size: 5642 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/editions/private_desktop/SOFTWAREBEWERTUNG_PRIVAT.md`  
+- Path: `AI-Shield-main/editions/private_desktop/SOFTWAREBEWERTUNG_PRIVAT.md`  
+- Size: 5707 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```markdown
 # Softwarebewertung: AI Shield Private Desktop
@@ -15234,7 +18551,8 @@ Administration, Flottenbetrieb, externe Ereignissammler und Security-Operations-
 nicht zum Umfang dieser Edition und fließen weder positiv noch negativ in die Wertung ein.
 
 Die Bewertung basiert auf Quellcode, lokalen Build- und Testergebnissen sowie dem dokumentierten
-Installationsstand vom 13. Juli 2026. Sie ist kein unabhängiger Penetrationstest und keine
+Installationsstand vom 14. Juli 2026 einschließlich Content-Policy v4 und Download-
+Freigabeschranke. Sie ist kein unabhängiger Penetrationstest und keine
 Produktzertifizierung.
 
 Der RC-1-Lauf bestätigt inzwischen reproduzierbare User-Mode- und Treiberbuilds, drei erfolgreiche
@@ -15319,10 +18637,10 @@ Die korrekte Einordnung ist daher nicht "unbezwingbarer Schutz", sondern:
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/start_private_desktop.ps1`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/start_private_desktop.ps1`  
+## File: `AI-Shield-main/editions/private_desktop/start_private_desktop.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/start_private_desktop.ps1`  
 - Size: 1177 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -15355,10 +18673,10 @@ Write-Output "Private workstation protection is active. No local web backend or 
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/Status_anzeigen.cmd`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/Status_anzeigen.cmd`  
+## File: `AI-Shield-main/editions/private_desktop/Status_anzeigen.cmd`  
+- Path: `AI-Shield-main/editions/private_desktop/Status_anzeigen.cmd`  
 - Size: 115 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 @echo off
@@ -15368,10 +18686,10 @@ pause
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/status_private_desktop.ps1`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/status_private_desktop.ps1`  
+## File: `AI-Shield-main/editions/private_desktop/status_private_desktop.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/status_private_desktop.ps1`  
 - Size: 586 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 $ErrorActionPreference = "Stop"
@@ -15390,10 +18708,10 @@ Get-Service AIShieldCore,AIShieldBroker -ErrorAction SilentlyContinue |
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/stop_private_desktop.ps1`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/stop_private_desktop.ps1`  
+## File: `AI-Shield-main/editions/private_desktop/stop_private_desktop.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/stop_private_desktop.ps1`  
 - Size: 400 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 $ErrorActionPreference = "Stop"
@@ -15408,10 +18726,218 @@ if ($LASTEXITCODE -ne 0) { throw "AI Shield could not be stopped cleanly." }
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/ui/AIShield.AuditViewer.xaml`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/ui/AIShield.AuditViewer.xaml`  
+## File: `AI-Shield-main/editions/private_desktop/tray/manage_tray_agent.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/tray/manage_tray_agent.ps1`  
+- Size: 3146 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
+
+```powershell
+param(
+    [Parameter(Mandatory=$true)]
+    [ValidateSet("install", "uninstall", "status", "start")]
+    [string]$Action,
+    [switch]$NoImmediateStart
+)
+
+$ErrorActionPreference = "Stop"
+$runKey = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run"
+$valueName = "AIShieldPrivateTray"
+$agent = Join-Path $PSScriptRoot "start_tray_agent.ps1"
+$powershell = Join-Path $env:SystemRoot "System32\WindowsPowerShell\v1.0\powershell.exe"
+$command = '"{0}" -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -STA -File "{1}"' -f $powershell, $agent
+
+function Test-Administrator {
+    $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = [Security.Principal.WindowsPrincipal]$identity
+    $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+function Stop-TrayAgent {
+    $escaped = [regex]::Escape([IO.Path]::GetFullPath($agent))
+    Get-CimInstance Win32_Process -Filter "Name='powershell.exe' OR Name='pwsh.exe'" -ErrorAction SilentlyContinue |
+        Where-Object { [string]$_.CommandLine -match $escaped } |
+        ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
+}
+
+if ($Action -eq "status") {
+    $registered = $false
+    $configured = $null
+    if (Test-Path -LiteralPath $runKey) {
+        try {
+            $configured = Get-ItemPropertyValue -LiteralPath $runKey -Name $valueName -ErrorAction Stop
+        } catch [Management.Automation.PSArgumentException] {
+            $configured = $null
+        }
+        $registered = -not [string]::IsNullOrWhiteSpace([string]$configured)
+    }
+    $escaped = [regex]::Escape([IO.Path]::GetFullPath($agent))
+    $running = @(Get-CimInstance Win32_Process -Filter "Name='powershell.exe' OR Name='pwsh.exe'" -ErrorAction SilentlyContinue |
+        Where-Object { [string]$_.CommandLine -match $escaped }).Count -gt 0
+    [ordered]@{ schema="AIShieldTrayStatus/1"; registered=$registered; running=$running; command=$configured; agent=$agent } |
+        ConvertTo-Json -Compress
+    exit 0
+}
+
+if ($Action -eq "start") {
+    if (-not (Test-Path -LiteralPath $agent -PathType Leaf)) { throw "Tray agent is missing: $agent" }
+    Start-Process -FilePath $powershell -WindowStyle Hidden -ArgumentList @(
+        "-NoProfile", "-WindowStyle", "Hidden", "-ExecutionPolicy", "Bypass", "-STA", "-File", ('"' + $agent + '"')) | Out-Null
+    exit 0
+}
+
+if (-not (Test-Administrator)) { throw "Tray autostart changes require administrator rights." }
+if ($Action -eq "install") {
+    if (-not (Test-Path -LiteralPath $agent -PathType Leaf)) { throw "Tray agent is missing: $agent" }
+    New-Item -Path $runKey -Force | Out-Null
+    Set-ItemProperty -LiteralPath $runKey -Name $valueName -Type String -Value $command
+    if (-not $NoImmediateStart -and -not [Security.Principal.WindowsIdentity]::GetCurrent().IsSystem) {
+        & $PSCommandPath -Action start
+    }
+    Write-Output "AI Shield tray autostart installed."
+    exit 0
+}
+
+Stop-TrayAgent
+Remove-ItemProperty -LiteralPath $runKey -Name $valueName -ErrorAction SilentlyContinue
+Write-Output "AI Shield tray autostart removed. Protection services remain unaffected."
+
+```
+
+## File: `AI-Shield-main/editions/private_desktop/tray/start_tray_agent.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/tray/start_tray_agent.ps1`  
+- Size: 5260 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
+
+```powershell
+param([switch]$ShowStartupStatus)
+
+$ErrorActionPreference = "Stop"
+Add-Type -AssemblyName System.Windows.Forms,System.Drawing
+
+$createdNew = $false
+$mutex = [Threading.Mutex]::new($true, "Local\AIShieldPrivateTray", [ref]$createdNew)
+if (-not $createdNew) {
+    $mutex.Dispose()
+    exit 0
+}
+
+$services = @("AIShieldCore", "AIShieldBroker", "AIShieldWfp", "AIShieldMiniFilter", "AIShieldProcessGuard")
+$editionRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot ".."))
+$uiLauncher = Join-Path $editionRoot "AI_Shield_UI.cmd"
+$startScript = Join-Path $editionRoot "start_private_desktop.ps1"
+$settingsPath = Join-Path $env:ProgramData "AIShield\private-desktop\ui-settings.json"
+$script:lastState = ""
+
+function Get-AIShieldTrayState {
+    $states = foreach ($name in $services) {
+        $service = Get-Service -Name $name -ErrorAction SilentlyContinue
+        [pscustomobject]@{ Name = $name; Running = $null -ne $service -and $service.Status -eq "Running" }
+    }
+    $running = @($states | Where-Object Running).Count
+    $level = if ($running -eq $services.Count) { "protected" } elseif ($running -eq 0) { "stopped" } else { "degraded" }
+    [pscustomobject]@{ Level = $level; Running = $running; Total = $services.Count; Services = @($states) }
+}
+
+function Open-AIShieldUi {
+    if (-not (Test-Path -LiteralPath $uiLauncher -PathType Leaf)) {
+        [Windows.Forms.MessageBox]::Show("Die AI-Shield-Oberfläche wurde nicht gefunden.", "AI Shield",
+            [Windows.Forms.MessageBoxButtons]::OK, [Windows.Forms.MessageBoxIcon]::Error) | Out-Null
+        return
+    }
+    Start-Process -FilePath $uiLauncher
+}
+
+function Restart-AIShieldProtection {
+    if (-not (Test-Path -LiteralPath $startScript -PathType Leaf)) { return }
+    $arguments = @("-NoProfile", "-WindowStyle", "Hidden", "-ExecutionPolicy", "Bypass", "-File", ('"' + $startScript + '"'))
+    try {
+        if (Test-Path -LiteralPath $settingsPath) {
+            $settings = Get-Content -LiteralPath $settingsPath -Raw | ConvertFrom-Json
+            if ($settings.harden_downloads) { $arguments += "-HardenDownloads" }
+            if ($settings.strict_browser) { $arguments += "-StrictBrowser" }
+            if ($settings.block_unsolicited_inbound) { $arguments += "-BlockUnsolicitedInbound" }
+        } else {
+            $arguments += "-HardenDownloads"
+        }
+        Start-Process powershell.exe -Verb RunAs -WindowStyle Hidden -ArgumentList $arguments | Out-Null
+    } catch {
+        [Windows.Forms.MessageBox]::Show($_.Exception.Message, "AI Shield",
+            [Windows.Forms.MessageBoxButtons]::OK, [Windows.Forms.MessageBoxIcon]::Error) | Out-Null
+    }
+}
+
+$notify = [Windows.Forms.NotifyIcon]::new()
+$notify.Visible = $true
+$notify.Text = "AI Shield wird gestartet"
+$menu = [Windows.Forms.ContextMenuStrip]::new()
+$openItem = $menu.Items.Add("AI Shield öffnen")
+$statusItem = $menu.Items.Add("Status wird geladen")
+$statusItem.Enabled = $false
+$menu.Items.Add([Windows.Forms.ToolStripSeparator]::new()) | Out-Null
+$restartItem = $menu.Items.Add("Schutzdienste neu starten")
+$refreshItem = $menu.Items.Add("Status aktualisieren")
+$servicesItem = $menu.Items.Add("Windows-Dienste öffnen")
+$menu.Items.Add([Windows.Forms.ToolStripSeparator]::new()) | Out-Null
+$exitItem = $menu.Items.Add("Tray-Agent beenden")
+$notify.ContextMenuStrip = $menu
+
+function Update-AIShieldTrayStatus {
+    $state = Get-AIShieldTrayState
+    switch ($state.Level) {
+        "protected" { $notify.Icon = [Drawing.SystemIcons]::Information; $label = "Geschützt" }
+        "degraded" { $notify.Icon = [Drawing.SystemIcons]::Warning; $label = "Eingeschränkt" }
+        default { $notify.Icon = [Drawing.SystemIcons]::Error; $label = "Schutz nicht aktiv" }
+    }
+    $notify.Text = "AI Shield: $label ($($state.Running)/$($state.Total))"
+    $statusItem.Text = "$label - $($state.Running) von $($state.Total) Komponenten aktiv"
+    if ($script:lastState -and $script:lastState -ne $state.Level) {
+        $notify.BalloonTipTitle = "AI Shield"
+        $notify.BalloonTipText = $statusItem.Text
+        $notify.BalloonTipIcon = if ($state.Level -eq "protected") {
+            [Windows.Forms.ToolTipIcon]::Info
+        } else { [Windows.Forms.ToolTipIcon]::Warning }
+        $notify.ShowBalloonTip(5000)
+    }
+    $script:lastState = $state.Level
+}
+
+$openItem.Add_Click({ Open-AIShieldUi })
+$restartItem.Add_Click({ Restart-AIShieldProtection })
+$refreshItem.Add_Click({ Update-AIShieldTrayStatus })
+$servicesItem.Add_Click({ Start-Process services.msc })
+$notify.Add_DoubleClick({ Open-AIShieldUi })
+$exitItem.Add_Click({ [Windows.Forms.Application]::ExitThread() })
+
+$timer = [Windows.Forms.Timer]::new()
+$timer.Interval = 5000
+$timer.Add_Tick({ Update-AIShieldTrayStatus })
+
+try {
+    Update-AIShieldTrayStatus
+    if ($ShowStartupStatus) {
+        $notify.BalloonTipTitle = "AI Shield"
+        $notify.BalloonTipText = $statusItem.Text
+        $notify.BalloonTipIcon = [Windows.Forms.ToolTipIcon]::Info
+        $notify.ShowBalloonTip(4000)
+    }
+    $timer.Start()
+    [Windows.Forms.Application]::Run()
+} finally {
+    $timer.Stop()
+    $timer.Dispose()
+    $notify.Visible = $false
+    $notify.Dispose()
+    $menu.Dispose()
+    if ($createdNew) { $mutex.ReleaseMutex() }
+    $mutex.Dispose()
+}
+
+```
+
+## File: `AI-Shield-main/editions/private_desktop/ui/AIShield.AuditViewer.xaml`  
+- Path: `AI-Shield-main/editions/private_desktop/ui/AIShield.AuditViewer.xaml`  
 - Size: 3191 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -15444,10 +18970,10 @@ if ($LASTEXITCODE -ne 0) { throw "AI Shield could not be stopped cleanly." }
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/ui/AIShield.PrivateDesktop.UI.xaml`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/ui/AIShield.PrivateDesktop.UI.xaml`  
-- Size: 18236 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/editions/private_desktop/ui/AIShield.PrivateDesktop.UI.xaml`  
+- Path: `AI-Shield-main/editions/private_desktop/ui/AIShield.PrivateDesktop.UI.xaml`  
+- Size: 21304 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -15464,7 +18990,7 @@ if ($LASTEXITCODE -ne 0) { throw "AI Shield could not be stopped cleanly." }
   <Border Grid.Column="0" Background="#17242D"><Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
    <StackPanel Margin="20,22"><TextBlock Text="AI SHIELD" Foreground="White" FontSize="22" FontWeight="Bold"/><TextBlock Text="PRIVATE DESKTOP" Foreground="#55D1B3" FontSize="11" Margin="0,4,0,0"/></StackPanel>
    <StackPanel Grid.Row="1" Margin="10,20"><Button x:Name="NavDashboard" Style="{StaticResource NavButton}" Content="Übersicht"/><Button x:Name="NavProtection" Style="{StaticResource NavButton}" Content="Schutzfunktionen"/><Button x:Name="NavAudit" Style="{StaticResource NavButton}" Content="Audit"/><Button x:Name="NavQuarantine" Style="{StaticResource NavButton}" Content="Quarantäne"/><Button x:Name="NavRecovery" Style="{StaticResource NavButton}" Content="Wiederherstellung"/><Button x:Name="NavSystem" Style="{StaticResource NavButton}" Content="Windows-Sicherheit"/></StackPanel>
-   <StackPanel Grid.Row="2" Margin="20,16"><TextBlock Text="2.0.0-rc.8" Foreground="#7F929D"/><TextBlock x:Name="SidebarState" Text="Status wird geladen" Foreground="#55D1B3" Margin="0,5,0,0"/></StackPanel>
+   <StackPanel Grid.Row="2" Margin="20,16"><TextBlock Text="2.0.0-rc.11" Foreground="#7F929D"/><TextBlock x:Name="SidebarState" Text="Status wird geladen" Foreground="#55D1B3" Margin="0,5,0,0"/></StackPanel>
   </Grid></Border>
   <Grid Grid.Column="1" Background="#F3F6F8"><Grid.RowDefinitions><RowDefinition Height="64"/><RowDefinition Height="*"/><RowDefinition Height="38"/></Grid.RowDefinitions>
    <Border Background="White" BorderBrush="#D8E0E4" BorderThickness="0,0,0,1"><Grid Margin="24,0"><TextBlock x:Name="PageTitle" Text="Übersicht" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center"/><StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center"><Button x:Name="RefreshButton" Content="Aktualisieren"/><Button x:Name="RestartButton" Content="Jetzt neu starten" Background="#E59B32" Foreground="White" Margin="10,0,0,0" Visibility="Collapsed"/></StackPanel></Grid></Border>
@@ -15474,7 +19000,8 @@ if ($LASTEXITCODE -ne 0) { throw "AI Shield could not be stopped cleanly." }
      <Border Style="{StaticResource Card}"><StackPanel><TextBlock Text="Komponenten" FontSize="16" FontWeight="SemiBold"/><DataGrid x:Name="ServiceGrid" Margin="0,14,0,0" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" GridLinesVisibility="Horizontal" BorderThickness="0"><DataGrid.Columns><DataGridTextColumn Header="Komponente" Binding="{Binding Name}" Width="*"/><DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="140"/><DataGridTextColumn Header="Starttyp" Binding="{Binding StartType}" Width="160"/></DataGrid.Columns></DataGrid></StackPanel></Border>
     </StackPanel></ScrollViewer></TabItem>
     <TabItem><ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel><TextBlock Text="Lokale Schutzfunktionen" FontSize="18" FontWeight="SemiBold"/><TextBlock Text="Änderungen werden als signierte lokale Policy aktiviert." Foreground="#60717B" Margin="0,4,0,16"/>
-     <Border Style="{StaticResource Card}" Margin="0,0,0,10"><Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="AI-Shield-Kernschutz" FontWeight="SemiBold"/><TextBlock Text="Treiber, Broker und Core aktiv halten" Foreground="#60717B"/></StackPanel><ToggleButton x:Name="CoreToggle" Grid.Column="1"/></Grid></Border>
+     <Border Style="{StaticResource Card}" Margin="0,0,0,10"><Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="AI Shield im Infobereich" FontWeight="SemiBold"/><TextBlock x:Name="TrayDetail" Text="Status wird geladen" Foreground="#60717B"/></StackPanel><ToggleButton x:Name="TrayToggle" Grid.Column="1"/></Grid></Border>
+     <Border Style="{StaticResource Card}" Margin="0,0,0,10"><Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="AI-Shield-Kernschutz" FontWeight="SemiBold"/><TextBlock Text="Treiber, Broker und Core laufen unabhängig von UI und Tray" Foreground="#60717B"/></StackPanel><ToggleButton x:Name="CoreToggle" Grid.Column="1"/></Grid></Border>
       <Border Style="{StaticResource Card}" Margin="0,0,0,10"><Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Downloads härten" FontWeight="SemiBold"/><TextBlock Text="Ausführung sperren und Internetdateien vor dem Öffnen prüfen" Foreground="#60717B"/></StackPanel><ToggleButton x:Name="DownloadsToggle" Grid.Column="1"/></Grid></Border>
       <TextBlock Text="Dateityp-Schutz" FontSize="16" FontWeight="SemiBold" Margin="0,10,0,4"/><TextBlock Text="Aktive Gruppen werden geprüft. Deaktivierte Gruppen werden ohne AI-Shield-Inhaltsprüfung freigegeben." Foreground="#60717B" Margin="0,0,0,10" TextWrapping="Wrap"/>
       <Border Style="{StaticResource Card}" Margin="0,0,0,10"><StackPanel>
@@ -15484,6 +19011,12 @@ if ($LASTEXITCODE -ne 0) { throw "AI Shield could not be stopped cleanly." }
        <Grid Margin="0,0,0,12"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Audio" FontWeight="SemiBold"/><TextBlock Text="MP3, WAV, FLAC, AAC, OGG und M4A" Foreground="#60717B"/></StackPanel><ToggleButton x:Name="AudioToggle" Grid.Column="1"/></Grid>
        <Grid Margin="0,0,0,12"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Video" FontWeight="SemiBold"/><TextBlock Text="MP4, MOV, AVI, MKV, WebM und WMV" Foreground="#60717B"/></StackPanel><ToggleButton x:Name="VideoToggle" Grid.Column="1"/></Grid>
        <Grid Margin="0,0,0,12"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Webdateien" FontWeight="SemiBold"/><TextBlock Text="HTML und HTM" Foreground="#60717B"/></StackPanel><ToggleButton x:Name="WebFilesToggle" Grid.Column="1"/></Grid>
+       <Grid Margin="0,0,0,12"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Programme und Installer" FontWeight="SemiBold"/><TextBlock Text="EXE, DLL, MSI, MSIX, APPX, CPL, SCR und weitere Binärpakete" Foreground="#60717B" TextWrapping="Wrap"/></StackPanel><ToggleButton x:Name="ProgramsToggle" Grid.Column="1"/></Grid>
+       <Grid Margin="0,0,0,12"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Windows-Skripte" FontWeight="SemiBold"/><TextBlock Text="BAT, CMD, PowerShell, VBScript, JScript, WSF, HTA und Scriptlets" Foreground="#60717B" TextWrapping="Wrap"/></StackPanel><ToggleButton x:Name="WindowsScriptsToggle" Grid.Column="1"/></Grid>
+       <Grid Margin="0,0,0,12"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Entwickler- und Shell-Skripte" FontWeight="SemiBold"/><TextBlock Text="Shell, Python, Node, Perl, Ruby, PHP, Java/JAR, Lua und WebAssembly" Foreground="#60717B" TextWrapping="Wrap"/></StackPanel><ToggleButton x:Name="DeveloperScriptsToggle" Grid.Column="1"/></Grid>
+       <Grid Margin="0,0,0,12"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Verknüpfungen und Systemaktionen" FontWeight="SemiBold"/><TextBlock Text="LNK, URL, REG, INF, CHM, ClickOnce, Diagnose- und Abfragedateien" Foreground="#60717B" TextWrapping="Wrap"/></StackPanel><ToggleButton x:Name="LaunchersToggle" Grid.Column="1"/></Grid>
+       <Grid Margin="0,0,0,12"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Unbekannte und Spezialformate" FontWeight="SemiBold"/><TextBlock Text="Dateien ohne bekannte Endung sowie Modelle, Firmware, CAD, GIS, Mods und proprietäre Container" Foreground="#60717B" TextWrapping="Wrap"/></StackPanel><ToggleButton x:Name="UnknownToggle" Grid.Column="1"/></Grid>
+       <Grid Margin="0,0,0,12"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Freigabe vor dem Öffnen erzwingen" FontWeight="SemiBold"/><TextBlock Text="Auch saubere Downloads aktiver Gruppen bleiben bis zur begründeten Freigabe in Quarantäne" Foreground="#60717B" TextWrapping="Wrap"/></StackPanel><ToggleButton x:Name="ReleaseRequiredToggle" Grid.Column="1"/></Grid>
        <Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Bei Scanfehler sicher quarantänisieren" FontWeight="SemiBold"/><TextBlock Text="Fail-closed: nicht prüfbare aktive Dateitypen nicht freigeben" Foreground="#60717B"/></StackPanel><ToggleButton x:Name="ScanFailureToggle" Grid.Column="1"/></Grid>
       </StackPanel></Border>
      <Border Style="{StaticResource Card}" Margin="0,0,0,10"><Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Browser auf Webprotokolle begrenzen" FontWeight="SemiBold"/><TextBlock Text="Direkte Browserverbindungen auf ungewöhnlichen Ports sperren" Foreground="#60717B"/></StackPanel><ToggleButton x:Name="BrowserToggle" Grid.Column="1"/></Grid></Border>
@@ -15491,7 +19024,7 @@ if ($LASTEXITCODE -ne 0) { throw "AI Shield could not be stopped cleanly." }
      <Border Style="{StaticResource Card}"><Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Unaufgeforderte Eingänge blockieren" FontWeight="SemiBold"/><TextBlock Text="Zusätzlicher lokaler Inbound-Schutz neben der Windows-Firewall" Foreground="#60717B"/></StackPanel><ToggleButton x:Name="InboundToggle" Grid.Column="1"/></Grid></Border>
     </StackPanel></ScrollViewer></TabItem>
      <TabItem><Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions><StackPanel Orientation="Horizontal"><Button x:Name="ViewAuditButton" Content="Audit anzeigen" Background="#138A72" Foreground="White"/><Button x:Name="OpenAuditFileButton" Content="Exportierte Datei öffnen" Margin="10,0,0,0"/><Button x:Name="VerifyAuditButton" Content="Integrität prüfen" Margin="10,0,0,0"/><Button x:Name="ExportAuditButton" Content="Audits exportieren" Margin="10,0,0,0"/></StackPanel><DataGrid x:Name="AuditGrid" Grid.Row="1" Margin="0,14,0,0" AutoGenerateColumns="False" IsReadOnly="True"><DataGrid.Columns><DataGridTextColumn Header="Datei" Binding="{Binding Name}" Width="*"/><DataGridTextColumn Header="Größe" Binding="{Binding Size}" Width="120"/><DataGridTextColumn Header="Geändert" Binding="{Binding Modified}" Width="190"/><DataGridTextColumn Header="Prüfung" Binding="{Binding Verification}" Width="130"/></DataGrid.Columns></DataGrid></Grid></TabItem>
-    <TabItem><Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions><StackPanel Orientation="Horizontal"><Button x:Name="ReleaseButton" Content="Ausgewählte Datei freigeben" Background="#C85A4A" Foreground="White"/><TextBlock Text="Freigaben benötigen Zielpfad und Begründung." VerticalAlignment="Center" Foreground="#60717B" Margin="14,0"/></StackPanel><DataGrid x:Name="QuarantineGrid" Grid.Row="1" Margin="0,14,0,0" AutoGenerateColumns="False" IsReadOnly="True"><DataGrid.Columns><DataGridTextColumn Header="Objekt-ID" Binding="{Binding Id}" Width="220"/><DataGridTextColumn Header="Quelle" Binding="{Binding Source}" Width="*"/><DataGridTextColumn Header="Größe" Binding="{Binding Size}" Width="100"/><DataGridTextColumn Header="Status" Binding="{Binding State}" Width="110"/></DataGrid.Columns></DataGrid></Grid></TabItem>
+    <TabItem><Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions><StackPanel Orientation="Horizontal"><Button x:Name="ReleaseButton" Content="Ausgewählte Datei freigeben" Background="#C85A4A" Foreground="White"/><TextBlock Text="Freigaben benötigen Zielpfad und Begründung." VerticalAlignment="Center" Foreground="#60717B" Margin="14,0"/></StackPanel><DataGrid x:Name="QuarantineGrid" Grid.Row="1" Margin="0,14,0,0" AutoGenerateColumns="False" IsReadOnly="True"><DataGrid.Columns><DataGridTextColumn Header="Objekt-ID" Binding="{Binding Id}" Width="190"/><DataGridTextColumn Header="Quelle" Binding="{Binding Source}" Width="*"/><DataGridTextColumn Header="Größe" Binding="{Binding Size}" Width="90"/><DataGridTextColumn Header="Grund" Binding="{Binding Classification}" Width="180"/><DataGridTextColumn Header="Status" Binding="{Binding State}" Width="100"/></DataGrid.Columns></DataGrid></Grid></TabItem>
     <TabItem><Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
      <Border Style="{StaticResource Card}"><Grid><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="Geschützter Versionsspeicher" FontSize="17" FontWeight="SemiBold"/><TextBlock x:Name="RecoveryStatus" Text="Status wird geladen" Foreground="#60717B" Margin="0,5,0,0" TextWrapping="Wrap"/><TextBlock Text="Desktop, Dokumente, Bilder, Musik und Videos. Systemdateien werden online nicht zurückgeschrieben." Foreground="#60717B" Margin="0,5,0,0" TextWrapping="Wrap"/></StackPanel><StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="18,0,0,0"><Button x:Name="SnapshotButton" Content="Jetzt sichern" Background="#138A72" Foreground="White"/><Button x:Name="BackupButton" Content="Extern sichern" Margin="0,8,0,0"/></StackPanel></Grid></Border>
      <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,14,0,12"><Button x:Name="DetectRansomwareButton" Content="Veränderungen prüfen"/><Button x:Name="RestorePlanButton" Content="Wiederherstellungsplan" Margin="10,0,0,0"/><Button x:Name="RestoreIncidentButton" Content="Ausgewählten Stand wiederherstellen" Margin="10,0,0,0" Background="#C85A4A" Foreground="White"/></StackPanel>
@@ -15512,10 +19045,10 @@ if ($LASTEXITCODE -ne 0) { throw "AI Shield could not be stopped cleanly." }
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/ui/private_security_settings.ps1`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/ui/private_security_settings.ps1`  
+## File: `AI-Shield-main/editions/private_desktop/ui/private_security_settings.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/ui/private_security_settings.ps1`  
 - Size: 4594 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -15573,16 +19106,37 @@ $status=Get-Status;$status["changed"]=$Setting;$status["requested"]=$enable;$sta
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/ui/start_private_ui.ps1`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/ui/start_private_ui.ps1`  
-- Size: 29761 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/editions/private_desktop/ui/start_private_ui.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/ui/start_private_ui.ps1`  
+- Size: 37341 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([switch]$ResumeAfterReboot)
 
 $ErrorActionPreference="Stop"
 $script:UiScriptPath=$PSCommandPath
+$uiRuntimeRoot=Join-Path $env:LocalAppData "AIShield"
+$uiInstancePath=Join-Path $uiRuntimeRoot "private-ui.instance.json"
+$uiSignalPath=Join-Path $uiRuntimeRoot "private-ui.show.signal"
+$uiLifecyclePath=Join-Path $uiRuntimeRoot "private-ui.lifecycle.log"
+function Write-UiLifecycle([string]$Event){New-Item -ItemType Directory -Force -Path $uiRuntimeRoot|Out-Null;if((Test-Path $uiLifecyclePath)-and(Get-Item $uiLifecyclePath).Length-gt128KB){Move-Item $uiLifecyclePath "$uiLifecyclePath.previous" -Force};Add-Content -LiteralPath $uiLifecyclePath -Value ("{0} pid={1} event={2}"-f[DateTime]::UtcNow.ToString("o"),$PID,$Event) -Encoding UTF8}
+function Signal-ExistingUi {
+    if(-not(Test-Path -LiteralPath $uiInstancePath)){return $false}
+    try {
+        $instance=Get-Content -LiteralPath $uiInstancePath -Raw|ConvertFrom-Json
+        if($instance.schema-ne"AIShieldPrivateUiInstance/1"){throw "invalid schema"}
+        $process=Get-Process -Id ([int]$instance.pid) -ErrorAction Stop
+        if($process.StartTime.ToUniversalTime().Ticks-ne[long]$instance.start_ticks){throw "stale process"}
+        New-Item -ItemType Directory -Force -Path $uiRuntimeRoot|Out-Null
+        [IO.File]::WriteAllText($uiSignalPath,[Guid]::NewGuid().ToString("N"),[Text.UTF8Encoding]::new($false))
+        return $true
+    } catch {
+        Remove-Item -LiteralPath $uiInstancePath,$uiSignalPath -Force -ErrorAction SilentlyContinue
+        return $false
+    }
+}
+if(Signal-ExistingUi){exit 0}
 $principal=[Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
 if(-not$principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)){
     $arguments=@("-NoProfile","-WindowStyle","Hidden","-ExecutionPolicy","Bypass","-STA","-File",('"'+$PSCommandPath+'"'))
@@ -15592,15 +19146,28 @@ if(-not$principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrato
 }
 
 Add-Type -AssemblyName PresentationFramework,PresentationCore,WindowsBase,System.Xaml,System.Windows.Forms
+New-Item -ItemType Directory -Force -Path $uiRuntimeRoot|Out-Null
+$currentProcess=Get-Process -Id $PID
+$instance=[ordered]@{schema="AIShieldPrivateUiInstance/1";pid=$PID;start_ticks=$currentProcess.StartTime.ToUniversalTime().Ticks}
+[IO.File]::WriteAllText($uiInstancePath,($instance|ConvertTo-Json -Compress),[Text.UTF8Encoding]::new($false))
+Remove-Item -LiteralPath $uiSignalPath -Force -ErrorAction SilentlyContinue
+Write-UiLifecycle "instance-registered"
 . (Join-Path $PSScriptRoot "..\private_common.ps1")
 $root=Get-AIShieldPrivateRoot
 $stateRoot=Join-Path $env:ProgramData "AIShield\private-desktop"
 $uiStatePath=Join-Path $stateRoot "ui-settings.json"
 $resumeTask="AIShieldPrivateUIResume"
 $script:refreshing=$false
+$script:knownQuarantineIds=[Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+$script:allowUiExit=$false
 
 function Show-Error([string]$Message){[Windows.MessageBox]::Show($Message,"AI Shield",[Windows.MessageBoxButton]::OK,[Windows.MessageBoxImage]::Error)|Out-Null}
 function Set-Message([string]$Message){$StatusMessage.Text=$Message}
+function Get-TrayStatus {
+    $manager=Join-Path $PSScriptRoot "..\tray\manage_tray_agent.ps1"
+    if(-not(Test-Path -LiteralPath $manager)){return [pscustomobject]@{registered=$false;running=$false}}
+    return (& powershell.exe -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File $manager -Action status|ConvertFrom-Json)
+}
 function Read-UiState {
     if(Test-Path -LiteralPath $uiStatePath){$state=Get-Content $uiStatePath -Raw|ConvertFrom-Json;if($state.schema-eq"AIShieldPrivateUiSettings/2"){return $state}}
     return [pscustomobject]@{schema="AIShieldPrivateUiSettings/2";harden_downloads=$true;strict_browser=$false;block_unsolicited_inbound=$false}
@@ -15658,9 +19225,13 @@ function Set-ContentPolicy {
     if($DocumentsToggle.IsChecked){$mask=$mask-bor 1};if($ArchivesToggle.IsChecked){$mask=$mask-bor 2}
     if($ImagesToggle.IsChecked){$mask=$mask-bor 4};if($AudioToggle.IsChecked){$mask=$mask-bor 8}
     if($VideoToggle.IsChecked){$mask=$mask-bor 16};if($WebFilesToggle.IsChecked){$mask=$mask-bor 32}
+    if($ProgramsToggle.IsChecked){$mask=$mask-bor 64};if($WindowsScriptsToggle.IsChecked){$mask=$mask-bor 128}
+    if($DeveloperScriptsToggle.IsChecked){$mask=$mask-bor 256};if($LaunchersToggle.IsChecked){$mask=$mask-bor 512}
+    if($UnknownToggle.IsChecked){$mask=$mask-bor 1024}
     $fail=$(if($ScanFailureToggle.IsChecked){1}else{0})
+    $release=$(if($ReleaseRequiredToggle.IsChecked){1}else{0})
     $broker=Get-ContentPolicyBroker
-    & $broker content-policy-set $mask $fail|Out-Null
+    & $broker content-policy-set $mask $fail $release|Out-Null
     if($LASTEXITCODE-ne0){throw "Dateityp-Richtlinie konnte nicht DPAPI-geschützt gespeichert werden."}
 }
 function Get-CurrentProcessNames {
@@ -15705,7 +19276,21 @@ function Get-Quarantine {
     $journal=Join-Path $env:ProgramData "AIShield\quarantine\journal.jsonl";if(-not(Test-Path -LiteralPath $journal)){return @()}
     $latest=[ordered]@{};Get-Content -LiteralPath $journal -ErrorAction SilentlyContinue|ForEach-Object{try{$row=$_|ConvertFrom-Json;if($row.id){$latest[[string]$row.id]=$row}}catch{}}
     $restore=Join-Path $env:ProgramData "AIShield\quarantine\restore.jsonl";if(Test-Path $restore){Get-Content $restore|ForEach-Object{try{$r=$_|ConvertFrom-Json;if($latest.Contains([string]$r.id)){$latest[[string]$r.id]|Add-Member NoteProperty state "released" -Force}}catch{}}}
-    return @($latest.Values|Where-Object{$_.state-in@("committed","released")}|ForEach-Object{[pscustomobject]@{Id=[string]$_.id;Source=[string]$_.source;Size=$(if($_.size){("{0:N1} KiB"-f([double]$_.size/1KB))}else{"-"});State=[string]$_.state}})
+    return @($latest.Values|Where-Object{$_.state-in@("committed","released")}|ForEach-Object{
+        $classification=switch([string]$_.classification){"pending_user_release"{"Wartet auf Freigabe"};"malware_detected"{"Schadsoftware erkannt"};"suspicious_file_structure"{"Verdächtige Dateistruktur"};"parser_risk_scan_unavailable"{"Prüfung nicht möglich"};"external_untrusted_executable"{"Nicht vertrauenswürdige Ausführung"};default{[string]$_.classification}}
+        [pscustomobject]@{Id=[string]$_.id;Source=[string]$_.source;Size=$(if($_.size){("{0:N1} KiB"-f([double]$_.size/1KB))}else{"-"});State=[string]$_.state;Classification=$classification}})
+}
+function Initialize-QuarantineNotifications {
+    foreach($item in @(Get-Quarantine)){if($item.State-eq"committed"){$null=$script:knownQuarantineIds.Add($item.Id)}}
+}
+function Update-QuarantineNotifications {
+    $items=@(Get-Quarantine);$QuarantineGrid.ItemsSource=$items
+    $new=@($items|Where-Object{$_.State-eq"committed"-and$script:knownQuarantineIds.Add($_.Id)})
+    if($new.Count-eq0){return}
+    $names=@($new|Select-Object -First 3|ForEach-Object{[IO.Path]::GetFileName($_.Source)})-join"`n"
+    $suffix=$(if($new.Count-gt3){"`n... und $($new.Count-3) weitere"}else{""})
+    [Windows.MessageBox]::Show("AI Shield hat $($new.Count) neuen Download gesichert. Die Datei kann erst nach Prüfung und begründeter Freigabe auf der Seite 'Quarantäne' geöffnet werden.`n`n$names$suffix","Download gesichert",[Windows.MessageBoxButton]::OK,[Windows.MessageBoxImage]::Warning)|Out-Null
+    Set-Message "$($new.Count) Download(s) warten auf Freigabe"
 }
 function Invoke-Recovery([string]$Action, [string]$IncidentId = '', [string]$BackupRoot = '', [switch]$ConfirmRestore) {
     $scriptPath = Join-Path $root "platform\windows\ransomware\ransomware_recovery.ps1"
@@ -15761,11 +19346,17 @@ function Refresh-All {
         $running=@($services|Where-Object { $_.Status -eq "Running" }).Count;$protected=$running-eq5
         $ProtectionState.Text=$(if($protected){"AKTIV"}else{"EINGESCHRÄNKT"});$ProtectionState.Foreground=[Windows.Media.BrushConverter]::new().ConvertFromString($(if($protected){"#138A72"}else{"#C85A4A"}));$ComponentState.Text="$running / 5";$SidebarState.Text=$(if($protected){"Geschützt"}else{"Prüfung erforderlich"});$ServiceGrid.ItemsSource=$services
         $CoreToggle.IsChecked=$protected
+        $trayStatus=Get-TrayStatus;$TrayToggle.IsChecked=[bool]$trayStatus.registered
+        $TrayDetail.Text=$(if($trayStatus.running){"Aktiv; startet automatisch bei jeder Windows-Anmeldung"}elseif($trayStatus.registered){"Registriert; wird bei der nächsten Anmeldung gestartet"}else{"Nicht für den automatischen Start registriert"})
         $uiState=Read-UiState;$DownloadsToggle.IsChecked=[bool]$uiState.harden_downloads;$BrowserToggle.IsChecked=[bool]$uiState.strict_browser;$InboundToggle.IsChecked=[bool]$uiState.block_unsolicited_inbound
         $contentPolicy=Get-ContentPolicy;$mask=[int]$contentPolicy.enabled_categories
         $DocumentsToggle.IsChecked=($mask-band 1)-ne0;$ArchivesToggle.IsChecked=($mask-band 2)-ne0;$ImagesToggle.IsChecked=($mask-band 4)-ne0
         $AudioToggle.IsChecked=($mask-band 8)-ne0;$VideoToggle.IsChecked=($mask-band 16)-ne0;$WebFilesToggle.IsChecked=($mask-band 32)-ne0
+        $ProgramsToggle.IsChecked=($mask-band 64)-ne0;$WindowsScriptsToggle.IsChecked=($mask-band 128)-ne0
+        $DeveloperScriptsToggle.IsChecked=($mask-band 256)-ne0;$LaunchersToggle.IsChecked=($mask-band 512)-ne0
+        $UnknownToggle.IsChecked=($mask-band 1024)-ne0
         $ScanFailureToggle.IsChecked=[bool]$contentPolicy.fail_closed
+        $ReleaseRequiredToggle.IsChecked=[bool]$contentPolicy.release_required
         $browserStatus=Get-BrowserSensorStatus;$BrowserSensorToggle.IsChecked=[bool]$browserStatus.ready
         $BrowserSensorDetail.Text=$(if(-not$browserStatus.ready){"Nicht installiert"}elseif($browserStatus.connected){"Verbunden; letztes Browserereignis: "+([DateTime]$browserStatus.last_event_utc).ToLocalTime().ToString("dd.MM.yyyy HH:mm")}elseif($browserStatus.edge_loaded-or$browserStatus.chrome_loaded){"Erweiterung geladen, aber Native Host noch nicht verbunden; auf 'Neu laden' klicken"}else{"Host installiert; Ordner selbst auswählen, nicht manifest.json"})
         $EdgeSetupButton.IsEnabled=[bool]$browserStatus.ready;$ChromeSetupButton.IsEnabled=[bool]$browserStatus.ready
@@ -15783,14 +19374,17 @@ function Refresh-All {
     }catch{Set-Message "Status konnte nicht vollständig geladen werden";Show-Error $_.Exception.Message}finally{$script:refreshing=$false}
 }
 
+Write-UiLifecycle "xaml-load-start"
 $reader=[System.Xml.XmlNodeReader]::new(([xml](Get-Content (Join-Path $PSScriptRoot "AIShield.PrivateDesktop.UI.xaml") -Raw)))
 $window=[Windows.Markup.XamlReader]::Load($reader)
-foreach($name in @("Pages","PageTitle","StatusMessage","SidebarState","ProtectionState","ComponentState","AuditState","ServiceGrid","AuditGrid","QuarantineGrid","RecoveryStatus","IncidentGrid","SnapshotButton","BackupButton","DetectRansomwareButton","RestorePlanButton","RestoreIncidentButton","RefreshButton","RestartButton","CoreToggle","DownloadsToggle","DocumentsToggle","ArchivesToggle","ImagesToggle","AudioToggle","VideoToggle","WebFilesToggle","ScanFailureToggle","BrowserToggle","InboundToggle","BrowserSensorToggle","BrowserSensorDetail","EdgeSetupButton","ChromeSetupButton","KernelHardwareToggle","KernelHardwareDetail","BitLockerButton","HvciToggle","CredentialToggle","FirewallToggle","DefenderToggle","HvciDetail","CredentialDetail","ViewAuditButton","OpenAuditFileButton","VerifyAuditButton","ExportAuditButton","ReleaseButton","NavDashboard","NavProtection","NavAudit","NavQuarantine","NavRecovery","NavSystem")){Set-Variable -Name $name -Value $window.FindName($name) -Scope Script}
+Write-UiLifecycle "xaml-load-complete"
+foreach($name in @("Pages","PageTitle","StatusMessage","SidebarState","ProtectionState","ComponentState","AuditState","ServiceGrid","AuditGrid","QuarantineGrid","RecoveryStatus","IncidentGrid","SnapshotButton","BackupButton","DetectRansomwareButton","RestorePlanButton","RestoreIncidentButton","RefreshButton","RestartButton","TrayToggle","TrayDetail","CoreToggle","DownloadsToggle","DocumentsToggle","ArchivesToggle","ImagesToggle","AudioToggle","VideoToggle","WebFilesToggle","ProgramsToggle","WindowsScriptsToggle","DeveloperScriptsToggle","LaunchersToggle","UnknownToggle","ReleaseRequiredToggle","ScanFailureToggle","BrowserToggle","InboundToggle","BrowserSensorToggle","BrowserSensorDetail","EdgeSetupButton","ChromeSetupButton","KernelHardwareToggle","KernelHardwareDetail","BitLockerButton","HvciToggle","CredentialToggle","FirewallToggle","DefenderToggle","HvciDetail","CredentialDetail","ViewAuditButton","OpenAuditFileButton","VerifyAuditButton","ExportAuditButton","ReleaseButton","NavDashboard","NavProtection","NavAudit","NavQuarantine","NavRecovery","NavSystem")){Set-Variable -Name $name -Value $window.FindName($name) -Scope Script}
 $nav=@(@($NavDashboard,0,"Übersicht"),@($NavProtection,1,"Schutzfunktionen"),@($NavAudit,2,"Audit"),@($NavQuarantine,3,"Quarantäne"),@($NavRecovery,4,"Wiederherstellung"),@($NavSystem,5,"Windows-Sicherheit"));foreach($item in $nav){$button=$item[0];$index=$item[1];$title=$item[2];$button.Add_Click({$Pages.SelectedIndex=$index;$PageTitle.Text=$title}.GetNewClosure())}
 $RefreshButton.Add_Click({Refresh-All})
+$TrayToggle.Add_Click({if($script:refreshing){return};try{$manager=Join-Path $PSScriptRoot "..\tray\manage_tray_agent.ps1";$action=$(if($TrayToggle.IsChecked){"install"}else{"uninstall"});& powershell.exe -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File $manager -Action $action|Out-Null;if($LASTEXITCODE-ne0){throw "Tray-Agent konnte nicht geändert werden."};Refresh-All}catch{Show-Error $_.Exception.Message;Refresh-All}})
 $CoreToggle.Add_Click({if($script:refreshing){return};try{if($CoreToggle.IsChecked){Apply-ProtectionState}else{& powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "..\stop_private_desktop.ps1")|Out-Null};Refresh-All}catch{Show-Error $_.Exception.Message;Refresh-All}})
 foreach($entry in @(@($DownloadsToggle,"harden_downloads"),@($BrowserToggle,"strict_browser"),@($InboundToggle,"block_unsolicited_inbound"))){$toggle=$entry[0];$property=$entry[1];$toggle.Add_Click({if($script:refreshing){return};try{$state=Read-UiState;$state.$property=[bool]$toggle.IsChecked;Write-UiState $state;Apply-ProtectionState;Refresh-All}catch{Show-Error $_.Exception.Message;Refresh-All}}.GetNewClosure())}
-foreach($toggle in @($DocumentsToggle,$ArchivesToggle,$ImagesToggle,$AudioToggle,$VideoToggle,$WebFilesToggle,$ScanFailureToggle)){$toggle.Add_Click({if($script:refreshing){return};try{Set-ContentPolicy;Set-Message "Dateityp-Richtlinie wurde aktiviert"}catch{Show-Error $_.Exception.Message;Refresh-All}})}
+foreach($toggle in @($DocumentsToggle,$ArchivesToggle,$ImagesToggle,$AudioToggle,$VideoToggle,$WebFilesToggle,$ProgramsToggle,$WindowsScriptsToggle,$DeveloperScriptsToggle,$LaunchersToggle,$UnknownToggle,$ReleaseRequiredToggle,$ScanFailureToggle)){$toggle.Add_Click({if($script:refreshing){return};try{Set-ContentPolicy;Set-Message "Dateityp-Richtlinie wurde aktiviert"}catch{Show-Error $_.Exception.Message;Refresh-All}})}
 $BrowserSensorToggle.Add_Click({if($script:refreshing){return};try{$script=Join-Path $root "platform\windows\browser_extension\install_browser_sensor.ps1";$action=$(if($BrowserSensorToggle.IsChecked){"install"}else{"uninstall"});$arguments=@("-NoProfile","-ExecutionPolicy","Bypass","-File",$script,"-Action",$action,"-ConfirmSystemChange");if($action-eq"install"){$certificate=[Security.Cryptography.X509Certificates.X509Certificate2]::new((Join-Path $root "driver_package\Release\ai_shield_testsigning.cer"));$arguments+=@("-PublisherThumbprint",$certificate.Thumbprint)};& powershell.exe @arguments|Out-Null;if($LASTEXITCODE-ne0){throw "Browsersensor konnte nicht geändert werden."};Refresh-All}catch{Show-Error $_.Exception.Message;Refresh-All}})
 $EdgeSetupButton.Add_Click({try{Open-BrowserSensorSetup "edge"}catch{Show-Error $_.Exception.Message}})
 $ChromeSetupButton.Add_Click({try{Open-BrowserSensorSetup "chrome"}catch{Show-Error $_.Exception.Message}})
@@ -15811,14 +19405,28 @@ $RestorePlanButton.Add_Click({try{$selected=$IncidentGrid.SelectedItem;if($null-
 $RestoreIncidentButton.Add_Click({try{$selected=$IncidentGrid.SelectedItem;if($null-eq$selected){Set-Message "Bitte zuerst einen Vorfall auswählen";return};$plan=Invoke-Recovery 'restore-plan' $selected.Id;if(@($plan.items).Count-eq0){throw "Für diesen Vorfall sind keine verifizierten Versionen verfügbar."};$answer=[Windows.MessageBox]::Show("$(@($plan.items).Count) Dateien auf den Stand vor dem Vorfall zurücksetzen? Bestehende geänderte Dateien werden im Konfliktspeicher aufbewahrt.","Wiederherstellung bestätigen",[Windows.MessageBoxButton]::YesNo,[Windows.MessageBoxImage]::Warning);if($answer-eq[Windows.MessageBoxResult]::Yes){$result=Invoke-Recovery 'restore' $selected.Id -ConfirmRestore;Set-Message "$($result.restored) Dateien wurden hashverifiziert wiederhergestellt";Update-RecoveryStatus}}catch{Show-Error $_.Exception.Message}})
 $RestartButton.Add_Click({if([Windows.MessageBox]::Show("Windows jetzt neu starten? Die AI-Shield-Oberfläche öffnet sich nach der Anmeldung automatisch erneut.","Neustart erforderlich",[Windows.MessageBoxButton]::YesNo,[Windows.MessageBoxImage]::Question)-eq[Windows.MessageBoxResult]::Yes){Register-ResumeTask;Restart-Computer -Force}})
 if($ResumeAfterReboot){Unregister-ScheduledTask -TaskName $resumeTask -Confirm:$false -ErrorAction SilentlyContinue;$window.Add_Loaded({Set-Message "Neustart abgeschlossen. Einstellungen wurden neu eingelesen."})}
-$window.Add_Loaded({try{Initialize-RecoveryBaselineIfRequired;Refresh-All}catch{Show-Error $_.Exception.Message}});$window.ShowDialog()|Out-Null
+$quarantineTimer=[Windows.Threading.DispatcherTimer]::new();$quarantineTimer.Interval=[TimeSpan]::FromSeconds(2);$quarantineTimer.Add_Tick({try{Update-QuarantineNotifications}catch{Set-Message "Quarantänestatus konnte nicht aktualisiert werden"}})
+$uiSignalTimer=[Windows.Threading.DispatcherTimer]::new();$uiSignalTimer.Interval=[TimeSpan]::FromMilliseconds(350);$uiSignalTimer.Add_Tick({if(Test-Path -LiteralPath $uiSignalPath){Remove-Item -LiteralPath $uiSignalPath -Force -ErrorAction SilentlyContinue;$window.ShowInTaskbar=$true;$window.Show();$window.WindowState=[Windows.WindowState]::Normal;$window.Activate()|Out-Null;Refresh-All}})
+$window.Add_StateChanged({if($window.WindowState-eq[Windows.WindowState]::Minimized){$window.Dispatcher.BeginInvoke([Action]{$window.ShowInTaskbar=$false;$window.Hide()})|Out-Null}})
+$window.Add_Closing({param($sender,$eventArgs)Write-UiLifecycle "closing-allow-$script:allowUiExit";if(-not$script:allowUiExit){$eventArgs.Cancel=$true;$sender.Dispatcher.BeginInvoke([Action]{$sender.ShowInTaskbar=$false;$sender.Hide()})|Out-Null}})
+$sessionEndingHandler=[Microsoft.Win32.SessionEndingEventHandler]{param($sender,$eventArgs)Write-UiLifecycle "session-ending";$script:allowUiExit=$true;$window.Dispatcher.BeginInvoke([Action]{$window.Close()})|Out-Null}
+Write-UiLifecycle "session-handler-start"
+[Microsoft.Win32.SystemEvents]::add_SessionEnding($sessionEndingHandler)
+Write-UiLifecycle "session-handler-complete"
+$window.Add_Loaded({try{Initialize-RecoveryBaselineIfRequired;Refresh-All;Initialize-QuarantineNotifications;$quarantineTimer.Start()}catch{Show-Error $_.Exception.Message}})
+$window.Add_Loaded({Write-UiLifecycle "loaded";$uiSignalTimer.Start()})
+$window.Add_Closed({Write-UiLifecycle "closed";$quarantineTimer.Stop();$uiSignalTimer.Stop();[Microsoft.Win32.SystemEvents]::remove_SessionEnding($sessionEndingHandler);Remove-Item -LiteralPath $uiInstancePath,$uiSignalPath -Force -ErrorAction SilentlyContinue;$window.Dispatcher.InvokeShutdown()})
+Write-UiLifecycle "dispatcher-start"
+$window.Show()
+[Windows.Threading.Dispatcher]::Run()
+Write-UiLifecycle "dispatcher-return"
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/ui/verify_ui_contract.ps1`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/ui/verify_ui_contract.ps1`  
-- Size: 3982 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/editions/private_desktop/ui/verify_ui_contract.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/ui/verify_ui_contract.ps1`  
+- Size: 4585 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([switch]$RenderPreview)
@@ -15835,8 +19443,9 @@ $required = @(
     "Pages", "PageTitle", "StatusMessage", "SidebarState", "ProtectionState",
     "ComponentState", "AuditState", "ServiceGrid", "AuditGrid", "QuarantineGrid",
     "RecoveryStatus", "IncidentGrid", "SnapshotButton", "BackupButton", "DetectRansomwareButton", "RestorePlanButton", "RestoreIncidentButton",
-    "RefreshButton", "RestartButton", "CoreToggle", "DownloadsToggle",
-    "DocumentsToggle", "ArchivesToggle", "ImagesToggle", "AudioToggle", "VideoToggle", "WebFilesToggle", "ScanFailureToggle", "BrowserToggle",
+    "RefreshButton", "RestartButton", "TrayToggle", "TrayDetail", "CoreToggle", "DownloadsToggle",
+    "DocumentsToggle", "ArchivesToggle", "ImagesToggle", "AudioToggle", "VideoToggle", "WebFilesToggle",
+    "ProgramsToggle", "WindowsScriptsToggle", "DeveloperScriptsToggle", "LaunchersToggle", "UnknownToggle", "ReleaseRequiredToggle", "ScanFailureToggle", "BrowserToggle",
     "InboundToggle", "BrowserSensorToggle", "BrowserSensorDetail", "EdgeSetupButton", "ChromeSetupButton",
     "KernelHardwareToggle", "KernelHardwareDetail", "BitLockerButton",
     "HvciToggle", "CredentialToggle", "FirewallToggle", "DefenderToggle",
@@ -15862,6 +19471,12 @@ if ($scriptText -notmatch '\$parameters\s*=\s*@\{\s*Action\s*=\s*\$Action\s*\}' 
     $scriptText -match '\$arguments\s*=\s*@\(''-Action''') {
     throw "Recovery actions must use named hashtable splatting."
 }
+foreach ($pattern in @('AIShieldPrivateUiInstance/1', 'private-ui.show.signal', 'Add_StateChanged', 'Add_Closing', 'ShowInTaskbar=\$false')) {
+    if ($scriptText -notmatch $pattern) { throw "Close-to-tray contract is missing: $pattern" }
+}
+if ($scriptText -notmatch '\[Windows\.Threading\.Dispatcher\]::Run\(\)' -or $scriptText -match '\$window\.ShowDialog\(\)') {
+    throw "Close-to-tray requires a persistent non-modal WPF dispatcher."
+}
 
 if ($RenderPreview) {
     $content = $window.Content
@@ -15883,10 +19498,10 @@ Write-Output "AI Shield private desktop UI contract: PASS ($($required.Count) co
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/uninstall_private_desktop.ps1`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/uninstall_private_desktop.ps1`  
-- Size: 3782 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/editions/private_desktop/uninstall_private_desktop.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/uninstall_private_desktop.ps1`  
+- Size: 4481 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([switch]$PurgeSecurityData)
@@ -15900,6 +19515,15 @@ if (-not (Test-AIShieldAdministrator)) {
     exit 0
 }
 $root = Get-AIShieldPrivateRoot
+$uiProcessPattern = [regex]::Escape([IO.Path]::GetFullPath((Join-Path $PSScriptRoot "ui\start_private_ui.ps1")))
+Get-CimInstance Win32_Process -Filter "Name='powershell.exe' OR Name='pwsh.exe'" -ErrorAction SilentlyContinue |
+    Where-Object { [string]$_.CommandLine -match $uiProcessPattern } |
+    ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
+$trayManager = Join-Path $PSScriptRoot "tray\manage_tray_agent.ps1"
+if (Test-Path -LiteralPath $trayManager -PathType Leaf) {
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $trayManager -Action uninstall
+    if ($LASTEXITCODE -ne 0) { throw "Tray autostart removal failed; uninstall stopped." }
+}
 Unregister-ScheduledTask -TaskName "AIShieldPrivateUIResume" -Confirm:$false -ErrorAction SilentlyContinue
 Remove-Item -LiteralPath (Join-Path $env:ProgramData "Microsoft\Windows\Start Menu\Programs\AI Shield") `
     -Recurse -Force -ErrorAction SilentlyContinue
@@ -15962,10 +19586,10 @@ Write-Output "AI Shield Private Desktop was removed."
 
 ```
 
-## File: `AI_Shield_Developer_Full/editions/private_desktop/validate_release_freeze.ps1`  
-- Path: `AI_Shield_Developer_Full/editions/private_desktop/validate_release_freeze.ps1`  
+## File: `AI-Shield-main/editions/private_desktop/validate_release_freeze.ps1`  
+- Path: `AI-Shield-main/editions/private_desktop/validate_release_freeze.ps1`  
 - Size: 2288 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([string]$OutputPath = "")
@@ -16009,19 +19633,10 @@ if ($failed.Count) { throw "Private release contract changed: $($failed.path -jo
 
 ```
 
-## File: `AI_Shield_Developer_Full/FULL_PACKAGE_MANIFEST.json`  
-- Path: `AI_Shield_Developer_Full/FULL_PACKAGE_MANIFEST.json`  
-- Size: 93870 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
-- Warning: 2 secret-like value(s) redacted  
-- Condensed: comments and repeated blank lines reduced
-
-> Condensed: comments and repeated blank lines reduced
-
-## File: `AI_Shield_Developer_Full/include/ai_shield/abi_validation.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/abi_validation.hpp`  
+## File: `AI-Shield-main/include/ai_shield/abi_validation.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/abi_validation.hpp`  
 - Size: 967 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16053,10 +19668,10 @@ struct ValidationContext final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/abi.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/abi.hpp`  
+## File: `AI-Shield-main/include/ai_shield/abi.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/abi.hpp`  
 - Size: 3192 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16173,10 +19788,10 @@ inline constexpr bool valid_header(std::uint32_t version, std::uint32_t size, st
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/abi2.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/abi2.hpp`  
+## File: `AI-Shield-main/include/ai_shield/abi2.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/abi2.hpp`  
 - Size: 2888 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16265,10 +19880,10 @@ static_assert(offsetof(SensorEvent, evidence_hash) == 212U);
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/audit.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/audit.hpp`  
+## File: `AI-Shield-main/include/ai_shield/audit.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/audit.hpp`  
 - Size: 2141 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16335,10 +19950,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/backpressure.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/backpressure.hpp`  
+## File: `AI-Shield-main/include/ai_shield/backpressure.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/backpressure.hpp`  
 - Size: 678 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16375,10 +19990,10 @@ struct Decision final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/broker_runtime.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/broker_runtime.hpp`  
+## File: `AI-Shield-main/include/ai_shield/broker_runtime.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/broker_runtime.hpp`  
 - Size: 374 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16404,10 +20019,10 @@ struct RuntimePlan final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/build_attestation.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/build_attestation.hpp`  
+## File: `AI-Shield-main/include/ai_shield/build_attestation.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/build_attestation.hpp`  
 - Size: 733 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16442,10 +20057,10 @@ struct BuildManifest final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/campaign.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/campaign.hpp`  
+## File: `AI-Shield-main/include/ai_shield/campaign.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/campaign.hpp`  
 - Size: 788 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16483,10 +20098,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/causal_graph.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/causal_graph.hpp`  
+## File: `AI-Shield-main/include/ai_shield/causal_graph.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/causal_graph.hpp`  
 - Size: 1110 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16539,10 +20154,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/checked.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/checked.hpp`  
+## File: `AI-Shield-main/include/ai_shield/checked.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/checked.hpp`  
 - Size: 1369 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16596,10 +20211,10 @@ template <typename T>
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/cloud_optin.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/cloud_optin.hpp`  
+## File: `AI-Shield-main/include/ai_shield/cloud_optin.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/cloud_optin.hpp`  
 - Size: 426 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16625,10 +20240,10 @@ struct TransferRequest final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/compatibility_lab.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/compatibility_lab.hpp`  
+## File: `AI-Shield-main/include/ai_shield/compatibility_lab.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/compatibility_lab.hpp`  
 - Size: 553 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16660,10 +20275,10 @@ struct Gate final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/consequence_detector.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/consequence_detector.hpp`  
+## File: `AI-Shield-main/include/ai_shield/consequence_detector.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/consequence_detector.hpp`  
 - Size: 477 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16690,10 +20305,10 @@ struct RuntimeEvent final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/correlation.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/correlation.hpp`  
+## File: `AI-Shield-main/include/ai_shield/correlation.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/correlation.hpp`  
 - Size: 776 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16727,10 +20342,10 @@ static_assert(std::is_standard_layout_v<Context> && std::is_trivially_copyable_v
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/dataset_governance.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/dataset_governance.hpp`  
+## File: `AI-Shield-main/include/ai_shield/dataset_governance.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/dataset_governance.hpp`  
 - Size: 819 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16766,10 +20381,10 @@ struct CanaryEvaluation final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/detection.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/detection.hpp`  
+## File: `AI-Shield-main/include/ai_shield/detection.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/detection.hpp`  
 - Size: 780 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16804,10 +20419,10 @@ struct Evidence final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/diagnostics.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/diagnostics.hpp`  
+## File: `AI-Shield-main/include/ai_shield/diagnostics.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/diagnostics.hpp`  
 - Size: 441 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16833,10 +20448,10 @@ struct Snapshot final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/dns.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/dns.hpp`  
+## File: `AI-Shield-main/include/ai_shield/dns.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/dns.hpp`  
 - Size: 767 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16870,10 +20485,10 @@ struct ParseSummary final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/egress_gate.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/egress_gate.hpp`  
+## File: `AI-Shield-main/include/ai_shield/egress_gate.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/egress_gate.hpp`  
 - Size: 687 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16910,10 +20525,10 @@ struct Decision final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/fail_policy.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/fail_policy.hpp`  
+## File: `AI-Shield-main/include/ai_shield/fail_policy.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/fail_policy.hpp`  
 - Size: 606 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16950,10 +20565,10 @@ struct FailureDecision final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/features.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/features.hpp`  
+## File: `AI-Shield-main/include/ai_shield/features.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/features.hpp`  
 - Size: 721 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -16987,10 +20602,68 @@ struct ProtocolFeatures final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/flow_baseline.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/flow_baseline.hpp`  
+## File: `AI-Shield-main/include/ai_shield/file_preflight.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/file_preflight.hpp`  
+- Size: 1205 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
+- Condensed: comments and repeated blank lines reduced
+
+```
+#pragma once
+
+#include <cstddef>
+#include <cstdint>
+#include <span>
+#include <string_view>
+
+namespace ai_shield::file_preflight {
+
+enum class Format : std::uint32_t {
+    unknown = 0U,
+    pe = 1U << 0U,
+    pdf = 1U << 1U,
+    zip = 1U << 2U,
+    wave = 1U << 3U,
+    png = 1U << 4U,
+    jpeg = 1U << 5U,
+    gif = 1U << 6U,
+    tiff = 1U << 7U,
+    webp = 1U << 8U,
+    mp4 = 1U << 9U,
+    ole = 1U << 10U,
+    rtf = 1U << 11U,
+    markup = 1U << 12U,
+};
+
+struct Summary final {
+    std::uint32_t formats = 0U;
+    std::uint32_t strong_header_count = 0U;
+    std::uint32_t external_reference_count = 0U;
+    std::uint32_t command_indicator_count = 0U;
+    std::uint32_t entropy_milli = 0U;
+    bool extension_mismatch = false;
+    bool polyglot = false;
+    bool trailing_data = false;
+    bool embedded_executable = false;
+    bool active_content = false;
+    bool automatic_action = false;
+    bool unsafe_deserialization = false;
+    bool suspicious_filename = false;
+    bool resource_risk = false;
+
+    [[nodiscard]] bool high_risk() const noexcept;
+};
+
+[[nodiscard]] Summary inspect(std::span<const std::byte> data, std::wstring_view filename) noexcept;
+
+}
+
+```
+
+## File: `AI-Shield-main/include/ai_shield/flow_baseline.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/flow_baseline.hpp`  
 - Size: 930 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17035,10 +20708,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/flow_control.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/flow_control.hpp`  
+## File: `AI-Shield-main/include/ai_shield/flow_control.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/flow_control.hpp`  
 - Size: 1998 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17115,10 +20788,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/flow_state.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/flow_state.hpp`  
+## File: `AI-Shield-main/include/ai_shield/flow_state.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/flow_state.hpp`  
 - Size: 2181 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17191,10 +20864,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/fuzz_plan.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/fuzz_plan.hpp`  
+## File: `AI-Shield-main/include/ai_shield/fuzz_plan.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/fuzz_plan.hpp`  
 - Size: 530 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17224,10 +20897,10 @@ struct Readiness final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/health.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/health.hpp`  
+## File: `AI-Shield-main/include/ai_shield/health.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/health.hpp`  
 - Size: 866 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17276,10 +20949,10 @@ struct Degradation final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/http_canonicalizer.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/http_canonicalizer.hpp`  
+## File: `AI-Shield-main/include/ai_shield/http_canonicalizer.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/http_canonicalizer.hpp`  
 - Size: 257 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17298,10 +20971,10 @@ namespace ai_shield::protocols::http1 {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/http1.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/http1.hpp`  
+## File: `AI-Shield-main/include/ai_shield/http1.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/http1.hpp`  
 - Size: 705 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17334,10 +21007,10 @@ struct ParseSummary final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/http2_preflight.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/http2_preflight.hpp`  
+## File: `AI-Shield-main/include/ai_shield/http2_preflight.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/http2_preflight.hpp`  
 - Size: 800 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17370,10 +21043,10 @@ struct FrameSummary final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/incident_package.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/incident_package.hpp`  
+## File: `AI-Shield-main/include/ai_shield/incident_package.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/incident_package.hpp`  
 - Size: 1747 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17425,10 +21098,10 @@ struct Package final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/ipc_validator.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/ipc_validator.hpp`  
+## File: `AI-Shield-main/include/ai_shield/ipc_validator.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/ipc_validator.hpp`  
 - Size: 722 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17459,10 +21132,10 @@ struct ValidationContext final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/ipv6_security.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/ipv6_security.hpp`  
+## File: `AI-Shield-main/include/ai_shield/ipv6_security.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/ipv6_security.hpp`  
 - Size: 1020 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17505,10 +21178,10 @@ struct QuicMetadata final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/isolation_forest.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/isolation_forest.hpp`  
+## File: `AI-Shield-main/include/ai_shield/isolation_forest.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/isolation_forest.hpp`  
 - Size: 660 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17548,10 +21221,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/json_preflight.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/json_preflight.hpp`  
+## File: `AI-Shield-main/include/ai_shield/json_preflight.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/json_preflight.hpp`  
 - Size: 693 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17582,10 +21255,10 @@ struct ParseSummary final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/learning_mode.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/learning_mode.hpp`  
+## File: `AI-Shield-main/include/ai_shield/learning_mode.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/learning_mode.hpp`  
 - Size: 921 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 #pragma once
@@ -17626,10 +21299,10 @@ struct DecisionOverride final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/maintenance_mode.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/maintenance_mode.hpp`  
+## File: `AI-Shield-main/include/ai_shield/maintenance_mode.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/maintenance_mode.hpp`  
 - Size: 369 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17650,10 +21323,10 @@ struct MaintenanceGuard final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/model_registry.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/model_registry.hpp`  
+## File: `AI-Shield-main/include/ai_shield/model_registry.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/model_registry.hpp`  
 - Size: 953 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17690,10 +21363,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/mutation_detector.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/mutation_detector.hpp`  
+## File: `AI-Shield-main/include/ai_shield/mutation_detector.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/mutation_detector.hpp`  
 - Size: 514 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17715,10 +21388,10 @@ namespace ai_shield::mutation {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/package_manifest.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/package_manifest.hpp`  
+## File: `AI-Shield-main/include/ai_shield/package_manifest.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/package_manifest.hpp`  
 - Size: 1314 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17776,10 +21449,10 @@ struct VerificationReport final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/pdf_preflight.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/pdf_preflight.hpp`  
+## File: `AI-Shield-main/include/ai_shield/pdf_preflight.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/pdf_preflight.hpp`  
 - Size: 674 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17812,10 +21485,10 @@ struct ParseSummary final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/pe_preflight.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/pe_preflight.hpp`  
+## File: `AI-Shield-main/include/ai_shield/pe_preflight.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/pe_preflight.hpp`  
 - Size: 745 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17850,10 +21523,10 @@ struct ImageSummary final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/pending_decision.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/pending_decision.hpp`  
+## File: `AI-Shield-main/include/ai_shield/pending_decision.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/pending_decision.hpp`  
 - Size: 1909 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17913,10 +21586,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/platform_uri.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/platform_uri.hpp`  
+## File: `AI-Shield-main/include/ai_shield/platform_uri.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/platform_uri.hpp`  
 - Size: 245 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17935,10 +21608,10 @@ namespace ai_shield::platform {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/policy_authorization.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/policy_authorization.hpp`  
+## File: `AI-Shield-main/include/ai_shield/policy_authorization.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/policy_authorization.hpp`  
 - Size: 427 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -17964,10 +21637,10 @@ struct PolicyChange final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/policy_store.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/policy_store.hpp`  
+## File: `AI-Shield-main/include/ai_shield/policy_store.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/policy_store.hpp`  
 - Size: 1090 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18011,10 +21684,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/policy.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/policy.hpp`  
+## File: `AI-Shield-main/include/ai_shield/policy.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/policy.hpp`  
 - Size: 1029 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18061,10 +21734,10 @@ struct PolicyContext final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/privacy.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/privacy.hpp`  
+## File: `AI-Shield-main/include/ai_shield/privacy.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/privacy.hpp`  
 - Size: 771 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18100,10 +21773,10 @@ struct SanitizedPayload final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/process_consequence.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/process_consequence.hpp`  
+## File: `AI-Shield-main/include/ai_shield/process_consequence.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/process_consequence.hpp`  
 - Size: 738 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18139,10 +21812,10 @@ struct ProcessEvidence final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/process_guard.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/process_guard.hpp`  
+## File: `AI-Shield-main/include/ai_shield/process_guard.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/process_guard.hpp`  
 - Size: 429 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18163,10 +21836,10 @@ using ProcessEvent = process_consequence::ProcessEvidence;
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/provenance.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/provenance.hpp`  
+## File: `AI-Shield-main/include/ai_shield/provenance.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/provenance.hpp`  
 - Size: 1757 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18228,10 +21901,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/ransomware.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/ransomware.hpp`  
+## File: `AI-Shield-main/include/ai_shield/ransomware.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/ransomware.hpp`  
 - Size: 1995 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18303,10 +21976,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/recovery_plan.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/recovery_plan.hpp`  
+## File: `AI-Shield-main/include/ai_shield/recovery_plan.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/recovery_plan.hpp`  
 - Size: 557 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18340,10 +22013,10 @@ struct ActionPlan final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/recovery_vault.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/recovery_vault.hpp`  
+## File: `AI-Shield-main/include/ai_shield/recovery_vault.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/recovery_vault.hpp`  
 - Size: 1210 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18392,10 +22065,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/release_gate.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/release_gate.hpp`  
+## File: `AI-Shield-main/include/ai_shield/release_gate.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/release_gate.hpp`  
 - Size: 756 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18430,10 +22103,10 @@ struct GateReport final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/replay.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/replay.hpp`  
+## File: `AI-Shield-main/include/ai_shield/replay.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/replay.hpp`  
 - Size: 1619 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18501,10 +22174,10 @@ struct ReplayResult final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/response_normalizer.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/response_normalizer.hpp`  
+## File: `AI-Shield-main/include/ai_shield/response_normalizer.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/response_normalizer.hpp`  
 - Size: 217 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18522,10 +22195,10 @@ namespace ai_shield::response {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/result.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/result.hpp`  
+## File: `AI-Shield-main/include/ai_shield/result.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/result.hpp`  
 - Size: 1286 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18582,10 +22255,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/retention.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/retention.hpp`  
+## File: `AI-Shield-main/include/ai_shield/retention.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/retention.hpp`  
 - Size: 668 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18618,10 +22291,10 @@ struct Decision final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/ring_buffer.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/ring_buffer.hpp`  
+## File: `AI-Shield-main/include/ai_shield/ring_buffer.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/ring_buffer.hpp`  
 - Size: 1211 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18676,10 +22349,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/risk.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/risk.hpp`  
+## File: `AI-Shield-main/include/ai_shield/risk.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/risk.hpp`  
 - Size: 296 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18702,10 +22375,10 @@ struct RiskScore final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/sandbox_budget.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/sandbox_budget.hpp`  
+## File: `AI-Shield-main/include/ai_shield/sandbox_budget.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/sandbox_budget.hpp`  
 - Size: 634 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18734,10 +22407,10 @@ struct Budget final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/sandbox.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/sandbox.hpp`  
+## File: `AI-Shield-main/include/ai_shield/sandbox.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/sandbox.hpp`  
 - Size: 747 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18779,10 +22452,10 @@ struct ResultSummary final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/sequence_model.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/sequence_model.hpp`  
+## File: `AI-Shield-main/include/ai_shield/sequence_model.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/sequence_model.hpp`  
 - Size: 831 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18820,10 +22493,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/service_discovery.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/service_discovery.hpp`  
+## File: `AI-Shield-main/include/ai_shield/service_discovery.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/service_discovery.hpp`  
 - Size: 673 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18851,10 +22524,10 @@ struct ObservedListener final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/service_identity.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/service_identity.hpp`  
+## File: `AI-Shield-main/include/ai_shield/service_identity.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/service_identity.hpp`  
 - Size: 590 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18886,10 +22559,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/service_registry.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/service_registry.hpp`  
+## File: `AI-Shield-main/include/ai_shield/service_registry.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/service_registry.hpp`  
 - Size: 1166 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18943,10 +22616,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/sha256.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/sha256.hpp`  
+## File: `AI-Shield-main/include/ai_shield/sha256.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/sha256.hpp`  
 - Size: 463 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -18970,10 +22643,10 @@ using Sha256Digest = std::array<std::byte, 32>;
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/shadow_catalog.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/shadow_catalog.hpp`  
+## File: `AI-Shield-main/include/ai_shield/shadow_catalog.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/shadow_catalog.hpp`  
 - Size: 734 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -19014,10 +22687,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/siem.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/siem.hpp`  
+## File: `AI-Shield-main/include/ai_shield/siem.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/siem.hpp`  
 - Size: 484 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -19046,10 +22719,10 @@ struct Event final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/signature_detector.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/signature_detector.hpp`  
+## File: `AI-Shield-main/include/ai_shield/signature_detector.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/signature_detector.hpp`  
 - Size: 705 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -19091,10 +22764,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/support_package.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/support_package.hpp`  
+## File: `AI-Shield-main/include/ai_shield/support_package.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/support_package.hpp`  
 - Size: 725 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -19125,10 +22798,10 @@ struct SupportManifest final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/system_preflight.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/system_preflight.hpp`  
+## File: `AI-Shield-main/include/ai_shield/system_preflight.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/system_preflight.hpp`  
 - Size: 548 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -19159,10 +22832,10 @@ struct PreflightReport final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/tls_service_policy.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/tls_service_policy.hpp`  
+## File: `AI-Shield-main/include/ai_shield/tls_service_policy.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/tls_service_policy.hpp`  
 - Size: 658 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -19191,10 +22864,10 @@ struct ManagedEndpoint final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/tlsmeta.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/tlsmeta.hpp`  
+## File: `AI-Shield-main/include/ai_shield/tlsmeta.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/tlsmeta.hpp`  
 - Size: 752 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -19227,10 +22900,10 @@ struct ClientHelloSummary final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/update_manager.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/update_manager.hpp`  
+## File: `AI-Shield-main/include/ai_shield/update_manager.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/update_manager.hpp`  
 - Size: 1359 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -19290,10 +22963,42 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/worker_supervisor.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/worker_supervisor.hpp`  
+## File: `AI-Shield-main/include/ai_shield/wav_preflight.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/wav_preflight.hpp`  
+- Size: 556 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
+- Condensed: comments and repeated blank lines reduced
+
+```
+#pragma once
+
+#include <cstddef>
+#include <cstdint>
+#include <span>
+
+#include "ai_shield/result.hpp"
+
+namespace ai_shield::protocols::wav {
+
+struct ParseSummary final {
+    std::uint32_t chunk_count = 0;
+    bool malformed = false;
+    bool format_present = false;
+    bool audio_data_present = false;
+    bool suspicious_metadata = false;
+};
+
+[[nodiscard]] bool has_wave_signature(std::span<const std::byte> data) noexcept;
+[[nodiscard]] Result<ParseSummary> preflight(std::span<const std::byte> data) noexcept;
+
+}
+
+```
+
+## File: `AI-Shield-main/include/ai_shield/worker_supervisor.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/worker_supervisor.hpp`  
 - Size: 1214 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -19357,10 +23062,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/xml_preflight.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/xml_preflight.hpp`  
+## File: `AI-Shield-main/include/ai_shield/xml_preflight.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/xml_preflight.hpp`  
 - Size: 732 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -19392,10 +23097,10 @@ struct ParseSummary final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/include/ai_shield/zip_preflight.hpp`  
-- Path: `AI_Shield_Developer_Full/include/ai_shield/zip_preflight.hpp`  
-- Size: 663 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+## File: `AI-Shield-main/include/ai_shield/zip_preflight.hpp`  
+- Path: `AI-Shield-main/include/ai_shield/zip_preflight.hpp`  
+- Size: 847 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -19418,6 +23123,11 @@ struct EntrySummary final {
     bool path_escape = false;
     bool bomb_risk = false;
     bool encrypted_entry = false;
+    bool unsupported_compression = false;
+    bool executable_entry = false;
+    bool active_content_entry = false;
+    bool nested_container = false;
+    bool duplicate_name = false;
 };
 
 [[nodiscard]] Result<EntrySummary> preflight(std::span<const std::byte> data) noexcept;
@@ -19427,64 +23137,237 @@ struct EntrySummary final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/Install_Precompiled_Desktop.cmd`  
-- Path: `AI_Shield_Developer_Full/Install_Precompiled_Desktop.cmd`  
-- Size: 188 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/LICENSE`  
+- Path: `AI-Shield-main/LICENSE`  
+- Size: 11357 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
+- Condensed: comments and repeated blank lines reduced
 
 ```
-@echo off
-setlocal
-cd /d "%~dp0"
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0Install_Precompiled_Desktop.ps1"
-set "RC=%ERRORLEVEL%"
-if not "%RC%"=="0" pause
-exit /b %RC%
+                                 Apache License
+                           Version 2.0, January 2004
+                        http:
+
+   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+   1. Definitions.
+
+      "License" shall mean the terms and conditions for use, reproduction,
+      and distribution as defined by Sections 1 through 9 of this document.
+
+      "Licensor" shall mean the copyright owner or entity authorized by
+      the copyright owner that is granting the License.
+
+      "Legal Entity" shall mean the union of the acting entity and all
+      other entities that control, are controlled by, or are under common
+      control with that entity. For the purposes of this definition,
+      "control" means (i) the power, direct or indirect, to cause the
+      direction or management of such entity, whether by contract or
+      otherwise, or (ii) ownership of fifty percent (50%) or more of the
+      outstanding shares, or (iii) beneficial ownership of such entity.
+
+      "You" (or "Your") shall mean an individual or Legal Entity
+      exercising permissions granted by this License.
+
+      "Source" form shall mean the preferred form for making modifications,
+      including but not limited to software source code, documentation
+      source, and configuration files.
+
+      "Object" form shall mean any form resulting from mechanical
+      transformation or translation of a Source form, including but
+      not limited to compiled object code, generated documentation,
+      and conversions to other media types.
+
+      "Work" shall mean the work of authorship, whether in Source or
+      Object form, made available under the License, as indicated by a
+      copyright notice that is included in or attached to the work
+      (an example is provided in the Appendix below).
+
+      "Derivative Works" shall mean any work, whether in Source or Object
+      form, that is based on (or derived from) the Work and for which the
+      editorial revisions, annotations, elaborations, or other modifications
+      represent, as a whole, an original work of authorship. For the purposes
+      of this License, Derivative Works shall not include works that remain
+      separable from, or merely link (or bind by name) to the interfaces of,
+      the Work and Derivative Works thereof.
+
+      "Contribution" shall mean any work of authorship, including
+      the original version of the Work and any modifications or additions
+      to that Work or Derivative Works thereof, that is intentionally
+      submitted to Licensor for inclusion in the Work by the copyright owner
+      or by an individual or Legal Entity authorized to submit on behalf of
+      the copyright owner. For the purposes of this definition, "submitted"
+      means any form of electronic, verbal, or written communication sent
+      to the Licensor or its representatives, including but not limited to
+      communication on electronic mailing lists, source code control systems,
+      and issue tracking systems that are managed by, or on behalf of, the
+      Licensor for the purpose of discussing and improving the Work, but
+      excluding communication that is conspicuously marked or otherwise
+      designated in writing by the copyright owner as "Not a Contribution."
+
+      "Contributor" shall mean Licensor and any individual or Legal Entity
+      on behalf of whom a Contribution has been received by Licensor and
+      subsequently incorporated within the Work.
+
+   2. Grant of Copyright License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      copyright license to reproduce, prepare Derivative Works of,
+      publicly display, publicly perform, sublicense, and distribute the
+      Work and such Derivative Works in Source or Object form.
+
+   3. Grant of Patent License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      (except as stated in this section) patent license to make, have made,
+      use, offer to sell, sell, import, and otherwise transfer the Work,
+      where such license applies only to those patent claims licensable
+      by such Contributor that are necessarily infringed by their
+      Contribution(s) alone or by combination of their Contribution(s)
+      with the Work to which such Contribution(s) was submitted. If You
+      institute patent litigation against any entity (including a
+      cross-claim or counterclaim in a lawsuit) alleging that the Work
+      or a Contribution incorporated within the Work constitutes direct
+      or contributory patent infringement, then any patent licenses
+      granted to You under this License for that Work shall terminate
+      as of the date such litigation is filed.
+
+   4. Redistribution. You may reproduce and distribute copies of the
+      Work or Derivative Works thereof in any medium, with or without
+      modifications, and in Source or Object form, provided that You
+      meet the following conditions:
+
+      (a) You must give any other recipients of the Work or
+          Derivative Works a copy of this License; and
+
+      (b) You must cause any modified files to carry prominent notices
+          stating that You changed the files; and
+
+      (c) You must retain, in the Source form of any Derivative Works
+          that You distribute, all copyright, patent, trademark, and
+          attribution notices from the Source form of the Work,
+          excluding those notices that do not pertain to any part of
+          the Derivative Works; and
+
+      (d) If the Work includes a "NOTICE" text file as part of its
+          distribution, then any Derivative Works that You distribute must
+          include a readable copy of the attribution notices contained
+          within such NOTICE file, excluding those notices that do not
+          pertain to any part of the Derivative Works, in at least one
+          of the following places: within a NOTICE text file distributed
+          as part of the Derivative Works; within the Source form or
+          documentation, if provided along with the Derivative Works; or,
+          within a display generated by the Derivative Works, if and
+          wherever such third-party notices normally appear. The contents
+          of the NOTICE file are for informational purposes only and
+          do not modify the License. You may add Your own attribution
+          notices within Derivative Works that You distribute, alongside
+          or as an addendum to the NOTICE text from the Work, provided
+          that such additional attribution notices cannot be construed
+          as modifying the License.
+
+      You may add Your own copyright statement to Your modifications and
+      may provide additional or different license terms and conditions
+      for use, reproduction, or distribution of Your modifications, or
+      for any such Derivative Works as a whole, provided Your use,
+      reproduction, and distribution of the Work otherwise complies with
+      the conditions stated in this License.
+
+   5. Submission of Contributions. Unless You explicitly state otherwise,
+      any Contribution intentionally submitted for inclusion in the Work
+      by You to the Licensor shall be under the terms and conditions of
+      this License, without any additional terms or conditions.
+      Notwithstanding the above, nothing herein shall supersede or modify
+      the terms of any separate license agreement you may have executed
+      with Licensor regarding such Contributions.
+
+   6. Trademarks. This License does not grant permission to use the trade
+      names, trademarks, service marks, or product names of the Licensor,
+      except as required for reasonable and customary use in describing the
+      origin of the Work and reproducing the content of the NOTICE file.
+
+   7. Disclaimer of Warranty. Unless required by applicable law or
+      agreed to in writing, Licensor provides the Work (and each
+      Contributor provides its Contributions) on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+      implied, including, without limitation, any warranties or conditions
+      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+      PARTICULAR PURPOSE. You are solely responsible for determining the
+      appropriateness of using or redistributing the Work and assume any
+      risks associated with Your exercise of permissions under this License.
+
+   8. Limitation of Liability. In no event and under no legal theory,
+      whether in tort (including negligence), contract, or otherwise,
+      unless required by applicable law (such as deliberate and grossly
+      negligent acts) or agreed to in writing, shall any Contributor be
+      liable to You for damages, including any direct, indirect, special,
+      incidental, or consequential damages of any character arising as a
+      result of this License or out of the use or inability to use the
+      Work (including but not limited to damages for loss of goodwill,
+      work stoppage, computer failure or malfunction, or any and all
+      other commercial damages or losses), even if such Contributor
+      has been advised of the possibility of such damages.
+
+   9. Accepting Warranty or Additional Liability. While redistributing
+      the Work or Derivative Works thereof, You may choose to offer,
+      and charge a fee for, acceptance of support, warranty, indemnity,
+      or other liability obligations and/or rights consistent with this
+      License. However, in accepting such obligations, You may act only
+      on Your own behalf and on Your sole responsibility, not on behalf
+      of any other Contributor, and only if You agree to indemnify,
+      defend, and hold each Contributor harmless for any liability
+      incurred by, or claims asserted against, such Contributor by reason
+      of your accepting any such warranty or additional liability.
+
+   END OF TERMS AND CONDITIONS
+
+   APPENDIX: How to apply the Apache License to your work.
+
+      To apply the Apache License to your work, attach the following
+      boilerplate notice, with the fields enclosed by brackets "[]"
+      replaced with your own identifying information. (Don't include
+      the brackets!)  The text should be enclosed in the appropriate
+      comment syntax for the file format. We also recommend that a
+      file or class name and description of purpose be included on the
+      same "printed page" as the copyright notice for easier
+      identification within third-party archives.
+
+   Copyright [yyyy] [name of copyright owner]
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 
 ```
 
-## File: `AI_Shield_Developer_Full/Install_Precompiled_Desktop.ps1`  
-- Path: `AI_Shield_Developer_Full/Install_Precompiled_Desktop.ps1`  
-- Size: 2012 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/NOTICE`  
+- Path: `AI-Shield-main/NOTICE`  
+- Size: 170 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
-```powershell
-$ErrorActionPreference = "Stop"
-$principal = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
-if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Start-Process powershell.exe -Verb RunAs -ArgumentList @(
-        "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ('"' + $PSCommandPath + '"'))
-    exit 0
-}
+```
+AI Shield
+Copyright 2026 Ralf Krümmel
 
-$archive = Join-Path $PSScriptRoot "prebuilt\AI_Shield_Private_Desktop.zip"
-$manifestPath = Join-Path $PSScriptRoot "FULL_PACKAGE_MANIFEST.json"
-if (-not (Test-Path -LiteralPath $archive -PathType Leaf)) { throw "Embedded desktop package is missing." }
-if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) { throw "Full package manifest is missing." }
-$manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
-$entry = $manifest.files | Where-Object { $_.path -eq "prebuilt/AI_Shield_Private_Desktop.zip" }
-if ($null -eq $entry) { throw "Desktop package is not covered by the full package manifest." }
-$actual = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash
-if ($actual -ne $entry.sha256) { throw "Embedded desktop package hash mismatch." }
+Developed by Ralf Krümmel
+Wintergartenstraße, Leipzig, Germany
 
-$target = [IO.Path]::GetFullPath((Join-Path $env:ProgramFiles "AI_Shield_Private_Desktop"))
-$expected = [IO.Path]::GetFullPath($env:ProgramFiles).TrimEnd('\') + '\AI_Shield_Private_Desktop'
-if ($target -ne $expected) { throw "Installation target validation failed." }
-if (Test-Path -LiteralPath $target) {
-    throw "An extracted desktop package already exists at $target. Run its Deinstallieren.cmd first, then remove that directory."
-}
-Expand-Archive -LiteralPath $archive -DestinationPath $env:ProgramFiles
-$installer = Join-Path $target "install_private_desktop.ps1"
-if (-not (Test-Path -LiteralPath $installer -PathType Leaf)) { throw "Extracted installer is missing." }
-& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installer
-if ($LASTEXITCODE -ne 0) { throw "Desktop installation failed with exit code $LASTEXITCODE." }
+This product is licensed under the Apache License, Version 2.0.
 
 ```
 
-## File: `AI_Shield_Developer_Full/planfortsetzung.txt`  
-- Path: `AI_Shield_Developer_Full/planfortsetzung.txt`  
-- Size: 20986 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+## File: `AI-Shield-main/planfortsetzung.txt`  
+- Path: `AI-Shield-main/planfortsetzung.txt`  
+- Size: 20161 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -20316,10 +24199,10 @@ Kann ein Modul keinem dieser Schritte eindeutig zugeordnet werden oder wird es f
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/admin/ai_shield_admin.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/admin/ai_shield_admin.ps1`  
+## File: `AI-Shield-main/platform/windows/admin/ai_shield_admin.ps1`  
+- Path: `AI-Shield-main/platform/windows/admin/ai_shield_admin.ps1`  
 - Size: 4538 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -20415,10 +24298,10 @@ switch ($Action) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/asr/evaluate_asr_audit.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/asr/evaluate_asr_audit.ps1`  
+## File: `AI-Shield-main/platform/windows/asr/evaluate_asr_audit.ps1`  
+- Path: `AI-Shield-main/platform/windows/asr/evaluate_asr_audit.ps1`  
 - Size: 2081 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -20459,10 +24342,10 @@ $report|ConvertTo-Json -Depth 7
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/browser_extension/install_browser_sensor.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/browser_extension/install_browser_sensor.ps1`  
+## File: `AI-Shield-main/platform/windows/browser_extension/install_browser_sensor.ps1`  
+- Path: `AI-Shield-main/platform/windows/browser_extension/install_browser_sensor.ps1`  
 - Size: 8874 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -20615,18 +24498,18 @@ Get-Status | ConvertTo-Json -Compress
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/browser_extension/manifest.json`  
-- Path: `AI_Shield_Developer_Full/platform/windows/browser_extension/manifest.json`  
+## File: `AI-Shield-main/platform/windows/browser_extension/manifest.json`  
+- Path: `AI-Shield-main/platform/windows/browser_extension/manifest.json`  
 - Size: 750 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Warning: 1 secret-like value(s) redacted
 
 > Warning: 1 secret-like value(s) redacted
 
-## File: `AI_Shield_Developer_Full/platform/windows/browser_extension/service_worker.js`  
-- Path: `AI_Shield_Developer_Full/platform/windows/browser_extension/service_worker.js`  
+## File: `AI-Shield-main/platform/windows/browser_extension/service_worker.js`  
+- Path: `AI-Shield-main/platform/windows/browser_extension/service_worker.js`  
 - Size: 2052 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```javascript
 const nativeHost = "de.ai_shield.browser";
@@ -20693,10 +24576,10 @@ chrome.downloads.onChanged.addListener(delta => {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/browser_extension/sign_browser_host.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/browser_extension/sign_browser_host.ps1`  
+## File: `AI-Shield-main/platform/windows/browser_extension/sign_browser_host.ps1`  
+- Path: `AI-Shield-main/platform/windows/browser_extension/sign_browser_host.ps1`  
 - Size: 1367 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([string]$Subject="CN=AI Shield Prototype Test Signing")
@@ -20725,10 +24608,10 @@ Write-Output "signed browser host publisher=$($certificate.Thumbprint)"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/build_drivers.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/build_drivers.ps1`  
+## File: `AI-Shield-main/platform/windows/build_drivers.ps1`  
+- Path: `AI-Shield-main/platform/windows/build_drivers.ps1`  
 - Size: 3404 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -20809,10 +24692,10 @@ Write-Output "driver package: $package"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/common/abi_translation.cpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/common/abi_translation.cpp`  
+## File: `AI-Shield-main/platform/windows/common/abi_translation.cpp`  
+- Path: `AI-Shield-main/platform/windows/common/abi_translation.cpp`  
 - Size: 3355 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -20890,10 +24773,10 @@ ai_shield::Result<ai_shield::abi2::SensorEvent> to_sensor_event_v2(
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/common/abi_translation.hpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/common/abi_translation.hpp`  
+## File: `AI-Shield-main/platform/windows/common/abi_translation.hpp`  
+- Path: `AI-Shield-main/platform/windows/common/abi_translation.hpp`  
 - Size: 1757 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -20958,10 +24841,10 @@ static_assert(std::is_trivially_copyable_v<DriverEventObservation>);
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/common/ai_shield_driver_protocol.h`  
-- Path: `AI_Shield_Developer_Full/platform/windows/common/ai_shield_driver_protocol.h`  
+## File: `AI-Shield-main/platform/windows/common/ai_shield_driver_protocol.h`  
+- Path: `AI-Shield-main/platform/windows/common/ai_shield_driver_protocol.h`  
 - Size: 4016 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 #pragma once
@@ -21073,10 +24956,10 @@ AI_SHIELD_ABI_ASSERT(FIELD_OFFSET(AI_SHIELD_DRIVER_EVENT, Reserved) == 68U);
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/common/ai_shield_event_queue.h`  
-- Path: `AI_Shield_Developer_Full/platform/windows/common/ai_shield_event_queue.h`  
+## File: `AI-Shield-main/platform/windows/common/ai_shield_event_queue.h`  
+- Path: `AI-Shield-main/platform/windows/common/ai_shield_event_queue.h`  
 - Size: 1706 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 #pragma once
@@ -21135,10 +25018,10 @@ static BOOLEAN AiShieldEventQueuePop(AI_SHIELD_EVENT_QUEUE* queue, AI_SHIELD_DRI
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/drivers.props`  
-- Path: `AI_Shield_Developer_Full/platform/windows/drivers.props`  
+## File: `AI-Shield-main/platform/windows/drivers.props`  
+- Path: `AI-Shield-main/platform/windows/drivers.props`  
 - Size: 1965 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -21188,10 +25071,10 @@ static BOOLEAN AiShieldEventQueuePop(AI_SHIELD_EVENT_QUEUE* queue, AI_SHIELD_DRI
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/firewall/firewall_baseline.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/firewall/firewall_baseline.ps1`  
+## File: `AI-Shield-main/platform/windows/firewall/firewall_baseline.ps1`  
+- Path: `AI-Shield-main/platform/windows/firewall/firewall_baseline.ps1`  
 - Size: 3410 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```powershell
@@ -21255,10 +25138,10 @@ Write-Output "Windows Firewall enabled with inbound block/outbound allow; rollba
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/ai_shield_minifilter.inf`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/ai_shield_minifilter.inf`  
+## File: `AI-Shield-main/platform/windows/installer/ai_shield_minifilter.inf`  
+- Path: `AI-Shield-main/platform/windows/installer/ai_shield_minifilter.inf`  
 - Size: 1198 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 [Version]
@@ -21309,10 +25192,10 @@ DiskName="AI Shield Minifilter Driver Package"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/ai_shield_process_guard.inf`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/ai_shield_process_guard.inf`  
+## File: `AI-Shield-main/platform/windows/installer/ai_shield_process_guard.inf`  
+- Path: `AI-Shield-main/platform/windows/installer/ai_shield_process_guard.inf`  
 - Size: 843 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 [Version]
@@ -21355,10 +25238,10 @@ DiskName="AI Shield Process Guard Driver Package"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/ai_shield_wfp.inf`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/ai_shield_wfp.inf`  
+## File: `AI-Shield-main/platform/windows/installer/ai_shield_wfp.inf`  
+- Path: `AI-Shield-main/platform/windows/installer/ai_shield_wfp.inf`  
 - Size: 769 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 [Version]
@@ -21402,10 +25285,10 @@ DiskName="AI Shield WFP Driver Package"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/binary_update.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/binary_update.ps1`  
+## File: `AI-Shield-main/platform/windows/installer/binary_update.ps1`  
+- Path: `AI-Shield-main/platform/windows/installer/binary_update.ps1`  
 - Size: 6645 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([Parameter(Mandatory=$true)][string]$PackageDirectory)
@@ -21523,10 +25406,10 @@ Write-Output "AI Shield update active security_version=$($manifest.security_vers
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/deploy_current_prototype.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/deploy_current_prototype.ps1`  
+## File: `AI-Shield-main/platform/windows/installer/deploy_current_prototype.ps1`  
+- Path: `AI-Shield-main/platform/windows/installer/deploy_current_prototype.ps1`  
 - Size: 5753 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 $ErrorActionPreference = "Stop"
@@ -21626,10 +25509,10 @@ Write-Output "Deployment completed. Log: $log"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/enable_testsigning.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/enable_testsigning.ps1`  
+## File: `AI-Shield-main/platform/windows/installer/enable_testsigning.ps1`  
+- Path: `AI-Shield-main/platform/windows/installer/enable_testsigning.ps1`  
 - Size: 1192 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -21673,10 +25556,10 @@ Write-Output "Restart Windows before loading kernel drivers if the state changed
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/install_broker.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/install_broker.ps1`  
-- Size: 3734 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/platform/windows/installer/install_broker.ps1`  
+- Path: `AI-Shield-main/platform/windows/installer/install_broker.ps1`  
+- Size: 4334 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -21687,10 +25570,11 @@ param(
 $ErrorActionPreference = "Stop"
 $repo = Resolve-Path (Join-Path $PSScriptRoot "..\..\..")
 $brokerSource = Join-Path $repo "build_vs\Release\ai_shield_broker.exe"
-$scannerSource = Join-Path $repo "build_vs\Release\ai_shield_integrations.exe"
+$scannerSource = Join-Path $repo "build_vs\Release\ai_shield_file_scanner.exe"
+$profileTool = Join-Path $repo "build_vs\Release\ai_shield_integrations.exe"
 $installRoot = Join-Path $env:ProgramFiles "AIShield\bin"
 $broker = Join-Path $installRoot "ai_shield_broker.exe"
-$scanner = Join-Path $installRoot "ai_shield_integrations.exe"
+$scanner = Join-Path $installRoot "ai_shield_file_scanner.exe"
 $auditDir = Join-Path $env:ProgramData "AIShield\audit"
 $quarantineDir = Join-Path $env:ProgramData "AIShield\quarantine"
 $serviceName = "AIShieldBroker"
@@ -21720,6 +25604,12 @@ New-Item -ItemType Directory -Force -Path $installRoot | Out-Null
 if ($LASTEXITCODE -ne 0) { throw "Could not secure AI Shield installation directory." }
 Copy-Item -LiteralPath $brokerSource -Destination $broker -Force
 Copy-Item -LiteralPath $scannerSource -Destination $scanner -Force
+$parserSid=(& $profileTool appcontainer-sid|Select-Object -First 1).Trim()
+if($LASTEXITCODE-ne0-or$parserSid-notmatch'^S-1-15-2-'){throw 'AppContainer parser profile provisioning failed.'}
+& icacls.exe (Split-Path $installRoot -Parent) /grant "*$parserSid`:(RX)"|Out-Null
+if($LASTEXITCODE-ne0){throw 'AppContainer parser traversal ACL provisioning failed.'}
+& icacls.exe $installRoot /grant "*$parserSid`:(OI)(CI)(RX)" /T /C|Out-Null
+if($LASTEXITCODE-ne0){throw 'AppContainer parser read/execute ACL provisioning failed.'}
 $sourceHash = (Get-FileHash -LiteralPath $brokerSource -Algorithm SHA256).Hash
 $installedHash = (Get-FileHash -LiteralPath $broker -Algorithm SHA256).Hash
 if ($sourceHash -ne $installedHash) { throw "Installed broker hash verification failed." }
@@ -21752,10 +25642,10 @@ Write-Output "audit directory: $auditDir"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/install_core_service.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/install_core_service.ps1`  
+## File: `AI-Shield-main/platform/windows/installer/install_core_service.ps1`  
+- Path: `AI-Shield-main/platform/windows/installer/install_core_service.ps1`  
 - Size: 2664 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([ValidateSet("install", "uninstall")][string]$Action = "install")
@@ -21806,10 +25696,10 @@ Write-Output "binary: $binary sha256=$installedHash"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/install_drivers.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/install_drivers.ps1`  
+## File: `AI-Shield-main/platform/windows/installer/install_drivers.ps1`  
+- Path: `AI-Shield-main/platform/windows/installer/install_drivers.ps1`  
 - Size: 1374 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -21848,10 +25738,10 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/prepare_microsoft_submission.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/prepare_microsoft_submission.ps1`  
+## File: `AI-Shield-main/platform/windows/installer/prepare_microsoft_submission.ps1`  
+- Path: `AI-Shield-main/platform/windows/installer/prepare_microsoft_submission.ps1`  
 - Size: 6577 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -21978,10 +25868,10 @@ Write-Output "ev_signed: $([bool]$EvCertificateThumbprint)"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/recover_pending_update.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/recover_pending_update.ps1`  
+## File: `AI-Shield-main/platform/windows/installer/recover_pending_update.ps1`  
+- Path: `AI-Shield-main/platform/windows/installer/recover_pending_update.ps1`  
 - Size: 1480 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 $ErrorActionPreference = "Stop"
@@ -22011,10 +25901,10 @@ Write-Output "rolled back pending update to protected service baseline"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/sign_driver_package.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/sign_driver_package.ps1`  
+## File: `AI-Shield-main/platform/windows/installer/sign_driver_package.ps1`  
+- Path: `AI-Shield-main/platform/windows/installer/sign_driver_package.ps1`  
 - Size: 2729 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -22098,10 +25988,10 @@ Write-Output "certificate thumbprint: $($existing.Thumbprint)"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/uninstall_drivers.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/uninstall_drivers.ps1`  
+## File: `AI-Shield-main/platform/windows/installer/uninstall_drivers.ps1`  
+- Path: `AI-Shield-main/platform/windows/installer/uninstall_drivers.ps1`  
 - Size: 302 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 $ErrorActionPreference = "Stop"
@@ -22114,10 +26004,10 @@ exit $LASTEXITCODE
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/uninstall_product.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/uninstall_product.ps1`  
+## File: `AI-Shield-main/platform/windows/installer/uninstall_product.ps1`  
+- Path: `AI-Shield-main/platform/windows/installer/uninstall_product.ps1`  
 - Size: 2296 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -22158,10 +26048,10 @@ Write-Output "AI Shield uninstalled. Security data preserved=$(-not $PurgeSecuri
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/update_and_install_drivers.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/update_and_install_drivers.ps1`  
+## File: `AI-Shield-main/platform/windows/installer/update_and_install_drivers.ps1`  
+- Path: `AI-Shield-main/platform/windows/installer/update_and_install_drivers.ps1`  
 - Size: 2278 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -22212,10 +26102,10 @@ Stop-Transcript | Out-Null
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/installer/verify_microsoft_signed_package.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/installer/verify_microsoft_signed_package.ps1`  
+## File: `AI-Shield-main/platform/windows/installer/verify_microsoft_signed_package.ps1`  
+- Path: `AI-Shield-main/platform/windows/installer/verify_microsoft_signed_package.ps1`  
 - Size: 1468 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -22244,10 +26134,10 @@ Write-Output "manifest=$output"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/minifilter/driver/ai_shield_minifilter.c`  
-- Path: `AI_Shield_Developer_Full/platform/windows/minifilter/driver/ai_shield_minifilter.c`  
+## File: `AI-Shield-main/platform/windows/minifilter/driver/ai_shield_minifilter.c`  
+- Path: `AI-Shield-main/platform/windows/minifilter/driver/ai_shield_minifilter.c`  
 - Size: 16646 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```c
 #include <fltKernel.h>
@@ -22588,10 +26478,10 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT driver, PUNICODE_STRING registryPath) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/minifilter/driver/AIShieldMiniFilter.vcxproj`  
-- Path: `AI_Shield_Developer_Full/platform/windows/minifilter/driver/AIShieldMiniFilter.vcxproj`  
+## File: `AI-Shield-main/platform/windows/minifilter/driver/AIShieldMiniFilter.vcxproj`  
+- Path: `AI-Shield-main/platform/windows/minifilter/driver/AIShieldMiniFilter.vcxproj`  
 - Size: 972 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -22619,10 +26509,10 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT driver, PUNICODE_STRING registryPath) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/minifilter/provenance_adapter.cpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/minifilter/provenance_adapter.cpp`  
+## File: `AI-Shield-main/platform/windows/minifilter/provenance_adapter.cpp`  
+- Path: `AI-Shield-main/platform/windows/minifilter/provenance_adapter.cpp`  
 - Size: 943 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -22650,10 +26540,10 @@ ai_shield::Result<void> apply_file_event(ai_shield::provenance::Store& store, co
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/minifilter/provenance_adapter.hpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/minifilter/provenance_adapter.hpp`  
+## File: `AI-Shield-main/platform/windows/minifilter/provenance_adapter.hpp`  
+- Path: `AI-Shield-main/platform/windows/minifilter/provenance_adapter.hpp`  
 - Size: 692 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -22686,10 +26576,10 @@ struct FileEvent final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/msi/AIShieldPrivateDesktop.wxs`  
-- Path: `AI_Shield_Developer_Full/platform/windows/msi/AIShieldPrivateDesktop.wxs`  
-- Size: 3050 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/platform/windows/msi/AIShieldPrivateDesktop.wxs`  
+- Path: `AI-Shield-main/platform/windows/msi/AIShieldPrivateDesktop.wxs`  
+- Size: 3051 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -22697,12 +26587,12 @@ struct FileEvent final {
   <Product Id="1EABE7E9-9CFB-4B7D-88F1-FE75FE013FD1"
            Name="AI Shield Private Desktop"
            Language="1031"
-           Version="2.0.8"
+           Version="2.0.9"
            Manufacturer="AI Shield"
            UpgradeCode="357A6A93-5FDA-43D2-8D41-4D24BF080EDD">
     <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine"
              InstallPrivileges="elevated" Platform="x64"
-             Description="AI Shield Private Desktop 2.0.0-rc.8" />
+             Description="AI Shield Private Desktop 2.0.0-rc.11" />
     <MajorUpgrade DowngradeErrorMessage="Eine neuere Version von AI Shield Private Desktop ist bereits installiert."
                   Schedule="afterInstallInitialize" />
     <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
@@ -22751,10 +26641,10 @@ struct FileEvent final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/msi/build_msi.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/msi/build_msi.ps1`  
-- Size: 4951 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/platform/windows/msi/build_msi.ps1`  
+- Path: `AI-Shield-main/platform/windows/msi/build_msi.ps1`  
+- Size: 5136 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -22789,9 +26679,6 @@ $extract = Join-Path $work "extract"
 $obj = Join-Path $work "obj"
 $payload = Join-Path $extract "AI_Shield_Private_Desktop"
 $harvest = Join-Path $work "Payload.wxs"
-$msiName = "AI_Shield_Private_Desktop_2.0.0-rc.8_x64.msi"
-$msiPath = Join-Path $outputRoot $msiName
-
 try {
     New-Item -ItemType Directory -Force -Path $extract, $obj, $outputRoot | Out-Null
     Expand-Archive -LiteralPath $packagePath -DestinationPath $extract -Force
@@ -22799,6 +26686,11 @@ try {
         throw "Consumer package root or manifest is invalid."
     }
     $manifest = Get-Content -LiteralPath (Join-Path $payload "PACKAGE_MANIFEST.json") -Raw | ConvertFrom-Json
+    if ([string]$manifest.release -notmatch '^\d+\.\d+\.\d+-rc\.\d+$') {
+        throw "Consumer package has an invalid release identifier: $($manifest.release)"
+    }
+    $msiName = "AI_Shield_Private_Desktop_$($manifest.release)_x64.msi"
+    $msiPath = Join-Path $outputRoot $msiName
     foreach ($entry in $manifest.files) {
         $file = Join-Path $payload ([string]$entry.path).Replace('/', '\')
         if (-not (Test-Path -LiteralPath $file -PathType Leaf)) { throw "Manifest file is missing: $($entry.path)" }
@@ -22847,10 +26739,10 @@ try {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/msi/License.rtf`  
-- Path: `AI_Shield_Developer_Full/platform/windows/msi/License.rtf`  
+## File: `AI-Shield-main/platform/windows/msi/License.rtf`  
+- Path: `AI-Shield-main/platform/windows/msi/License.rtf`  
 - Size: 964 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 {\rtf1\ansi\deff0{\fonttbl{\f0 Segoe UI;}}\fs20
@@ -22867,10 +26759,10 @@ No security product can guarantee prevention of every possible attack. Continue 
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/policy/ai_shield_policy.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/policy/ai_shield_policy.ps1`  
+## File: `AI-Shield-main/platform/windows/policy/ai_shield_policy.ps1`  
+- Path: `AI-Shield-main/platform/windows/policy/ai_shield_policy.ps1`  
 - Size: 13067 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -23141,10 +27033,10 @@ if ($Action -eq "status") {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/powershell_logging/powershell_privacy_forwarder.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/powershell_logging/powershell_privacy_forwarder.ps1`  
+## File: `AI-Shield-main/platform/windows/powershell_logging/powershell_privacy_forwarder.ps1`  
+- Path: `AI-Shield-main/platform/windows/powershell_logging/powershell_privacy_forwarder.ps1`  
 - Size: 7656 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -23271,10 +27163,10 @@ Write-Output "PowerShell logging configured; external payload contains metadata 
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/process_guard/driver/ai_shield_process_guard.c`  
-- Path: `AI_Shield_Developer_Full/platform/windows/process_guard/driver/ai_shield_process_guard.c`  
-- Size: 20941 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/platform/windows/process_guard/driver/ai_shield_process_guard.c`  
+- Path: `AI-Shield-main/platform/windows/process_guard/driver/ai_shield_process_guard.c`  
+- Size: 22332 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```c
 #include <ntifs.h>
@@ -23380,7 +27272,24 @@ static BOOLEAN AiShieldIsDownloadedScriptLaunch(const PPS_CREATE_NOTIFY_INFO cre
                   AiShieldContains(createInfo->ImageFileName, L"\\py.exe") ||
                   AiShieldContains(createInfo->ImageFileName, L"\\node.exe") ||
                   AiShieldContains(createInfo->ImageFileName, L"\\perl.exe") ||
-                  AiShieldContains(createInfo->ImageFileName, L"\\ruby.exe");
+                  AiShieldContains(createInfo->ImageFileName, L"\\ruby.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\php.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\java.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\javaw.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\dotnet.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\csi.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\msiexec.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\rundll32.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\regsvr32.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\control.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\hh.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\reg.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\regedit.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\cmstp.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\installutil.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\regasm.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\regsvcs.exe") ||
+                  AiShieldContains(createInfo->ImageFileName, L"\\msbuild.exe");
     downloadPath = AiShieldContains(createInfo->CommandLine, L"\\Downloads\\") ||
                    AiShieldContains(createInfo->CommandLine, L"/Downloads/") ||
                    AiShieldContains(createInfo->CommandLine, L"\\Downloads/") ||
@@ -23663,10 +27572,10 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT driver, PUNICODE_STRING registryPath) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/process_guard/driver/AIShieldProcessGuard.vcxproj`  
-- Path: `AI_Shield_Developer_Full/platform/windows/process_guard/driver/AIShieldProcessGuard.vcxproj`  
+## File: `AI-Shield-main/platform/windows/process_guard/driver/AIShieldProcessGuard.vcxproj`  
+- Path: `AI-Shield-main/platform/windows/process_guard/driver/AIShieldProcessGuard.vcxproj`  
 - Size: 999 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -23694,10 +27603,10 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT driver, PUNICODE_STRING registryPath) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/protect_system.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/protect_system.ps1`  
+## File: `AI-Shield-main/platform/windows/protect_system.ps1`  
+- Path: `AI-Shield-main/platform/windows/protect_system.ps1`  
 - Size: 3496 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([switch]$StrictBrowser, [switch]$BlockUnsolicitedInbound, [switch]$HardenDownloads,
@@ -23756,10 +27665,10 @@ Write-Output "kernel and hardware mitigation baseline: $([bool]$HardenKernelHard
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/qualification/recovery_drills.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/qualification/recovery_drills.ps1`  
+## File: `AI-Shield-main/platform/windows/qualification/recovery_drills.ps1`  
+- Path: `AI-Shield-main/platform/windows/qualification/recovery_drills.ps1`  
 - Size: 4296 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -23842,10 +27751,10 @@ Write-Output "Recovery drill passed: $path"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/ransomware/ransomware_recovery.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/ransomware/ransomware_recovery.ps1`  
+## File: `AI-Shield-main/platform/windows/ransomware/ransomware_recovery.ps1`  
+- Path: `AI-Shield-main/platform/windows/ransomware/ransomware_recovery.ps1`  
 - Size: 23426 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -24306,16 +28215,17 @@ switch ($Action) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/sandbox/appcontainer_launcher.cpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/sandbox/appcontainer_launcher.cpp`  
-- Size: 7150 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+## File: `AI-Shield-main/platform/windows/sandbox/appcontainer_launcher.cpp`  
+- Path: `AI-Shield-main/platform/windows/sandbox/appcontainer_launcher.cpp`  
+- Size: 11132 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
 #include "platform/windows/sandbox/appcontainer_launcher.hpp"
 
 #include <string>
+#include <sddl.h>
 #include <userenv.h>
 #include <vector>
 
@@ -24345,6 +28255,25 @@ std::wstring owned(std::wstring_view value) {
     return std::wstring(value.data(), value.size());
 }
 
+HRESULT obtain_parser_sid(SidHolder& sid) {
+    constexpr auto profile_name = L"AIShieldShadowParser";
+    HRESULT result = CreateAppContainerProfile(profile_name, L"AI Shield Shadow Parser",
+                                               L"AI Shield isolated parser profile", nullptr, 0, &sid.sid);
+    if (result == HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS))
+        result = DeriveAppContainerSidFromAppContainerName(profile_name, &sid.sid);
+    return result;
+}
+
+}
+
+ai_shield::Result<std::wstring> parser_profile_sid() {
+    SidHolder sid{};
+    if (FAILED(obtain_parser_sid(sid)) || sid.sid == nullptr) return ai_shield::Status::integrity_failure;
+    LPWSTR text = nullptr;
+    if (!ConvertSidToStringSidW(sid.sid, &text) || text == nullptr) return ai_shield::Status::integrity_failure;
+    std::wstring result(text);
+    LocalFree(text);
+    return result;
 }
 
 ai_shield::Result<void> validate_launch_spec(const AppContainerLaunchSpec& spec) noexcept {
@@ -24367,17 +28296,8 @@ ai_shield::Result<LaunchedProcess> launch_shadow_parser(const AppContainerLaunch
         return valid.status();
     }
 
-    const auto profile_name = L"AIShieldShadowParser";
     SidHolder sid{};
-    HRESULT profile_result = CreateAppContainerProfile(profile_name,
-                                                       L"AI Shield Shadow Parser",
-                                                       L"AI Shield isolated parser profile",
-                                                       nullptr,
-                                                       0,
-                                                       &sid.sid);
-    if (profile_result == HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS)) {
-        profile_result = DeriveAppContainerSidFromAppContainerName(profile_name, &sid.sid);
-    }
+    const HRESULT profile_result = obtain_parser_sid(sid);
     if (FAILED(profile_result) || sid.sid == nullptr) {
         return ai_shield::Status::integrity_failure;
     }
@@ -24388,14 +28308,15 @@ ai_shield::Result<LaunchedProcess> launch_shadow_parser(const AppContainerLaunch
     capabilities.CapabilityCount = 0;
     capabilities.Reserved = 0;
 
+    const DWORD attribute_count = spec.inherited_handle != INVALID_HANDLE_VALUE ? 2U : 1U;
     SIZE_T attribute_size = 0;
-    InitializeProcThreadAttributeList(nullptr, 1, 0, &attribute_size);
+    InitializeProcThreadAttributeList(nullptr, attribute_count, 0, &attribute_size);
     AttributeListHolder attributes{};
     attributes.list = static_cast<LPPROC_THREAD_ATTRIBUTE_LIST>(HeapAlloc(GetProcessHeap(), 0, attribute_size));
     if (attributes.list == nullptr) {
         return ai_shield::Status::out_of_budget;
     }
-    if (InitializeProcThreadAttributeList(attributes.list, 1, 0, &attribute_size) == FALSE) {
+    if (InitializeProcThreadAttributeList(attributes.list, attribute_count, 0, &attribute_size) == FALSE) {
         return ai_shield::Status::integrity_failure;
     }
     if (UpdateProcThreadAttribute(attributes.list,
@@ -24407,13 +28328,19 @@ ai_shield::Result<LaunchedProcess> launch_shadow_parser(const AppContainerLaunch
                                   nullptr) == FALSE) {
         return ai_shield::Status::integrity_failure;
     }
+    if (spec.inherited_handle != INVALID_HANDLE_VALUE &&
+        UpdateProcThreadAttribute(attributes.list, 0, PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
+                                  const_cast<HANDLE*>(&spec.inherited_handle), sizeof(spec.inherited_handle),
+                                  nullptr, nullptr) == FALSE) {
+        return ai_shield::Status::integrity_failure;
+    }
 
     STARTUPINFOEXW startup{};
     startup.StartupInfo.cb = sizeof(startup);
     startup.lpAttributeList = attributes.list;
 
     PROCESS_INFORMATION info{};
-    auto command_line = owned(spec.executable_path);
+    auto command_line = owned(spec.command_line.empty() ? spec.executable_path : spec.command_line);
     const auto working_directory = owned(spec.work_directory);
     std::vector<wchar_t> environment;
     if (!spec.result_pipe_name.empty()) {
@@ -24427,7 +28354,7 @@ ai_shield::Result<LaunchedProcess> launch_shadow_parser(const AppContainerLaunch
                                         command_line.data(),
                                         nullptr,
                                         nullptr,
-                                        FALSE,
+                                        spec.inherited_handle != INVALID_HANDLE_VALUE,
                                         EXTENDED_STARTUPINFO_PRESENT | CREATE_SUSPENDED |
                                             (environment.empty() ? 0U : CREATE_UNICODE_ENVIRONMENT),
                                         environment.empty() ? nullptr : environment.data(),
@@ -24465,6 +28392,52 @@ ai_shield::Result<LaunchedProcess> launch_shadow_parser(const AppContainerLaunch
                            .process_id = info.dwProcessId};
 }
 
+ai_shield::Result<LaunchedProcess> launch_restricted_parser(const AppContainerLaunchSpec& spec) noexcept {
+    const auto valid = validate_launch_spec(spec);
+    if (!valid.ok()) return valid.status();
+    HANDLE process_token = nullptr;
+    HANDLE restricted_token = nullptr;
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_DUPLICATE | TOKEN_ASSIGN_PRIMARY | TOKEN_QUERY | TOKEN_ADJUST_DEFAULT,
+                          &process_token)) return ai_shield::Status::integrity_failure;
+    const bool restricted = CreateRestrictedToken(process_token, DISABLE_MAX_PRIVILEGE, 0U, nullptr, 0U, nullptr,
+                                                   0U, nullptr, &restricted_token) != FALSE;
+    CloseHandle(process_token);
+    if (!restricted) return ai_shield::Status::integrity_failure;
+    PSID low_sid = nullptr;
+    if (!ConvertStringSidToSidW(L"S-1-16-4096", &low_sid)) { CloseHandle(restricted_token); return ai_shield::Status::integrity_failure; }
+    TOKEN_MANDATORY_LABEL label{};
+    label.Label.Attributes = SE_GROUP_INTEGRITY;
+    label.Label.Sid = low_sid;
+    const DWORD label_size = sizeof(label) + GetLengthSid(low_sid);
+    if (!SetTokenInformation(restricted_token, TokenIntegrityLevel, &label, label_size)) {
+        LocalFree(low_sid); CloseHandle(restricted_token); return ai_shield::Status::integrity_failure;
+    }
+    LocalFree(low_sid);
+    auto command_line = owned(spec.command_line.empty() ? spec.executable_path : spec.command_line);
+    const auto working_directory = owned(spec.work_directory);
+    STARTUPINFOW startup{};
+    startup.cb = sizeof(startup);
+    PROCESS_INFORMATION info{};
+    const BOOL created = CreateProcessAsUserW(restricted_token, owned(spec.executable_path).c_str(), command_line.data(),
+        nullptr, nullptr, spec.inherited_handle != INVALID_HANDLE_VALUE, CREATE_SUSPENDED | CREATE_NO_WINDOW,
+        nullptr, working_directory.c_str(), &startup, &info);
+    CloseHandle(restricted_token);
+    if (!created) return ai_shield::Status::integrity_failure;
+    HANDLE job = CreateJobObjectW(nullptr, nullptr);
+    if (job == nullptr) { TerminateProcess(info.hProcess, 1U); CloseHandle(info.hThread); CloseHandle(info.hProcess); return ai_shield::Status::integrity_failure; }
+    JOBOBJECT_EXTENDED_LIMIT_INFORMATION limits{};
+    limits.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE |
+        JOB_OBJECT_LIMIT_DIE_ON_UNHANDLED_EXCEPTION | JOB_OBJECT_LIMIT_ACTIVE_PROCESS | JOB_OBJECT_LIMIT_PROCESS_MEMORY;
+    limits.BasicLimitInformation.ActiveProcessLimit = spec.budget.max_processes;
+    limits.ProcessMemoryLimit = static_cast<SIZE_T>(spec.budget.memory_bytes);
+    if (!SetInformationJobObject(job, JobObjectExtendedLimitInformation, &limits, sizeof(limits)) ||
+        !AssignProcessToJobObject(job, info.hProcess)) {
+        TerminateProcess(info.hProcess, 1U); CloseHandle(info.hThread); CloseHandle(info.hProcess); CloseHandle(job);
+        return ai_shield::Status::integrity_failure;
+    }
+    return LaunchedProcess{.process = info.hProcess, .thread = info.hThread, .job = job, .process_id = info.dwProcessId};
+}
+
 ai_shield::Result<void> resume_launched_process(LaunchedProcess& process) noexcept {
     if (process.process == nullptr || process.thread == nullptr || process.job == nullptr)
         return ai_shield::Status::invalid_state_transition;
@@ -24493,16 +28466,17 @@ void close_launched_process(LaunchedProcess& process) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/sandbox/appcontainer_launcher.hpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/sandbox/appcontainer_launcher.hpp`  
-- Size: 1142 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+## File: `AI-Shield-main/platform/windows/sandbox/appcontainer_launcher.hpp`  
+- Path: `AI-Shield-main/platform/windows/sandbox/appcontainer_launcher.hpp`  
+- Size: 1436 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
 #pragma once
 
 #include <cstdint>
+#include <string>
 #include <string_view>
 
 #include <windows.h>
@@ -24519,8 +28493,10 @@ struct AppContainerLaunchSpec final {
     bool allow_network = false;
     bool allow_child_processes = false;
     std::wstring_view executable_path;
+    std::wstring_view command_line;
     std::wstring_view work_directory;
     std::wstring_view result_pipe_name;
+    HANDLE inherited_handle = INVALID_HANDLE_VALUE;
 };
 
 struct LaunchedProcess final {
@@ -24531,7 +28507,9 @@ struct LaunchedProcess final {
 };
 
 [[nodiscard]] ai_shield::Result<void> validate_launch_spec(const AppContainerLaunchSpec& spec) noexcept;
+[[nodiscard]] ai_shield::Result<std::wstring> parser_profile_sid();
 [[nodiscard]] ai_shield::Result<LaunchedProcess> launch_shadow_parser(const AppContainerLaunchSpec& spec) noexcept;
+[[nodiscard]] ai_shield::Result<LaunchedProcess> launch_restricted_parser(const AppContainerLaunchSpec& spec) noexcept;
 [[nodiscard]] ai_shield::Result<void> resume_launched_process(LaunchedProcess& process) noexcept;
 void close_launched_process(LaunchedProcess& process) noexcept;
 
@@ -24539,10 +28517,10 @@ void close_launched_process(LaunchedProcess& process) noexcept;
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/sandbox/parser_pool.cpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/sandbox/parser_pool.cpp`  
+## File: `AI-Shield-main/platform/windows/sandbox/parser_pool.cpp`  
+- Path: `AI-Shield-main/platform/windows/sandbox/parser_pool.cpp`  
 - Size: 4911 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -24663,10 +28641,10 @@ std::size_t ParserPool::active_workers() const noexcept { return workers_.size()
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/sandbox/parser_pool.hpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/sandbox/parser_pool.hpp`  
+## File: `AI-Shield-main/platform/windows/sandbox/parser_pool.hpp`  
+- Path: `AI-Shield-main/platform/windows/sandbox/parser_pool.hpp`  
 - Size: 1054 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -24715,10 +28693,10 @@ private:
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/sensors/etw_amsi_adapter.cpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/sensors/etw_amsi_adapter.cpp`  
+## File: `AI-Shield-main/platform/windows/sensors/etw_amsi_adapter.cpp`  
+- Path: `AI-Shield-main/platform/windows/sensors/etw_amsi_adapter.cpp`  
 - Size: 3999 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -24802,10 +28780,10 @@ Result<AmsiObservation> scan_with_amsi(std::span<const std::byte> content,
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/sensors/etw_amsi_adapter.hpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/sensors/etw_amsi_adapter.hpp`  
+## File: `AI-Shield-main/platform/windows/sensors/etw_amsi_adapter.hpp`  
+- Path: `AI-Shield-main/platform/windows/sensors/etw_amsi_adapter.hpp`  
 - Size: 1812 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -24860,10 +28838,10 @@ struct AmsiObservation final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/siem/syslog_connector.cpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/siem/syslog_connector.cpp`  
+## File: `AI-Shield-main/platform/windows/siem/syslog_connector.cpp`  
+- Path: `AI-Shield-main/platform/windows/siem/syslog_connector.cpp`  
 - Size: 2176 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -24916,10 +28894,10 @@ Result<void> send_syslog(std::string_view host, std::uint16_t port,
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/siem/syslog_connector.hpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/siem/syslog_connector.hpp`  
+## File: `AI-Shield-main/platform/windows/siem/syslog_connector.hpp`  
+- Path: `AI-Shield-main/platform/windows/siem/syslog_connector.hpp`  
 - Size: 420 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -24941,18 +28919,18 @@ enum class Transport : std::uint32_t { udp, tcp };
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/soc_ui/app.js`  
-- Path: `AI_Shield_Developer_Full/platform/windows/soc_ui/app.js`  
+## File: `AI-Shield-main/platform/windows/soc_ui/app.js`  
+- Path: `AI-Shield-main/platform/windows/soc_ui/app.js`  
 - Size: 2109 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Warning: 1 secret-like value(s) redacted
 
 > Warning: 1 secret-like value(s) redacted
 
-## File: `AI_Shield_Developer_Full/platform/windows/soc_ui/index.html`  
-- Path: `AI_Shield_Developer_Full/platform/windows/soc_ui/index.html`  
+## File: `AI-Shield-main/platform/windows/soc_ui/index.html`  
+- Path: `AI-Shield-main/platform/windows/soc_ui/index.html`  
 - Size: 1872 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```html
 <!doctype html>
@@ -25001,10 +28979,10 @@ enum class Transport : std::uint32_t { udp, tcp };
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/soc_ui/start_soc_console.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/soc_ui/start_soc_console.ps1`  
+## File: `AI-Shield-main/platform/windows/soc_ui/start_soc_console.ps1`  
+- Path: `AI-Shield-main/platform/windows/soc_ui/start_soc_console.ps1`  
 - Size: 5163 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([ValidateRange(1024,65535)][int]$Port = 18443, [ValidateRange(0,1000000)][int]$MaxRequests = 0)
@@ -25095,10 +29073,10 @@ try {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/soc_ui/style.css`  
-- Path: `AI_Shield_Developer_Full/platform/windows/soc_ui/style.css`  
+## File: `AI-Shield-main/platform/windows/soc_ui/style.css`  
+- Path: `AI-Shield-main/platform/windows/soc_ui/style.css`  
 - Size: 2057 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```css
 :root{font-family:Segoe UI,Arial,sans-serif;color:#182028;background:#eef1f3;letter-spacing:0}
@@ -25106,10 +29084,10 @@ try {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/start_ai_shield.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/start_ai_shield.ps1`  
+## File: `AI-Shield-main/platform/windows/start_ai_shield.ps1`  
+- Path: `AI-Shield-main/platform/windows/start_ai_shield.ps1`  
 - Size: 10066 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -25342,10 +29320,10 @@ Write-Output "telemetry broker: running; audit: $env:ProgramData\AIShield\audit"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/stop_ai_shield.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/stop_ai_shield.ps1`  
+## File: `AI-Shield-main/platform/windows/stop_ai_shield.ps1`  
+- Path: `AI-Shield-main/platform/windows/stop_ai_shield.ps1`  
 - Size: 3249 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -25422,10 +29400,10 @@ Write-Output "AI Shield prototype stopped"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/uac/uac_hardening_assistant.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/uac/uac_hardening_assistant.ps1`  
+## File: `AI-Shield-main/platform/windows/uac/uac_hardening_assistant.ps1`  
+- Path: `AI-Shield-main/platform/windows/uac/uac_hardening_assistant.ps1`  
 - Size: 1812 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```powershell
@@ -25463,10 +29441,10 @@ Write-Output "Recommendation generated but not applied: $OutputPath"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/verification/driver_security_lab.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/verification/driver_security_lab.ps1`  
+## File: `AI-Shield-main/platform/windows/verification/driver_security_lab.ps1`  
+- Path: `AI-Shield-main/platform/windows/verification/driver_security_lab.ps1`  
 - Size: 3396 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -25545,10 +29523,10 @@ if($Action -eq "arm-hvci"){
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/verification/prepare_hlk_lab.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/verification/prepare_hlk_lab.ps1`  
+## File: `AI-Shield-main/platform/windows/verification/prepare_hlk_lab.ps1`  
+- Path: `AI-Shield-main/platform/windows/verification/prepare_hlk_lab.ps1`  
 - Size: 2905 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -25601,10 +29579,10 @@ if($RequireInstalledHlk -and $blockers.Count){exit 3}
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/verification/validate_abi_freeze.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/verification/validate_abi_freeze.ps1`  
+## File: `AI-Shield-main/platform/windows/verification/validate_abi_freeze.ps1`  
+- Path: `AI-Shield-main/platform/windows/verification/validate_abi_freeze.ps1`  
 - Size: 1850 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 $ErrorActionPreference="Stop"
@@ -25636,10 +29614,10 @@ Write-Output "manifest=$output"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/wdac/wdac_audit_baseline.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/wdac/wdac_audit_baseline.ps1`  
+## File: `AI-Shield-main/platform/windows/wdac/wdac_audit_baseline.ps1`  
+- Path: `AI-Shield-main/platform/windows/wdac/wdac_audit_baseline.ps1`  
 - Size: 6300 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -25747,10 +29725,10 @@ Write-Output "WDAC audit policy rolled back"
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/wef/configure_wef.ps1`  
-- Path: `AI_Shield_Developer_Full/platform/windows/wef/configure_wef.ps1`  
+## File: `AI-Shield-main/platform/windows/wef/configure_wef.ps1`  
+- Path: `AI-Shield-main/platform/windows/wef/configure_wef.ps1`  
 - Size: 4762 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -25845,10 +29823,10 @@ Write-Output "WEF source forwarding configured with five-minute certificate pin 
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/wfp/adapter/wfp_enforcement.cpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/wfp/adapter/wfp_enforcement.cpp`  
+## File: `AI-Shield-main/platform/windows/wfp/adapter/wfp_enforcement.cpp`  
+- Path: `AI-Shield-main/platform/windows/wfp/adapter/wfp_enforcement.cpp`  
 - Size: 1787 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -25886,10 +29864,10 @@ FastPolicyDecision decide_fast_path(const FastPolicyInput& input) noexcept {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/wfp/adapter/wfp_enforcement.hpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/wfp/adapter/wfp_enforcement.hpp`  
+## File: `AI-Shield-main/platform/windows/wfp/adapter/wfp_enforcement.hpp`  
+- Path: `AI-Shield-main/platform/windows/wfp/adapter/wfp_enforcement.hpp`  
 - Size: 1011 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -25931,10 +29909,10 @@ struct FastPolicyDecision final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/wfp/adapter/wfp_telemetry.cpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/wfp/adapter/wfp_telemetry.cpp`  
+## File: `AI-Shield-main/platform/windows/wfp/adapter/wfp_telemetry.cpp`  
+- Path: `AI-Shield-main/platform/windows/wfp/adapter/wfp_telemetry.cpp`  
 - Size: 1078 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -25970,10 +29948,10 @@ ai_shield::Result<ai_shield::abi::FlowEvent> translate_telemetry(const Telemetry
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/wfp/adapter/wfp_telemetry.hpp`  
-- Path: `AI_Shield_Developer_Full/platform/windows/wfp/adapter/wfp_telemetry.hpp`  
+## File: `AI-Shield-main/platform/windows/wfp/adapter/wfp_telemetry.hpp`  
+- Path: `AI-Shield-main/platform/windows/wfp/adapter/wfp_telemetry.hpp`  
 - Size: 664 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```
@@ -26006,10 +29984,10 @@ struct TelemetryEvent final {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/wfp/driver/ai_shield_wfp.c`  
-- Path: `AI_Shield_Developer_Full/platform/windows/wfp/driver/ai_shield_wfp.c`  
-- Size: 22621 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/platform/windows/wfp/driver/ai_shield_wfp.c`  
+- Path: `AI-Shield-main/platform/windows/wfp/driver/ai_shield_wfp.c`  
+- Size: 23227 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```c
 #define NDIS_SUPPORT_NDIS6 1
@@ -26092,6 +30070,10 @@ static BOOLEAN AiShieldIsBrowser(const FWPS_INCOMING_METADATA_VALUES0* metadata)
            AiShieldProcessPathContains(metadata, L"\\opera.exe");
 }
 
+static BOOLEAN AiShieldIsFileScanner(const FWPS_INCOMING_METADATA_VALUES0* metadata) {
+    return AiShieldProcessPathContains(metadata, L"\\ai_shield_file_scanner.exe");
+}
+
 static BOOLEAN AiShieldIsWebPort(UINT16 port) {
     return port == 53U || port == 80U || port == 443U || port == 853U;
 }
@@ -26163,6 +30145,15 @@ static void NTAPI AiShieldAuthorizeClassify(const FWPS_INCOMING_VALUES0* values,
             values->incomingValue[FWPS_FIELD_ALE_AUTH_CONNECT_V6_IP_REMOTE_ADDRESS].value.byteArray16->byteArray16,
             16U);
         outbound = TRUE;
+    }
+    if (AiShieldIsFileScanner(metadata)) {
+        classifyOut->actionType = FWP_ACTION_BLOCK;
+        classifyOut->rights &= ~FWPS_RIGHT_ACTION_WRITE;
+        InterlockedIncrement64(&g_Status.Blocked);
+        event.Decision = FWP_ACTION_BLOCK;
+        event.Flags |= AI_SHIELD_EVENT_FLAG_BLOCKED;
+        if (!AiShieldEventQueuePush(&g_EventQueue, &event)) InterlockedIncrement64(&g_Status.DroppedTelemetry);
+        return;
     }
     if (policy.Mode == AI_SHIELD_POLICY_ENFORCE && outbound &&
         (((policy.Flags & AI_SHIELD_POLICY_SYSTEM_NETWORK_GUARD) != 0U && AiShieldIsWormEgressPort(port)) ||
@@ -26434,10 +30425,10 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT driver, PUNICODE_STRING registryPath) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/platform/windows/wfp/driver/AIShieldWfp.vcxproj`  
-- Path: `AI_Shield_Developer_Full/platform/windows/wfp/driver/AIShieldWfp.vcxproj`  
+## File: `AI-Shield-main/platform/windows/wfp/driver/AIShieldWfp.vcxproj`  
+- Path: `AI-Shield-main/platform/windows/wfp/driver/AIShieldWfp.vcxproj`  
 - Size: 941 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -26464,29 +30455,115 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT driver, PUNICODE_STRING registryPath) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/prebuilt/AI_Shield_Private_Desktop.msi`  
-- Path: `AI_Shield_Developer_Full/prebuilt/AI_Shield_Private_Desktop.msi`  
-- Size: 1785856 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
-- Binary file skipped (mode: skip).
+## File: `AI-Shield-main/SHA256SUMS.txt`  
+- Path: `AI-Shield-main/SHA256SUMS.txt`  
+- Size: 398 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
+
+```
+EEC3F0856495A8439DD31B7302AF81784F82E0BFBFB651B7052D840BBD820ADF  AI_Shield_Private_Desktop.zip
+6559E16093E46CA8CF7F8D7F2F07DA55871BE7CFECF6532FAB03657F4C9B0755  AI_Shield_Private_Desktop_2.0.0-rc.11_x64.msi
+41A4B550779D0A93025E2329EC6C6BB57D9DF56AA6E7A95CF13D7F0102E8D2A5  AI_Shield_Developer_ABI2.zip
+BB44A1A9B13F548B10C498D4462EC2CED9B0474B7223315B87764614DC89D7AB  AI_Shield_Developer_Full.zip
 
 ```
 
-```
-
-## File: `AI_Shield_Developer_Full/Softwarebewertung.md`  
-- Path: `AI_Shield_Developer_Full/Softwarebewertung.md`  
+## File: `AI-Shield-main/Softwarebewertung.md`  
+- Path: `AI-Shield-main/Softwarebewertung.md`  
 - Size: 16457 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Warning: 2 secret-like value(s) redacted
 
 > Warning: 2 secret-like value(s) redacted
 
-## File: `AI_Shield_Developer_Full/tools/ai_shield_broker/main.cpp`  
-- Path: `AI_Shield_Developer_Full/tools/ai_shield_broker/main.cpp`  
-- Size: 51532 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+## File: `AI-Shield-main/submission/microsoft/ABI_MANIFEST.json`  
+- Path: `AI-Shield-main/submission/microsoft/ABI_MANIFEST.json`  
+- Size: 447 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
+
+```json
+{
+    "schema":  "AIShieldDriverABI/1.1",
+    "protocol_version":  "0x00010001",
+    "freeze_revision":  1,
+    "packing":  8,
+    "policy_size":  32,
+    "status_size":  56,
+    "event_size":  72,
+    "schema_sha256":  "1dd9fcfea3aafd1f3d179cf18d7dd3d8ea38e07fb46404a0eacd770eaf0cbb88",
+    "canonical_schema":  "AI_SHIELD_ABI_1_1|POLICY:32:0,4,8,12,16,20,24,28|STATUS:56:0,4,8,12,16,24,32,40,48|EVENT:72:0,4,8,12,16,24,32,40,48,52,56,60,64,68"
+}
+
+```
+
+## File: `AI-Shield-main/submission/microsoft/AIShieldDrivers.ddf`  
+- Path: `AI-Shield-main/submission/microsoft/AIShieldDrivers.ddf`  
+- Size: 1202 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
+
+```
+.OPTION EXPLICIT
+.Set CabinetNameTemplate=AIShieldDrivers-x64.cab
+.Set DiskDirectoryTemplate=D:\AI_Shield\submission\microsoft
+.Set CompressionType=MSZIP
+.Set Cabinet=on
+.Set Compress=on
+.Set DestinationDir=wfp
+"D:\AI_Shield\submission\microsoft\packages\wfp\ai_shield_wfp.cat"
+"D:\AI_Shield\submission\microsoft\packages\wfp\ai_shield_wfp.inf"
+"D:\AI_Shield\submission\microsoft\packages\wfp\AIShieldWfp.pdb"
+"D:\AI_Shield\submission\microsoft\packages\wfp\AIShieldWfp.sys"
+.Set DestinationDir=minifilter
+"D:\AI_Shield\submission\microsoft\packages\minifilter\ai_shield_minifilter.cat"
+"D:\AI_Shield\submission\microsoft\packages\minifilter\ai_shield_minifilter.inf"
+"D:\AI_Shield\submission\microsoft\packages\minifilter\AIShieldMiniFilter.pdb"
+"D:\AI_Shield\submission\microsoft\packages\minifilter\AIShieldMiniFilter.sys"
+.Set DestinationDir=process_guard
+"D:\AI_Shield\submission\microsoft\packages\process_guard\ai_shield_process_guard.cat"
+"D:\AI_Shield\submission\microsoft\packages\process_guard\ai_shield_process_guard.inf"
+"D:\AI_Shield\submission\microsoft\packages\process_guard\AIShieldProcessGuard.pdb"
+"D:\AI_Shield\submission\microsoft\packages\process_guard\AIShieldProcessGuard.sys"
+
+```
+
+## File: `AI-Shield-main/submission/microsoft/SUBMISSION_README.md`  
+- Path: `AI-Shield-main/submission/microsoft/SUBMISSION_README.md`  
+- Size: 1140 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
+- Condensed: comments and repeated blank lines reduced
+
+```markdown
+# AI Shield Microsoft driver submission staging
+
+This directory is generated input for Microsoft signing qualification. It is not a Microsoft-signed release.
+
+Required external gates:
+
+1. Register the organization in the Windows Hardware Developer Program.
+2. Use the current Partner Center certificate and identity requirements.
+3. Run the applicable Windows HLK playlists on every declared Windows target.
+4. Create and sign the HLK submission package required by Partner Center.
+5. Upload through the Hardware Dashboard and download the Microsoft-signed return package.
+6. Verify every returned catalog with SignTool and repeat install, reboot, HVCI and Driver Verifier qualification.
+
+Generated locally:
+
+- isolated INF/SYS/CAT folders for all three drivers
+- matching PDB symbols and AIShieldDrivers-x64.cab
+- Inf2Cat validation for: 10_X64,Server10_X64
+- SHA-256 manifest: SHA256SUMS.json
+- frozen ABI manifest: ABI_MANIFEST.json
+- EV signed CAB: no; signing remains an external release gate
+
+Do not enable Secure Boot for this local test-signed build. Only the returned Microsoft-trusted package may pass the production signing gate.
+
+```
+
+## File: `AI-Shield-main/tools/ai_shield_broker/main.cpp`  
+- Path: `AI-Shield-main/tools/ai_shield_broker/main.cpp`  
+- Size: 61442 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```cpp
 #ifndef WIN32_LEAN_AND_MEAN
@@ -26526,6 +30603,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT driver, PUNICODE_STRING registryPath) {
 #include "platform/windows/common/ai_shield_driver_protocol.h"
 #include "platform/windows/common/abi_translation.hpp"
 #include "platform/windows/security/secure_runtime_state.hpp"
+#include "platform/windows/sandbox/appcontainer_launcher.hpp"
 
 namespace {
 
@@ -26538,13 +30616,29 @@ constexpr std::uint32_t kContentImages = 1U << 2U;
 constexpr std::uint32_t kContentAudio = 1U << 3U;
 constexpr std::uint32_t kContentVideo = 1U << 4U;
 constexpr std::uint32_t kContentWeb = 1U << 5U;
-constexpr std::uint32_t kContentAll = (1U << 6U) - 1U;
+constexpr std::uint32_t kContentPrograms = 1U << 6U;
+constexpr std::uint32_t kContentWindowsScripts = 1U << 7U;
+constexpr std::uint32_t kContentDeveloperScripts = 1U << 8U;
+constexpr std::uint32_t kContentLaunchers = 1U << 9U;
+constexpr std::uint32_t kContentUnknown = 1U << 10U;
+constexpr std::uint32_t kContentLegacyAll = (1U << 6U) - 1U;
+constexpr std::uint32_t kContentExecutionAll = kContentPrograms | kContentWindowsScripts |
+                                               kContentDeveloperScripts | kContentLaunchers;
+constexpr std::uint32_t kContentAll = kContentLegacyAll | kContentExecutionAll | kContentUnknown;
 
 struct ContentPolicy final {
     std::uint32_t magic = 0x50435341U;
-    std::uint32_t version = 1U;
+    std::uint32_t version = 4U;
     std::uint32_t enabled_categories = kContentAll;
     std::uint32_t fail_closed = 1U;
+    std::uint32_t release_required = 1U;
+};
+
+struct LegacyContentPolicy final {
+    std::uint32_t magic;
+    std::uint32_t version;
+    std::uint32_t enabled_categories;
+    std::uint32_t fail_closed;
 };
 
 struct Sensor final {
@@ -26698,16 +30792,6 @@ std::string json_escape(std::wstring_view value) {
     return result;
 }
 
-bool executable_extension(std::filesystem::path path) {
-    auto extension = path.extension().wstring();
-    for (auto& character : extension) character = static_cast<wchar_t>(towlower(character));
-    constexpr std::array<std::wstring_view, 15> extensions{
-        L".exe", L".dll", L".scr", L".com", L".msi", L".bat", L".cmd", L".ps1",
-        L".vbs", L".vbe", L".js", L".jse", L".wsf", L".hta", L".lnk"};
-    for (const auto candidate : extensions) if (extension == candidate) return true;
-    return false;
-}
-
 std::wstring lower_extension(const std::filesystem::path& path) {
     auto extension = path.extension().wstring();
     for (auto& character : extension) character = static_cast<wchar_t>(towlower(character));
@@ -26718,13 +30802,35 @@ std::uint32_t content_category(const std::filesystem::path& path) {
     const auto extension = lower_extension(path);
     constexpr auto documents = std::to_array<std::wstring_view>({
         L".pdf", L".doc", L".docx", L".docm", L".xls", L".xlsx", L".xlsm", L".ppt", L".pptx", L".pptm",
-        L".rtf", L".odt", L".ods", L".odp", L".one"});
-    constexpr auto archives = std::to_array<std::wstring_view>({L".zip", L".7z", L".rar", L".iso", L".cab"});
+        L".rtf", L".odt", L".ods", L".odp", L".one", L".fdf", L".xps", L".oxps", L".djvu",
+        L".csv", L".tsv", L".eml", L".msg", L".ics", L".vcf", L".epub", L".mobi", L".azw", L".azw3", L".fb2"});
+    constexpr auto archives = std::to_array<std::wstring_view>({
+        L".zip", L".7z", L".rar", L".iso", L".cab", L".tar", L".gz", L".bz2", L".xz", L".zst",
+        L".img", L".vhd", L".vhdx", L".vmdk", L".wim", L".esd", L".dmg", L".apk", L".nupkg", L".crx", L".xpi", L".vsix"});
     constexpr auto images = std::to_array<std::wstring_view>({
-        L".jpg", L".jpeg", L".jfif", L".png", L".gif", L".bmp", L".tif", L".tiff", L".webp", L".ico", L".svg"});
-    constexpr auto audio = std::to_array<std::wstring_view>({L".mp3", L".wav", L".flac", L".aac", L".ogg", L".m4a"});
+        L".jpg", L".jpeg", L".jfif", L".png", L".gif", L".bmp", L".tif", L".tiff", L".webp", L".ico", L".svg",
+        L".heif", L".heic", L".avif", L".jxl", L".psd", L".raw"});
+    constexpr auto audio = std::to_array<std::wstring_view>({
+        L".mp3", L".wav", L".flac", L".aac", L".ogg", L".m4a", L".wma", L".aiff", L".opus",
+        L".m3u", L".m3u8", L".pls", L".asx", L".cue"});
     constexpr auto video = std::to_array<std::wstring_view>({L".mp4", L".m4v", L".mov", L".avi", L".mkv", L".webm", L".wmv"});
-    constexpr auto web = std::to_array<std::wstring_view>({L".html", L".htm"});
+    constexpr auto web = std::to_array<std::wstring_view>({
+        L".html", L".htm", L".mhtml", L".mht", L".xhtml", L".xml", L".xsl", L".xslt", L".json", L".yaml", L".yml", L".toml"});
+    constexpr auto programs = std::to_array<std::wstring_view>({
+        L".exe", L".com", L".scr", L".pif", L".dll", L".ocx", L".cpl", L".sys", L".drv",
+        L".msi", L".msp", L".mst", L".msix", L".msixbundle", L".appx", L".appxbundle", L".appinstaller", L".efi"});
+    constexpr auto windows_scripts = std::to_array<std::wstring_view>({
+        L".bat", L".cmd", L".ps1", L".psm1", L".psd1", L".vbs", L".vbe", L".js", L".jse",
+        L".wsf", L".wsh", L".hta", L".sct"});
+    constexpr auto developer_scripts = std::to_array<std::wstring_view>({
+        L".sh", L".bash", L".zsh", L".fish", L".py", L".pyw", L".pyz", L".mjs", L".cjs",
+        L".pl", L".pm", L".rb", L".rake", L".php", L".phar", L".lua", L".tcl", L".jar",
+        L".groovy", L".kts", L".wasm"});
+    constexpr auto launchers = std::to_array<std::wstring_view>({
+        L".lnk", L".url", L".scf", L".application", L".appref-ms", L".gadget", L".diagcab",
+        L".diagpkg", L".reg", L".inf", L".chm", L".xll", L".iqy", L".oqy", L".rqy", L".slk",
+        L".settingcontent-ms", L".library-ms", L".search-ms", L".torrent", L".rdp", L".pbk", L".mobileconfig",
+        L".pkl", L".pickle", L".joblib", L".dill", L".pt", L".pth", L".ckpt", L".onnx", L".safetensors", L".gguf"});
     const auto contains = [&extension](const auto& values) {
         return std::find(values.begin(), values.end(), extension) != values.end();
     };
@@ -26734,7 +30840,15 @@ std::uint32_t content_category(const std::filesystem::path& path) {
     if (contains(audio)) return kContentAudio;
     if (contains(video)) return kContentVideo;
     if (contains(web)) return kContentWeb;
-    return 0U;
+    if (contains(programs)) return kContentPrograms;
+    if (contains(windows_scripts)) return kContentWindowsScripts;
+    if (contains(developer_scripts)) return kContentDeveloperScripts;
+    if (contains(launchers)) return kContentLaunchers;
+    return kContentUnknown;
+}
+
+bool executable_extension(const std::filesystem::path& path, std::uint32_t enabled = kContentAll) {
+    return (content_category(path) & enabled & kContentExecutionAll) != 0U;
 }
 
 bool parser_risk_extension(const std::filesystem::path& path, std::uint32_t enabled = kContentAll) {
@@ -26757,11 +30871,34 @@ ContentPolicy load_content_policy() {
     DATA_BLOB clear{};
     if (!CryptUnprotectData(&source, nullptr, nullptr, nullptr, nullptr, CRYPTPROTECT_UI_FORBIDDEN, &clear)) return fallback;
     ContentPolicy policy{};
-    const bool valid = clear.cbData == sizeof(policy);
-    if (valid) std::memcpy(&policy, clear.pbData, sizeof(policy));
+    bool valid = false;
+    if (clear.cbData == sizeof(policy)) {
+        std::memcpy(&policy, clear.pbData, sizeof(policy));
+        if (policy.version == 3U) {
+            policy.version = 4U;
+            policy.enabled_categories |= kContentUnknown;
+            valid = true;
+        } else {
+            valid = policy.version == 4U;
+        }
+    } else if (clear.cbData == sizeof(LegacyContentPolicy)) {
+        LegacyContentPolicy legacy{};
+        std::memcpy(&legacy, clear.pbData, sizeof(legacy));
+        if (legacy.version == 1U || legacy.version == 2U) {
+            policy.magic = legacy.magic;
+            policy.version = 4U;
+            policy.enabled_categories = legacy.enabled_categories;
+            policy.fail_closed = legacy.fail_closed;
+            policy.release_required = 1U;
+            if (legacy.version == 1U) policy.enabled_categories |= kContentExecutionAll;
+            policy.enabled_categories |= kContentUnknown;
+            valid = true;
+        }
+    }
     LocalFree(clear.pbData);
-    if (!valid || policy.magic != fallback.magic || policy.version != 1U ||
-        (policy.enabled_categories & ~kContentAll) != 0U || policy.fail_closed > 1U) return fallback;
+    if (!valid || policy.magic != fallback.magic ||
+        (policy.enabled_categories & ~kContentAll) != 0U || policy.fail_closed > 1U ||
+        policy.release_required > 1U) return fallback;
     return policy;
 }
 
@@ -26792,26 +30929,27 @@ bool has_external_zone(const std::filesystem::path& path) {
     return text.find("ZoneId=3") != std::string_view::npos || text.find("ZoneId=4") != std::string_view::npos;
 }
 
-bool read_locked_file(HANDLE file, std::uint64_t expected_size, std::vector<std::byte>& content,
-                      ai_shield::crypto::Sha256Digest& digest) {
+bool hash_locked_file(HANDLE file, std::uint64_t expected_size, ai_shield::crypto::Sha256Digest& digest) {
     LARGE_INTEGER size{};
     if (!GetFileSizeEx(file, &size) || size.QuadPart < 0 ||
         static_cast<std::uint64_t>(size.QuadPart) != expected_size)
         return false;
-    if (expected_size > kMaximumClassifiedFileSize) {
-        BY_HANDLE_FILE_INFORMATION information{};
-        if (!GetFileInformationByHandle(file, &information)) return false;
-        const std::array<std::uint64_t, 4> identity{
-            information.dwVolumeSerialNumber,
-            (static_cast<std::uint64_t>(information.nFileIndexHigh) << 32U) | information.nFileIndexLow,
-            expected_size,
-            (static_cast<std::uint64_t>(information.ftLastWriteTime.dwHighDateTime) << 32U) |
-                information.ftLastWriteTime.dwLowDateTime};
-        digest = ai_shield::crypto::sha256(std::as_bytes(std::span(identity)));
-        return true;
+    BCRYPT_ALG_HANDLE algorithm = nullptr;
+    BCRYPT_HASH_HANDLE hash = nullptr;
+    DWORD object_size = 0U;
+    DWORD received_property = 0U;
+    if (!BCRYPT_SUCCESS(BCryptOpenAlgorithmProvider(&algorithm, BCRYPT_SHA256_ALGORITHM, nullptr, 0U)) ||
+        !BCRYPT_SUCCESS(BCryptGetProperty(algorithm, BCRYPT_OBJECT_LENGTH,
+            reinterpret_cast<PUCHAR>(&object_size), sizeof(object_size), &received_property, 0U))) {
+        if (algorithm != nullptr) BCryptCloseAlgorithmProvider(algorithm, 0U);
+        return false;
     }
-    content.resize(static_cast<std::size_t>(size.QuadPart));
-    std::array<std::byte, 1U << 20U> chunk{};
+    std::vector<UCHAR> object(object_size);
+    if (!BCRYPT_SUCCESS(BCryptCreateHash(algorithm, &hash, object.data(), object_size, nullptr, 0U, 0U))) {
+        BCryptCloseAlgorithmProvider(algorithm, 0U);
+        return false;
+    }
+    std::vector<std::byte> chunk(1U << 20U);
     std::uint64_t offset = 0;
     bool ok = true;
     HANDLE read_event = CreateEventW(nullptr, TRUE, FALSE, nullptr);
@@ -26841,13 +30979,19 @@ bool read_locked_file(HANDLE file, std::uint64_t expected_size, std::vector<std:
             ok = false;
             break;
         }
-        std::copy_n(chunk.begin(), bytes, content.begin() + static_cast<std::size_t>(offset));
+        if (!BCRYPT_SUCCESS(BCryptHashData(hash, reinterpret_cast<PUCHAR>(chunk.data()), bytes, 0U))) {
+            ok = false;
+            break;
+        }
         offset += bytes;
     }
     CloseHandle(read_event);
-    if (!ok || offset != expected_size) return false;
-    digest = ai_shield::crypto::sha256(content);
-    return ok;
+    if (ok && offset == expected_size)
+        ok = BCRYPT_SUCCESS(BCryptFinishHash(hash, reinterpret_cast<PUCHAR>(digest.data()),
+                                             static_cast<ULONG>(digest.size()), 0U));
+    BCryptDestroyHash(hash);
+    BCryptCloseAlgorithmProvider(algorithm, 0U);
+    return ok && offset == expected_size;
 }
 
 enum class DefenderVerdict { clean, threat, unavailable, suspicious };
@@ -26876,35 +31020,79 @@ std::filesystem::path defender_command() {
     return {};
 }
 
-DefenderVerdict scan_with_defender(const std::filesystem::path& path, std::uint64_t size) {
+DefenderVerdict scan_with_defender(const std::filesystem::path& path, std::uint64_t size, HANDLE source_handle,
+                                   DWORD& diagnostic) {
+    diagnostic = ERROR_SUCCESS;
     if (size > 0U && size <= kMaximumClassifiedFileSize) {
         std::array<wchar_t, 32768> module_path{};
         const DWORD module_length = GetModuleFileNameW(nullptr, module_path.data(), static_cast<DWORD>(module_path.size()));
-        if (module_length == 0U || module_length >= module_path.size()) return DefenderVerdict::unavailable;
-        const auto scanner = std::filesystem::path(module_path.data()).parent_path() / L"ai_shield_integrations.exe";
-        if (!std::filesystem::exists(scanner)) return DefenderVerdict::unavailable;
-        std::wstring arguments = L"\"" + scanner.wstring() + L"\" amsi-scan-file \"" + path.wstring() + L"\"";
+        if (module_length == 0U || module_length >= module_path.size()) { diagnostic = GetLastError(); return DefenderVerdict::unavailable; }
+        const auto scanner = std::filesystem::path(module_path.data()).parent_path() / L"ai_shield_file_scanner.exe";
+        if (!std::filesystem::exists(scanner)) { diagnostic = ERROR_FILE_NOT_FOUND; return DefenderVerdict::unavailable; }
+        HANDLE inherited_handle = INVALID_HANDLE_VALUE;
+        if (source_handle == INVALID_HANDLE_VALUE ||
+            !DuplicateHandle(GetCurrentProcess(), source_handle, GetCurrentProcess(), &inherited_handle, 0U, TRUE,
+                             DUPLICATE_SAME_ACCESS)) { diagnostic = GetLastError(); return DefenderVerdict::unavailable; }
+        std::wstring arguments = L"\"" + scanner.wstring() + L"\" scan-handle " +
+                                 std::to_wstring(reinterpret_cast<std::uintptr_t>(inherited_handle)) + L" " +
+                                 std::to_wstring(size) + L" \"" + path.filename().wstring() + L"\"";
         std::vector<wchar_t> mutable_arguments(arguments.begin(), arguments.end());
         mutable_arguments.push_back(L'\0');
-        STARTUPINFOW startup{};
-        startup.cb = sizeof(startup);
-        PROCESS_INFORMATION process{};
-        if (!CreateProcessW(scanner.c_str(), mutable_arguments.data(), nullptr, nullptr, FALSE, CREATE_NO_WINDOW,
-                            nullptr, nullptr, &startup, &process)) return DefenderVerdict::unavailable;
-        const DWORD wait = WaitForSingleObject(process.hProcess, 10'000U);
+        const auto launched = ai_shield::platform::windows::sandbox::launch_shadow_parser({
+            .analysis_id = GetTickCount64() + 1U,
+            .parser_id = 1U,
+            .budget = {.wall_time_ns = 10'000'000'000ULL, .memory_bytes = 512ULL * 1024ULL * 1024ULL,
+                       .max_processes = 1U, .network_allowed = false},
+            .allow_network = false,
+            .allow_child_processes = false,
+            .executable_path = scanner.wstring(),
+            .command_line = mutable_arguments.data(),
+            .work_directory = scanner.parent_path().wstring(),
+            .inherited_handle = inherited_handle});
+        if (!launched.ok()) { CloseHandle(inherited_handle); diagnostic = 0xE001U + static_cast<DWORD>(launched.status()); return DefenderVerdict::unavailable; }
+        auto isolated = launched.value();
+        if (!ai_shield::platform::windows::sandbox::resume_launched_process(isolated).ok()) {
+            ai_shield::platform::windows::sandbox::close_launched_process(isolated);
+            CloseHandle(inherited_handle);
+            diagnostic = 0xE100U;
+            return DefenderVerdict::unavailable;
+        }
+        const DWORD wait = WaitForSingleObject(isolated.process, 10'000U);
         DWORD exit_code = ERROR_GEN_FAILURE;
-        if (wait == WAIT_TIMEOUT) TerminateProcess(process.hProcess, ERROR_TIMEOUT);
-        const bool completed = wait == WAIT_OBJECT_0 && GetExitCodeProcess(process.hProcess, &exit_code) != FALSE;
-        CloseHandle(process.hThread);
-        CloseHandle(process.hProcess);
-        if (!completed) return DefenderVerdict::unavailable;
+        if (wait == WAIT_TIMEOUT) TerminateProcess(isolated.process, ERROR_TIMEOUT);
+        const bool completed = wait == WAIT_OBJECT_0 && GetExitCodeProcess(isolated.process, &exit_code) != FALSE;
+        ai_shield::platform::windows::sandbox::close_launched_process(isolated);
+        bool restricted_fallback = false;
+        if (completed && exit_code == 0xC0000142U) {
+            auto fallback = ai_shield::platform::windows::sandbox::launch_restricted_parser({
+                .analysis_id = GetTickCount64() + 1U, .parser_id = 1U,
+                .budget = {.wall_time_ns = 10'000'000'000ULL, .memory_bytes = 512ULL * 1024ULL * 1024ULL,
+                           .max_processes = 1U, .network_allowed = false},
+                .allow_network = false, .allow_child_processes = false, .executable_path = scanner.wstring(),
+                .command_line = mutable_arguments.data(), .work_directory = scanner.parent_path().wstring(),
+                .inherited_handle = inherited_handle});
+            if (fallback.ok()) {
+                auto restricted_process = fallback.value();
+                if (ai_shield::platform::windows::sandbox::resume_launched_process(restricted_process).ok()) {
+                    const DWORD fallback_wait = WaitForSingleObject(restricted_process.process, 10'000U);
+                    exit_code = ERROR_GEN_FAILURE;
+                    restricted_fallback = fallback_wait == WAIT_OBJECT_0 &&
+                        GetExitCodeProcess(restricted_process.process, &exit_code) != FALSE;
+                }
+                ai_shield::platform::windows::sandbox::close_launched_process(restricted_process);
+            }
+        }
+        CloseHandle(inherited_handle);
+        diagnostic = restricted_fallback ? 0x00010000U + exit_code :
+            (completed ? exit_code : (wait == WAIT_TIMEOUT ? ERROR_TIMEOUT : GetLastError()));
+        if (!completed || (exit_code == 0xC0000142U && !restricted_fallback)) return DefenderVerdict::unavailable;
         if (exit_code == 0U) return DefenderVerdict::clean;
         if (exit_code == 10U) return DefenderVerdict::threat;
         if (exit_code == 11U) return DefenderVerdict::suspicious;
         return DefenderVerdict::unavailable;
     }
     const auto command = defender_command();
-    if (command.empty()) return DefenderVerdict::unavailable;
+    if (command.empty()) { diagnostic = ERROR_FILE_NOT_FOUND; return DefenderVerdict::unavailable; }
     std::wstring arguments = L"\"" + command.wstring() + L"\" -Scan -ScanType 3 -File \"" +
                              path.wstring() + L"\" -DisableRemediation";
     std::vector<wchar_t> mutable_arguments(arguments.begin(), arguments.end());
@@ -26914,6 +31102,7 @@ DefenderVerdict scan_with_defender(const std::filesystem::path& path, std::uint6
     PROCESS_INFORMATION process{};
     if (!CreateProcessW(command.c_str(), mutable_arguments.data(), nullptr, nullptr, FALSE, CREATE_NO_WINDOW,
                         nullptr, nullptr, &startup, &process)) {
+        diagnostic = GetLastError();
         return DefenderVerdict::unavailable;
     }
     const DWORD wait = WaitForSingleObject(process.hProcess, 30'000U);
@@ -26922,6 +31111,7 @@ DefenderVerdict scan_with_defender(const std::filesystem::path& path, std::uint6
     const bool completed = wait == WAIT_OBJECT_0 && GetExitCodeProcess(process.hProcess, &exit_code) != FALSE;
     CloseHandle(process.hThread);
     CloseHandle(process.hProcess);
+    diagnostic = completed ? exit_code : (wait == WAIT_TIMEOUT ? ERROR_TIMEOUT : GetLastError());
     if (!completed) return DefenderVerdict::unavailable;
     if (exit_code == 0U) return DefenderVerdict::clean;
     if (exit_code == 2U) return DefenderVerdict::threat;
@@ -26947,7 +31137,9 @@ bool suspicious_structure(const std::filesystem::path& path, std::span<const std
         const auto result = ai_shield::protocols::zip::preflight(content);
         if (!result.ok()) return true;
         const auto& summary = result.value();
-        return summary.path_escape || summary.bomb_risk || summary.encrypted_entry;
+        return summary.malformed || summary.path_escape || summary.bomb_risk || summary.encrypted_entry ||
+               summary.unsupported_compression || summary.executable_entry || summary.active_content_entry ||
+               summary.nested_container || summary.duplicate_name;
     }
     return false;
 }
@@ -26987,6 +31179,12 @@ bool trusted_signature(const std::filesystem::path& path) {
 }
 
 class QuarantineManager final {
+    struct FileStamp final {
+        std::uint64_t size = 0U;
+        std::filesystem::file_time_type modified{};
+        bool operator==(const FileStamp&) const = default;
+    };
+
 public:
     explicit QuarantineManager(std::filesystem::path directory)
         : directory_(std::move(directory)), objects_(directory_ / L"objects"), journal_(directory_ / L"journal.jsonl"),
@@ -27019,10 +31217,14 @@ public:
             for (const auto& entry : std::filesystem::recursive_directory_iterator(
                      root, std::filesystem::directory_options::skip_permission_denied, error)) {
                 if (!entry.is_regular_file(error)) continue;
-                const bool executable = executable_extension(entry.path());
+                const bool executable = executable_extension(entry.path(), policy_.enabled_categories);
                 if ((!downloads_root && !executable) ||
                     (downloads_root && !executable && !parser_risk_extension(entry.path(), policy_.enabled_categories))) continue;
-                processed_.insert(entry.path().wstring());
+                const auto modified = entry.last_write_time(error);
+                if (error) continue;
+                const auto size = entry.file_size(error);
+                if (error) continue;
+                processed_[entry.path().wstring()] = FileStamp{size, modified};
                 ++baseline;
                 if (baseline >= 20'000U) break;
             }
@@ -27049,18 +31251,20 @@ public:
                      root, std::filesystem::directory_options::skip_permission_denied, error)) {
                 if (++visited > 20'000U) return;
                 if (error || !entry.is_regular_file(error)) continue;
-                const bool executable = executable_extension(entry.path());
+                const bool executable = executable_extension(entry.path(), policy_.enabled_categories);
                 if ((!downloads_root && !executable) ||
                     (downloads_root && !executable && !parser_risk_extension(entry.path(), policy_.enabled_categories))) continue;
                 const auto modified = entry.last_write_time(error);
                 if (error) continue;
                 const auto size = entry.file_size(error);
-                if (error || !has_external_zone(entry.path())) continue;
+                if (error || (!downloads_root && !has_external_zone(entry.path()))) continue;
                 const auto key = entry.path().wstring();
-                if (processed_.contains(key)) continue;
+                const FileStamp stamp{size, modified};
+                const auto processed = processed_.find(key);
+                if (processed != processed_.end() && processed->second == stamp) continue;
                 const auto found = stable_sizes_.find(key);
-                if (found == stable_sizes_.end() || found->second != size) {
-                    stable_sizes_[key] = size;
+                if (found == stable_sizes_.end() || found->second != stamp) {
+                    stable_sizes_[key] = stamp;
                     continue;
                 }
                 candidates.push_back({entry.path(), size, modified});
@@ -27077,7 +31281,7 @@ public:
         }
         constexpr std::size_t maximum_per_pass = 256U;
         for (std::size_t i = 0; i < (std::min)(candidates.size(), maximum_per_pass); ++i) {
-            classify(candidates[i].path, candidates[i].size);
+            classify(candidates[i].path, candidates[i].size, candidates[i].modified);
         }
     }
 
@@ -27122,7 +31326,8 @@ private:
         return ok;
     }
 
-    void classify(const std::filesystem::path& source, std::uint64_t size) {
+    void classify(const std::filesystem::path& source, std::uint64_t size,
+                  std::filesystem::file_time_type modified) {
         HANDLE source_handle = CreateFileW(source.c_str(), GENERIC_READ | FILE_READ_ATTRIBUTES,
                                            FILE_SHARE_READ | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING,
                                            FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN |
@@ -27145,7 +31350,7 @@ private:
         if (!identity_safe) {
             CloseHandle(source_handle);
             append_record(health_, "{\"event\":\"identity_rejected\"}\r\n");
-            processed_.insert(source.wstring());
+            processed_[source.wstring()] = FileStamp{size, modified};
             return;
         }
         const std::array<std::uint64_t, 4> identity{
@@ -27156,22 +31361,35 @@ private:
                 source_info.ftLastWriteTime.dwLowDateTime};
         const auto digest = ai_shield::crypto::sha256(std::as_bytes(std::span(identity)));
         const std::string identifier = digest_hex(digest);
-        const bool executable = executable_extension(source);
+        ai_shield::crypto::Sha256Digest content_digest{};
+        if (!hash_locked_file(source_handle, size, content_digest)) {
+            CloseHandle(source_handle);
+            append_record(health_, "{\"event\":\"content_hash_failed\"}\r\n");
+            return;
+        }
+        const std::string content_sha256 = digest_hex(content_digest);
+        const bool executable = executable_extension(source, policy_.enabled_categories);
         const bool parser_risk = parser_risk_extension(source, policy_.enabled_categories);
         const bool trusted = executable && trusted_signature(source);
-        const auto defender = scan_with_defender(source, size);
+        DWORD scanner_diagnostic = ERROR_SUCCESS;
+        const auto defender = scan_with_defender(source, size, source_handle, scanner_diagnostic);
         append_record(health_, "{\"event\":\"defender_complete\",\"verdict\":" +
-                               std::to_string(static_cast<unsigned int>(defender)) + "}\r\n");
+                               std::to_string(static_cast<unsigned int>(defender)) + ",\"diagnostic\":" +
+                               std::to_string(scanner_diagnostic) + "}\r\n");
         const bool structure_suspicious = defender == DefenderVerdict::suspicious;
-        const bool quarantine = (executable && !trusted) || structure_suspicious || defender == DefenderVerdict::threat ||
+        const bool release_pending = parser_risk && policy_.release_required != 0U;
+        const bool quarantine = release_pending || (executable && !trusted) || structure_suspicious ||
+                                defender == DefenderVerdict::threat ||
                                 (parser_risk && policy_.fail_closed != 0U && defender == DefenderVerdict::unavailable);
         const std::string classification = defender == DefenderVerdict::threat ? "malware_detected" :
             structure_suspicious ? "suspicious_file_structure" :
             (parser_risk && policy_.fail_closed != 0U && defender == DefenderVerdict::unavailable) ? "parser_risk_scan_unavailable" :
             (executable && !trusted) ? "external_untrusted_executable" :
+            release_pending ? "pending_user_release" :
             trusted ? "external_trusted_scanned" : "external_content_scanned_safe";
         const std::string record = "{\"id\":\"" + identifier + "\",\"source\":\"" +
                                     json_escape(source.wstring()) + "\",\"size\":" + std::to_string(size) +
+                                    ",\"sha256\":\"" + content_sha256 + "\"" +
                                     ",\"classification\":\"" + classification + "\",\"defender\":\"" +
                                     (defender == DefenderVerdict::clean ? "clean" :
                                      defender == DefenderVerdict::threat ? "threat" :
@@ -27179,7 +31397,7 @@ private:
         if (!append_record(provenance_, record)) { CloseHandle(source_handle); return; }
         if (!quarantine) {
             CloseHandle(source_handle);
-            processed_.insert(source.wstring());
+            processed_[source.wstring()] = FileStamp{size, modified};
             return;
         }
         HANDLE enforcement_handle = CreateFileW(source.c_str(), DELETE | FILE_READ_ATTRIBUTES,
@@ -27229,8 +31447,8 @@ private:
     std::filesystem::path provenance_;
     std::filesystem::path health_;
     std::vector<std::filesystem::path> roots_;
-    std::map<std::wstring, std::uint64_t> stable_sizes_;
-    std::set<std::wstring> processed_;
+    std::map<std::wstring, FileStamp> stable_sizes_;
+    std::map<std::wstring, FileStamp> processed_;
     HANDLE objects_handle_ = INVALID_HANDLE_VALUE;
     BY_HANDLE_FILE_INFORMATION objects_info_{};
     ContentPolicy policy_{};
@@ -27269,7 +31487,7 @@ int run_broker(const std::filesystem::path& log_directory, bool once) {
         quarantine_worker = std::jthread([&quarantine](std::stop_token stop) {
             while (!stop.stop_requested()) {
                 quarantine.scan();
-                for (unsigned int i = 0U; i < 20U && !stop.stop_requested(); ++i) Sleep(100U);
+                for (unsigned int i = 0U; i < 10U && !stop.stop_requested(); ++i) Sleep(100U);
             }
         });
     }
@@ -27411,8 +31629,15 @@ int self_test() {
     if (suspicious_structure(L"benign.pdf", bytes(benign_pdf)) ||
         !suspicious_structure(L"active.pdf", bytes(active_pdf)) ||
         !parser_risk_extension(L"photo.webp") || !parser_risk_extension(L"movie.mp4") ||
-        parser_risk_extension(L"notes.txt") || parser_risk_extension(L"photo.webp", kContentDocuments) ||
-        content_category(L"report.pdf") != kContentDocuments || content_category(L"track.mp3") != kContentAudio) return 4;
+        !parser_risk_extension(L"notes.txt") || parser_risk_extension(L"notes.txt", kContentDocuments) ||
+        parser_risk_extension(L"photo.webp", kContentDocuments) ||
+        content_category(L"report.pdf") != kContentDocuments || content_category(L"track.mp3") != kContentAudio ||
+        content_category(L"setup.msi") != kContentPrograms || content_category(L"notes.txt") != kContentUnknown ||
+        content_category(L"deploy.ps1") != kContentWindowsScripts ||
+        content_category(L"bootstrap.sh") != kContentDeveloperScripts || content_category(L"target.lnk") != kContentLaunchers ||
+        !executable_extension(L"deploy.ps1") || !executable_extension(L"module.psm1") ||
+        !executable_extension(L"tool.py") || !executable_extension(L"package.jar") ||
+        executable_extension(L"deploy.ps1", kContentPrograms)) return 4;
     std::wcout << L"ai_shield_broker self-test passed\n";
     return 0;
 }
@@ -27420,22 +31645,27 @@ int self_test() {
 int runtime_command(int argc, wchar_t** argv) {
     if (argc == 2 && std::wstring_view(argv[1]) == L"content-policy-status") {
         const auto policy = load_content_policy();
-        std::wcout << L"{\"schema\":\"AIShieldContentPolicy/1\",\"enabled_categories\":"
+        std::wcout << L"{\"schema\":\"AIShieldContentPolicy/4\",\"enabled_categories\":"
                    << policy.enabled_categories << L",\"fail_closed\":"
-                   << (policy.fail_closed != 0U ? L"true" : L"false") << L"}\n";
+                   << (policy.fail_closed != 0U ? L"true" : L"false") << L",\"release_required\":"
+                   << (policy.release_required != 0U ? L"true" : L"false") << L"}\n";
         return 0;
     }
-    if (argc == 4 && std::wstring_view(argv[1]) == L"content-policy-set") {
+    if ((argc == 4 || argc == 5) && std::wstring_view(argv[1]) == L"content-policy-set") {
         if (!elevated_administrator()) return 5;
         wchar_t* mask_end = nullptr;
         wchar_t* fail_end = nullptr;
+        wchar_t* release_end = nullptr;
         const auto mask = wcstoul(argv[2], &mask_end, 10);
         const auto fail_closed = wcstoul(argv[3], &fail_end, 10);
+        const auto release_required = argc == 5 ? wcstoul(argv[4], &release_end, 10) : 1UL;
         if (mask_end == argv[2] || *mask_end != L'\0' || fail_end == argv[3] || *fail_end != L'\0' ||
-            (mask & ~kContentAll) != 0U || fail_closed > 1U) return 2;
+            (argc == 5 && (release_end == argv[4] || *release_end != L'\0')) ||
+            (mask & ~kContentAll) != 0U || fail_closed > 1U || release_required > 1U) return 2;
         ContentPolicy policy{};
         policy.enabled_categories = mask;
         policy.fail_closed = fail_closed;
+        policy.release_required = release_required;
         return save_content_policy(policy) ? 0 : 2;
     }
     ai_shield::platform::windows::security::SecureRuntimeStore store(L"C:\\ProgramData\\AIShield");
@@ -27466,7 +31696,7 @@ int runtime_command(int argc, wchar_t** argv) {
     return -1;
 }
 
-}
+}  // namespace
 
 int wmain(int argc, wchar_t** argv) {
     const int runtime_result = runtime_command(argc, argv);
@@ -27493,10 +31723,10 @@ int wmain(int argc, wchar_t** argv) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/ai_shield_browser_host/main.cpp`  
-- Path: `AI_Shield_Developer_Full/tools/ai_shield_browser_host/main.cpp`  
+## File: `AI-Shield-main/tools/ai_shield_browser_host/main.cpp`  
+- Path: `AI-Shield-main/tools/ai_shield_browser_host/main.cpp`  
 - Size: 4037 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -27601,10 +31831,10 @@ int wmain(int argc, wchar_t** argv) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/ai_shield_diag/main.cpp`  
-- Path: `AI_Shield_Developer_Full/tools/ai_shield_diag/main.cpp`  
+## File: `AI-Shield-main/tools/ai_shield_diag/main.cpp`  
+- Path: `AI-Shield-main/tools/ai_shield_diag/main.cpp`  
 - Size: 5764 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -27747,10 +31977,10 @@ int main(int argc, char** argv) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/ai_shield_driverctl/main.cpp`  
-- Path: `AI_Shield_Developer_Full/tools/ai_shield_driverctl/main.cpp`  
+## File: `AI-Shield-main/tools/ai_shield_driverctl/main.cpp`  
+- Path: `AI-Shield-main/tools/ai_shield_driverctl/main.cpp`  
 - Size: 15562 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -28191,10 +32421,131 @@ int wmain(int argc, wchar_t** argv) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/ai_shield_handle_probe/main.cpp`  
-- Path: `AI_Shield_Developer_Full/tools/ai_shield_handle_probe/main.cpp`  
+## File: `AI-Shield-main/tools/ai_shield_file_scanner/main.cpp`  
+- Path: `AI-Shield-main/tools/ai_shield_file_scanner/main.cpp`  
+- Size: 5777 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
+- Condensed: comments and repeated blank lines reduced
+
+```cpp
+#include <windows.h>
+#include <amsi.h>
+
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <filesystem>
+#include <iostream>
+#include <span>
+#include <string>
+#include <string_view>
+#include <vector>
+
+#include "ai_shield/file_preflight.hpp"
+#include "ai_shield/pdf_preflight.hpp"
+#include "ai_shield/wav_preflight.hpp"
+#include "ai_shield/zip_preflight.hpp"
+
+namespace {
+
+bool structural_risk(std::span<const std::byte> content, const std::filesystem::path& path) {
+    const auto universal = ai_shield::file_preflight::inspect(content, path.filename().wstring());
+    if (universal.high_risk()) return true;
+    auto extension = path.extension().wstring();
+    for (auto& character : extension) character = static_cast<wchar_t>(towlower(character));
+    const bool pdf_signature = content.size() >= 5U &&
+        std::to_integer<unsigned char>(content[0]) == '%' && std::to_integer<unsigned char>(content[1]) == 'P' &&
+        std::to_integer<unsigned char>(content[2]) == 'D' && std::to_integer<unsigned char>(content[3]) == 'F' &&
+        std::to_integer<unsigned char>(content[4]) == '-';
+    if (extension == L".pdf" || pdf_signature) {
+        const auto parsed = ai_shield::protocols::pdf::preflight(content);
+        if (!parsed.ok() || parsed.value().malformed || parsed.value().javascript || parsed.value().launch_action ||
+            parsed.value().embedded_file || parsed.value().open_action) return true;
+    }
+    const bool zip_signature = content.size() >= 4U && std::to_integer<unsigned char>(content[0]) == 'P' &&
+        std::to_integer<unsigned char>(content[1]) == 'K';
+    if (extension == L".zip" || zip_signature) {
+        const auto parsed = ai_shield::protocols::zip::preflight(content);
+        if (!parsed.ok() || parsed.value().malformed || parsed.value().path_escape || parsed.value().bomb_risk ||
+            parsed.value().encrypted_entry || parsed.value().unsupported_compression || parsed.value().executable_entry ||
+            parsed.value().active_content_entry || parsed.value().nested_container || parsed.value().duplicate_name) return true;
+    }
+    if (extension == L".wav" || ai_shield::protocols::wav::has_wave_signature(content)) {
+        const auto parsed = ai_shield::protocols::wav::preflight(content);
+        if (!parsed.ok() || parsed.value().malformed || parsed.value().suspicious_metadata) return true;
+    }
+    return false;
+}
+
+int amsi_verdict(std::span<const std::byte> content) {
+    const HMODULE module = LoadLibraryExW(L"amsi.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+    if (module == nullptr) return 3;
+    const auto initialize = reinterpret_cast<decltype(&AmsiInitialize)>(GetProcAddress(module, "AmsiInitialize"));
+    const auto scan = reinterpret_cast<decltype(&AmsiScanBuffer)>(GetProcAddress(module, "AmsiScanBuffer"));
+    const auto uninitialize = reinterpret_cast<decltype(&AmsiUninitialize)>(GetProcAddress(module, "AmsiUninitialize"));
+    if (initialize == nullptr || scan == nullptr || uninitialize == nullptr) { FreeLibrary(module); return 3; }
+    HAMSICONTEXT context = nullptr;
+    if (FAILED(initialize(L"AIShieldIsolatedFileScanner", &context))) { FreeLibrary(module); return 3; }
+    AMSI_RESULT result = AMSI_RESULT_NOT_DETECTED;
+    const HRESULT scanned = scan(context, const_cast<std::byte*>(content.data()), static_cast<ULONG>(content.size()),
+                                 L"AIShieldDownload", nullptr, &result);
+    uninitialize(context);
+    FreeLibrary(module);
+    if (FAILED(scanned)) return 3;
+    return AmsiResultIsMalware(result) ? 10 : 0;
+}
+
+}
+
+int wmain(int argc, wchar_t** argv) {
+    if (argc == 2 && std::wstring_view(argv[1]) == L"self-test") return 0;
+    if (argc != 5 || std::wstring_view(argv[1]) != L"scan-handle") return 2;
+    wchar_t* handle_end = nullptr;
+    wchar_t* size_end = nullptr;
+    const auto handle_value = _wcstoui64(argv[2], &handle_end, 10);
+    const auto size = _wcstoui64(argv[3], &size_end, 10);
+    if (handle_end == argv[2] || *handle_end != L'\0' || size_end == argv[3] || *size_end != L'\0' ||
+        handle_value == 0U || size == 0U || size > 256ULL * 1024ULL * 1024ULL) return 3;
+    const HANDLE file = reinterpret_cast<HANDLE>(static_cast<std::uintptr_t>(handle_value));
+    std::vector<std::byte> content(static_cast<std::size_t>(size));
+    std::size_t offset = 0U;
+    HANDLE read_event = CreateEventW(nullptr, TRUE, FALSE, nullptr);
+    if (read_event == nullptr) return 3;
+    while (offset < content.size()) {
+        const DWORD requested = static_cast<DWORD>((std::min)(content.size() - offset,
+                                                              static_cast<std::size_t>(1U << 20U)));
+        DWORD received = 0U;
+        OVERLAPPED operation{};
+        operation.Offset = static_cast<DWORD>(offset & 0xffffffffULL);
+        operation.OffsetHigh = static_cast<DWORD>(static_cast<std::uint64_t>(offset) >> 32U);
+        operation.hEvent = read_event;
+        ResetEvent(read_event);
+        const BOOL immediate = ReadFile(file, content.data() + offset, requested, &received, &operation);
+        if (!immediate && GetLastError() == ERROR_IO_PENDING) {
+            if (WaitForSingleObject(read_event, 5'000U) != WAIT_OBJECT_0 ||
+                !GetOverlappedResult(file, &operation, &received, FALSE)) {
+                CancelIoEx(file, &operation);
+                CloseHandle(read_event);
+                return 3;
+            }
+        } else if (!immediate) {
+            CloseHandle(read_event);
+            return 3;
+        }
+        if (received == 0U) { CloseHandle(read_event); return 3; }
+        offset += received;
+    }
+    CloseHandle(read_event);
+    if (structural_risk(content, std::filesystem::path(argv[4]))) return 11;
+    return amsi_verdict(content);
+}
+
+```
+
+## File: `AI-Shield-main/tools/ai_shield_handle_probe/main.cpp`  
+- Path: `AI-Shield-main/tools/ai_shield_handle_probe/main.cpp`  
 - Size: 1507 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -28246,10 +32597,10 @@ int wmain(int argc, wchar_t** argv) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/ai_shield_integrations/main.cpp`  
-- Path: `AI_Shield_Developer_Full/tools/ai_shield_integrations/main.cpp`  
-- Size: 6841 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+## File: `AI-Shield-main/tools/ai_shield_integrations/main.cpp`  
+- Path: `AI-Shield-main/tools/ai_shield_integrations/main.cpp`  
+- Size: 10319 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -28263,13 +32614,50 @@ int wmain(int argc, wchar_t** argv) {
 #include <vector>
 
 #include "ai_shield/siem.hpp"
+#include "ai_shield/file_preflight.hpp"
 #include "ai_shield/pdf_preflight.hpp"
+#include "ai_shield/wav_preflight.hpp"
 #include "ai_shield/zip_preflight.hpp"
 #include "platform/windows/security/tpm_trust_anchor.hpp"
+#include "platform/windows/sandbox/appcontainer_launcher.hpp"
 #include "platform/windows/sensors/etw_amsi_adapter.hpp"
 #include "platform/windows/siem/syslog_connector.hpp"
 
 namespace {
+
+bool structural_risk(std::span<const std::byte> content, const std::filesystem::path* path = nullptr) {
+    std::wstring extension;
+    if (path != nullptr) {
+        extension = path->extension().wstring();
+        for (auto& character : extension) character = static_cast<wchar_t>(towlower(character));
+    }
+    const std::wstring filename = path != nullptr ? path->filename().wstring() : std::wstring{};
+    const auto universal = ai_shield::file_preflight::inspect(content, filename);
+    if (universal.high_risk()) return true;
+    const bool pdf_signature = content.size() >= 5U &&
+        std::to_integer<unsigned char>(content[0]) == '%' && std::to_integer<unsigned char>(content[1]) == 'P' &&
+        std::to_integer<unsigned char>(content[2]) == 'D' && std::to_integer<unsigned char>(content[3]) == 'F' &&
+        std::to_integer<unsigned char>(content[4]) == '-';
+    if (extension == L".pdf" || pdf_signature) {
+        const auto parsed = ai_shield::protocols::pdf::preflight(content);
+        if (!parsed.ok() || parsed.value().malformed || parsed.value().javascript || parsed.value().launch_action ||
+            parsed.value().embedded_file || parsed.value().open_action) return true;
+    }
+    const bool zip_signature = content.size() >= 4U && std::to_integer<unsigned char>(content[0]) == 'P' &&
+        std::to_integer<unsigned char>(content[1]) == 'K';
+    if (extension == L".zip" || zip_signature) {
+        const auto parsed = ai_shield::protocols::zip::preflight(content);
+        if (!parsed.ok() || parsed.value().malformed || parsed.value().path_escape || parsed.value().bomb_risk ||
+            parsed.value().encrypted_entry || parsed.value().unsupported_compression || parsed.value().executable_entry ||
+            parsed.value().active_content_entry || parsed.value().nested_container || parsed.value().duplicate_name)
+            return true;
+    }
+    if (extension == L".wav" || ai_shield::protocols::wav::has_wave_signature(content)) {
+        const auto parsed = ai_shield::protocols::wav::preflight(content);
+        if (!parsed.ok() || parsed.value().malformed || parsed.value().suspicious_metadata) return true;
+    }
+    return false;
+}
 
 int self_test() {
     const auto text = ai_shield::siem::format({.monotonic_ns = 1, .reason_mask = 2, .risk_score = 3,
@@ -28290,6 +32678,33 @@ int wmain(int argc, wchar_t** argv) {
     }
     if (argc == 2 && std::wstring_view(argv[1]) == L"tpm-provision")
         return ai_shield::platform::windows::security::ensure_tpm_anchor().ok() ? 0 : 3;
+    if (argc == 2 && std::wstring_view(argv[1]) == L"appcontainer-sid") {
+        const auto sid = ai_shield::platform::windows::sandbox::parser_profile_sid();
+        if (!sid.ok()) return 3;
+        std::wcout << sid.value() << L'\n';
+        return 0;
+    }
+    if (argc == 2 && std::wstring_view(argv[1]) == L"appcontainer-launch-test") {
+        const std::wstring executable = L"C:\\Windows\\System32\\cmd.exe";
+        const std::wstring command = L"\"" + executable + L"\" /d /c exit 7";
+        auto launched = ai_shield::platform::windows::sandbox::launch_shadow_parser({
+            .analysis_id = GetTickCount64() + 1U, .parser_id = 99U,
+            .budget = {.wall_time_ns = 5'000'000'000ULL, .memory_bytes = 64ULL * 1024ULL * 1024ULL,
+                       .max_processes = 1U, .network_allowed = false},
+            .executable_path = executable, .command_line = command, .work_directory = L"C:\\Windows\\System32"});
+        if (!launched.ok()) return 3;
+        auto process = launched.value();
+        if (!ai_shield::platform::windows::sandbox::resume_launched_process(process).ok()) {
+            ai_shield::platform::windows::sandbox::close_launched_process(process);
+            return 3;
+        }
+        const DWORD wait = WaitForSingleObject(process.process, 5'000U);
+        DWORD exit_code = ERROR_GEN_FAILURE;
+        const bool completed = wait == WAIT_OBJECT_0 && GetExitCodeProcess(process.process, &exit_code) != FALSE;
+        ai_shield::platform::windows::sandbox::close_launched_process(process);
+        std::wcout << L"exit=" << exit_code << L'\n';
+        return completed && exit_code == 7U ? 0 : 3;
+    }
     if (argc == 3 && std::wstring_view(argv[1]) == L"amsi-scan-file") {
         const std::filesystem::path path(argv[2]);
         std::error_code error;
@@ -28298,24 +32713,14 @@ int wmain(int argc, wchar_t** argv) {
         std::ifstream input(path, std::ios::binary);
         std::vector<std::byte> content(static_cast<std::size_t>(size));
         if (!input.read(reinterpret_cast<char*>(content.data()), static_cast<std::streamsize>(content.size()))) return 3;
-        auto extension = path.extension().wstring();
-        for (auto& character : extension) character = static_cast<wchar_t>(towlower(character));
-        if (extension == L".pdf") {
-            const auto parsed = ai_shield::protocols::pdf::preflight(content);
-            if (!parsed.ok() || parsed.value().malformed || parsed.value().javascript || parsed.value().launch_action ||
-                parsed.value().embedded_file || parsed.value().open_action) return 11;
-        } else if (extension == L".zip") {
-            const auto parsed = ai_shield::protocols::zip::preflight(content);
-            if (!parsed.ok() || parsed.value().path_escape || parsed.value().bomb_risk || parsed.value().encrypted_entry)
-                return 11;
-        }
+        if (structural_risk(content, &path)) return 11;
         const auto result = ai_shield::platform::windows::sensors::scan_with_amsi(
             content, 1U, GetTickCount64() * 1'000'000ULL, 1U, 1U);
         if (!result.ok()) return 3;
         constexpr std::uint32_t blocked_by_administrator = 16'384U;
         return result.value().scan_result >= blocked_by_administrator ? 10 : 0;
     }
-    if (argc == 4 && std::wstring_view(argv[1]) == L"amsi-scan-handle") {
+    if ((argc == 4 || argc == 5) && std::wstring_view(argv[1]) == L"amsi-scan-handle") {
         wchar_t* handle_end = nullptr;
         wchar_t* size_end = nullptr;
         const auto handle_value = _wcstoui64(argv[2], &handle_end, 10);
@@ -28355,6 +32760,8 @@ int wmain(int argc, wchar_t** argv) {
             offset += received;
         }
         CloseHandle(read_event);
+        const std::filesystem::path path = argc == 5 ? std::filesystem::path(argv[4]) : std::filesystem::path{};
+        if (structural_risk(content, argc == 5 ? &path : nullptr)) return 11;
         const auto result = ai_shield::platform::windows::sensors::scan_with_amsi(
             content, 1U, GetTickCount64() * 1'000'000ULL, 1U, 1U);
         if (!result.ok()) return 3;
@@ -28384,10 +32791,10 @@ int wmain(int argc, wchar_t** argv) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/ai_shield_kernelctl/main.cpp`  
-- Path: `AI_Shield_Developer_Full/tools/ai_shield_kernelctl/main.cpp`  
+## File: `AI-Shield-main/tools/ai_shield_kernelctl/main.cpp`  
+- Path: `AI-Shield-main/tools/ai_shield_kernelctl/main.cpp`  
 - Size: 8463 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -28590,10 +32997,10 @@ int wmain(int argc, wchar_t** argv) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/ai_shield_prototype/main.cpp`  
-- Path: `AI_Shield_Developer_Full/tools/ai_shield_prototype/main.cpp`  
+## File: `AI-Shield-main/tools/ai_shield_prototype/main.cpp`  
+- Path: `AI-Shield-main/tools/ai_shield_prototype/main.cpp`  
 - Size: 14143 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -29016,10 +33423,10 @@ int main(int argc, char** argv) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/ai_shield_replay/main.cpp`  
-- Path: `AI_Shield_Developer_Full/tools/ai_shield_replay/main.cpp`  
+## File: `AI-Shield-main/tools/ai_shield_replay/main.cpp`  
+- Path: `AI-Shield-main/tools/ai_shield_replay/main.cpp`  
 - Size: 2204 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC  
+- Modified: 2026-07-14 10:35:32 UTC  
 - Condensed: comments and repeated blank lines reduced
 
 ```cpp
@@ -29089,10 +33496,10 @@ int main(int argc, char** argv) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/ai_shield_service/main.cpp`  
-- Path: `AI_Shield_Developer_Full/tools/ai_shield_service/main.cpp`  
+## File: `AI-Shield-main/tools/ai_shield_service/main.cpp`  
+- Path: `AI-Shield-main/tools/ai_shield_service/main.cpp`  
 - Size: 8012 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```cpp
 #ifndef WIN32_LEAN_AND_MEAN
@@ -29302,10 +33709,10 @@ int wmain(int argc, wchar_t** argv) {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/build_private_release_candidate.ps1`  
-- Path: `AI_Shield_Developer_Full/tools/build_private_release_candidate.ps1`  
-- Size: 8581 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/tools/build_private_release_candidate.ps1`  
+- Path: `AI-Shield-main/tools/build_private_release_candidate.ps1`  
+- Size: 8610 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -29375,7 +33782,7 @@ try {
     & $CTestExe --test-dir $buildDebug -C Debug --output-on-failure
     Assert-ExternalSuccess "ctest-debug"
 
-    $executables=@("ai_shield_broker.exe","ai_shield_driverctl.exe","ai_shield_integrations.exe",
+    $executables=@("ai_shield_broker.exe","ai_shield_driverctl.exe","ai_shield_integrations.exe","ai_shield_file_scanner.exe",
         "ai_shield_kernelctl.exe","ai_shield_service.exe")
     $hashA=Get-ArtifactHashes (Join-Path $buildA "Release") $executables
     $hashB=Get-ArtifactHashes (Join-Path $buildB "Release") $executables
@@ -29453,10 +33860,10 @@ try {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/check_shared_core_boundary.ps1`  
-- Path: `AI_Shield_Developer_Full/tools/check_shared_core_boundary.ps1`  
+## File: `AI-Shield-main/tools/check_shared_core_boundary.ps1`  
+- Path: `AI-Shield-main/tools/check_shared_core_boundary.ps1`  
 - Size: 598 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 $ErrorActionPreference = "Stop"
@@ -29487,10 +33894,10 @@ Write-Output "shared-core-boundary-ok"
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/complete_private_rc_admin.ps1`  
-- Path: `AI_Shield_Developer_Full/tools/complete_private_rc_admin.ps1`  
+## File: `AI-Shield-main/tools/complete_private_rc_admin.ps1`  
+- Path: `AI-Shield-main/tools/complete_private_rc_admin.ps1`  
 - Size: 5285 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -29586,10 +33993,10 @@ Write-Output "sha256=$hashB"
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/deploy_download_content_protection.ps1`  
-- Path: `AI_Shield_Developer_Full/tools/deploy_download_content_protection.ps1`  
-- Size: 6734 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/tools/deploy_download_content_protection.ps1`  
+- Path: `AI-Shield-main/tools/deploy_download_content_protection.ps1`  
+- Size: 7404 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([switch]$Elevated)
@@ -29607,7 +34014,8 @@ if(-not([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity
 $log=Join-Path $repo 'build_vs\download-content-protection-deploy.log'
 Start-Transcript -Path $log -Force|Out-Null
 $source=Join-Path $repo 'build_vs\Release\ai_shield_broker.exe'
-$scannerSource=Join-Path $repo 'build_vs\Release\ai_shield_integrations.exe'
+$scannerSource=Join-Path $repo 'build_vs\Release\ai_shield_file_scanner.exe'
+$profileTool=Join-Path $repo 'build_vs\Release\ai_shield_integrations.exe'
 $test=Join-Path $repo 'tests\windows_download_content_protection.ps1'
 $uiSource=Join-Path $repo 'editions\private_desktop\ui\AIShield.PrivateDesktop.UI.xaml'
 $uiScriptSource=Join-Path $repo 'editions\private_desktop\ui\start_private_ui.ps1'
@@ -29622,7 +34030,7 @@ if(-not$service){throw 'AIShieldBroker service is not installed.'}
 $installed=([regex]::Match($service.PathName,'^"?([^\"]+?\.exe)"?(?:\s|$)')).Groups[1].Value
 if(-not$installed){throw 'Could not resolve installed broker path.'}
 $backup=$installed+'.before-content-protection.bak'
-$scannerInstalled=Join-Path (Split-Path $installed -Parent) 'ai_shield_integrations.exe'
+$scannerInstalled=Join-Path (Split-Path $installed -Parent) 'ai_shield_file_scanner.exe'
 $scannerBackup=$scannerInstalled+'.before-content-protection.bak'
 $uiInstalled='C:\Program Files\AI_Shield_Private_Desktop\ui\AIShield.PrivateDesktop.UI.xaml'
 $uiBackup=$uiInstalled+'.before-content-protection.bak'
@@ -29643,6 +34051,13 @@ try {
     if(Test-Path $scannerInstalled){Copy-Item -LiteralPath $scannerInstalled -Destination $scannerBackup -Force}
     Copy-Item -LiteralPath $source -Destination $installed -Force
     Copy-Item -LiteralPath $scannerSource -Destination $scannerInstalled -Force
+    $parserSid=(& $profileTool appcontainer-sid|Select-Object -First 1).Trim()
+    if($LASTEXITCODE-ne0-or$parserSid-notmatch'^S-1-15-2-'){throw 'AppContainer parser profile provisioning failed.'}
+    $parserBin=Split-Path $scannerInstalled -Parent
+    & icacls.exe (Split-Path $parserBin -Parent) /grant "*$parserSid`:(RX)"|Out-Null
+    if($LASTEXITCODE-ne0){throw 'AppContainer parser traversal ACL provisioning failed.'}
+    & icacls.exe $parserBin /grant "*$parserSid`:(OI)(CI)(RX)" /T /C|Out-Null
+    if($LASTEXITCODE-ne0){throw 'AppContainer parser read/execute ACL provisioning failed.'}
     if(Test-Path $uiInstalled){
         Copy-Item -LiteralPath $uiInstalled -Destination $uiBackup -Force
         Copy-Item -LiteralPath $uiSource -Destination $uiInstalled -Force
@@ -29697,10 +34112,10 @@ try {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/deploy_private_rc5_patch.ps1`  
-- Path: `AI_Shield_Developer_Full/tools/deploy_private_rc5_patch.ps1`  
+## File: `AI-Shield-main/tools/deploy_private_rc5_patch.ps1`  
+- Path: `AI-Shield-main/tools/deploy_private_rc5_patch.ps1`  
 - Size: 4728 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([switch]$SkipRuntimeTest)
@@ -29787,10 +34202,149 @@ try {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/package_developer_full.ps1`  
-- Path: `AI_Shield_Developer_Full/tools/package_developer_full.ps1`  
+## File: `AI-Shield-main/tools/deploy_private_tray.ps1`  
+- Path: `AI-Shield-main/tools/deploy_private_tray.ps1`  
+- Size: 2570 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
+
+```powershell
+param([switch]$Elevated)
+
+$ErrorActionPreference = "Stop"
+$repo = Split-Path $PSScriptRoot -Parent
+$installRoot = Join-Path $env:ProgramFiles "AI_Shield_Private_Desktop"
+
+if (-not $Elevated) {
+    $arguments = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ('"' + $PSCommandPath + '"'), "-Elevated")
+    $process = Start-Process powershell.exe -Verb RunAs -WindowStyle Hidden -ArgumentList $arguments -Wait -PassThru
+    if ($process.ExitCode -eq 0) {
+        $manager = Join-Path $installRoot "tray\manage_tray_agent.ps1"
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $manager -Action start
+        Start-Process -FilePath (Join-Path $installRoot "AI_Shield_UI.cmd")
+    }
+    exit $process.ExitCode
+}
+
+if (-not (Test-Path -LiteralPath $installRoot -PathType Container)) {
+    throw "AI Shield Private Desktop is not installed at $installRoot"
+}
+
+$installedUiScript = Join-Path $installRoot "ui\start_private_ui.ps1"
+$uiPattern = [regex]::Escape([IO.Path]::GetFullPath($installedUiScript))
+Get-CimInstance Win32_Process -Filter "Name='powershell.exe' OR Name='pwsh.exe'" -ErrorAction SilentlyContinue |
+    Where-Object { [string]$_.CommandLine -match $uiPattern } |
+    ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
+
+$copies = @(
+    @("editions\private_desktop\tray\start_tray_agent.ps1", "tray\start_tray_agent.ps1"),
+    @("editions\private_desktop\tray\manage_tray_agent.ps1", "tray\manage_tray_agent.ps1"),
+    @("editions\private_desktop\ui\AIShield.PrivateDesktop.UI.xaml", "ui\AIShield.PrivateDesktop.UI.xaml"),
+    @("editions\private_desktop\ui\start_private_ui.ps1", "ui\start_private_ui.ps1")
+)
+
+foreach ($copy in $copies) {
+    $source = Join-Path $repo $copy[0]
+    $destination = Join-Path $installRoot $copy[1]
+    if (-not (Test-Path -LiteralPath $source -PathType Leaf)) { throw "Missing source file: $source" }
+    New-Item -ItemType Directory -Force -Path (Split-Path $destination -Parent) | Out-Null
+    Copy-Item -LiteralPath $source -Destination $destination -Force
+}
+
+$manager = Join-Path $installRoot "tray\manage_tray_agent.ps1"
+& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $manager -Action uninstall
+if ($LASTEXITCODE -ne 0) { throw "Previous tray agent could not be stopped." }
+& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $manager -Action install -NoImmediateStart
+if ($LASTEXITCODE -ne 0) { throw "Installed tray agent could not be registered." }
+Write-Output (& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $manager -Action status)
+
+```
+
+## File: `AI-Shield-main/tools/deploy_scanner_network_isolation.ps1`  
+- Path: `AI-Shield-main/tools/deploy_scanner_network_isolation.ps1`  
+- Size: 2623 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
+
+```powershell
+param([switch]$Elevated)
+$ErrorActionPreference='Stop'
+$repo=(Resolve-Path (Join-Path $PSScriptRoot '..')).Path
+$log=Join-Path $repo 'build_vs\scanner-network-driver-deploy.log'
+if(-not([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
+    [Security.Principal.WindowsBuiltInRole]::Administrator)){
+    if($Elevated){throw 'Elevation failed.'}
+    $process=Start-Process powershell.exe -Verb RunAs -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',$PSCommandPath,'-Elevated') -Wait -PassThru
+    if(Test-Path $log){Get-Content $log}
+    exit $process.ExitCode
+}
+Set-Location $repo
+Start-Transcript -Path $log -Force|Out-Null
+$package=Join-Path $repo 'driver_package\Release'
+$backup=Join-Path $repo 'build_vs\driver-package-before-scanner-network'
+try{
+    Remove-Item $backup -Recurse -Force -ErrorAction SilentlyContinue
+    Copy-Item $package $backup -Recurse -Force
+    Stop-Service AIShieldCore,AIShieldBroker -Force -ErrorAction SilentlyContinue
+    & .\build_vs\Release\ai_shield_driverctl.exe stop
+    if($LASTEXITCODE-ne0){throw 'Driver stop failed.'}
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\platform\windows\build_drivers.ps1 -Configuration Release
+    if($LASTEXITCODE-ne0){throw 'Driver package refresh failed.'}
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\platform\windows\installer\sign_driver_package.ps1 -PackageDir $package
+    if($LASTEXITCODE-ne0){throw 'Driver signing failed.'}
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\platform\windows\installer\install_drivers.ps1 -PackageDir $package
+    if($LASTEXITCODE-ne0){throw 'Driver installation failed.'}
+    Start-Service AIShieldBroker,AIShieldCore
+    foreach($name in 'AIShieldWfp','AIShieldMiniFilter','AIShieldProcessGuard','AIShieldBroker','AIShieldCore'){
+        (Get-Service $name).WaitForStatus('Running',[TimeSpan]::FromSeconds(30))
+    }
+    Remove-Item $backup -Recurse -Force
+    Write-Output 'scanner_network_isolation_driver=installed'
+    Write-Output "wfp_sha256=$((Get-FileHash (Join-Path $package 'AIShieldWfp.sys') -Algorithm SHA256).Hash)"
+    Stop-Transcript|Out-Null
+}catch{
+    & .\build_vs\Release\ai_shield_driverctl.exe stop|Out-Null
+    if(Test-Path $backup){Copy-Item (Join-Path $backup '*') $package -Recurse -Force}
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\platform\windows\installer\install_drivers.ps1 -PackageDir $package|Out-Null
+    Start-Service AIShieldBroker,AIShieldCore -ErrorAction SilentlyContinue
+    Write-Error $_
+    Stop-Transcript|Out-Null
+    exit 1
+}
+
+```
+
+## File: `AI-Shield-main/tools/diagnose_private_ui.ps1`  
+- Path: `AI-Shield-main/tools/diagnose_private_ui.ps1`  
+- Size: 691 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
+
+```powershell
+param([switch]$Elevated)
+
+$ErrorActionPreference = "Stop"
+$repo = Split-Path $PSScriptRoot -Parent
+$log = Join-Path $repo "build_vs\private-ui-start-error.log"
+$ui = Join-Path $env:ProgramFiles "AI_Shield_Private_Desktop\ui\start_private_ui.ps1"
+
+if (-not $Elevated) {
+    Remove-Item -LiteralPath $log -Force -ErrorAction SilentlyContinue
+    $arguments = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-STA", "-File", ('"' + $PSCommandPath + '"'), "-Elevated")
+    Start-Process powershell.exe -Verb RunAs -WindowStyle Hidden -ArgumentList $arguments | Out-Null
+    exit 0
+}
+
+try {
+    & $ui
+} catch {
+    $_ | Format-List * -Force | Out-File -LiteralPath $log -Encoding UTF8
+    exit 1
+}
+
+```
+
+## File: `AI-Shield-main/tools/package_developer_full.ps1`  
+- Path: `AI-Shield-main/tools/package_developer_full.ps1`  
 - Size: 6109 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -29899,10 +34453,10 @@ try {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/package_developer_release.ps1`  
-- Path: `AI_Shield_Developer_Full/tools/package_developer_release.ps1`  
+## File: `AI-Shield-main/tools/package_developer_release.ps1`  
+- Path: `AI-Shield-main/tools/package_developer_release.ps1`  
 - Size: 3976 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param([string]$Output = "AI_Shield_Developer_ABI2.zip")
@@ -29976,10 +34530,10 @@ try {
 
 ```
 
-## File: `AI_Shield_Developer_Full/tools/package_private_desktop.ps1`  
-- Path: `AI_Shield_Developer_Full/tools/package_private_desktop.ps1`  
-- Size: 7091 Bytes  
-- Modified: 2026-07-13 16:30:00 UTC
+## File: `AI-Shield-main/tools/package_private_desktop.ps1`  
+- Path: `AI-Shield-main/tools/package_private_desktop.ps1`  
+- Size: 7184 Bytes  
+- Modified: 2026-07-14 10:35:32 UTC
 
 ```powershell
 param(
@@ -30008,12 +34562,13 @@ $editionFiles = @(
     "Schutz_starten.cmd", "Schutz_beenden.cmd", "Status_anzeigen.cmd", "Deinstallieren.cmd",
     "AI_Shield_UI.cmd", "ui\README.md", "ui\AIShield.PrivateDesktop.UI.xaml", "ui\AIShield.AuditViewer.xaml", "ui\start_private_ui.ps1",
     "ui\private_security_settings.ps1", "ui\verify_ui_contract.ps1",
+    "tray\start_tray_agent.ps1", "tray\manage_tray_agent.ps1",
     "private_common.ps1", "install_private_desktop.ps1", "msi_product_action.ps1", "start_private_desktop.ps1",
     "stop_private_desktop.ps1", "status_private_desktop.ps1", "private_posture.ps1",
     "uninstall_private_desktop.ps1"
 )
 $binaries = @("ai_shield_driverctl.exe", "ai_shield_kernelctl.exe", "ai_shield_broker.exe", "ai_shield_diag.exe",
-    "ai_shield_service.exe", "ai_shield_integrations.exe", "ai_shield_browser_host.exe")
+    "ai_shield_service.exe", "ai_shield_integrations.exe", "ai_shield_file_scanner.exe", "ai_shield_browser_host.exe")
 $driverFiles = @("ai_shield_minifilter.inf", "ai_shield_process_guard.inf", "ai_shield_wfp.inf",
     "ai_shield_testsigning.cer", "AIShieldMiniFilter.sys", "AIShieldProcessGuard.sys", "AIShieldWfp.sys")
 $scripts = @(
@@ -30113,3 +34668,4 @@ try {
 }
 
 ```
+

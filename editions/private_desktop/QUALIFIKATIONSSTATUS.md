@@ -1,13 +1,20 @@
-# Qualifikationsstatus AI Shield Private Desktop 2.0.0-rc.13
+# Qualifikationsstatus AI Shield Private Desktop 2.0.0-rc.15
 
-Stand: 15. Juli 2026
+Stand: 27. Juli 2026
 
 ## Bestätigte lokale Gates
 
 - Kernel-Transport ABI 1.2, Freeze-Revision 3 und internes ABI 2.0 entsprechen dem Releasevertrag.
-- Release- und Debug-Build bestehen jeweils alle 16 CTest-Ziele einschließlich Datei-Scanner-, Tray-,
-  Einzelinstanz- und Close-to-Tray-Vertrag.
-- Der WPF-Vertrag enthält 61 gebundene Controls in sechs Ansichten.
+- Release- und Debug-Build bestehen jeweils alle 18 CTest-Ziele einschließlich Datei-Scanner-, Tray-,
+  Einzelinstanz-, Close-to-Tray- und Enterprise-Vertrag.
+- Der Enterprise-Agent-Vertrag prüft TPM-bindbare Geräteidentität, Clone Detection,
+  Zertifikatsrotation, Anti-Rollback, Rollout-Ringe, feste Remote-Response-Aktionen ohne
+  Remote-Shell, Nonce-Replay, RBAC, Dual Control und hashverkettete Fleet-Batches.
+- Windows-Enrollment und detached CMS verlangen HTTPS, Client-Auth, SHA-256-Zertifikatpin,
+  vollständige Zertifikatkette und Online-Widerrufsprüfung. Enrollment-Zustand ist per
+  DPAPI LocalMachine und restriktiver ACL geschützt.
+- Alle User-Mode-Binärdateien werden mit Control Flow Guard, CET, ASLR und DEP/NX gebaut.
+- Der WPF-Vertrag enthält 62 gebundene Controls in sechs Ansichten.
 - Der Tray-Vertrag und der reale Laufzeittest bestätigen Einzelinstanz, Fünf-Komponenten-Status,
   maschinenweiten Anmeldeautostart und eine vom Schutzkern unabhängige Beendigung.
 - Content-Policy v4 migriert v1/v2/v3 und aktiviert elf Dateigruppen, Fail-closed und die
@@ -24,24 +31,30 @@ Stand: 15. Juli 2026
   insgesamt 933,9 ms; die Download-Testdatei wurde anschließend aus dem Downloadordner entfernt.
 - Der reale Downloadtest quarantänisierte eine aktive PDF und verlangte auch für eine saubere
   Bilddatei eine begründete Freigabe.
-- Der ProcessGuard-Laufzeittest blockierte direkte Temp-Ausführung, riskante PowerShell-Kommandos
-  sowie heruntergeladene `.ps1`- und `.bat`-Dateien.
+- Der RC14-Schaltertest bestätigt: `.crdownload` bleibt bis zum finalen Rename unangetastet,
+  deaktivierter Archivschutz lässt ZIP-Dateien ohne Inhaltsprüfung zu und ein aktivierter
+  Archivschutz klassifiziert dieselbe Datei nach dem Rename neu.
+- Der ProcessGuard-Laufzeittest blockierte direkte Temp-Ausführung und verschleierte
+  PowerShell-Kommandos. Normale URL-Befehle blieben erlaubt. Bei ausgeschaltetem Download-
+  Ausführungsschutz liefen `.ps1` und `.bat`; bei eingeschaltetem Schutz wurden beide blockiert.
 - WFP, Minifilter und ProcessGuard wurden mit WDK `/W4 /WX` neu gebaut, testsigniert, installiert
   und mit `state=4` geladen.
 - Broker und Core laufen als automatische LocalSystem-Dienste.
-- Das signierte RC13-MSI wurde erfolgreich mit Windows Installer/WiX erzeugt und seine lokale
-  Authenticode-Testsignatur verifiziert.
+- Der MSI-Deinstallationspfad prüft nach dem Rückbau ausdrücklich, dass Broker, Core und alle drei
+  Treiberregistrierungen verschwunden sind; ein unvollständiger Rückbau beendet das MSI mit Fehler.
+- Das signierte RC15-MSI wurde mit Windows Installer/WiX erzeugt und seine lokale
+  Authenticode-Testsignatur erfolgreich verifiziert.
 - Desktop-, ABI2- und Developer-Full-ZIP besitzen sichere Pfade; Desktop- und Full-Manifeste wurden
   vollständig gegen SHA-256 geprüft.
-- Der eingefrorene RC13-Quellvertrag ist gültig.
+- Der eingefrorene RC15-Quellvertrag ist gültig.
 
 ## Signierte Treiberhashes
 
 | Datei | SHA-256 der vollständigen signierten Datei |
 |---|---|
 | `AIShieldWfp.sys` | `60DF032CA04F9BF0F90D696EB4478E0B8850D714CCA1D24004B688E61389B351` |
-| `AIShieldMiniFilter.sys` | `B7810522A7F4C44774CA9B0094F2D5E0DAF56CA60B2F48835CC12816715411D4` |
-| `AIShieldProcessGuard.sys` | `A9D99C95EE77775DD7947CC73E53BF28D6768AD65195EEF65D06CEB7AB07C6F7` |
+| `AIShieldMiniFilter.sys` | `63CFBF7482596E73FF7AA2109BDC35D9000034EF33A1B15BB6607220779D27EB` |
+| `AIShieldProcessGuard.sys` | `FBAEF84400510EE2DE54E5E5EDB0B103AFBBD6DD1D594F49AD17AD3D12021811` |
 
 Die Signatur stammt vom lokalen Zertifikat `AI Shield Prototype Test Signing`. Sie ersetzt keine
 Microsoft-Produktionstreibersignatur.

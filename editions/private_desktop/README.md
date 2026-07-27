@@ -1,13 +1,15 @@
 # AI Shield Private Desktop
 
-Release Candidate: `2.0.0-rc.13`. ABI-, Policy- und Funktionsumfang sind durch
+Release Candidate: `2.0.0-rc.15`. ABI-, Policy- und Funktionsumfang sind durch
 [`RELEASE_CONTRACT.json`](RELEASE_CONTRACT.json) eingefroren. Änderungen an sicherheitsrelevanten
 Verträgen werden von `validate_release_freeze.ps1` abgelehnt, bis ein bewusst neuer Vertrag erstellt
 wird.
 
-RC13 ergänzt eine direkte, transaktionale Quarantänefreigabe über Broker und Minifilter. Das Ziel
-muss auf demselben Volume wie der Quarantänespeicher liegen; bei Identitäts- oder Kernelproblemen
-wird die Datei automatisch zurückgerollt.
+RC14 korrigiert die Schaltertreue des Download- und Dateitypschutzes. Temporäre Browserdateien wie
+`.crdownload` werden bis zum finalen Rename zurückgestellt; der Rename invalidiert das vorläufige
+Verdikt und löst die Prüfung der endgültigen Endung aus. Deaktivierte Dateitypgruppen umgehen die
+AI-Shield-Inhaltsprüfung vollständig. Normale PowerShell-URL-Aufrufe bleiben erlaubt, während
+verschleierte oder versteckte Downloadketten weiterhin blockiert werden.
 
 Ein installierbares RC-Paket darf nur aus dem frisch gebauten und anschließend testsignierten
 Treiber-Staging erzeugt werden. `tools\complete_private_rc_admin.ps1` führt dieses erhöhte Gate aus;
@@ -137,7 +139,7 @@ gibt diese Gruppe ohne AI-Shield-Inhaltsprüfung frei. Die Option
 atomar und mit DPAPI-Machine-Schutz gespeichert und vom Broker ohne Neustart neu geladen.
 Bestehende Policy-v1-/v2-/v3-Dateien werden auf Policy v4 migriert. Die Ausführungsgruppen,
 **Unbekannte und Spezialformate** und die Freigabeschranke sind beim Upgrade zunächst
-eingeschaltet. Der globale Schalter **Downloads härten** bleibt die
+eingeschaltet. Der globale Schalter **Ausführung aus Downloads sperren** bleibt die
 zusätzliche ProcessGuard-Sperre für direkte und interpretergestützte Starts aus `Downloads`.
 
 ```powershell
