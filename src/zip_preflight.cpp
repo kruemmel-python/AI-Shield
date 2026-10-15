@@ -187,7 +187,9 @@ public:
             const auto canonical = next[length]++;
             std::uint16_t reversed = 0U;
             for (unsigned int bit = 0U; bit < length; ++bit)
-                reversed = static_cast<std::uint16_t>((reversed << 1U) | ((canonical >> bit) & 1U));
+                reversed = static_cast<std::uint16_t>(
+                    (static_cast<unsigned int>(reversed) << 1U) |
+                    ((static_cast<unsigned int>(canonical) >> bit) & 1U));
             codes_.push_back({reversed, static_cast<std::uint16_t>(symbol), length});
             maximum_length_ = (std::max)(maximum_length_, length);
         }
