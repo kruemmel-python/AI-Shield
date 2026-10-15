@@ -16,8 +16,9 @@ Evidence inspect_text(std::string_view payload) noexcept {
     Evidence evidence{};
     std::string lower;
     lower.reserve(payload.size());
-    for (const unsigned char ch : payload) {
-        lower.push_back(static_cast<char>(std::tolower(ch)));
+    for (const char ch : payload) {
+        const auto unsigned_ch = static_cast<unsigned char>(ch);
+        lower.push_back(static_cast<char>(std::tolower(unsigned_ch)));
     }
 
     const auto contains = [&](std::string_view needle) noexcept {

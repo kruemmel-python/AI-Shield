@@ -18,7 +18,8 @@ SanitizedPayload sanitize_payload(std::span<const std::byte> payload, const Expo
     sanitized.full_payload_hash = crypto::sha256(payload);
     if (policy.include_payload_excerpt && policy.max_excerpt_bytes > 0U) {
         const auto count = std::min<std::size_t>(payload.size(), policy.max_excerpt_bytes);
-        sanitized.excerpt.insert(sanitized.excerpt.end(), payload.begin(), payload.begin() + count);
+        const auto excerpt = payload.first(count);
+        sanitized.excerpt.insert(sanitized.excerpt.end(), excerpt.begin(), excerpt.end());
         if (count < payload.size()) {
             sanitized.reason_mask |= abi::ReasonCode::privacy_redacted;
         }
